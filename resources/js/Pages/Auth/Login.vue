@@ -19,6 +19,8 @@ const form = useForm({
 });
 
 const submit = () => {
+    // アプリケーションのCSRF保護を初期化する必要があるらしい。
+    axios.get('/sanctum/csrf-cookie').then(response => {})
     form.post(route('login'), {
         onFinish: () => form.reset('password'),
     });
