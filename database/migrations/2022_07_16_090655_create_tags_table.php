@@ -16,12 +16,9 @@ return new class extends Migration
         Schema::create('tags', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->bigInteger('user_id')->unsigned();
+            $table->unsignedBigInteger('user_id');
             $table->softDeletes();
             $table->timestamps();
-
-            // 外部キー成約
-            $table->foreign('user_id')->references('id')->on('users');
 
             //インデックス
             $table->index('user_id');

@@ -15,17 +15,13 @@ return new class extends Migration
     {
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('user_id')->unsigned();
-            $table->tinyInteger('category',1); //リンク:1 記事:2
+            $table->unsignedBigInteger('user_id');
+            $table->tinyInteger('category')->comment('リンク:1 記事:2');
             $table->string('title');
             $table->longText('body');
-            $table->bigInteger('article_tag_id')->unsigned();
+            $table->unsignedBigInteger('article_tag_id');
             $table->softDeletes();
             $table->timestamps();
-
-            // 外部キー成約
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('article_tag_id')->references('id')->on('article_tags');
 
             //インデックス
             $table->index('user_id');
