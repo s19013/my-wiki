@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamps();
 
             //インデックス
-            $table->index('article_id');
+            // $table->index('article_id');
             $table->index('user_id');
             $table->index('tag_id');
         });
