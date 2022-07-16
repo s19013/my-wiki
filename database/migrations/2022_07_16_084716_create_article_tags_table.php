@@ -19,6 +19,15 @@ return new class extends Migration
             $table->unsignedBigInteger('tag_id')->nullable()->default(null);
             $table->softDeletes();
             $table->timestamps();
+
+            // 外部キー成約
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('article_id')->references('id')->on('articles');
+
+            //インデックス
+            $table->index('article_id');
+            $table->index('user_id');
+            $table->index('tag_id');
         });
     }
 
