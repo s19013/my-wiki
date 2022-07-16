@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id')->unsigned();
-            $table->tyniInteger('category',1); //リンク:1 記事:2
+            $table->tinyInteger('category',1); //リンク:1 記事:2
             $table->string('title');
             $table->longText('body');
             $table->bigInteger('article_tag_id')->unsigned();
