@@ -14,9 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('article_tags', function (Blueprint $table) {
-            $table->unsignedBigInteger('article_id');
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('tag_id')->nullable()->default(null);
+            $table->bigInteger('article_id')->unsigned();
+            $table->bigInteger('user_id')->unsigned();
+            $table->bigInteger('tag_id')->nullable()->default(null)->unsigned();
             $table->softDeletes();
             $table->timestamps();
 

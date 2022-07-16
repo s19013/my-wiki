@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->interger('category',1);
-            $table->text('title');
+            $table->bigInteger('user_id')->unsigned();
+            $table->tyniInteger('category',1); //リンク:1 記事:2
+            $table->string('title');
             $table->longText('body');
-            $table->unsignedBigInteger('article_tag_id');
+            $table->bigInteger('article_tag_id')->unsigned();
             $table->softDeletes();
             $table->timestamps();
 
