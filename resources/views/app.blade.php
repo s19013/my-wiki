@@ -17,6 +17,11 @@
         @vite('resources/js/app.js')
         @inertiaHead
     </head>
+    <style>
+        #app {
+            height: 100vh;
+        }
+    </style>
     <body class="font-sans antialiased">
         @inertia
     </body>
