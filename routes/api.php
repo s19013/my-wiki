@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\ArticleController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -25,5 +27,7 @@ Route::middleware('auth:sanctum')->post('/postTest', function (Request $request)
         "message" => $request->message
     ]);
 });
+
+Route::middleware('auth:sanctum')->post('/serveTag',[ArticleController::class,'serveUserAllTag']);
 
 require __DIR__.'/auth.php';
