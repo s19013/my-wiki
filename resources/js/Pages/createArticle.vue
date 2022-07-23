@@ -1,8 +1,9 @@
 <template>
     <div>
         <section class="articleContainer">
-            <v-form  v-on:submit.prevent ="submit">
-                <v-row>
+            <!-- <v-form  v-on:submit.prevent ="submit"> -->
+            <v-form>
+                <v-row class="head">
                     <v-col cols="10">
                         <v-text-field
                             v-model="title"
@@ -10,6 +11,7 @@
                         ></v-text-field>
                     </v-col>
                     <v-col cols="1"> <v-btn color="error" @click="change()"> 削除 </v-btn> </v-col>
+                    <v-col cols="1"> <v-btn color="submit"> 保存 </v-btn> </v-col>
                 </v-row>
                 <DeleteAlertComponent></DeleteAlertComponent>
                 <ul class="tabLabel">
@@ -32,6 +34,11 @@
                 <div v-show="activeTab === 1" class="markdown" v-html="compiledMarkdown()"></div>
             </v-form>
         </section>
+        {{$attrs.auth.user.id}}
+        <v-btn color="submit" @click="getTag()">tag </v-btn>
+        <ul v-for="tag of allTag" :key="tag.id">
+            <li>{{tag.name}}</li>
+        </ul>
         <DeleteAlertComponent
             :open="deleteAlertFlag"
             @switch="deleteAlertFlagSwitch"
@@ -42,6 +49,8 @@
 <script>
 import {marked} from 'marked';
 import DeleteAlertComponent from '@/Components/DeleteAlertComponent.vue';
+import axios from 'axios'
+
 export default {
     data() {
       return {
@@ -49,19 +58,29 @@ export default {
         title:null,
         article: '# hello',
         deleteAlertFlag:false,
+        allTag:[],
       }
     },
     components:{
         DeleteAlertComponent
     },
     methods: {
-      changeTab(num){this.activeTab = num},
-      compiledMarkdown() {return marked(this.article)},
-      submit(){},
-      deleteAlertFlagSwitch(){
-        this.deleteAlertFlag = !this.deleteAlertFlag
-        console.log(this.deleteAlertSwitch);
-        }
+        changeTab(num){this.activeTab = num},
+        compiledMarkdown() {return marked(this.article)},
+        submit(){},
+        deleteAlertFlagSwitch(){
+            this.deleteAlertFlag = !this.deleteAlertFlag
+            console.log(this.deleteAlertSwitch);
+        },
+        async getTag(){
+            await axios.post('/api/serveTag',{id:this.$attrs.auth.user.id})
+                .then((res)=>{
+                    for (const tag of res.data) {
+                        console.log('id:',tag.id,' name:',tag);
+                        this.allTag.push({id:tag.id,name:tag.name})
+                    }
+            })
+        },
     }
 }
 </script>
@@ -98,6 +117,9 @@ ul{
     color: black;
     cursor: pointer;
 }
+
+button{width:100%}
+.head{margin-top: 10px;}
 
 
 </style>
