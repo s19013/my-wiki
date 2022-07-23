@@ -32,7 +32,10 @@
                 <div v-show="activeTab === 1" class="markdown" v-html="compiledMarkdown()"></div>
             </v-form>
         </section>
-        <DeleteAlertComponent :open="deleteAlertSwitch"></DeleteAlertComponent>
+        <DeleteAlertComponent
+            :open="deleteAlertFlag"
+            @switch="deleteAlertFlagSwitch"
+        ></DeleteAlertComponent>
     </div>
 </template>
 
@@ -45,7 +48,7 @@ export default {
         activeTab:0,
         title:null,
         article: '# hello',
-        deleteAlertSwitch:false,
+        deleteAlertFlag:false,
       }
     },
     components:{
@@ -55,7 +58,10 @@ export default {
       changeTab(num){this.activeTab = num},
       compiledMarkdown() {return marked(this.article)},
       submit(){},
-      change(){ this.deleteAlertSwitch = !this.deleteAlertSwitch }
+      deleteAlertFlagSwitch(){
+        this.deleteAlertFlag = !this.deleteAlertFlag
+        console.log(this.deleteAlertSwitch);
+        }
     }
 }
 </script>

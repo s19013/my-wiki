@@ -13,14 +13,14 @@
           <v-btn
             color="green darken-1"
             text
-            @click="open = false"
+            @click="this.$emit('switch')"
           >
             もどる
           </v-btn>
           <v-btn
             color="red darken-1"
             text
-            @click="open = false"
+            @click="this.$emit('switch')"
           >
             削除する
           </v-btn>
