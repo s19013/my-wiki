@@ -16,18 +16,19 @@ use App\Http\Controllers\ArticleController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/test', function (Request $request) {
-    return response()->json([
-        "message" => "ok"
-    ]);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/test', function (Request $request) {
+        return response()->json([
+            "message" => "ok"
+        ]);
+    });
+    Route::post('/postTest', function (Request $request) {
+        return response()->json([
+            "message" => $request->message
+        ]);
+    });
+    Route::post('/serveTag',[ArticleController::class,'serveUserAllTag']);
 });
 
-Route::middleware('auth:sanctum')->post('/postTest', function (Request $request) {
-    return response()->json([
-        "message" => $request->message
-    ]);
-});
-
-Route::middleware('auth:sanctum')->post('/serveTag',[ArticleController::class,'serveUserAllTag']);
 
 require __DIR__.'/auth.php';
