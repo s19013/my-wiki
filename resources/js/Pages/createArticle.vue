@@ -10,19 +10,24 @@
                             label="タイトル"
                         ></v-text-field>
                     </v-col>
-                    <v-col cols="1"> <v-btn color="error" @click="change()"> 削除 </v-btn> </v-col>
-                    <v-col cols="1"> <v-btn color="submit"> 保存 </v-btn> </v-col>
+                    <!-- <v-col cols="1"> <v-btn color="error"> 削除 </v-btn> </v-col> -->
+                    <v-col cols="1"> <v-btn color="submit" @click="submit"> 保存 </v-btn> </v-col>
                 </v-row>
-                <DeleteAlertComponent></DeleteAlertComponent>
-                <ul class="tabLabel">
-                        <li @click="changeTab(0)" :class="{active: activeTab === 0,notActive: activeTab !== 0 }">
-                            本文
-                        </li>
-                        <li @click="changeTab(1)" :class="{active: activeTab === 1,notActive: activeTab !== 1 }">
-                            変換後
-                        </li>
-                </ul>
-
+                <!--  -->
+                <v-row>
+                    <v-col>
+                        <ul class="tabLabel">
+                            <li @click="changeTab(0)" :class="{active: activeTab === 0,notActive: activeTab !== 0 }">
+                                本文
+                            </li>
+                            <li @click="changeTab(1)" :class="{active: activeTab === 1,notActive: activeTab !== 1 }">
+                                変換後
+                            </li>
+                        </ul>
+                    </v-col>
+                    <v-col cols="2"><v-btn color="submit" @click="tagDialogFlag = !tagDialogFlag">tag </v-btn></v-col>
+                </v-row>
+                <!--  -->
                 <div v-show="activeTab === 0">
                     <v-textarea
                         filled
@@ -35,20 +40,39 @@
             </v-form>
         </section>
         {{$attrs.auth.user.id}}
-        <v-btn color="submit" @click="getTag()">tag </v-btn>
-        <ul v-for="tag of allTag" :key="tag.id">
-            <li>{{tag.name}}</li>
-        </ul>
-        <DeleteAlertComponent
+
+        {{checkedTagList}}
+
+        <v-dialog
+            v-model="tagDialogFlag"
+            scrollable
+            persistent>
+            <v-card>
+                <p @click.stop="tagDialogFlag = !tagDialogFlag">X 閉じる</p>
+                <v-card-text></v-card-text>
+
+                <ul v-for="tag of allTagList" :key="tag.id">
+                    <input type="checkbox" :id="tag.id" v-model="checkedTagList" :value="tag.id">
+                    <label :for="tag.id">{{tag.name}}</label>
+                </ul>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="submit" elevation="2">新規作成</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
+
+        <!-- <DeleteAlertComponent
             :open="deleteAlertFlag"
             @switch="deleteAlertFlagSwitch"
-        ></DeleteAlertComponent>
+        ></DeleteAlertComponent> -->
     </div>
 </template>
 
 <script>
 import {marked} from 'marked';
-import DeleteAlertComponent from '@/Components/DeleteAlertComponent.vue';
+// import DeleteAlertComponent from '@/Components/DeleteAlertComponent.vue';
 import axios from 'axios'
 
 export default {
@@ -57,31 +81,47 @@ export default {
         activeTab:0,
         title:null,
         article: '# hello',
-        deleteAlertFlag:false,
-        allTag:[],
+        // deleteAlertFlag:false,
+        tagDialogFlag:false,
+        allTagList:[],
+        checkedTagList:[]
       }
     },
     components:{
-        DeleteAlertComponent
+        // DeleteAlertComponent
     },
     methods: {
         changeTab(num){this.activeTab = num},
         compiledMarkdown() {return marked(this.article)},
-        submit(){},
+        submit(){
+            axios.post('/api/store',{
+                id:this.$attrs.auth.user.id,
+                titel:this.titel,
+                article:this.article,
+                tagList:this.checkedTagList
+            })
+            .then((res)=>{
+                console.log(res);
+            })
+        },
         deleteAlertFlagSwitch(){
             this.deleteAlertFlag = !this.deleteAlertFlag
             console.log(this.deleteAlertSwitch);
         },
         async getTag(){
             await axios.post('/api/serveTag',{id:this.$attrs.auth.user.id})
-                .then((res)=>{
+            .then((res)=>{
                     for (const tag of res.data) {
                         console.log('id:',tag.id,' name:',tag);
-                        this.allTag.push({id:tag.id,name:tag.name})
+                        this.allTagList.push({id:tag.id,name:tag.name})
                     }
             })
+            .catch((error)=>{})
         },
-    }
+    },
+    mounted() {
+        this.getTag()
+    },
 }
 </script>
 
@@ -98,7 +138,7 @@ textarea {
     overflow-wrap:normal;
 }
 
-ul{
+.tabLabel{
     li{
         display: inline-block;
         list-style:none;
