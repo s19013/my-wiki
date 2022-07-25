@@ -30,6 +30,7 @@
                 <!--  -->
                 <div v-show="activeTab === 0">
                     <v-textarea
+                        required
                         filled
                         auto-grow
                         label="本文"
@@ -95,9 +96,10 @@ export default {
         compiledMarkdown() {return marked(this.article)},
         submit(){
             axios.post('/api/store',{
-                id:this.$attrs.auth.user.id,
-                titel:this.titel,
+                userId:this.$attrs.auth.user.id,
+                title:this.title,
                 article:this.article,
+                category:2,
                 tagList:this.checkedTagList
             })
             .then((res)=>{
@@ -109,7 +111,7 @@ export default {
             console.log(this.deleteAlertSwitch);
         },
         async getTag(){
-            await axios.post('/api/serveTag',{id:this.$attrs.auth.user.id})
+            await axios.post('/api/serveTag',{userId:this.$attrs.auth.user.id})
             .then((res)=>{
                     for (const tag of res.data) {
                         console.log('id:',tag.id,' name:',tag);
