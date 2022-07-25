@@ -6,7 +6,7 @@
                 <v-row class="head">
                     <v-col cols="10">
                         <v-text-field
-                            v-model="title"
+                            v-model="articleTitle"
                             label="タイトル"
                         ></v-text-field>
                     </v-col>
@@ -34,7 +34,7 @@
                         filled
                         auto-grow
                         label="本文"
-                        v-model = "article"
+                        v-model = "articleBody"
                     ></v-textarea>
                 </div>
                 <div v-show="activeTab === 1" class="markdown" v-html="compiledMarkdown()"></div>
@@ -80,8 +80,8 @@ export default {
     data() {
       return {
         activeTab:0,
-        title:null,
-        article: '# hello',
+        articleTitle:null,
+        articleBody: '# hello',
         // deleteAlertFlag:false,
         tagDialogFlag:false,
         allTagList:[],
@@ -93,12 +93,12 @@ export default {
     },
     methods: {
         changeTab(num){this.activeTab = num},
-        compiledMarkdown() {return marked(this.article)},
+        compiledMarkdown() {return marked(this.articleBody)},
         submit(){
-            axios.post('/api/store',{
+            axios.post('/api/article/store',{
                 userId:this.$attrs.auth.user.id,
-                title:this.title,
-                article:this.article,
+                articleTitle:this.articleTitle,
+                articleBody:this.articleBody,
                 category:2,
                 tagList:this.checkedTagList
             })
@@ -110,8 +110,8 @@ export default {
             this.deleteAlertFlag = !this.deleteAlertFlag
             console.log(this.deleteAlertSwitch);
         },
-        async getTag(){
-            await axios.post('/api/serveTag',{userId:this.$attrs.auth.user.id})
+        async getAllTag(){
+            await axios.post('/api/tag/serveUserAllTag',{userId:this.$attrs.auth.user.id})
             .then((res)=>{
                     for (const tag of res.data) {
                         console.log('id:',tag.id,' name:',tag);
@@ -122,7 +122,7 @@ export default {
         },
     },
     mounted() {
-        this.getTag()
+        this.getAllTag()
     },
 }
 </script>
