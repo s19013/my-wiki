@@ -20,7 +20,7 @@ class Article extends Model
     public static function storeArticle($title,$body,$userId,$category)
     {
         // タイトルが産められてなかったら日時で埋める
-        if ($title == null) {
+        if ($title == '') {
             return DB::transaction(function () use($body,$userId,$category){
                 return Article::insertGetId([
                 'user_id'  => $userId,
