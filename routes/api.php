@@ -16,6 +16,7 @@ use App\Http\Controllers\ArticleController;
 |
 */
 
+// 認証が必要な部分
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/test', function (Request $request) {
         return response()->json([
@@ -27,8 +28,23 @@ Route::middleware('auth:sanctum')->group(function () {
             "message" => $request->message
         ]);
     });
-    Route::post('/serveTag',[ArticleController::class,'serveUserAllTag']);
+
+    Route::prefix('/tag')->group(function () {
+        Route::post('/delete',[ArticleController::class,'']);
+        Route::post('/store',[ArticleController::class,'']);
+        Route::post('/edit',[ArticleController::class,'']);
+        Route::post('/serveUserAllTag',[ArticleController::class,'serveUserAllTag']);
+    });
+
+    Route::prefix('/article')->group(function () {
+        Route::post('/store',[ArticleController::class,'store']);
+        Route::post('/edit',[ArticleController::class,'']);
+        Route::post('/delete',[ArticleController::class,'']);
+        Route::post('/serveUserAllArticle',[ArticleController::class,'']);
+    });
 });
+
+
 
 
 require __DIR__.'/auth.php';
