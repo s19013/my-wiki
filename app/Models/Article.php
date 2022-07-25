@@ -21,17 +21,17 @@ class Article extends Model
     {
         // タイトルが産められてなかったら日時で埋める
         if ($title == null) {
-            DB::transaction(function () use($body,$userId,$category){
-                Article::create([
+            return DB::transaction(function () use($body,$userId,$category){
+                return Article::insertGetId([
                 'user_id'  => $userId,
                 'title'    => Carbon::now(),
                 'body'     => $body,
                 'category' => $category]);
             });
-            return;
         }
-        DB::transaction(function () use($title,$body,$userId,$category){
-            Article::create([
+
+        return DB::transaction(function () use($title,$body,$userId,$category){
+            return Article::insertGetId([
             'user_id'  => $userId,
             'title'    => $title,
             'body'     => $body,
