@@ -15,7 +15,7 @@ class ArticleController extends Controller
         return Tag::getUserAllTag($request->userId);
     }
 
-    public function store(Request $request)
+    public function articleStore(Request $request)
     {
         // 記事を保存して記事のidを取得
         $articleId = Article::storeArticle(
@@ -43,5 +43,13 @@ class ArticleController extends Controller
                 );
             }
         }
+    }
+
+    public function tagStore(Request $request)
+    {
+        return Tag::store(
+            userId:$request->userId,
+            tag   :$request->tag,
+        );
     }
 }
