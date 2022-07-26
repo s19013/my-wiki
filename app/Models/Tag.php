@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 use DB;
+use App\Http\Controllers\searchToolKit;
 
 class Tag extends Model
 {
@@ -18,7 +19,6 @@ class Tag extends Model
 
     public static function getUserAllTag($id)
     {
-
         return Tag::select('id','name')
         ->where('user_id','=',$id)
         ->get();
@@ -60,5 +60,24 @@ class Tag extends Model
         ->where('user_id','=',$userId)
         ->orderBy('created_at', 'desc')
         ->first();
+    }
+
+    public static function search($userId,$tag)
+    {
+        // %と_をエスケープ
+        $escaped = searchToolKit::sqlEscape($tag);
+
+        //and検索のために空白区切りでつくった配列を用意
+        $wordListToSearch = searchToolKit::preparationToAndSearch($escaped);
+
+        //クエリビルダ
+        $query = Tag::select('id','name');
+
+        // tag名をlikeけんさく
+        foreach($wordListToSearch as $word){
+            $query->where('name','like',"%$word%")->get();
+        }
+
+        return $query->get();
     }
 }

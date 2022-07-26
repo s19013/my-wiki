@@ -54,28 +54,26 @@
                 <v-row class="areaTagSerch">
                     <v-col cols="10">
                         <v-text-field
-                            v-model="serchTag"
+                            v-model="tagToSearch"
                             label="タグ検索"
                             clearable
                         ></v-text-field>
                     </v-col>
                     <v-col cols="1">
-                        <v-btn
-                            color="submit"
-                            elevation="2"
-                            x-small
-                            >検索</v-btn>
+                        <v-btn color="submit" elevation="2" @click="searchTagCheck()">検索</v-btn>
                     </v-col>
                 </v-row>
                 <!--  -->
-                <ul>
-                    <template v-for="tag of allTagList" :key="tag.id">
-                        <li>
-                            <input type="checkbox" :id="tag.id" v-model="checkedTagList" :value="tag.id">
-                            <label :for="tag.id">{{tag.name}}</label>
-                        </li>
-                    </template>
-                </ul>
+                <v-virtual-scroll>
+                    <ul>
+                        <template v-for="tag of tagSearchResult" :key="tag.id">
+                            <li>
+                                <input type="checkbox" :id="tag.id" v-model="checkedTagList" :value="tag.id">
+                                <label :for="tag.id">{{tag.name}}</label>
+                            </li>
+                        </template>
+                    </ul>
+                </v-virtual-scroll>
                 <v-btn class="longButton" color="submit" elevation="2" v-if="!createNewTagFlag" @click.stop="createNewTagFlagSwitch()">新規作成</v-btn>
                 <!--  -->
                 <div class="areaCreateNewTag">
@@ -110,7 +108,7 @@ export default {
         activeTab:0,
         articleTitle:'',
         articleBody: '',
-        serchTag:'',
+        tagToSearch:'',
         newTag:'',
 
         // flag
@@ -128,7 +126,8 @@ export default {
 
         // tagList
         allTagList:[],
-        checkedTagList:[]
+        checkedTagList:[],
+        tagSearchResult:[]
       }
     },
     components:{
@@ -170,6 +169,8 @@ export default {
             })
             .then((res)=>{
                 this.getAddedTag()
+                // 入力欄を消す
+                this.createNewTagFlag=false
             })
             .catch((error) =>{
                 // console.log(error.response);
@@ -180,15 +181,22 @@ export default {
         createNewTagFlagSwitch(){ this.createNewTagFlag = !this.createNewTagFlag },
         tagDialogFlagSwithch(){
             this.tagDialogFlag = !this.tagDialogFlag
+            // 新規登録の入力欄を消す
             this.createNewTagFlag =false
+            // 全部のタグをリストに表示するように戻す
+            this.tagToSearch = ''
+            this.tagSearchResult = this.allTagList
         },
         async getAllTag(){
             await axios.post('/api/tag/serveUserAllTag',{userId:this.$attrs.auth.user.id})
             .then((res)=>{
                     for (const tag of res.data) {
-                        console.log('id:',tag.id,' name:',tag);
-                        this.allTagList.push({id:tag.id,name:tag.name})
+                        this.allTagList.push({
+                            id:tag.id,
+                            name:tag.name
+                        })
                     }
+                    this.tagSearchResult = this.allTagList
             })
             .catch((error)=>{})
         },
@@ -196,9 +204,35 @@ export default {
             await axios.post('/api/tag/serveAddedTag',{userId:this.$attrs.auth.user.id})
             .then((res)=>{
                 // リストに追加
-                this.allTagList.push({id:res.data.id,name:res.data.name})
+                this.allTagList.push({
+                    id:res.data.id,
+                    name:res.data.name
+                })
             })
             .catch((error)=>{})
+        },
+        searchTagCheck(){
+            //空の状態ならalltagを入れとく
+            if (this.tagToSearch == '') {
+                this.tagSearchResult = this.allTagList
+                return
+            }
+            this.searchTag()
+        },
+        async searchTag(){
+            this.tagSearchResult = []
+            await axios.post('/api/tag/search',{
+                userId:this.$attrs.auth.user.id,
+                tag:this.tagToSearch
+            })
+            .then((res)=>{
+                for (const tag of res.data) {
+                    this.tagSearchResult.push({
+                        id:tag.id,
+                        name:tag.name
+                    })
+                }
+            })
         }
     },
     mounted() {

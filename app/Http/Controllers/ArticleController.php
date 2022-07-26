@@ -57,4 +57,12 @@ class ArticleController extends Controller
     {
         return Tag::serveAddedTag($request->userId);
     }
+
+    public function tagSearch(Request $request)
+    {
+        return Tag::search(
+            userId:$request->userId,
+            tag   :$request->tag
+        );
+    }
 }
