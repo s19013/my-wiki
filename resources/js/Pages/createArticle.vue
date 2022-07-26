@@ -59,6 +59,7 @@
                 <!--  -->
                 <div class="areaCreateNewTag">
                     <p class="error" v-if="newTagErrorFlag">文字を入力してください</p>
+                    <p class="error" v-if="tagAlreadyExistsErrorFlag">そのタグはすでに登録されいます</p>
                     <v-text-field
                         v-if="createNewTagFlag"
                         v-model="newTag"
@@ -116,6 +117,7 @@ export default {
         // errorFlag
         articleBodyErrorFlag:false,
         newTagErrorFlag:false,
+        tagAlreadyExistsErrorFlag:false,
 
         // tagList
         allTagList:[],
@@ -155,7 +157,17 @@ export default {
             else {this.createNewTag()}
         },
         createNewTag(){
-
+            axios.post('/api/tag/store',{
+                userId:this.$attrs.auth.user.id,
+                tag   :this.newTag
+            })
+            .then((res)=>{
+                console.log(res);
+            })
+            .catch((error) =>{
+                // console.log(error.response);
+                if (error.response.status == 400) { this.tagAlreadyExistsErrorFlag = true }
+            })
         },
         deleteAlertFlagSwitch() { this.deleteAlertFlag = !this.deleteAlertFlag },
         createNewTagFlagSwitch(){ this.createNewTagFlag = !this.createNewTagFlag },
