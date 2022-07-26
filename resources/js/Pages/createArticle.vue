@@ -144,7 +144,7 @@ export default {
                 tag   :this.newTag
             })
             .then((res)=>{
-                console.log(res);
+                this.getAddedTag()
             })
             .catch((error) =>{
                 // console.log(error.response);
@@ -163,6 +163,14 @@ export default {
             })
             .catch((error)=>{})
         },
+        async getAddedTag(){
+            await axios.post('/api/tag/serveAddedTag',{userId:this.$attrs.auth.user.id})
+            .then((res)=>{
+                // リストに追加
+                this.allTagList.push({id:res.data.id,name:res.data.name})
+            })
+            .catch((error)=>{})
+        }
     },
     mounted() {
         this.getAllTag()
