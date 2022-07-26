@@ -68,24 +68,6 @@
                     <v-btn color="submit" elevation="2" v-if="createNewTagFlag" @click="createNewTagCheck()">作成</v-btn>
                 </div>
             </section>
-            <!-- <v-card>
-                <p @click.stop="tagDialogFlag = !tagDialogFlag">X 閉じる</p>
-                <v-card-text></v-card-text>
-
-                <ul v-for="tag of allTagList" :key="tag.id">
-                    <input type="checkbox" :id="tag.id" v-model="checkedTagList" :value="tag.id">
-                    <label :for="tag.id">{{tag.name}}</label>
-                </ul>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-text-field
-                            v-if="createNewTagFlag"
-                            v-model="newTag"
-                            label="新しいタグ"
-                        ></v-text-field>
-                    <v-btn color="submit" elevation="2" @click="createNewTagFlagSwitch">新規作成</v-btn>
-                </v-card-actions>
-            </v-card> -->
         </v-dialog>
 
 
