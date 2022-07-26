@@ -31,13 +31,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('/tag')->group(function () {
         Route::post('/delete',[ArticleController::class,'']);
-        Route::post('/store',[ArticleController::class,'']);
+        Route::post('/store',[ArticleController::class,'tagStore']);
         Route::post('/edit',[ArticleController::class,'']);
         Route::post('/serveUserAllTag',[ArticleController::class,'serveUserAllTag']);
     });
 
     Route::prefix('/article')->group(function () {
-        Route::post('/store',[ArticleController::class,'store']);
+        Route::post('/store',[ArticleController::class,'articleStore']);
         Route::post('/edit',[ArticleController::class,'']);
         Route::post('/delete',[ArticleController::class,'']);
         Route::post('/serveUserAllArticle',[ArticleController::class,'']);
