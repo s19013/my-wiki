@@ -34,6 +34,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/store',[ArticleController::class,'tagStore']);
         Route::post('/edit',[ArticleController::class,'']);
         Route::post('/serveUserAllTag',[ArticleController::class,'serveUserAllTag']);
+        Route::post('/serveAddedTag',[ArticleController::class,'serveAddedTag']);
     });
 
     Route::prefix('/article')->group(function () {
