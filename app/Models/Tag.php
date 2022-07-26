@@ -19,11 +19,9 @@ class Tag extends Model
     public static function getUserAllTag($id)
     {
 
-        $allTag = Tag::select('id','name')
+        return Tag::select('id','name')
         ->where('user_id','=',$id)
         ->get();
-
-        return $allTag;
     }
 
     public static function store($userId,$tag)
@@ -53,5 +51,14 @@ class Tag extends Model
             ["message" => "stored"],
             200
         );
+    }
+
+    public static function serveAddedTag($userId)
+    {
+        // 一番新しく追加したタグだけを取り出す
+        return Tag::select('id','name')
+        ->where('user_id','=',$userId)
+        ->orderBy('created_at', 'desc')
+        ->first();
     }
 }
