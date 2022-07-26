@@ -11,7 +11,7 @@
                         ></v-text-field>
                     </v-col>
                     <!-- <v-col cols="1"> <v-btn color="error"> 削除 </v-btn> </v-col> -->
-                    <v-col cols="1"> <v-btn color="submit" @click="submit"> 保存 </v-btn> </v-col>
+                    <v-col cols="1"> <v-btn color="submit" @click="submitCheck"> 保存 </v-btn> </v-col>
                 </v-row>
                 <!--  -->
                 <v-row>
@@ -25,15 +25,16 @@
                             </li>
                         </ul>
                     </v-col>
+
+                    <v-col><p class="error" v-if="articleBodyErrorFlag">本文を入力してください</p></v-col>
                     <v-col cols="2"><v-btn color="submit" @click="tagDialogFlag = !tagDialogFlag">tag </v-btn></v-col>
                 </v-row>
                 <!--  -->
                 <div v-show="activeTab === 0">
                     <v-textarea
-                        required
                         filled
                         auto-grow
-                        label="本文"
+                        label="本文 [必須]"
                         v-model = "articleBody"
                     ></v-textarea>
                 </div>
@@ -48,7 +49,25 @@
             v-model="tagDialogFlag"
             scrollable
             persistent>
-            <v-card>
+            <section class="Dialog tagDialog">
+                <p @click.stop="tagDialogFlag = !tagDialogFlag">X 閉じる</p>
+                <ul v-for="tag of allTagList" :key="tag.id">
+                    <input type="checkbox" :id="tag.id" v-model="checkedTagList" :value="tag.id">
+                    <label :for="tag.id">{{tag.name}}</label>
+                </ul>
+                <v-btn color="submit" elevation="2" v-if="!createNewTagFlag" @click="createNewTagFlagSwitch()">新規作成</v-btn>
+                <!--  -->
+                <div class="areaCreateNewTag">
+                    <p class="error" v-if="newTagErrorFlag">文字を入力してください</p>
+                    <v-text-field
+                        v-if="createNewTagFlag"
+                        v-model="newTag"
+                        label="新しいタグ"
+                    ></v-text-field>
+                    <v-btn color="submit" elevation="2" v-if="createNewTagFlag" @click="createNewTagCheck()">作成</v-btn>
+                </div>
+            </section>
+            <!-- <v-card>
                 <p @click.stop="tagDialogFlag = !tagDialogFlag">X 閉じる</p>
                 <v-card-text></v-card-text>
 
@@ -58,9 +77,14 @@
                 </ul>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="submit" elevation="2">新規作成</v-btn>
+                    <v-text-field
+                            v-if="createNewTagFlag"
+                            v-model="newTag"
+                            label="新しいタグ"
+                        ></v-text-field>
+                    <v-btn color="submit" elevation="2" @click="createNewTagFlagSwitch">新規作成</v-btn>
                 </v-card-actions>
-            </v-card>
+            </v-card> -->
         </v-dialog>
 
 
@@ -80,10 +104,20 @@ export default {
     data() {
       return {
         activeTab:0,
-        articleTitle:null,
-        articleBody: '# hello',
-        // deleteAlertFlag:false,
+        articleTitle:'',
+        articleBody: '',
+        newTag:'',
+
+        // flag
         tagDialogFlag:false,
+        createNewTagFlag:false,
+        // deleteAlertFlag:false,
+
+        // errorFlag
+        articleBodyErrorFlag:false,
+        newTagErrorFlag:false,
+
+        // tagList
         allTagList:[],
         checkedTagList:[]
       }
@@ -92,8 +126,15 @@ export default {
         // DeleteAlertComponent
     },
     methods: {
-        changeTab(num){this.activeTab = num},
         compiledMarkdown() {return marked(this.articleBody)},
+        changeTab(num){this.activeTab = num},
+        submitCheck(){
+            if (this.articleBody =='') {
+                this.articleBodyErrorFlag = true
+                return
+            }
+            else {this.submit()}
+        },
         submit(){
             axios.post('/api/article/store',{
                 userId:this.$attrs.auth.user.id,
@@ -106,10 +147,18 @@ export default {
                 console.log(res);
             })
         },
-        deleteAlertFlagSwitch(){
-            this.deleteAlertFlag = !this.deleteAlertFlag
-            console.log(this.deleteAlertSwitch);
+        createNewTagCheck(){
+            if (this.newTag == '') {
+                this.newTagErrorFlag = true
+                return
+            }
+            else {this.createNewTag()}
         },
+        createNewTag(){
+
+        },
+        deleteAlertFlagSwitch() { this.deleteAlertFlag = !this.deleteAlertFlag },
+        createNewTagFlagSwitch(){ this.createNewTagFlag = !this.createNewTagFlag },
         async getAllTag(){
             await axios.post('/api/tag/serveUserAllTag',{userId:this.$attrs.auth.user.id})
             .then((res)=>{
@@ -149,6 +198,11 @@ textarea {
     }
 }
 
+.error{
+    color: rgb(190, 0, 0);
+    font-weight: bolder;
+    margin-top: 10px;
+}
 .active{
     font-weight: bold;
     cursor: default;
@@ -159,6 +213,19 @@ textarea {
     color: black;
     cursor: pointer;
 }
+
+.Dialog{
+    background: #e1e1e1;
+    width: 30vw;
+}
+
+.tagDialog{
+    .areaCreateNewTag{
+        margin-top: 10px;
+        .v-input__details{ margin: 0px; }
+    }
+}
+
 
 button{width:100%}
 .head{margin-top: 10px;}
