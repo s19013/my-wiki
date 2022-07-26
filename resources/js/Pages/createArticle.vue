@@ -27,7 +27,7 @@
                     </v-col>
 
                     <v-col><p class="error" v-if="articleBodyErrorFlag">本文を入力してください</p></v-col>
-                    <v-col cols="2"><v-btn color="submit" @click="tagDialogFlag = !tagDialogFlag">tag </v-btn></v-col>
+                    <v-col cols="2"><v-btn class="longButton" color="submit" @click="tagDialogFlag = !tagDialogFlag">tag </v-btn></v-col>
                 </v-row>
                 <!--  -->
                 <div v-show="activeTab === 0">
@@ -50,12 +50,33 @@
             scrollable
             persistent>
             <section class="Dialog tagDialog">
-                <p @click.stop="tagDialogFlag = !tagDialogFlag">X 閉じる</p>
-                <ul v-for="tag of allTagList" :key="tag.id">
-                    <input type="checkbox" :id="tag.id" v-model="checkedTagList" :value="tag.id">
-                    <label :for="tag.id">{{tag.name}}</label>
+                <v-btn color="#E57373"   x-small elevation="2" @click.stop="tagDialogFlagSwithch()">X 閉じる</v-btn>
+                <v-row class="areaTagSerch">
+                    <v-col cols="10">
+                        <v-text-field
+                            v-model="serchTag"
+                            label="タグ検索"
+                            clearable
+                        ></v-text-field>
+                    </v-col>
+                    <v-col cols="1">
+                        <v-btn
+                            color="submit"
+                            elevation="2"
+                            x-small
+                            >検索</v-btn>
+                    </v-col>
+                </v-row>
+                <!--  -->
+                <ul>
+                    <template v-for="tag of allTagList" :key="tag.id">
+                        <li>
+                            <input type="checkbox" :id="tag.id" v-model="checkedTagList" :value="tag.id">
+                            <label :for="tag.id">{{tag.name}}</label>
+                        </li>
+                    </template>
                 </ul>
-                <v-btn color="submit" elevation="2" v-if="!createNewTagFlag" @click="createNewTagFlagSwitch()">新規作成</v-btn>
+                <v-btn class="longButton" color="submit" elevation="2" v-if="!createNewTagFlag" @click.stop="createNewTagFlagSwitch()">新規作成</v-btn>
                 <!--  -->
                 <div class="areaCreateNewTag">
                     <p class="error" v-if="newTagErrorFlag">文字を入力してください</p>
@@ -65,7 +86,7 @@
                         v-model="newTag"
                         label="新しいタグ"
                     ></v-text-field>
-                    <v-btn color="submit" elevation="2" v-if="createNewTagFlag" @click="createNewTagCheck()">作成</v-btn>
+                    <v-btn class="longButton" color="#64B5F6" elevation="2" v-if="createNewTagFlag" @click.stop="createNewTagCheck()">作成</v-btn>
                 </div>
             </section>
         </v-dialog>
@@ -89,12 +110,16 @@ export default {
         activeTab:0,
         articleTitle:'',
         articleBody: '',
+        serchTag:'',
         newTag:'',
 
         // flag
         tagDialogFlag:false,
         createNewTagFlag:false,
         // deleteAlertFlag:false,
+
+        //loding
+        tagSerchLoding:false,
 
         // errorFlag
         articleBodyErrorFlag:false,
@@ -153,6 +178,10 @@ export default {
         },
         deleteAlertFlagSwitch() { this.deleteAlertFlag = !this.deleteAlertFlag },
         createNewTagFlagSwitch(){ this.createNewTagFlag = !this.createNewTagFlag },
+        tagDialogFlagSwithch(){
+            this.tagDialogFlag = !this.tagDialogFlag
+            this.createNewTagFlag =false
+        },
         async getAllTag(){
             await axios.post('/api/tag/serveUserAllTag',{userId:this.$attrs.auth.user.id})
             .then((res)=>{
@@ -199,12 +228,6 @@ textarea {
         padding:10px 20px;
     }
 }
-
-.error{
-    color: rgb(190, 0, 0);
-    font-weight: bolder;
-    margin-top: 10px;
-}
 .active{
     font-weight: bold;
     cursor: default;
@@ -218,19 +241,43 @@ textarea {
 
 .Dialog{
     background: #e1e1e1;
-    width: 30vw;
+    width: 40vw;
 }
 
 .tagDialog{
-    .areaCreateNewTag{
-        margin-top: 10px;
-        .v-input__details{ margin: 0px; }
+    .v-input__details{
+        margin: 0px;
+        padding: 0;
+        height: 0;
+        width: 0;
+    }
+    ul{
+        margin:10px;
+        li{
+            list-style:none;
+            font-size: 1.5vw;
+            input{margin: 0 5px;}
+        }
+    }
+    // .v-input__control{ margin: 0px 5px;}
+    .areaCreateNewTag{margin: 10px;}
+    .areaTagSerch{
+        margin: 20px 5px 5px 5px;
+        .v-col{
+            padding-top:0;
+            padding-bottom:0;
+        }
     }
 }
 
-
-button{width:100%}
 .head{margin-top: 10px;}
 
+
+.longButton{width:100%}
+.error{
+    color: rgb(190, 0, 0);
+    font-weight: bolder;
+    padding-top: 10px;
+}
 
 </style>
