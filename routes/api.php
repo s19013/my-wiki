@@ -35,6 +35,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/edit',[ArticleController::class,'']);
         Route::post('/serveUserAllTag',[ArticleController::class,'serveUserAllTag']);
         Route::post('/serveAddedTag',[ArticleController::class,'serveAddedTag']);
+        Route::post('/search',[ArticleController::class,'tagSearch']);
     });
 
     Route::prefix('/article')->group(function () {
