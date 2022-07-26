@@ -52,4 +52,9 @@ class ArticleController extends Controller
             tag   :$request->tag,
         );
     }
+
+    public function serveAddedTag(Request $request)
+    {
+        return Tag::serveAddedTag($request->userId);
+    }
 }
