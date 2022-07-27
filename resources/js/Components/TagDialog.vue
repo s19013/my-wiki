@@ -21,10 +21,13 @@
                         ></v-text-field>
                     </v-col>
                     <v-col cols="1">
-                        <v-btn color="submit" elevation="2" @click="searchTagCheck()">検索</v-btn>
+                        <v-btn color="submit"
+                        elevation="2"
+                        @click="searchTagCheck()">検索</v-btn>
                     </v-col>
                 </v-row>
                 <!--  -->
+                <loading v-if="tagSerchLoading"></loading>
                 <v-list
                     class="overflow-y-auto mx-auto"
                     width="100%"
@@ -56,6 +59,7 @@
 </template>
 
 <script>
+import loading from './loading/loading.vue'
 export default{
     data() {
       return {
@@ -67,7 +71,7 @@ export default{
         tagDialogFlag:false,
 
         //loding
-        tagSerchLoding:false,
+        tagSerchLoading:false,
 
         // errorFlag
         newTagErrorFlag:false,
@@ -79,10 +83,8 @@ export default{
         tagSearchResultList:[]
       }
     },
-    props:{
-        userId:{type:Number},
-        // tagDialogFlag:{type:Boolean}
-    },
+    props:{ userId:{type:Number},},
+    components:{loading},
     methods: {
         createNewTagCheck(){
             if (this.newTag == '') {
@@ -150,6 +152,7 @@ export default{
             this.searchTag()
         },
         async searchTag(){
+            this.tagSerchLoading = true
             this.tagSearchResultList = []
             await axios.post('/api/tag/search',{
                 userId:this.userId,
@@ -162,6 +165,7 @@ export default{
                         name:tag.name
                     })
                 }
+                this.tagSerchLoading = false
             })
         },
         serveCheckedTagListToParent(){ return this.checkedTagList}
