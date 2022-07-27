@@ -24,8 +24,38 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
+
+    Route::get('/test', function () {
+        return Inertia::render('test');
+    })->name('test');
+
+    Route::get('/createArticle', function () {
+        return Inertia::render('createArticle',[
+            'rederTest' => 'test'
+        ]);
+    })->name('createArticle');
+
+    Route::get('/index', function () {
+        return Inertia::render('index');
+    })->name('index');
+
+
+});
+
+// Route::get('/dashboard', function () {
+//     return Inertia::render('Dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
+
+// Route::get('/createArticle', function () {
+//     return Inertia::render('createArticle');
+// })->middleware(['auth', 'verified'])->name('createArticle');
+
+// Route::get('/test', function () {
+//     return Inertia::render('test');
+// })->middleware(['auth', 'verified'])->name('test');
 
 require __DIR__.'/auth.php';

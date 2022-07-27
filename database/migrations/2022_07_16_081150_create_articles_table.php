@@ -19,7 +19,7 @@ return new class extends Migration
             $table->tinyInteger('category')->comment('リンク:1 記事:2');
             $table->string('title');
             $table->longText('body');
-            $table->unsignedBigInteger('article_tag_id');
+            // $table->unsignedBigInteger('article_tag_id');
             $table->softDeletes();
             $table->timestamps();
 

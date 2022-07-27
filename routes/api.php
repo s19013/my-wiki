@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\ArticleController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,16 +16,37 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/test', function (Request $request) {
-    return response()->json([
-        "message" => "ok"
-    ]);
+// 認証が必要な部分
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/test', function (Request $request) {
+        return response()->json([
+            "message" => "ok"
+        ]);
+    });
+    Route::post('/postTest', function (Request $request) {
+        return response()->json([
+            "message" => $request->message
+        ]);
+    });
+
+    Route::prefix('/tag')->group(function () {
+        Route::post('/delete',[ArticleController::class,'']);
+        Route::post('/store',[ArticleController::class,'tagStore']);
+        Route::post('/edit',[ArticleController::class,'']);
+        Route::post('/serveUserAllTag',[ArticleController::class,'serveUserAllTag']);
+        Route::post('/serveAddedTag',[ArticleController::class,'serveAddedTag']);
+        Route::post('/search',[ArticleController::class,'tagSearch']);
+    });
+
+    Route::prefix('/article')->group(function () {
+        Route::post('/store',[ArticleController::class,'articleStore']);
+        Route::post('/edit',[ArticleController::class,'']);
+        Route::post('/delete',[ArticleController::class,'']);
+        Route::post('/serveUserAllArticle',[ArticleController::class,'']);
+    });
 });
 
-Route::middleware('auth:sanctum')->post('/postTest', function (Request $request) {
-    return response()->json([
-        "message" => $request->message
-    ]);
-});
+
+
 
 require __DIR__.'/auth.php';
