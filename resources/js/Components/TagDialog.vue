@@ -195,19 +195,18 @@ export default{
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .tagDialog{
-    .v-input__details{
-        margin: 0px;
-        padding: 0;
-        height: 0;
-        width: 0;
-    }
     .v-list{
         margin: 0;
         padding:0;
     }
-    // .v-input__control{ margin: 0px 5px;}
+    // .v-input__details{
+    //     margin: 0;
+    //     padding: 0;
+    //     height: 0;
+    //     width: 0;
+    // }
     .areaCreateNewTag{margin: 10px;}
     .areaTagSerch{
         margin: 20px 5px 5px 5px;

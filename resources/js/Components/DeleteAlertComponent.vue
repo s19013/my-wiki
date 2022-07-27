@@ -37,7 +37,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .Dialog{
     .v-col{
         display: flex;
