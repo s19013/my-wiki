@@ -102,7 +102,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .articleContainer {margin: 0 20px;}
 textarea {
         width: 100%;
@@ -136,11 +136,11 @@ textarea {
 
 .head{margin-top: 10px;}
 .articleError{padding-top: 5px;}
-// .v-input__details{
-//         margin: 0;
-//         padding: 0;
-//         height: 0;
-//         width: 0;
-// }
+.v-input__details{
+        margin: 0;
+        padding: 0;
+        height: 0;
+        width: 0;
+}
 
 </style>
