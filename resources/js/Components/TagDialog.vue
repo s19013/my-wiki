@@ -23,6 +23,7 @@
                     <v-col cols="1">
                         <v-btn color="submit"
                         elevation="2"
+                        :disabled = "tagSerchLoading"
                         @click="searchTagCheck()">検索</v-btn>
                     </v-col>
                 </v-row>
@@ -51,7 +52,12 @@
 
                     <v-text-field v-model="newTag" label="新しいタグ"></v-text-field>
 
-                    <v-btn class="longButton" color="#64B5F6" elevation="2" @click.stop="createNewTagCheck()">作成</v-btn>
+                    <v-btn
+                    class="longButton"
+                    color="#64B5F6"
+                    elevation="2"
+                    :disabled="newTagSending"
+                    @click.stop="createNewTagCheck()">作成</v-btn>
                 </div>
             </section>
         </v-dialog>
@@ -72,6 +78,7 @@ export default{
 
         //loding
         tagSerchLoading:false,
+        newTagSending:false,
 
         // errorFlag
         newTagErrorFlag:false,
@@ -94,6 +101,7 @@ export default{
             else {this.createNewTag()}
         },100),150),
         createNewTag(){
+            this.newTagSending = true
             axios.post('/api/tag/store',{
                 userId:this.userId,
                 tag   :this.newTag
@@ -103,11 +111,16 @@ export default{
                 // 入力欄を消す
                 this.createNewTagFlag=false
                 this.newTag=''
+
+                //エラーを消す
+                this.tagAlreadyExistsErrorFlag = false
+                this.newTagErrorFlag = false
             })
             .catch((error) =>{
                 // console.log(error.response);
                 if (error.response.status == 400) { this.tagAlreadyExistsErrorFlag = true }
             })
+            this.newTagSending = false
         },
         searchTagCheck:_.debounce(_.throttle(async function(){
             //空の状態ならalltagを入れとく
@@ -159,7 +172,7 @@ export default{
             .catch((error)=>{})
         },
         createNewTagFlagSwitch(){ this.createNewTagFlag = !this.createNewTagFlag },
-        tagDialogFlagSwithch:_.debounce(_.throttle(async function(){
+        tagDialogFlagSwithch(){
             this.tagDialogFlag = !this.tagDialogFlag
 
             // 新規登録の入力欄を消す
@@ -168,7 +181,7 @@ export default{
             // 全部のタグをリストに表示するように戻す
             this.tagToSearch = ''
             this.tagSearchResultList = this.allTagList
-        },100),150),
+        },
         serveCheckedTagListToParent(){ return this.checkedTagList}
     },
     mounted() {
