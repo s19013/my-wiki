@@ -6,9 +6,9 @@
 .error{
     color: rgb(190, 0, 0);
     font-weight: bolder;
-    padding-top: 5px;
 }
 .Dialog{
     background: #e1e1e1;
     width: 40vw;
+    padding: 10px;
 }
