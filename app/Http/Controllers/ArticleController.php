@@ -17,6 +17,8 @@ class ArticleController extends Controller
 
     public function articleStore(Request $request)
     {
+        // CSRFトークンを再生成して、二重送信対策
+        $request->session()->regenerateToken();
         // 記事を保存して記事のidを取得
         $articleId = Article::storeArticle(
                 userId   : $request->userId,
@@ -47,6 +49,8 @@ class ArticleController extends Controller
 
     public function tagStore(Request $request)
     {
+        // CSRFトークンを再生成して、二重送信対策
+        $request->session()->regenerateToken();
         return Tag::store(
             userId:$request->userId,
             tag   :$request->tag,

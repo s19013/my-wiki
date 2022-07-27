@@ -17,7 +17,7 @@ use App\Http\Controllers\ArticleController;
 */
 
 // 認証が必要な部分
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:sanctum', 'throttle:60,1')->group(function () {
     Route::get('/test', function (Request $request) {
         return response()->json([
             "message" => "ok"
