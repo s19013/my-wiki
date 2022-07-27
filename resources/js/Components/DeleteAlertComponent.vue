@@ -1,41 +1,51 @@
 <template>
+    <div>
+     <!-- ダイアログを呼び出すためのボタン -->
+    <v-btn color="error" @click.stop="deleteDialogFlagSwitch"> 削除 </v-btn>
+
     <v-dialog
-      v-model="open"
+      v-model="deleteDialogFlag"
       persistent
-      max-width="290"
     >
-      <v-card>
-        <v-card-title class="text-h5">
-          この記事を削除しますか
-        </v-card-title>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="green darken-1"
-            text
-            @click="this.$emit('switch')"
-          >
-            もどる
-          </v-btn>
-          <v-btn
-            color="red darken-1"
-            text
-            @click="this.$emit('switch')"
-          >
-            削除する
-          </v-btn>
-        </v-card-actions>
-      </v-card>
+        <section class="Dialog">
+            <h2>この記事を削除しますか</h2>
+            <v-row>
+                <v-col cols=""></v-col>
+                <v-col cols="2">
+                    <p @click.stop="deleteDialogFlagSwitch()">もどる</p>
+                </v-col>
+                <v-col cols="2">
+                    <p class="error" @click.stop="deleteAricle()">削除する</p>
+                </v-col>
+            </v-row>
+        </section>
     </v-dialog>
+    </div>
 </template>
 
 <script>
 export default {
     data() {
         return {
-
+            deleteDialogFlag:false,
         }
     },
-    props:["open"]
+    methods: {
+        deleteDialogFlagSwitch(){this.deleteDialogFlag = !this.deleteDialogFlag},
+        deleteAricle(){this.$emit("deleteAricleTrigger");}
+    },
 }
 </script>
+
+<style lang="scss">
+.Dialog{
+    .v-col{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    p{
+        cursor: pointer;
+    }
+}
+</style>
