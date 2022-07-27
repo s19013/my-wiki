@@ -54,7 +54,7 @@
 
                     <v-btn
                     class="longButton"
-                    color="#64B5F6"
+                    color="#BBDEFB"
                     elevation="2"
                     :disabled="newTagSending"
                     @click.stop="createNewTagCheck()">作成</v-btn>
