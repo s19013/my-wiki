@@ -11,7 +11,9 @@
                         ></v-text-field>
                     </v-col>
                     <v-col cols="1"> <DeleteAlertComponent @deleteAricleTrigger="deleteArticle"></DeleteAlertComponent> </v-col>
-                    <v-col cols="1"> <v-btn class="longButton" color="#BBDEFB" @click="submitCheck"> 保存 </v-btn> </v-col>
+                    <v-col cols="1">
+                        <v-btn class="longButton" color="#BBDEFB" @click="submitCheck" :disabled="articleSending"> 保存 </v-btn>
+                    </v-col>
                 </v-row>
                 <!-- タブ -->
                 <v-row>
@@ -41,6 +43,7 @@
                 <div v-show="activeTab === 1" class="markdown" v-html="compiledMarkdown()"></div>
             </v-form>
         </section>
+        <loadingDialog :loadingFlag="articleSending"></loadingDialog>
     </div>
 </template>
 
@@ -48,6 +51,7 @@
 import {marked} from 'marked';
 import TagDialog from '@/Components/dialog/TagDialog.vue';
 import DeleteAlertComponent from '@/Components/dialog/DeleteAlertDialog.vue';
+import loadingDialog from '@/Components/loading/loadingDialog.vue';
 import axios from 'axios'
 
 export default {
@@ -59,6 +63,7 @@ export default {
 
         //loding
         articleLoding :false,
+        articleSending:false,
 
         // errorFlag
         articleBodyErrorFlag:false,
@@ -66,20 +71,22 @@ export default {
     },
     components:{
         DeleteAlertComponent,
-        TagDialog
+        TagDialog,
+        loadingDialog,
     },
     methods: {
         compiledMarkdown() {return marked(this.articleBody)},
         changeTab(num){this.activeTab = num},
         // 本文送信
-        submitCheck(){
+        submitCheck:_.debounce(_.throttle(async function(){
             if (this.articleBody =='') {
                 this.articleBodyErrorFlag = true
                 return
             }
             else {this.submit()}
-        },
+        },100),150),
         submit(){
+            this.articleSending = true
             axios.post('/api/article/store',{
                 userId:this.$attrs.auth.user.id,
                 articleTitle:this.articleTitle,
@@ -88,6 +95,7 @@ export default {
                 tagList:this.$refs.tagDialog.serveCheckedTagListToParent()
             })
             .then((res)=>{
+                this.articleSending = false
                 this.$inertia.get('/index')
             })
         },
@@ -111,6 +119,7 @@ textarea {
         padding: 20px;
 }
 .markdown{
+    padding: 0 10px;
     word-break:break-word;
     overflow-wrap:normal;
 }
@@ -137,10 +146,10 @@ textarea {
 .head{margin-top: 10px;}
 .articleError{padding-top: 5px;}
 .v-input__details{
-        margin: 0;
-        padding: 0;
-        height: 0;
-        width: 0;
+    margin: 0;
+    padding: 0;
+    height: 0;
+    width: 0;
 }
 
 </style>
