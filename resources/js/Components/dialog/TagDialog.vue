@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import loading from '../loading/loading.vue'
+import loading from '@/Components/loading/loading.vue'
 export default{
     data() {
       return {
