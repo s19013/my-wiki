@@ -20,25 +20,15 @@ class Article extends Model
     public static function storeArticle($title,$body,$userId,$category)
     {
         // タイトルが産められてなかったら日時で埋める
-        if ($title == '') {
-            return DB::transaction(function () use($body,$userId,$category){
-                return Article::insertGetId([
-                'user_id'  => $userId,
-                'title'    => Carbon::now(),
-                'body'     => $body,
-                'category' => $category]);
-            });
-        }
+        if ($title == '') { $title = Carbon::now() ;}
 
         return DB::transaction(function () use($title,$body,$userId,$category){
-            return Article::insertGetId([
-            'user_id'  => $userId,
-            'title'    => $title,
-            'body'     => $body,
-            'category' => $category]);
+            $article = Article::create([
+                'user_id'  => $userId,
+                'title'    => $title,
+                'body'     => $body,
+                'category' => $category]);
+            return $article->id;
         });
-
-        // CSRFトークンを再生成して、二重送信対策
-        $request->session()->regenerateToken();
     }
 }

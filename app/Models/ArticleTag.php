@@ -25,7 +25,5 @@ class ArticleTag extends Model
                 'tag_id'     => $tagId,
             ]);
         });
-        // CSRFトークンを再生成して、二重送信対策
-        $request->session()->regenerateToken();
     }
 }
