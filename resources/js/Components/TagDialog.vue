@@ -1,30 +1,212 @@
 <template>
-    <v-dialog
-        v-model="open"
-        persistent
-        scrollable
-    >
-    <v-card>
-        <v-card-title class="text-h5">タグ</v-card-title>
-        <ul>
-            <li></li>
-        </ul>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="green darken-1"
-            text
-            @click="dialog = false"
-          >
-            新規作成
-          </v-btn>
-        </v-card-actions>
-    </v-card>
-    </v-dialog>
+    <div>
+        <!-- ダイアログを呼び出すためのボタン -->
+        <v-btn class="longButton" color="submit" @click.stop="tagDialogFlagSwithch">tag </v-btn>
+
+
+<!-- v-modelがv-ifとかの代わりになっている -->
+        <v-dialog
+            v-model="tagDialogFlag"
+            scrollable
+            persistent>
+
+            <section class="Dialog tagDialog">
+                <v-btn color="#E57373"   x-small elevation="2" @click.stop="tagDialogFlagSwithch()">X 閉じる</v-btn>
+                <v-row class="areaTagSerch">
+                    <v-col cols="10">
+                        <v-text-field
+                            v-model="tagToSearch"
+                            label="タグ検索"
+                            clearable
+                        ></v-text-field>
+                    </v-col>
+                    <v-col cols="1">
+                        <v-btn color="submit" elevation="2" @click="searchTagCheck()">検索</v-btn>
+                    </v-col>
+                </v-row>
+                <!--  -->
+                <v-list
+                    class="overflow-y-auto mx-auto"
+                    width="100%"
+                    max-height="50vh">
+
+                    <v-list-item v-for="tag of tagSearchResultList" :key="tag.id">
+                        <input type="checkbox" :id="tag.id" v-model="checkedTagList" :value="tag.id">
+                        <label :for="tag.id">{{tag.name}}</label>
+                    </v-list-item>
+
+                </v-list>
+                <v-btn
+                class="longButton my-4"
+                color="submit"
+                v-if="!createNewTagFlag"
+                @click.stop="createNewTagFlagSwitch">新規作成</v-btn>
+                <!--  -->
+                <div class="areaCreateNewTag" v-if="createNewTagFlag">
+                    <p class="error" v-if="newTagErrorFlag">文字を入力してください</p>
+                    <p class="error" v-if="tagAlreadyExistsErrorFlag">そのタグはすでに登録されいます</p>
+
+                    <v-text-field v-model="newTag" label="新しいタグ"></v-text-field>
+
+                    <v-btn class="longButton" color="#64B5F6" elevation="2" @click.stop="createNewTagCheck()">作成</v-btn>
+                </div>
+            </section>
+        </v-dialog>
+    </div>
 </template>
 
 <script>
 export default{
+    data() {
+      return {
+        tagToSearch:'',
+        newTag:'',
 
+        // flag
+        createNewTagFlag:false,
+        tagDialogFlag:false,
+
+        //loding
+        tagSerchLoding:false,
+
+        // errorFlag
+        newTagErrorFlag:false,
+        tagAlreadyExistsErrorFlag:false,
+
+        // tagList
+        allTagList:[],//キャッシュみたいなもの
+        checkedTagList:[],
+        tagSearchResultList:[]
+      }
+    },
+    props:{
+        userId:{type:Number},
+        // tagDialogFlag:{type:Boolean}
+    },
+    methods: {
+        createNewTagCheck(){
+            if (this.newTag == '') {
+                this.newTagErrorFlag = true
+                return
+            }
+            else {this.createNewTag()}
+        },
+        createNewTag(){
+            axios.post('/api/tag/store',{
+                userId:this.userId,
+                tag   :this.newTag
+            })
+            .then((res)=>{
+                this.getAddedTag()
+                // 入力欄を消す
+                this.createNewTagFlag=false
+            })
+            .catch((error) =>{
+                // console.log(error.response);
+                if (error.response.status == 400) { this.tagAlreadyExistsErrorFlag = true }
+            })
+        },
+        createNewTagFlagSwitch(){ this.createNewTagFlag = !this.createNewTagFlag },
+        tagDialogFlagSwithch(){
+            this.tagDialogFlag = !this.tagDialogFlag
+
+            // 新規登録の入力欄を消す
+            this.createNewTagFlag =false
+
+            // 全部のタグをリストに表示するように戻す
+            this.tagToSearch = ''
+            this.tagSearchResultList = this.allTagList
+        },
+        async getAllTag(){
+            await axios.post('/api/tag/serveUserAllTag',{userId:this.userId})
+            .then((res)=>{
+                    for (const tag of res.data) {
+                        this.allTagList.push({
+                            id:tag.id,
+                            name:tag.name
+                        })
+                    }
+                    this.tagSearchResultList = this.allTagList
+            })
+            .catch((error)=>{})
+        },
+        async getAddedTag(){
+            await axios.post('/api/tag/serveAddedTag',{userId:this.userId})
+            .then((res)=>{
+                // リストに追加
+                this.allTagList.push({
+                    id:res.data.id,
+                    name:res.data.name
+                })
+            })
+            .catch((error)=>{})
+        },
+        searchTagCheck(){
+            //空の状態ならalltagを入れとく
+            if (this.tagToSearch == '') {
+                this.tagSearchResultList = this.allTagList
+                return
+            }
+            this.searchTag()
+        },
+        async searchTag(){
+            this.tagSearchResultList = []
+            await axios.post('/api/tag/search',{
+                userId:this.userId,
+                tag:this.tagToSearch
+            })
+            .then((res)=>{
+                for (const tag of res.data) {
+                    this.tagSearchResultList.push({
+                        id:tag.id,
+                        name:tag.name
+                    })
+                }
+            })
+        },
+        serveCheckedTagListToParent(){ return this.checkedTagList}
+    },
+    mounted() {
+        this.getAllTag()
+    },
 }
 </script>
+
+<style lang="scss">
+.Dialog{
+    background: #e1e1e1;
+    width: 40vw;
+}
+
+.tagDialog{
+    .v-input__details{
+        margin: 0px;
+        padding: 0;
+        height: 0;
+        width: 0;
+    }
+    .v-list{
+        margin: 0;
+        padding:0;
+    }
+    // .v-input__control{ margin: 0px 5px;}
+    .areaCreateNewTag{margin: 10px;}
+    .areaTagSerch{
+        margin: 20px 5px 5px 5px;
+        .v-col{
+            padding-top:0;
+            padding-bottom:0;
+        }
+    }
+}
+
+
+
+.longButton{width:100%}
+.error{
+    color: rgb(190, 0, 0);
+    font-weight: bolder;
+    padding-top: 10px;
+}
+
+</style>
