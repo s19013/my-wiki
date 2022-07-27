@@ -3,8 +3,7 @@
         <!-- ダイアログを呼び出すためのボタン -->
         <v-btn class="longButton" color="submit" @click.stop="tagDialogFlagSwithch">tag </v-btn>
 
-
-<!-- v-modelがv-ifとかの代わりになっている -->
+        <!-- v-modelがv-ifとかの代わりになっている -->
         <v-dialog
             v-model="tagDialogFlag"
             scrollable
@@ -12,6 +11,7 @@
 
             <section class="Dialog tagDialog">
                 <v-btn color="#E57373"   x-small elevation="2" @click.stop="tagDialogFlagSwithch()">X 閉じる</v-btn>
+                <!-- 検索窓とか -->
                 <v-row class="areaTagSerch">
                     <v-col cols="10">
                         <v-text-field
@@ -27,8 +27,11 @@
                         @click="searchTagCheck()">検索</v-btn>
                     </v-col>
                 </v-row>
-                <!--  -->
+
+                <!-- loadingアニメ -->
                 <loading v-if="tagSerchLoading"></loading>
+
+                <!-- タグ一覧 -->
                 <v-list
                     class="overflow-y-auto mx-auto"
                     width="100%"
@@ -40,12 +43,15 @@
                     </v-list-item>
 
                 </v-list>
-                <v-btn
-                class="longButton my-4"
-                color="submit"
-                v-if="!createNewTagFlag"
-                @click.stop="createNewTagFlagSwitch">新規作成</v-btn>
+
                 <!--  -->
+                <v-btn
+                    class="longButton my-4"
+                    color="submit"
+                    v-if="!createNewTagFlag"
+                    @click.stop="createNewTagFlagSwitch">新規作成</v-btn>
+
+                <!-- 新規タグ作成 -->
                 <div class="areaCreateNewTag" v-if="createNewTagFlag">
                     <p class="error" v-if="newTagErrorFlag">文字を入力してください</p>
                     <p class="error" v-if="tagAlreadyExistsErrorFlag">そのタグはすでに登録されいます</p>
@@ -65,7 +71,7 @@
 </template>
 
 <script>
-import loading from './loading/loading.vue'
+import loading from '../loading/loading.vue'
 export default{
     data() {
       return {
@@ -93,6 +99,7 @@ export default{
     props:{ userId:{type:Number},},
     components:{loading},
     methods: {
+        // 新規タグ作成
         createNewTagCheck:_.debounce(_.throttle(async function(){
             if (this.newTag == '') {
                 this.newTagErrorFlag = true
@@ -122,6 +129,7 @@ export default{
             })
             this.newTagSending = false
         },
+        // タグ検索
         searchTagCheck:_.debounce(_.throttle(async function(){
             //空の状態ならalltagを入れとく
             if (this.tagToSearch == '') {
@@ -147,6 +155,25 @@ export default{
                 this.tagSerchLoading = false
             })
         },
+        // 切り替え
+        createNewTagFlagSwitch(){ this.createNewTagFlag = !this.createNewTagFlag },
+        tagDialogFlagSwithch(){
+            this.tagDialogFlag = !this.tagDialogFlag
+
+            // 新規登録の入力欄を消す
+            this.createNewTagFlag =false
+            this.newTag = ''
+
+            // 全部のタグをリストに表示するように戻す
+            this.tagToSearch = ''
+            this.tagSearchResultList = this.allTagList
+
+            //エラーを消す
+            this.tagAlreadyExistsErrorFlag = false
+            this.newTagErrorFlag = false
+        },
+        //その他?
+        serveCheckedTagListToParent(){ return this.checkedTagList},
         async getAllTag(){
             await axios.post('/api/tag/serveUserAllTag',{userId:this.userId})
             .then((res)=>{
@@ -171,23 +198,6 @@ export default{
             })
             .catch((error)=>{})
         },
-        createNewTagFlagSwitch(){ this.createNewTagFlag = !this.createNewTagFlag },
-        tagDialogFlagSwithch(){
-            this.tagDialogFlag = !this.tagDialogFlag
-
-            // 新規登録の入力欄を消す
-            this.createNewTagFlag =false
-            this.newTag = ''
-
-            // 全部のタグをリストに表示するように戻す
-            this.tagToSearch = ''
-            this.tagSearchResultList = this.allTagList
-
-            //エラーを消す
-            this.tagAlreadyExistsErrorFlag = false
-            this.newTagErrorFlag = false
-        },
-        serveCheckedTagListToParent(){ return this.checkedTagList}
     },
     mounted() {
         this.getAllTag()
@@ -201,12 +211,6 @@ export default{
         margin: 0;
         padding:0;
     }
-    // .v-input__details{
-    //     margin: 0;
-    //     padding: 0;
-    //     height: 0;
-    //     width: 0;
-    // }
     .areaCreateNewTag{margin: 10px;}
     .areaTagSerch{
         margin: 20px 5px 5px 5px;

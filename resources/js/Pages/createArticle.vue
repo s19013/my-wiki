@@ -1,8 +1,8 @@
 <template>
     <div>
         <section class="articleContainer">
-            <!-- <v-form  v-on:submit.prevent ="submit"> -->
-            <v-form>
+            <v-form v-on:submit.prevent ="submit">
+                <!-- タイトル入力欄とボタン2つ -->
                 <v-row class="head">
                     <v-col cols="10">
                         <v-text-field
@@ -11,10 +11,9 @@
                         ></v-text-field>
                     </v-col>
                     <v-col cols="1"> <DeleteAlertComponent @deleteAricleTrigger="deleteArticle"></DeleteAlertComponent> </v-col>
-                    <!-- <v-col cols="1"> <v-btn color="error"> 削除 </v-btn> </v-col> -->
                     <v-col cols="1"> <v-btn class="longButton" color="#BBDEFB" @click="submitCheck"> 保存 </v-btn> </v-col>
                 </v-row>
-                <!--  -->
+                <!-- タブ -->
                 <v-row>
                     <v-col>
                         <ul class="tabLabel">
@@ -30,7 +29,7 @@
                     <v-col><p class="error articleError" v-if="articleBodyErrorFlag">本文を入力してください</p></v-col>
                     <v-col cols="2"><TagDialog :userId="$attrs.auth.user.id" ref="tagDialog"></TagDialog></v-col>
                 </v-row>
-                <!--  -->
+                <!-- md入力欄  -->
                 <div v-show="activeTab === 0">
                     <v-textarea
                         filled
@@ -47,8 +46,8 @@
 
 <script>
 import {marked} from 'marked';
-import TagDialog from '@/Components/TagDialog.vue';
-import DeleteAlertComponent from '@/Components/DeleteAlertComponent.vue';
+import TagDialog from '@/Components/dialog/TagDialog.vue';
+import DeleteAlertComponent from '@/Components/dialog/DeleteAlertDialog.vue';
 import axios from 'axios'
 
 export default {
@@ -72,6 +71,7 @@ export default {
     methods: {
         compiledMarkdown() {return marked(this.articleBody)},
         changeTab(num){this.activeTab = num},
+        // 本文送信
         submitCheck(){
             if (this.articleBody =='') {
                 this.articleBodyErrorFlag = true
@@ -122,16 +122,16 @@ textarea {
         border:black solid 1px;
         padding:10px 20px;
     }
-}
-.active{
-    font-weight: bold;
-    cursor: default;
-}
+    .active{
+        font-weight: bold;
+        cursor: default;
+    }
 
-.notActive{
-    background: #919191;
-    color: black;
-    cursor: pointer;
+    .notActive{
+        background: #919191;
+        color: black;
+        cursor: pointer;
+    }
 }
 
 .head{margin-top: 10px;}
