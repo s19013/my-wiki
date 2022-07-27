@@ -47,9 +47,6 @@ class Tag extends Model
             ]);
         });
 
-        // CSRFトークンを再生成して、二重送信対策
-        $request->session()->regenerateToken();
-
         return response()->json(
             ["message" => "stored"],
             200
