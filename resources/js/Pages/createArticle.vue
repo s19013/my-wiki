@@ -10,8 +10,9 @@
                             label="タイトル"
                         ></v-text-field>
                     </v-col>
-                    <v-col cols="1"> <v-btn color="error"> 削除 </v-btn> </v-col>
-                    <v-col cols="1"> <v-btn color="submit" @click="submitCheck"> 保存 </v-btn> </v-col>
+                    <v-col cols="1"> <DeleteAlertComponent @deleteAricleTrigger="deleteArticle"></DeleteAlertComponent> </v-col>
+                    <!-- <v-col cols="1"> <v-btn color="error"> 削除 </v-btn> </v-col> -->
+                    <v-col cols="1"> <v-btn class="longButton" color="#BBDEFB" @click="submitCheck"> 保存 </v-btn> </v-col>
                 </v-row>
                 <!--  -->
                 <v-row>
@@ -26,7 +27,7 @@
                         </ul>
                     </v-col>
 
-                    <v-col><p class="error" v-if="articleBodyErrorFlag">本文を入力してください</p></v-col>
+                    <v-col><p class="error articleError" v-if="articleBodyErrorFlag">本文を入力してください</p></v-col>
                     <v-col cols="2"><TagDialog :userId="$attrs.auth.user.id" ref="tagDialog"></TagDialog></v-col>
                 </v-row>
                 <!--  -->
@@ -41,19 +42,13 @@
                 <div v-show="activeTab === 1" class="markdown" v-html="compiledMarkdown()"></div>
             </v-form>
         </section>
-        {{$attrs.auth.user.id}}
-
-        <!-- <DeleteAlertComponent
-            :open="deleteAlertFlag"
-            @switch="deleteAlertFlagSwitch"
-        ></DeleteAlertComponent> -->
     </div>
 </template>
 
 <script>
 import {marked} from 'marked';
-// import DeleteAlertComponent from '@/Components/DeleteAlertComponent.vue';
 import TagDialog from '@/Components/TagDialog.vue';
+import DeleteAlertComponent from '@/Components/DeleteAlertComponent.vue';
 import axios from 'axios'
 
 export default {
@@ -63,9 +58,6 @@ export default {
         articleTitle:'',
         articleBody: '',
 
-        // flag
-        // deleteAlertFlag:false,
-
         //loding
         articleLoding :false,
 
@@ -74,14 +66,13 @@ export default {
       }
     },
     components:{
-        // DeleteAlertComponent
+        DeleteAlertComponent,
         TagDialog
     },
     methods: {
         compiledMarkdown() {return marked(this.articleBody)},
         changeTab(num){this.activeTab = num},
         submitCheck(){
-            console.log(this.$refs.tagDialog.serveCheckedTagListToParent());
             if (this.articleBody =='') {
                 this.articleBodyErrorFlag = true
                 return
@@ -100,7 +91,13 @@ export default {
                 this.$inertia.get('/index')
             })
         },
-        deleteAlertFlagSwitch() { this.deleteAlertFlag = !this.deleteAlertFlag },
+        deleteArticle() {
+            // 消す処理
+
+            //遷移
+            this.$inertia.get('/index')
+            console.log('called');
+        },
     },
 }
 </script>
@@ -138,5 +135,6 @@ textarea {
 }
 
 .head{margin-top: 10px;}
+.articleError{padding-top: 5px;}
 
 </style>
