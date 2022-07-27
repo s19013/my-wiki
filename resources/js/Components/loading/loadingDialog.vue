@@ -3,14 +3,15 @@
         <v-dialog
             v-model="loadingFlag"
             persistent
+            class="Dialog"
         >
-        <loading></loading>
+            <loading></loading>
         </v-dialog>
     </div>
 </template>
 
 <script>
-import loading from 'loading.vue';
+import loading from '@/Components/loading/loading.vue'
 export default{
     props:['loadingFlag'],
     components:{loading}
