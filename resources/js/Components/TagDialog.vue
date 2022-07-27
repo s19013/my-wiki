@@ -173,11 +173,6 @@ export default{
 </script>
 
 <style lang="scss">
-.Dialog{
-    background: #e1e1e1;
-    width: 40vw;
-}
-
 .tagDialog{
     .v-input__details{
         margin: 0px;
@@ -199,14 +194,4 @@ export default{
         }
     }
 }
-
-
-
-.longButton{width:100%}
-.error{
-    color: rgb(190, 0, 0);
-    font-weight: bolder;
-    padding-top: 10px;
-}
-
 </style>

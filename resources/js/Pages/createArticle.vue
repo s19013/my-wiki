@@ -137,19 +137,6 @@ textarea {
     cursor: pointer;
 }
 
-.Dialog{
-    background: #e1e1e1;
-    width: 40vw;
-}
-
 .head{margin-top: 10px;}
-
-
-.longButton{width:100%}
-.error{
-    color: rgb(190, 0, 0);
-    font-weight: bolder;
-    padding-top: 10px;
-}
 
 </style>
