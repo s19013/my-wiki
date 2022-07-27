@@ -177,10 +177,15 @@ export default{
 
             // 新規登録の入力欄を消す
             this.createNewTagFlag =false
+            this.newTag = ''
 
             // 全部のタグをリストに表示するように戻す
             this.tagToSearch = ''
             this.tagSearchResultList = this.allTagList
+
+            //エラーを消す
+            this.tagAlreadyExistsErrorFlag = false
+            this.newTagErrorFlag = false
         },
         serveCheckedTagListToParent(){ return this.checkedTagList}
     },
