@@ -86,13 +86,13 @@ export default{
     props:{ userId:{type:Number},},
     components:{loading},
     methods: {
-        createNewTagCheck(){
+        createNewTagCheck:_.debounce(_.throttle(async function(){
             if (this.newTag == '') {
                 this.newTagErrorFlag = true
                 return
             }
             else {this.createNewTag()}
-        },
+        },100),150),
         createNewTag(){
             axios.post('/api/tag/store',{
                 userId:this.userId,
@@ -102,22 +102,37 @@ export default{
                 this.getAddedTag()
                 // 入力欄を消す
                 this.createNewTagFlag=false
+                this.newTag=''
             })
             .catch((error) =>{
                 // console.log(error.response);
                 if (error.response.status == 400) { this.tagAlreadyExistsErrorFlag = true }
             })
         },
-        createNewTagFlagSwitch(){ this.createNewTagFlag = !this.createNewTagFlag },
-        tagDialogFlagSwithch(){
-            this.tagDialogFlag = !this.tagDialogFlag
-
-            // 新規登録の入力欄を消す
-            this.createNewTagFlag =false
-
-            // 全部のタグをリストに表示するように戻す
-            this.tagToSearch = ''
-            this.tagSearchResultList = this.allTagList
+        searchTagCheck:_.debounce(_.throttle(async function(){
+            //空の状態ならalltagを入れとく
+            if (this.tagToSearch == '') {
+                this.tagSearchResultList = this.allTagList
+                return
+            }
+            this.searchTag()
+        },100),150),
+        async searchTag(){
+            this.tagSerchLoading = true
+            this.tagSearchResultList = []
+            await axios.post('/api/tag/search',{
+                userId:this.userId,
+                tag:this.tagToSearch
+            })
+            .then((res)=>{
+                for (const tag of res.data) {
+                    this.tagSearchResultList.push({
+                        id:tag.id,
+                        name:tag.name
+                    })
+                }
+                this.tagSerchLoading = false
+            })
         },
         async getAllTag(){
             await axios.post('/api/tag/serveUserAllTag',{userId:this.userId})
@@ -143,31 +158,17 @@ export default{
             })
             .catch((error)=>{})
         },
-        searchTagCheck(){
-            //空の状態ならalltagを入れとく
-            if (this.tagToSearch == '') {
-                this.tagSearchResultList = this.allTagList
-                return
-            }
-            this.searchTag()
-        },
-        async searchTag(){
-            this.tagSerchLoading = true
-            this.tagSearchResultList = []
-            await axios.post('/api/tag/search',{
-                userId:this.userId,
-                tag:this.tagToSearch
-            })
-            .then((res)=>{
-                for (const tag of res.data) {
-                    this.tagSearchResultList.push({
-                        id:tag.id,
-                        name:tag.name
-                    })
-                }
-                this.tagSerchLoading = false
-            })
-        },
+        createNewTagFlagSwitch(){ this.createNewTagFlag = !this.createNewTagFlag },
+        tagDialogFlagSwithch:_.debounce(_.throttle(async function(){
+            this.tagDialogFlag = !this.tagDialogFlag
+
+            // 新規登録の入力欄を消す
+            this.createNewTagFlag =false
+
+            // 全部のタグをリストに表示するように戻す
+            this.tagToSearch = ''
+            this.tagSearchResultList = this.allTagList
+        },100),150),
         serveCheckedTagListToParent(){ return this.checkedTagList}
     },
     mounted() {
