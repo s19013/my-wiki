@@ -37,5 +37,8 @@ class Article extends Model
             'body'     => $body,
             'category' => $category]);
         });
+
+        // CSRFトークンを再生成して、二重送信対策
+        $request->session()->regenerateToken();
     }
 }
