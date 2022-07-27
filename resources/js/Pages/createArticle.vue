@@ -10,7 +10,7 @@
                             label="タイトル"
                         ></v-text-field>
                     </v-col>
-                    <!-- <v-col cols="1"> <v-btn color="error"> 削除 </v-btn> </v-col> -->
+                    <v-col cols="1"> <v-btn color="error"> 削除 </v-btn> </v-col>
                     <v-col cols="1"> <v-btn color="submit" @click="submitCheck"> 保存 </v-btn> </v-col>
                 </v-row>
                 <!--  -->
@@ -66,7 +66,7 @@
                 <!--  -->
                 <v-virtual-scroll>
                     <ul>
-                        <template v-for="tag of tagSearchResult" :key="tag.id">
+                        <template v-for="tag of tagSearchResultList" :key="tag.id">
                             <li>
                                 <input type="checkbox" :id="tag.id" v-model="checkedTagList" :value="tag.id">
                                 <label :for="tag.id">{{tag.name}}</label>
@@ -118,6 +118,7 @@ export default {
 
         //loding
         tagSerchLoding:false,
+        articleLoding :false,
 
         // errorFlag
         articleBodyErrorFlag:false,
@@ -125,9 +126,9 @@ export default {
         tagAlreadyExistsErrorFlag:false,
 
         // tagList
-        allTagList:[],
+        allTagList:[],//キャッシュみたいなもの
         checkedTagList:[],
-        tagSearchResult:[]
+        tagSearchResultList:[]
       }
     },
     components:{
@@ -152,7 +153,7 @@ export default {
                 tagList:this.checkedTagList
             })
             .then((res)=>{
-                console.log(res);
+                this.$inertia.get('/index')
             })
         },
         createNewTagCheck(){
@@ -185,7 +186,7 @@ export default {
             this.createNewTagFlag =false
             // 全部のタグをリストに表示するように戻す
             this.tagToSearch = ''
-            this.tagSearchResult = this.allTagList
+            this.tagSearchResultList = this.allTagList
         },
         async getAllTag(){
             await axios.post('/api/tag/serveUserAllTag',{userId:this.$attrs.auth.user.id})
@@ -196,7 +197,7 @@ export default {
                             name:tag.name
                         })
                     }
-                    this.tagSearchResult = this.allTagList
+                    this.tagSearchResultList = this.allTagList
             })
             .catch((error)=>{})
         },
@@ -214,20 +215,20 @@ export default {
         searchTagCheck(){
             //空の状態ならalltagを入れとく
             if (this.tagToSearch == '') {
-                this.tagSearchResult = this.allTagList
+                this.tagSearchResultList = this.allTagList
                 return
             }
             this.searchTag()
         },
         async searchTag(){
-            this.tagSearchResult = []
+            this.tagSearchResultList = []
             await axios.post('/api/tag/search',{
                 userId:this.$attrs.auth.user.id,
                 tag:this.tagToSearch
             })
             .then((res)=>{
                 for (const tag of res.data) {
-                    this.tagSearchResult.push({
+                    this.tagSearchResultList.push({
                         id:tag.id,
                         name:tag.name
                     })
