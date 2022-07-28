@@ -39,4 +39,24 @@ class Article extends Model
         ->Where('id','=',$articleId)
         ->get();
     }
+
+    public static function serveUserAllArticle($userId)
+    {
+        // まずはユーザーで絞った表を作る
+        // whereで探すか副問合せで表を作るかどっちがよいか
+        // 削除されていない記事を取って来る
+        // 記事だからcategory = 2
+
+        $userTable = Article::select('id','title','body')
+        -> where('user_id','=',\Auth::id())
+        -> where('category','=',2)
+        ->get();
+        return $userTable;
+
+
+        // return Article::select('id','title','body')
+        // ->leftJoin('article_tags','articles.id','=', 'article_tags.article_id')
+        // ->leftJoin('tags','article_tags.tag_id', '=' ,'tags.id')
+        // ->get();
+    }
 }

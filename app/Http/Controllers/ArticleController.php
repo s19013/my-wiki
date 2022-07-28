@@ -79,4 +79,10 @@ class ArticleController extends Controller
     {
         return ArticleTag::serveAricleTag(articleId:$request->articleId);
     }
+
+    public function serveUserAllArticle(Request $request)
+    {
+        // タグと記事は別々?
+        return Article::serveUserAllArticle(userId:$request->userId);
+    }
 }
