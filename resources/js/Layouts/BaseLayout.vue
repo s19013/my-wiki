@@ -1,6 +1,6 @@
 <template>
     <inertia-head :title="title" />
-    <originalHead :title="title"></originalHead>
+    <originalHead :pageTitle="pageTitle"/>
     <!-- <article>
         <slot />
     </article> -->
@@ -21,7 +21,8 @@
             originalHead
         },
         props:{
-            title: String
+            title: String,
+            pageTitle: String
         },
     }
 </script>
