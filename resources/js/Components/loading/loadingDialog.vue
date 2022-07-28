@@ -3,9 +3,8 @@
         <v-dialog
             v-model="loadingFlag"
             persistent
-            class="Dialog"
         >
-            <loading></loading>
+            <loading class="Dialog"></loading>
         </v-dialog>
     </div>
 </template>
