@@ -26,4 +26,16 @@ class ArticleTag extends Model
             ]);
         });
     }
+
+    public static function serveAricleTag($articleId)
+    {
+        // tagsターブルとくっつける
+        // タグ自体消されていないタグと記事からはずされていないタグを取得
+        return ArticleTag::select('tags.name')
+        ->leftJoin('tags','article_tags.tag_id','=','tags.id')
+        ->WhereNull('tags.deleted_at')
+        ->WhereNull('article_tags.deleted_at')
+        ->Where('article_tags.article_id','=',$articleId)
+        ->get();
+    }
 }

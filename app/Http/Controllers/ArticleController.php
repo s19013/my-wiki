@@ -72,6 +72,11 @@ class ArticleController extends Controller
 
     public function articleRead(Request $request)
     {
-        return Article::serveArticle(articleId:$request->id);
+        return Article::serveArticle(articleId:$request->articleId);
+    }
+
+    public function tagRead(Request $request)
+    {
+        return ArticleTag::serveAricleTag(articleId:$request->articleId);
     }
 }
