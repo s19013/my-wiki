@@ -34,7 +34,7 @@ Route::middleware('auth:sanctum', 'throttle:60,1')->group(function () {
         Route::post('/store',[ArticleController::class,'tagStore']);
         Route::post('/edit',[ArticleController::class,'']);
         Route::post('/read',[ArticleController::class,'tagRead']);
-        Route::post('/getAllTag',[ArticleController::class,'serveUserAllTag']);
+        Route::post('/getUserAllTag',[ArticleController::class,'serveUserAllTag']);
         Route::post('/getAddedTag',[ArticleController::class,'serveAddedTag']);
         Route::post('/search',[ArticleController::class,'tagSearch']);
     });
@@ -44,7 +44,7 @@ Route::middleware('auth:sanctum', 'throttle:60,1')->group(function () {
         Route::post('/edit',[ArticleController::class,'']);
         Route::post('/read',[ArticleController::class,'articleRead']);
         Route::post('/delete',[ArticleController::class,'']);
-        Route::post('/getUserAllArticle',[ArticleController::class,'']);
+        Route::post('/getUserAllArticle',[ArticleController::class,'serveUserAllArticle']);
     });
 });
 
