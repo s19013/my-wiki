@@ -34,7 +34,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('test');
 
     Route::get('/createArticle', function () {
-        return Inertia::render('createArticle',[
+        return Inertia::render('EditArticle',[
             'rederTest' => 'test'
         ]);
     })->name('createArticle');
