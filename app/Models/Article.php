@@ -31,4 +31,12 @@ class Article extends Model
             return $article->id;
         });
     }
+
+    //viewAricle用に指定された記事だけを取ってくる
+    public static function serveArticle($articleId)
+    {
+        return Article::select('title','body')
+        ->where('id','=',$articleId)
+        ->get();
+    }
 }

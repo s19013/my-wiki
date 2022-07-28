@@ -69,4 +69,9 @@ class ArticleController extends Controller
             tag   :$request->tag
         );
     }
+
+    public function articleRead(Request $request)
+    {
+        return Article::serveArticle(articleId:$request->id);
+    }
 }
