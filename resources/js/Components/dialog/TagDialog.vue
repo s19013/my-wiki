@@ -175,7 +175,7 @@ export default{
         //その他?
         serveCheckedTagListToParent(){ return this.checkedTagList},
         async getAllTag(){
-            await axios.post('/api/tag/serveUserAllTag',{userId:this.userId})
+            await axios.post('/api/tag/getUserAllTag',{userId:this.userId})
             .then((res)=>{
                     for (const tag of res.data) {
                         this.allTagList.push({
@@ -188,7 +188,7 @@ export default{
             .catch((error)=>{})
         },
         async getAddedTag(){
-            await axios.post('/api/tag/serveAddedTag',{userId:this.userId})
+            await axios.post('/api/tag/getAddedTag',{userId:this.userId})
             .then((res)=>{
                 // リストに追加
                 this.allTagList.push({
