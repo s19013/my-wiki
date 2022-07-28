@@ -48,7 +48,7 @@ class Article extends Model
         // 記事だからcategory = 2
 
         $userTable = Article::select('id','title','body')
-        -> where('user_id','=',\Auth::id())
+        -> where('user_id','=',$userId)
         -> where('category','=',2)
         ->get();
         return $userTable;
