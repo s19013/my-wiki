@@ -1,10 +1,10 @@
 <template>
-    <BaseLayout :title= "title">
+    <BaseLayout title= "記事観覧">
         <section class="articleContainer">
                 <!-- タイトルとボタン2つ -->
                 <v-row class="head">
                     <v-col cols="10">
-                        <p>{{articleTitle}}</p>
+                        <h1>{{articleTitle}}</h1>
                     </v-col>
                     <v-col cols="1"> <DeleteAlertComponent @deleteAricleTrigger="deleteArticle"></DeleteAlertComponent> </v-col>
                     <v-col cols="1">
@@ -16,9 +16,12 @@
                 <div class="markdown" v-html="compiledMarkdown()"></div>
 
                 <!-- タブ -->
-                <ul v-for="tag of tagList" :key="tag.name">
-                    <li>{{tag.name}}</li>
-                </ul>
+                <div class="tab">
+                    <p>つけたタグ</p>
+                    <ul >
+                        <li v-for="tag of tagList" :key="tag">{{tag.name}}</li>
+                    </ul>
+                </div>
         </section>
         <loadingDialog :loadingFlag="articleSending"></loadingDialog>
     </BaseLayout>
@@ -60,7 +63,6 @@ data() {
                 this.articleTitle = res.data[0].title
                 this.articleBody  = res.data[0].body
             })
-            console.log("title:",this.articleTitle);
         },
         // タグを取ってくる
         async getTag(){
@@ -71,7 +73,6 @@ data() {
                     this.tagList.push( tag )
                 }
             })
-            console.log(this.tagList);
         },
         deleteArticle() {
             // 消す処理
@@ -97,27 +98,25 @@ textarea {
         padding: 20px;
 }
 .markdown{
-    padding: 0 10px;
+    margin:10px 0;
+    padding: 10px;
+    border:black solid 1px;
     word-break:break-word;
     overflow-wrap:normal;
 }
 
-.tabLabel{
+.tab{
+    ul{
+        display: flex;
+        flex-wrap: wrap;
+    }
     li{
-        display: inline-block;
         list-style:none;
         border:black solid 1px;
-        padding:10px 20px;
-    }
-    .active{
-        font-weight: bold;
+        padding: 0 10px ;
+        margin:5px;
         cursor: default;
-    }
 
-    .notActive{
-        background: #919191;
-        color: black;
-        cursor: pointer;
     }
 }
 
