@@ -33,11 +33,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('test');
     })->name('test');
 
-    Route::get('/createArticle', function () {
+    Route::get('/CreateArticle', function () {
         return Inertia::render('EditArticle',[
             'rederTest' => 'test'
         ]);
-    })->name('createArticle');
+    })->name('CreateArticle');
+
+    Route::get('/ViewArticle', function () {
+        return Inertia::render('ViewArticle',[
+            'rederTest' => 'test'
+        ]);
+    })->name('ViewAricle');
 
     Route::get('/index', function () {
         return Inertia::render('index');
