@@ -17,10 +17,10 @@ class Tag extends Model
         'user_id',
     ];
 
-    public static function getUserAllTag($id)
+    public static function getUserAllTag($userId)
     {
         return Tag::select('id','name')
-        ->where('user_id','=',$id)
+        ->where('user_id','=',$userId)
         ->get();
     }
 
