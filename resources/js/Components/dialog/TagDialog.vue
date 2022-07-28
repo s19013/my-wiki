@@ -96,7 +96,6 @@ export default{
         tagSearchResultList:[]
       }
     },
-    props:{ userId:{type:Number},},
     components:{loading},
     methods: {
         // 新規タグ作成
@@ -110,7 +109,6 @@ export default{
         createNewTag(){
             this.newTagSending = true
             axios.post('/api/tag/store',{
-                userId:this.userId,
                 tag   :this.newTag
             })
             .then((res)=>{
@@ -142,7 +140,6 @@ export default{
             this.tagSerchLoading = true
             this.tagSearchResultList = []
             await axios.post('/api/tag/search',{
-                userId:this.userId,
                 tag:this.tagToSearch
             })
             .then((res)=>{
@@ -175,7 +172,7 @@ export default{
         //その他?
         serveCheckedTagListToParent(){ return this.checkedTagList},
         async getAllTag(){
-            await axios.post('/api/tag/getUserAllTag',{userId:this.userId})
+            await axios.get('/api/tag/getUserAllTag')
             .then((res)=>{
                     for (const tag of res.data) {
                         this.allTagList.push({
@@ -188,7 +185,7 @@ export default{
             .catch((error)=>{})
         },
         async getAddedTag(){
-            await axios.post('/api/tag/getAddedTag',{userId:this.userId})
+            await axios.get('/api/tag/getAddedTag')
             .then((res)=>{
                 // リストに追加
                 this.allTagList.push({

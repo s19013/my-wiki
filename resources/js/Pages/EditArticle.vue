@@ -28,8 +28,12 @@
                         </ul>
                     </v-col>
 
+                    <!--  -->
                     <v-col><p class="error articleError" v-if="articleBodyErrorFlag">本文を入力してください</p></v-col>
-                    <v-col cols="2"><TagDialog :userId="$attrs.auth.user.id" ref="tagDialog"></TagDialog></v-col>
+
+                    <!-- タグ -->
+                    <v-col cols="2"><TagDialog ref="tagDialog"></TagDialog></v-col>
+
                 </v-row>
                 <!-- md入力欄  -->
                 <div v-show="activeTab === 0">
@@ -90,7 +94,6 @@ export default {
         submit(){
             this.articleSending = true
             axios.post('/api/article/store',{
-                userId:this.$attrs.auth.user.id,
                 articleTitle:this.articleTitle,
                 articleBody:this.articleBody,
                 category:2,
