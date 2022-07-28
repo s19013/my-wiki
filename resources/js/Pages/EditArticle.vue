@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <BaseLayout :title= "title">
         <section class="articleContainer">
             <v-form v-on:submit.prevent ="submit">
                 <!-- タイトル入力欄とボタン2つ -->
@@ -44,7 +44,7 @@
             </v-form>
         </section>
         <loadingDialog :loadingFlag="articleSending"></loadingDialog>
-    </div>
+    </BaseLayout>
 </template>
 
 <script>
