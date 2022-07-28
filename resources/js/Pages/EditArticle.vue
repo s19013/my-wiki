@@ -52,6 +52,7 @@ import {marked} from 'marked';
 import TagDialog from '@/Components/dialog/TagDialog.vue';
 import DeleteAlertComponent from '@/Components/dialog/DeleteAlertDialog.vue';
 import loadingDialog from '@/Components/loading/loadingDialog.vue';
+import BaseLayout from '@/Layouts/BaseLayout.vue'
 import axios from 'axios'
 
 export default {
@@ -73,6 +74,7 @@ export default {
         DeleteAlertComponent,
         TagDialog,
         loadingDialog,
+        BaseLayout,
     },
     methods: {
         compiledMarkdown() {return marked(this.articleBody)},
