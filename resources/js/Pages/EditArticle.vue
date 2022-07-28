@@ -1,5 +1,5 @@
 <template>
-    <BaseLayout :title= "title">
+    <BaseLayout title="新規作成" pageTitle="新規作成">
         <section class="articleContainer">
             <v-form v-on:submit.prevent ="submit">
                 <!-- タイトル入力欄とボタン2つ -->

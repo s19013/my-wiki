@@ -1,5 +1,5 @@
 <template>
-    <BaseLayout title= "記事観覧">
+    <BaseLayout :title=articleTitle pageTitle="記事観覧">
         <section class="articleContainer">
                 <!-- タイトルとボタン2つ -->
                 <v-row class="head">
