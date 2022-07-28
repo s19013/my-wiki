@@ -10,7 +10,7 @@ use Auth;
 
 class ArticleController extends Controller
 {
-    public function serveUserAllTag(Request $request)
+    public function serveUserAllTag()
     {
         return Tag::getUserAllTag(userId:Auth::id());
     }
@@ -57,7 +57,7 @@ class ArticleController extends Controller
         );
     }
 
-    public function serveAddedTag(Request $request)
+    public function serveAddedTag()
     {
         return Tag::serveAddedTag(userId:Auth::id());
     }
