@@ -6,13 +6,13 @@ use Illuminate\Http\Request;
 use App\Models\Tag;
 use App\Models\ArticleTag;
 use App\Models\Article;
+use Auth;
 
 class ArticleController extends Controller
 {
-    //
-    public function serveUserAllTag(Request $request)
+    public function serveUserAllTag()
     {
-        return Tag::getUserAllTag($request->userId);
+        return Tag::getUserAllTag(userId:Auth::id());
     }
 
     public function articleStore(Request $request)
@@ -21,7 +21,7 @@ class ArticleController extends Controller
         $request->session()->regenerateToken();
         // 記事を保存して記事のidを取得
         $articleId = Article::storeArticle(
-                userId   : $request->userId,
+                userId   : Auth::id(),
                 title    : $request->articleTitle,
                 body     : $request->articleBody,
                 category : $request->category,
@@ -30,7 +30,7 @@ class ArticleController extends Controller
         // なんのタグも設定されていない時
         if (empty($request->tagList) == true) {
             ArticleTag::storeArticleTag(
-                userId    : $request->userId,
+                userId    : Auth::id(),
                 tagId     : null,
                 articleId : $articleId,
             );
@@ -39,7 +39,7 @@ class ArticleController extends Controller
         else {
             foreach($request->tagList as $tagId){
                 ArticleTag::storeArticleTag(
-                    userId    : $request->userId,
+                    userId    : Auth::id(),
                     tagId     : $tagId,
                     articleId : $articleId,
                 );
@@ -52,21 +52,42 @@ class ArticleController extends Controller
         // CSRFトークンを再生成して、二重送信対策
         $request->session()->regenerateToken();
         return Tag::store(
-            userId:$request->userId,
+            userId:Auth::id(),
             tag   :$request->tag,
         );
     }
 
-    public function serveAddedTag(Request $request)
+    public function serveAddedTag()
     {
-        return Tag::serveAddedTag($request->userId);
+        return Tag::serveAddedTag(userId:Auth::id());
     }
 
     public function tagSearch(Request $request)
     {
         return Tag::search(
-            userId:$request->userId,
+            userId:Auth::id(),
             tag   :$request->tag
         );
+    }
+
+    public function deleteArticle(Request $request)
+    {
+        Article::deleteArticle(articleId:$request->articleId);
+    }
+
+    // public function articleRead(Request $request)
+    // {
+    //     return Article::serveArticle(articleId:$request->articleId);
+    // }
+
+    // public function tagRead(Request $request)
+    // {
+    //     return ArticleTag::serveTagsRelatedToAricle(articleId:$request->articleId);
+    // }
+
+    public function serveUserAllArticle(Request $request)
+    {
+        // タグと記事は別々?
+        return Article::serveUserAllArticle(userId:Auth::id());
     }
 }

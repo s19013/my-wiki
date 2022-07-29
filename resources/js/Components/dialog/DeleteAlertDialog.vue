@@ -1,7 +1,10 @@
 <template>
     <div>
      <!-- ダイアログを呼び出すためのボタン -->
-    <v-btn color="error" @click.stop="deleteDialogFlagSwitch"> 削除 </v-btn>
+    <v-btn color="error" @click.stop="deleteDialogFlagSwitch">
+        <v-icon>mdi-trash-can</v-icon>
+        削除
+    </v-btn>
 
     <v-dialog
       v-model="deleteDialogFlag"

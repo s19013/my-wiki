@@ -4,6 +4,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+use App\Http\Controllers\TransitionController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -33,11 +35,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('test');
     })->name('test');
 
-    Route::get('/createArticle', function () {
-        return Inertia::render('createArticle',[
-            'rederTest' => 'test'
-        ]);
-    })->name('createArticle');
+    Route::get('/CreateArticle', function () {
+        return Inertia::render('CreateArticle');
+    })->name('CreateArticle');
+
+    Route::get('/ViewArticle/{articleId}', [TransitionController::class,'transitionToViewArticle'])->name('ViewAricle');
 
     Route::get('/index', function () {
         return Inertia::render('index');

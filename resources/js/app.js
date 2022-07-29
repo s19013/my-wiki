@@ -17,6 +17,9 @@ const vuetify = Vuetify.createVuetify({
     directives,
 });
 
+// icon
+import '@mdi/font/css/materialdesignicons.css'
+
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 

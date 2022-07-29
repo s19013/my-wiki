@@ -17,10 +17,10 @@ class Tag extends Model
         'user_id',
     ];
 
-    public static function getUserAllTag($id)
+    public static function getUserAllTag($userId)
     {
         return Tag::select('id','name')
-        ->where('user_id','=',$id)
+        ->where('user_id','=',$userId)
         ->get();
     }
 
@@ -75,7 +75,7 @@ class Tag extends Model
 
         // tag名をlikeけんさく
         foreach($wordListToSearch as $word){
-            $query->where('name','like',"%$word%")->get();
+            $query->where('name','like',"%$word%");
         }
 
         return $query->get();
