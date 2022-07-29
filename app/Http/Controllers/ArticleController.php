@@ -82,7 +82,7 @@ class ArticleController extends Controller
 
     // public function tagRead(Request $request)
     // {
-    //     return ArticleTag::serveAricleTag(articleId:$request->articleId);
+    //     return ArticleTag::serveTagsRelatedToAricle(articleId:$request->articleId);
     // }
 
     public function serveUserAllArticle(Request $request)

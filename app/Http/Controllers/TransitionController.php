@@ -25,7 +25,7 @@ class TransitionController extends Controller
 
 
         $article = Article::serveArticle(articleId:$articleId);
-        $articleTag = ArticleTag::serveAricleTag(articleId:$articleId);
+        $articleTag = ArticleTag::serveTagsRelatedToAricle(articleId:$articleId);
         return Inertia::render('ViewArticle',[
             'article'    => $article,
             'articleTag' => $articleTag,
