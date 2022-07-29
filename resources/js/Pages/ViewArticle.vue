@@ -8,7 +8,7 @@
                     </v-col>
                     <v-col cols="1"> <DeleteAlertComponent @deleteAricleTrigger="deleteArticle"></DeleteAlertComponent> </v-col>
                     <v-col cols="1">
-                        <v-btn class="longButton" color="#BBDEFB" :disabled="articleSending"> 保存 </v-btn>
+                        <v-btn class="longButton" color="#BBDEFB" :disabled="articleSending"> 編集 </v-btn>
                     </v-col>
                 </v-row>
 
@@ -23,7 +23,7 @@
                     </ul>
                 </div>
         </section>
-        <loadingDialog :loadingFlag="articleSending"></loadingDialog>
+        <loadingDialog :loadingFlag="articleDeleting"></loadingDialog>
     </BaseLayout>
 </template>
 
@@ -37,8 +37,7 @@ export default{
     data() {
       return {
         //loding
-        articleLoding :false,
-        articleSending:false,
+        articleDeleting:false,
       }
     },
     props:['article','articleTag'],
@@ -50,11 +49,17 @@ export default{
     methods: {
         compiledMarkdown() {return marked(this.article[0].body)},
         deleteArticle() {
+            this.articleDeleting = true
             // 消す処理
-
-            //遷移
-            this.$inertia.get('/index')
-            console.log('called');
+            axios.post('/api/article/delete',{articleId:this.article[0].id})
+            .then((res) => {
+                //遷移
+                this.$inertia.get('/index')
+                this.articleDeleting = false
+            })
+            .catch((error) => {
+                this.articleDeleting = false
+            })
         },
     },
 }
