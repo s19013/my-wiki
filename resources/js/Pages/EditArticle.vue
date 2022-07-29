@@ -47,7 +47,9 @@
                 <div v-show="activeTab === 1" class="markdown" v-html="compiledMarkdown()"></div>
             </v-form>
         </section>
+        <!-- 送信中に表示 -->
         <loadingDialog :loadingFlag="articleSending"></loadingDialog>
+
     </BaseLayout>
 </template>
 
