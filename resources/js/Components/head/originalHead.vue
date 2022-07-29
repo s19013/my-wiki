@@ -1,17 +1,30 @@
 <template>
-    <div class="head">
+    <div class="originalHead">
         <h2>{{title}}</h2>
         <v-btn @click="show = !show"> <v-icon> mdi-view-headline </v-icon> メニュー</v-btn>
         <transition name="slide">
             <nav v-if="show">
-                <p>test</p>
+                <div>
+                    <Link href="CreateAricle">
+                        <h2 class="createAticle navButton"  >
+                            <v-icon>mdi-note-plus</v-icon>
+                            新規記事作成
+                        </h2>
+                    </Link>
+                    <Link href="index">
+                        <h2 class="createBookMark navButton">
+                            <v-icon>mdi-bookmark-plus</v-icon>
+                            新規ブックマーク作成
+                        </h2>
+                    </Link>
+                </div>
             </nav>
         </transition>
     </div>
 </template>
 
 <script>
-import { InertiaLink } from '@inertiajs/inertia-vue3'
+import { Link } from '@inertiajs/inertia-vue3';
 export default{
     data() {
         return {
@@ -19,7 +32,7 @@ export default{
         }
     },
     components:{
-        InertiaLink,
+        Link,
     },
     props:['title']
 }
@@ -27,7 +40,7 @@ export default{
 </script>
 
 <style lang="scss" scoped>
-.head{
+.originalHead{
     background-color: rgb(127, 255, 174);
     height: 3vmax;
     margin-bottom:10px;
@@ -67,7 +80,23 @@ nav {
     right: 0;
     //ボタンと被らないように頭の位置を下げる
     top:3vmax;
+    a{
+        margin: 0 5px ;
+        text-decoration: none;
+        color: rgb(248, 248, 248);
     }
+    .navButton{
+        display: grid;
+        grid-template-columns:1fr 1fr 10fr 1fr;
+    }
+    i{grid-column: 2/3;}
+    h2 {
+        grid-column: 3/4;
+        padding:10px;
+    }
+    .createAticle   { background-color:rgb(26, 130, 195) ;}
+    .createBookMark { background-color:rgb(77, 26, 195) ;}
+}
 
 // アニメ
 // on
