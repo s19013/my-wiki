@@ -1,14 +1,14 @@
 <template>
-    <BaseLayout :title=articleTitle pageTitle="記事観覧">
+    <BaseLayout :title="'my-wiki ' + article.title" pageTitle="記事観覧">
         <section class="articleContainer">
                 <!-- タイトルとボタン2つ -->
                 <v-row class="head">
                     <v-col cols="10">
-                        <h1>{{article[0].title}}</h1>
+                        <h1>{{article.title}}</h1>
                     </v-col>
                     <v-col cols="1"> <DeleteAlertComponent @deleteAricleTrigger="deleteArticle"></DeleteAlertComponent> </v-col>
                     <v-col cols="1">
-                        <v-btn class="longButton" color="#BBDEFB" :disabled="articleSending"> 編集 </v-btn>
+                        <v-btn class="longButton" color="#BBDEFB" > 編集 </v-btn>
                     </v-col>
                 </v-row>
 
@@ -47,11 +47,11 @@ export default{
         BaseLayout,
     },
     methods: {
-        compiledMarkdown() {return marked(this.article[0].body)},
+        compiledMarkdown() {return marked(this.article.body)},
         deleteArticle() {
             this.articleDeleting = true
             // 消す処理
-            axios.post('/api/article/delete',{articleId:this.article[0].id})
+            axios.post('/api/article/delete',{articleId:this.article.id})
             .then((res) => {
                 //遷移
                 this.$inertia.get('/index')
