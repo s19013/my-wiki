@@ -66,7 +66,5 @@ class Article extends Model
         // 論理削除
         Article::where('id','=',$articleId)
         ->update(['deleted_at' => date(Carbon::now())]);
-
-        return redirect(route('index'));
     }
 }
