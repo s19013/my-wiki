@@ -15,6 +15,7 @@
 <script>
 import BaseLayout from '@/Layouts/BaseLayout.vue'
 import { InertiaLink, InertiaHead } from '@inertiajs/inertia-vue3'
+import { Link } from '@inertiajs/inertia-vue3';
 
 export default{
     data() {
@@ -25,6 +26,7 @@ export default{
     components:{
         BaseLayout,
         InertiaLink,
+        Link,
     },
     methods: {
         async getAricle(){
