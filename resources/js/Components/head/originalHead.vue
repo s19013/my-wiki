@@ -5,13 +5,13 @@
         <transition name="slide">
             <nav v-if="show">
                 <div>
-                    <Link href="CreateAricle">
+                    <Link :href="route('CreateArticle')">
                         <h2 class="createAticle navButton"  >
                             <v-icon>mdi-note-plus</v-icon>
                             新規記事作成
                         </h2>
                     </Link>
-                    <Link href="index">
+                    <Link :href="route('index')">
                         <h2 class="createBookMark navButton">
                             <v-icon>mdi-bookmark-plus</v-icon>
                             新規ブックマーク作成
