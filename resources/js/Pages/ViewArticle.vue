@@ -4,7 +4,7 @@
                 <!-- タイトルとボタン2つ -->
                 <v-row class="head">
                     <v-col cols="10">
-                        <h1>{{articleTitle}}</h1>
+                        <h1>{{article[0].title}}</h1>
                     </v-col>
                     <v-col cols="1"> <DeleteAlertComponent @deleteAricleTrigger="deleteArticle"></DeleteAlertComponent> </v-col>
                     <v-col cols="1">
@@ -19,7 +19,7 @@
                 <div class="tab">
                     <p>つけたタグ</p>
                     <ul >
-                        <li v-for="tag of tagList" :key="tag">{{tag.name}}</li>
+                        <li v-for="tag of articleTag" :key="tag">{{tag.name}}</li>
                     </ul>
                 </div>
         </section>
@@ -34,46 +34,21 @@ import loadingDialog from '@/Components/loading/loadingDialog.vue';
 import BaseLayout from '@/Layouts/BaseLayout.vue'
 import axios from 'axios'
 export default{
-data() {
+    data() {
       return {
-        articleTitle:'',
-        articleBody: '',
-        tagList:[],
-
         //loding
         articleLoding :false,
         articleSending:false,
-
-        // errorFlag
-        articleBodyErrorFlag:false,
       }
     },
+    props:['article','articleTag'],
     components:{
         DeleteAlertComponent,
         loadingDialog,
         BaseLayout,
     },
     methods: {
-        compiledMarkdown() {return marked(this.articleBody)},
-        // 記事とタグを取ってくる
-        async getArticle(){
-            axios.post('/api/article/read',{ articleId:1 })
-            .then((res)=>{
-                console.log(res);
-                this.articleTitle = res.data[0].title
-                this.articleBody  = res.data[0].body
-            })
-        },
-        // タグを取ってくる
-        async getTag(){
-            axios.post('/api/tag/read',{ articleId:1 })
-            .then((res)=>{
-                console.log(res);
-                for (const tag of res.data) {
-                    this.tagList.push( tag )
-                }
-            })
-        },
+        compiledMarkdown() {return marked(this.article[0].body)},
         deleteArticle() {
             // 消す処理
 
@@ -81,10 +56,6 @@ data() {
             this.$inertia.get('/index')
             console.log('called');
         },
-    },
-    mounted() {
-        this.getTag()
-        this.getArticle()
     },
 }
 </script>
