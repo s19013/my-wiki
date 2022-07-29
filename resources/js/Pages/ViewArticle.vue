@@ -8,7 +8,10 @@
                     </v-col>
                     <v-col cols="1"> <DeleteAlertComponent @deleteAricleTrigger="deleteArticle"></DeleteAlertComponent> </v-col>
                     <v-col cols="1">
-                        <v-btn class="longButton" color="#BBDEFB" > 編集 </v-btn>
+                        <v-btn class="longButton" color="#BBDEFB" >
+                            <v-icon>mdi-pencil-plus</v-icon>
+                            編集
+                        </v-btn>
                     </v-col>
                 </v-row>
 
@@ -17,7 +20,7 @@
 
                 <!-- タブ -->
                 <div class="tab">
-                    <p>つけたタグ</p>
+                    <p><v-icon>mdi-tag</v-icon> つけたタグ</p>
                     <ul >
                         <li v-for="tag of articleTag" :key="tag">{{tag.name}}</li>
                     </ul>
@@ -68,13 +71,14 @@ export default{
 <style lang="scss">
 .articleContainer {margin: 0 20px;}
 textarea {
-        width: 100%;
-        resize: none;
-        background-color: #f6f6f6;
-        padding: 20px;
+    width: 100%;
+    resize: none;
+    background-color: #f6f6f6;
+    padding: 20px;
 }
 .markdown{
-    margin:10px 0;
+    margin-top:10px;
+    margin-bottom:30px;
     padding: 10px;
     border:black solid 1px;
     word-break:break-word;

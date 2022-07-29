@@ -1,7 +1,10 @@
 <template>
     <div>
         <!-- ダイアログを呼び出すためのボタン -->
-        <v-btn class="longButton" color="submit" @click.stop="tagDialogFlagSwithch">tag </v-btn>
+        <v-btn class="longButton" color="submit" @click.stop="tagDialogFlagSwithch">
+        <v-icon>mdi-tag</v-icon>
+        tag
+        </v-btn>
 
         <!-- v-modelがv-ifとかの代わりになっている -->
         <v-dialog
@@ -10,7 +13,10 @@
             persistent>
 
             <section class="Dialog tagDialog">
-                <v-btn color="#E57373"   x-small elevation="2" @click.stop="tagDialogFlagSwithch()">X 閉じる</v-btn>
+                <v-btn color="#E57373"   x-small elevation="2" @click.stop="tagDialogFlagSwithch()">
+                <v-icon>mdi-close-box</v-icon>
+                閉じる
+                </v-btn>
                 <!-- 検索窓とか -->
                 <v-row class="areaTagSerch">
                     <v-col cols="10">
@@ -24,7 +30,10 @@
                         <v-btn color="submit"
                         elevation="2"
                         :disabled = "tagSerchLoading"
-                        @click="searchTagCheck()">検索</v-btn>
+                        @click="searchTagCheck()">
+                        <v-icon>mdi-magnify</v-icon>
+                        検索
+                        </v-btn>
                     </v-col>
                 </v-row>
 
@@ -49,7 +58,10 @@
                     class="longButton my-4"
                     color="submit"
                     v-if="!createNewTagFlag"
-                    @click.stop="createNewTagFlagSwitch">新規作成</v-btn>
+                    @click.stop="createNewTagFlagSwitch">
+                    <v-icon>mdi-tag-plus</v-icon>
+                    新規作成
+                </v-btn>
 
                 <!-- 新規タグ作成 -->
                 <div class="areaCreateNewTag" v-if="createNewTagFlag">
@@ -63,7 +75,10 @@
                     color="#BBDEFB"
                     elevation="2"
                     :disabled="newTagSending"
-                    @click.stop="createNewTagCheck()">作成</v-btn>
+                    @click.stop="createNewTagCheck()">
+                    <v-icon>mdi-content-save</v-icon>
+                    作成
+                    </v-btn>
                 </div>
             </section>
         </v-dialog>
@@ -207,6 +222,13 @@ export default{
     .v-list{
         margin: 0;
         padding:0;
+        .v-list-item{
+            padding:0 10px;
+        }
+        label{
+            font-size: 1.5vmax;
+            padding-left: 10px;
+        }
     }
     .areaCreateNewTag{margin: 10px;}
     .areaTagSerch{

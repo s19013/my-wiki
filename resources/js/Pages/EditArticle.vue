@@ -12,7 +12,10 @@
                     </v-col>
                     <v-col cols="1"> <DeleteAlertComponent @deleteAricleTrigger="deleteArticle"></DeleteAlertComponent> </v-col>
                     <v-col cols="1">
-                        <v-btn class="longButton" color="#BBDEFB" @click="submitCheck" :disabled="articleSending"> 保存 </v-btn>
+                        <v-btn class="longButton" color="#BBDEFB" @click="submitCheck" :disabled="articleSending">
+                        <v-icon>mdi-content-save</v-icon>
+                        保存
+                        </v-btn>
                     </v-col>
                 </v-row>
                 <!-- タブ -->
