@@ -58,4 +58,8 @@ export default{
     padding: 5px;
     cursor: pointer;
 }
+a{
+    text-decoration: none;
+    color: black;
+}
 </style>
