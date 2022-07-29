@@ -47,10 +47,13 @@ class Article extends Model
         // 削除されていない記事を取って来る
         // 記事だからcategory = 2
 
+        // whereの優先順位
+        // 削除されてない､category=2,ログインユーザー = user_id
+
         $userTable = Article::select('id','title','body')
-        -> where('user_id','=',$userId)
-        -> where('category','=',2)
         -> WhereNull('deleted_at')
+        -> where('category','=',2)
+        -> where('user_id','=',$userId)
         ->get();
         return $userTable;
 

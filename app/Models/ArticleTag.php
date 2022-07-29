@@ -28,22 +28,28 @@ class ArticleTag extends Model
     }
 
 
-    public static function serveTagsRelatedToAricle($articleId)
+    //記事に関連付けられたタグを取得
+    public static function serveTagsRelatedToAricle($articleId,$userId)
     {
         // tagsターブルとくっつける
         // article_tags.tag_id = tags.id
-        // タグ自体消されていないタグと記事からはずされていないタグを取得
+        // 記事からはずされていないタグを取得
 
-        // ログインユーザーの削除されていないタグを探す
+        // タグテーブルからログインユーザーの削除されていないタグを探す
+        $subTagTable = DB::table('tags')
+        ->select('id','name')
+        ->where('user_id','=',':$userId')
+        ->WhereNull('deleted_at')
+        ->toSql();
 
-
-
-
-        return ArticleTag::select('tags.name')
-        ->leftJoin('tags','article_tags.tag_id','=','tags.id')
-        ->WhereNull('tags.deleted_at')
-        ->WhereNull('article_tags.deleted_at')
-        ->Where('article_tags.article_id','=',$articleId)
+        return ArticleTag::select('sub_tags.name')
+        ->leftJoin(DB::raw('('.$subTagTable.') AS sub_tags'),'article_tags.tag_id','=','sub_tags.id')
+        ->WhereNull('article_tags.deleted_at') // 記事からはずされていないタグのみを取得
+        ->Where('article_tags.article_id','=',':$articleId')
+        ->setBindings([
+            ':$userId'   => $userId,
+            ':$articleId'=> $articleId
+        ])
         ->get();
     }
 }

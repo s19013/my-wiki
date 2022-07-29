@@ -20,12 +20,16 @@ class TransitionController extends Controller
         if ($deleted == null ) { return redirect()->route('index'); }
 
         // 他人の記事を覗こうとしているならindexに戻す
+        // 関数名後で変える
         $peep = Article::illegalPeep(articleId:$articleId,userId:Auth::id());
         if ($peep == false) { return redirect()->route('index'); }
 
-
         $article = Article::serveArticle(articleId:$articleId);
-        $articleTag = ArticleTag::serveTagsRelatedToAricle(articleId:$articleId);
+
+        $articleTag = ArticleTag::serveTagsRelatedToAricle(
+            userId:Auth::id(),
+            articleId:$articleId
+        );
         return Inertia::render('ViewArticle',[
             'article'    => $article,
             'articleTag' => $articleTag,

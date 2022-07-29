@@ -75,7 +75,7 @@ class Tag extends Model
 
         // tag名をlikeけんさく
         foreach($wordListToSearch as $word){
-            $query->where('name','like',"%$word%")->get();
+            $query->where('name','like',"%$word%");
         }
 
         return $query->get();
