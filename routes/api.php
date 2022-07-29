@@ -43,7 +43,7 @@ Route::middleware('auth:sanctum', 'throttle:60,1')->group(function () {
         Route::post('/store',[ArticleController::class,'articleStore']);
         Route::post('/edit',[ArticleController::class,'']);
         // Route::post('/read',[ArticleController::class,'articleRead']);
-        Route::post('/delete',[ArticleController::class,'']);
+        Route::post('/delete',[ArticleController::class,'deleteArticle']);
         Route::post('/getUserAllArticle',[ArticleController::class,'serveUserAllArticle']);
     });
 });

@@ -70,6 +70,11 @@ class ArticleController extends Controller
         );
     }
 
+    public function deleteArticle(Request $request)
+    {
+        Article::deleteArticle(articleId:$request->articleId);
+    }
+
     // public function articleRead(Request $request)
     // {
     //     return Article::serveArticle(articleId:$request->articleId);

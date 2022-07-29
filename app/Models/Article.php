@@ -50,6 +50,7 @@ class Article extends Model
         $userTable = Article::select('id','title','body')
         -> where('user_id','=',$userId)
         -> where('category','=',2)
+        -> WhereNull('deleted_at')
         ->get();
         return $userTable;
 
@@ -58,5 +59,14 @@ class Article extends Model
         // ->leftJoin('article_tags','articles.id','=', 'article_tags.article_id')
         // ->leftJoin('tags','article_tags.tag_id', '=' ,'tags.id')
         // ->get();
+    }
+
+    public static function deleteArticle($articleId)
+    {
+        // 論理削除
+        Article::where('id','=',$articleId)
+        ->update(['deleted_at' => date(Carbon::now())]);
+
+        return redirect(route('index'));
     }
 }
