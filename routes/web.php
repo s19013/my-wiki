@@ -36,9 +36,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('test');
 
     Route::get('/CreateArticle', function () {
-        return Inertia::render('EditArticle',[
-            'rederTest' => 'test'
-        ]);
+        return Inertia::render('CreateArticle');
     })->name('CreateArticle');
 
     Route::get('/ViewArticle/{articleId}', [TransitionController::class,'transitionToViewArticle'])->name('ViewAricle');
