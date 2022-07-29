@@ -37,7 +37,7 @@ class Article extends Model
     {
         return Article::select('id','title','body')
         ->Where('id','=',$articleId)
-        ->get();
+        ->first();
     }
 
     public static function serveUserAllArticle($userId)
