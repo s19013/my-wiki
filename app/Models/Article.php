@@ -35,7 +35,7 @@ class Article extends Model
     //viewAricle用に指定された記事だけを取ってくる
     public static function serveArticle($articleId)
     {
-        return Article::select('title','body')
+        return Article::select('id','title','body')
         ->Where('id','=',$articleId)
         ->get();
     }
