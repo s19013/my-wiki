@@ -185,6 +185,13 @@ export default{
         //親にチェックリストを渡す
         serveCheckedTagListToParent(){ return this.checkedTagList},
     },
+    mounted() {
+        if (this.originalCheckedTag != null) {
+            for (const tag of this.originalCheckedTag) {
+                    this.checkedTagList.push(tag.id)
+            }
+        }
+    },
 }
 </script>
 
