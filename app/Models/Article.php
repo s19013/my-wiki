@@ -35,7 +35,7 @@ class Article extends Model
     public static function updateArticle($articleId,$title,$body)
     {
         DB::transaction(function () use($articleId,$title,$body){
-            Aricle::where('id','=',$articleId)
+            Article::where('id','=',$articleId)
             ->update([
                 'title' => $title,
                 'body'  => $body,
