@@ -99,6 +99,7 @@ export default {
         submit(){
             this.articleSending = true
             axios.post('/api/article/store',{
+                articleId:0,
                 articleTitle:this.articleTitle,
                 articleBody:this.articleBody,
                 category:2,
