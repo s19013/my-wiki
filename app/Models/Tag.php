@@ -21,6 +21,7 @@ class Tag extends Model
     {
         return Tag::select('id','name')
         ->where('user_id','=',$userId)
+        ->orderBy('name')
         ->get();
     }
 
@@ -71,12 +72,15 @@ class Tag extends Model
         $wordListToSearch = searchToolKit::preparationToAndSearch($escaped);
 
         //クエリビルダ
-        $query = Tag::select('id','name');
+        $query = Tag::select('id','name')
+        ->where('user_id','=',$userId);
 
         // tag名をlikeけんさく
         foreach($wordListToSearch as $word){
             $query->where('name','like',"%$word%");
         }
+
+        $query->orderBy('name');
 
         return $query->get();
     }
