@@ -47,6 +47,15 @@ class ArticleController extends Controller
         }
     }
 
+    public function aricleUpdate(Request $request)
+    {
+        Article::updateArticle(
+            articleId:$aricleId,
+            title:$title,
+            body :$body
+        );
+    }
+
     public function tagStore(Request $request)
     {
         // CSRFトークンを再生成して、二重送信対策
@@ -89,5 +98,10 @@ class ArticleController extends Controller
     {
         // タグと記事は別々?
         return Article::serveUserAllArticle(userId:Auth::id());
+    }
+
+    public function DetermineProcessing(Request $request)
+    {
+
     }
 }

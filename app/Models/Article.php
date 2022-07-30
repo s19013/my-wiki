@@ -32,6 +32,15 @@ class Article extends Model
         });
     }
 
+    public function updateArticle($articleId,$title,$body)
+    {
+        Aricle::where('id','=',$articleId)
+        ->update([
+            'title' => $title,
+            'body'  => $body,
+        ]);
+    }
+
     //viewAricle用に指定された記事だけを取ってくる
     public static function serveArticle($articleId)
     {
