@@ -110,6 +110,7 @@ export default{
         tagSearchResultList:[]
       }
     },
+    props:['originalCheckedTag'],
     components:{loading},
     methods: {
         // 新規タグ作成
