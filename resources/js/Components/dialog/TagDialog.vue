@@ -30,7 +30,7 @@
                         <v-btn color="submit"
                         elevation="2"
                         :disabled = "tagSerchLoading"
-                        @click="searchTagCheck()">
+                        @click="searchTag()">
                         <v-icon>mdi-magnify</v-icon>
                         検索
                         </v-btn>
@@ -106,7 +106,6 @@ export default{
         tagAlreadyExistsErrorFlag:false,
 
         // tagList
-        allTagList:[],//キャッシュみたいなもの
         checkedTagList:[],
         tagSearchResultList:[]
       }
@@ -127,7 +126,10 @@ export default{
                 tag   :this.newTag
             })
             .then((res)=>{
-                this.getAddedTag()
+                // 読み込み直し
+                this.tagToSearch = ''
+                this.searchTag()
+                // this.getAddedTag()
                 // 入力欄を消す
                 this.createNewTagFlag=false
                 this.newTag=''
@@ -138,20 +140,13 @@ export default{
             })
             .catch((error) =>{
                 // console.log(error.response);
+                // ダブりエラー
                 if (error.response.status == 400) { this.tagAlreadyExistsErrorFlag = true }
             })
             this.newTagSending = false
         },
         // タグ検索
-        searchTagCheck:_.debounce(_.throttle(async function(){
-            //空の状態ならalltagを入れとく
-            if (this.tagToSearch == '') {
-                this.tagSearchResultList = this.allTagList
-                return
-            }
-            this.searchTag()
-        },100),150),
-        async searchTag(){
+        searchTag:_.debounce(_.throttle(async function(){
             this.tagSerchLoading = true
             this.tagSearchResultList = []
             await axios.post('/api/tag/search',{
@@ -166,7 +161,7 @@ export default{
                 }
                 this.tagSerchLoading = false
             })
-        },
+        },100),150),
         // 切り替え
         createNewTagFlagSwitch(){ this.createNewTagFlag = !this.createNewTagFlag },
         tagDialogFlagSwithch(){
@@ -176,43 +171,18 @@ export default{
             this.createNewTagFlag =false
             this.newTag = ''
 
-            // 全部のタグをリストに表示するように戻す
+            // 検索窓を初期化
             this.tagToSearch = ''
-            this.tagSearchResultList = this.allTagList
 
             //エラーを消す
             this.tagAlreadyExistsErrorFlag = false
             this.newTagErrorFlag = false
+
+            //開くときは全部取得した状態に
+            if (this.tagDialogFlag == true) { this.searchTag() }
         },
-        //その他?
+        //親にチェックリストを渡す
         serveCheckedTagListToParent(){ return this.checkedTagList},
-        async getAllTag(){
-            await axios.get('/api/tag/getUserAllTag')
-            .then((res)=>{
-                    for (const tag of res.data) {
-                        this.allTagList.push({
-                            id:tag.id,
-                            name:tag.name
-                        })
-                    }
-                    this.tagSearchResultList = this.allTagList
-            })
-            .catch((error)=>{})
-        },
-        async getAddedTag(){
-            await axios.get('/api/tag/getAddedTag')
-            .then((res)=>{
-                // リストに追加
-                this.allTagList.push({
-                    id:res.data.id,
-                    name:res.data.name
-                })
-            })
-            .catch((error)=>{})
-        },
-    },
-    mounted() {
-        this.getAllTag()
     },
 }
 </script>
