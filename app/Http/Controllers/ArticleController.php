@@ -49,10 +49,16 @@ class ArticleController extends Controller
 
     public function aricleUpdate(Request $request)
     {
+        $request->session()->regenerateToken();
+
         Article::updateArticle(
-            articleId:$aricleId,
-            title:$title,
-            body :$body
+            articleId:$request->articleId,
+            title:$request->articleTitle,
+            body :$request->articleBody
+        );
+        ArticleTag::updateAricleTag(
+            articleId     :$request->articleId,
+            updatedTagList:$request  ->tagList,
         );
     }
 
@@ -81,6 +87,7 @@ class ArticleController extends Controller
 
     public function deleteArticle(Request $request)
     {
+        $request->session()->regenerateToken();
         Article::deleteArticle(articleId:$request->articleId);
     }
 
@@ -100,8 +107,14 @@ class ArticleController extends Controller
         return Article::serveUserAllArticle(userId:Auth::id());
     }
 
-    public function DetermineProcessing(Request $request)
-    {
-
-    }
+    // 編集か新規かを分ける
+    // public function DetermineProcessing(Request $request)
+    // {
+    //     //新規
+    //     if ($request->articleId == 0) { $this->articleStore($request); }
+    //     // 編集
+    //     else {
+    //         $this->aricleUpdate($request);
+    //     }
+    // }
 }
