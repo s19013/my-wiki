@@ -8,7 +8,7 @@
                     </v-col>
                     <v-col cols="1"> <DeleteAlertComponent @deleteAricleTrigger="deleteArticle"></DeleteAlertComponent> </v-col>
                     <v-col cols="1">
-                        <v-btn class="longButton" color="#BBDEFB" >
+                        <v-btn class="longButton" color="#BBDEFB" @click="TransitionToEdit">
                             <v-icon>mdi-pencil-plus</v-icon>
                             編集
                         </v-btn>
@@ -64,6 +64,14 @@ export default{
                 this.articleDeleting = false
             })
         },
+        TransitionToEdit(){
+            this.$inertia.post('/EditArticle',{
+                articleTitle:this.article.title,
+                articleBody :this.article.body,
+                category:this.article.category,
+                tagList :this.articleTag
+            })
+        }
     },
 }
 </script>

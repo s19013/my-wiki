@@ -35,4 +35,17 @@ class TransitionController extends Controller
             'articleTag' => $articleTag,
         ]);
     }
+
+    public function transitionToEditArticle(Request $request)
+    {
+        //categoryによって変える
+        if ($request->category == 2) {
+            return Inertia::render('EditArticle',[
+                'originalTitle'=> $request->title,
+                'originalBody' => $request->body,
+                'originalTag'  => $request->tag,
+                'category'     => $request->category
+            ]);
+        }
+    }
 }

@@ -41,23 +41,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/ViewArticle/{articleId}', [TransitionController::class,'transitionToViewArticle'])->name('ViewAricle');
 
+    Route::post('/EditArticle', [TransitionController::class,'transitionToEditArticle'])->name('EditAricle');
+
     Route::get('/index', function () {
         return Inertia::render('index');
     })->name('index');
 
 
 });
-
-// Route::get('/dashboard', function () {
-//     return Inertia::render('Dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
-
-// Route::get('/createArticle', function () {
-//     return Inertia::render('createArticle');
-// })->middleware(['auth', 'verified'])->name('createArticle');
-
-// Route::get('/test', function () {
-//     return Inertia::render('test');
-// })->middleware(['auth', 'verified'])->name('test');
 
 require __DIR__.'/auth.php';
