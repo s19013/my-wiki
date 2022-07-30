@@ -76,22 +76,26 @@ class Article extends Model
     {
         //削除されていないなら 記事のデータが帰ってくるはず
         //つまり帰り値がnullなら削除済みということ
-        return Article::select('id')
+        $article = Article::select('id')
         ->whereNull('deleted_at')
         ->where('id','=',$articleId)
         ->first();
+
+        // 帰り値がnull->削除済みならtrue
+        if ($article == null) {return true;}
+        else {return false;}
     }
 
     //他人の覗こうとしてないか確かめる
-    public static function illegalPeep($articleId,$userId)
+    public static function preventPeep($articleId,$userId)
     {
-        $peep = Article::select('user_id')
+        $article = Article::select('user_id')
         ->whereNull('deleted_at')
         ->where('id','=',$articleId)
         ->first();
 
         //記事に紐づけられているuserIdとログイン中のユーザーのidを比較する
         // falseなら他人のを覗こうとしている
-        return ($peep->original['user_id']) == $userId ;
+        return ($article->original['user_id']) == $userId ;
     }
 }

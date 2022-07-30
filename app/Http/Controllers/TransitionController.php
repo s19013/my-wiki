@@ -16,13 +16,13 @@ class TransitionController extends Controller
     public function transitionToViewArticle($articleId)
     {
         //削除された記事ならindexに戻す
-        $deleted = Article::checkArticleDeleted(articleId:$articleId);
-        if ($deleted == null ) { return redirect()->route('index'); }
+        $isDeleted = Article::checkArticleDeleted(articleId:$articleId);
+        if ($isDeleted == true ) { return redirect()->route('index'); }
 
         // 他人の記事を覗こうとしているならindexに戻す
         // 関数名後で変える
-        $peep = Article::illegalPeep(articleId:$articleId,userId:Auth::id());
-        if ($peep == false) { return redirect()->route('index'); }
+        $isSamePerson = Article::preventPeep(articleId:$articleId,userId:Auth::id());
+        if ($isSamePerson == false) { return redirect()->route('index'); }
 
         $article = Article::serveArticle(articleId:$articleId);
 
