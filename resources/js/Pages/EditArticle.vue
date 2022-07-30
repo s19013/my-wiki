@@ -1,5 +1,5 @@
 <template>
-    <BaseLayout title="新規作成" pageTitle="新規作成">
+    <BaseLayout title="記事編集" pageTitle="記事編集">
         <section class="articleContainer">
             <v-form v-on:submit.prevent ="submit">
                 <!-- タイトル入力欄とボタン2つ -->
@@ -35,7 +35,7 @@
                     <v-col><p class="error articleError" v-if="articleBodyErrorFlag">本文を入力してください</p></v-col>
 
                     <!-- タグ -->
-                    <v-col cols="2"><TagDialog ref="tagDialog" :originalCheckedTag=null></TagDialog></v-col>
+                    <v-col cols="2"><TagDialog ref="tagDialog" :originalCheckedTag="originalCheckedTag"></TagDialog></v-col>
 
                 </v-row>
                 <!-- md入力欄  -->
@@ -79,6 +79,7 @@ export default {
         articleBodyErrorFlag:false,
       }
     },
+    props:['originalArticle','originalCheckedTag'],
     components:{
         DeleteAlertComponent,
         TagDialog,
@@ -98,10 +99,10 @@ export default {
         },100),150),
         submit(){
             this.articleSending = true
-            axios.post('/api/article/store',{
-                // articleId:0,
-                articleTitle:this.articleTitle,
-                articleBody:this.articleBody,
+            axios.post('/api/article/update',{
+                articleId:this.originalArticle.id,
+                articleTitle:this.originalArticle.title,
+                articleBody:this.originalArticle.body,
                 category:2,
                 tagList:this.$refs.tagDialog.serveCheckedTagListToParent()
             })
@@ -111,12 +112,22 @@ export default {
             })
         },
         deleteArticle() {
+            this.articleDeleting = true
             // 消す処理
-
-            //遷移
-            this.$inertia.get('/index')
-            console.log('called');
+            axios.post('/api/article/delete',{articleId:this.originalArticle.id})
+            .then((res) => {
+                //遷移
+                this.$inertia.get('/index')
+                this.articleDeleting = false
+            })
+            .catch((error) => {
+                this.articleDeleting = false
+            })
         },
+    },
+    mounted() {
+        this.articleTitle = this.originalArticle.title
+        this.articleBody  = this.originalArticle.body
     },
 }
 </script>

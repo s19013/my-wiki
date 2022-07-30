@@ -10,15 +10,12 @@ use Auth;
 
 class ArticleController extends Controller
 {
-    public function serveUserAllTag()
-    {
-        return Tag::getUserAllTag(userId:Auth::id());
-    }
 
     public function articleStore(Request $request)
     {
         // CSRFトークンを再生成して、二重送信対策
         $request->session()->regenerateToken();
+
         // 記事を保存して記事のidを取得
         $articleId = Article::storeArticle(
                 userId   : Auth::id(),
@@ -47,6 +44,33 @@ class ArticleController extends Controller
         }
     }
 
+    public function aricleUpdate(Request $request)
+    {
+        $request->session()->regenerateToken();
+
+        Article::updateArticle(
+            articleId:$request->articleId,
+            title:$request->articleTitle,
+            body :$request->articleBody
+        );
+        ArticleTag::updateAricleTag(
+            articleId     :$request->articleId,
+            updatedTagList:$request  ->tagList,
+        );
+    }
+
+    public function deleteArticle(Request $request)
+    {
+        $request->session()->regenerateToken();
+        Article::deleteArticle(articleId:$request->articleId);
+    }
+
+    public function serveUserAllArticle(Request $request)
+    {
+        // タグと記事は別々?
+        return Article::serveUserAllArticle(userId:Auth::id());
+    }
+
     public function tagStore(Request $request)
     {
         // CSRFトークンを再生成して、二重送信対策
@@ -57,11 +81,6 @@ class ArticleController extends Controller
         );
     }
 
-    public function serveAddedTag()
-    {
-        return Tag::serveAddedTag(userId:Auth::id());
-    }
-
     public function tagSearch(Request $request)
     {
         return Tag::search(
@@ -70,24 +89,14 @@ class ArticleController extends Controller
         );
     }
 
-    public function deleteArticle(Request $request)
-    {
-        Article::deleteArticle(articleId:$request->articleId);
-    }
-
-    // public function articleRead(Request $request)
+    // 編集か新規かを分ける
+    // public function DetermineProcessing(Request $request)
     // {
-    //     return Article::serveArticle(articleId:$request->articleId);
+    //     //新規
+    //     if ($request->articleId == 0) { $this->articleStore($request); }
+    //     // 編集
+    //     else {
+    //         $this->aricleUpdate($request);
+    //     }
     // }
-
-    // public function tagRead(Request $request)
-    // {
-    //     return ArticleTag::serveTagsRelatedToAricle(articleId:$request->articleId);
-    // }
-
-    public function serveUserAllArticle(Request $request)
-    {
-        // タグと記事は別々?
-        return Article::serveUserAllArticle(userId:Auth::id());
-    }
 }
