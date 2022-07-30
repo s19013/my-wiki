@@ -35,7 +35,7 @@
                     <v-col><p class="error articleError" v-if="articleBodyErrorFlag">本文を入力してください</p></v-col>
 
                     <!-- タグ -->
-                    <v-col cols="2"><TagDialog ref="tagDialog"></TagDialog></v-col>
+                    <v-col cols="2"><TagDialog ref="tagDialog" :originalCheckedTag=null></TagDialog></v-col>
 
                 </v-row>
                 <!-- md入力欄  -->
