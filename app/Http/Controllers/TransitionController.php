@@ -20,9 +20,9 @@ class TransitionController extends Controller
         if ($isDeleted == true ) { return redirect()->route('index'); }
 
         // 他人の記事を覗こうとしているならindexに戻す
-        // 関数名後で変える
         $isSamePerson = Article::preventPeep(articleId:$articleId,userId:Auth::id());
         if ($isSamePerson == false) { return redirect()->route('index'); }
+
 
         $article = Article::serveArticle(articleId:$articleId);
 
@@ -43,7 +43,6 @@ class TransitionController extends Controller
         if ($isDeleted == true ) { return redirect()->route('index'); }
 
         // 他人の記事を覗こうとしているならindexに戻す
-        // 関数名後で変える
         $isSamePerson = Article::preventPeep(articleId:$articleId,userId:Auth::id());
         if ($isSamePerson == false) { return redirect()->route('index'); }
 
