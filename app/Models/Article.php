@@ -34,11 +34,13 @@ class Article extends Model
 
     public static function updateArticle($articleId,$title,$body)
     {
-        Aricle::where('id','=',$articleId)
-        ->update([
-            'title' => $title,
-            'body'  => $body,
-        ]);
+        DB::transaction(function () use($articleId,$title,$body){
+            Aricle::where('id','=',$articleId)
+            ->update([
+                'title' => $title,
+                'body'  => $body,
+            ]);
+        });
     }
 
     //viewAricle用に指定された記事だけを取ってくる
@@ -77,8 +79,10 @@ class Article extends Model
     public static function deleteArticle($articleId)
     {
         // 論理削除
-        Article::where('id','=',$articleId)
-        ->update(['deleted_at' => date(Carbon::now())]);
+        DB::transaction(function () use($articleId){
+            Article::where('id','=',$articleId)
+            ->update(['deleted_at' => date(Carbon::now())]);
+        });
     }
 
     // 削除済みか確かめる
