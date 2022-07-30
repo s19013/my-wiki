@@ -54,6 +54,7 @@ class Article extends Model
         -> WhereNull('deleted_at')
         -> where('category','=',2)
         -> where('user_id','=',$userId)
+        -> orderBy('updated_at', 'desc')
         ->get();
         return $userTable;
 
