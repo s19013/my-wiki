@@ -42,7 +42,7 @@ class ArticleTag extends Model
         ->WhereNull('deleted_at')
         ->toSql();
 
-        return ArticleTag::select('sub_tags.name')
+        return ArticleTag::select('sub_tags.id as id','sub_tags.name as name')
         ->leftJoin(DB::raw('('.$subTagTable.') AS sub_tags'),'article_tags.tag_id','=','sub_tags.id')
         ->WhereNull('article_tags.deleted_at') // 記事からはずされていないタグのみを取得
         ->Where('article_tags.article_id','=',':$articleId')
