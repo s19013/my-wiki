@@ -8,10 +8,12 @@
                     </v-col>
                     <v-col cols="1"> <DeleteAlertComponent @deleteAricleTrigger="deleteArticle"></DeleteAlertComponent> </v-col>
                     <v-col cols="1">
-                        <v-btn class="longButton" color="#BBDEFB" @click="TransitionToEdit">
-                            <v-icon>mdi-pencil-plus</v-icon>
-                            編集
-                        </v-btn>
+                        <Link :href="'/EditArticle/' + article.id">
+                            <v-btn class="longButton" color="#BBDEFB">
+                                <v-icon>mdi-pencil-plus</v-icon>
+                                編集
+                            </v-btn>
+                        </Link>
                     </v-col>
                 </v-row>
 
@@ -35,6 +37,7 @@ import {marked} from 'marked';
 import DeleteAlertComponent from '@/Components/dialog/DeleteAlertDialog.vue';
 import loadingDialog from '@/Components/loading/loadingDialog.vue';
 import BaseLayout from '@/Layouts/BaseLayout.vue'
+import { Link } from '@inertiajs/inertia-vue3';
 import axios from 'axios'
 export default{
     data() {
@@ -48,6 +51,7 @@ export default{
         DeleteAlertComponent,
         loadingDialog,
         BaseLayout,
+        Link
     },
     methods: {
         compiledMarkdown() {return marked(this.article.body)},
@@ -64,14 +68,6 @@ export default{
                 this.articleDeleting = false
             })
         },
-        TransitionToEdit(){
-            this.$inertia.post('/EditArticle',{
-                articleTitle:this.article.title,
-                articleBody :this.article.body,
-                category:this.article.category,
-                tagList :this.articleTag
-            })
-        }
     },
 }
 </script>

@@ -41,7 +41,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/ViewArticle/{articleId}', [TransitionController::class,'transitionToViewArticle'])->name('ViewAricle');
 
-    Route::post('/EditArticle', [TransitionController::class,'transitionToEditArticle'])->name('EditAricle');
+    Route::get('/EditArticle/{articleId}', [TransitionController::class,'transitionToEditArticle'])->name('EditAricle');
 
     Route::get('/index', function () {
         return Inertia::render('index');
