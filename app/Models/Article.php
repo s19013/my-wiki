@@ -32,7 +32,7 @@ class Article extends Model
         });
     }
 
-    public function updateArticle($articleId,$title,$body)
+    public static function updateArticle($articleId,$title,$body)
     {
         Aricle::where('id','=',$articleId)
         ->update([
