@@ -42,8 +42,6 @@ class ArticleTag extends Model
 
         // 消された､追加されたを確認する
         $originalTagList = [];
-        // $deletedTagList  = [];
-        // $addedTagList    = [];
 
         // もとのタグを確認する
         $original = ArticleTag::select('tag_id')
@@ -56,6 +54,7 @@ class ArticleTag extends Model
 
         // 追加されたタグ
         $addedTagList = array_diff($updatedTagList, $originalTagList);
+
         // 削除されたタグ
         $deletedTagList = array_diff($originalTagList, $updatedTagList);
 
@@ -86,7 +85,6 @@ class ArticleTag extends Model
     {
         // tagsターブルとくっつける
         // article_tags.tag_id = tags.id
-        // 記事からはずされていないタグを取得
 
         // タグテーブルからログインユーザーの削除されていないタグを探す
         $subTagTable = DB::table('tags')
@@ -95,6 +93,7 @@ class ArticleTag extends Model
         ->WhereNull('deleted_at')
         ->toSql();
 
+        // 記事からはずされていないタグを取得
         return ArticleTag::select('sub_tags.id as id','sub_tags.name as name')
         ->leftJoin(DB::raw('('.$subTagTable.') AS sub_tags'),'article_tags.tag_id','=','sub_tags.id')
         ->WhereNull('article_tags.deleted_at') // 記事からはずされていないタグのみを取得
