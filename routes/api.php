@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\TagController;
+use App\Http\Controllers\BookMarkController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,19 +32,24 @@ Route::middleware('auth:sanctum', 'throttle:60,1')->group(function () {
     });
 
     Route::prefix('/tag')->group(function () {
-        Route::post('/delete',[ArticleController::class,'']);
-        Route::post('/store',[ArticleController::class,'tagStore']);
-        Route::post('/edit',[ArticleController::class,'']);
-        Route::post('/search',[ArticleController::class,'tagSearch']);
+        Route::post('/delete' , [TagController::class,'']);
+        Route::post('/store'  , [TagController::class,'tagStore']);
+        Route::post('/edit'   , [TagController::class,'']);
+        Route::post('/search' , [TagController::class,'tagSearch']);
     });
 
     Route::prefix('/article')->group(function () {
-        Route::post('/store',[ArticleController::class,'articleStore']);
-        Route::post('/update',[ArticleController::class,'aricleUpdate']);
-        Route::post('/edit',[ArticleController::class,'']);
-        // Route::post('/read',[ArticleController::class,'articleRead']);
-        Route::post('/delete',[ArticleController::class,'deleteArticle']);
+        Route::post('/store'  , [ArticleController::class,'articleStore']);
+        Route::post('/update' , [ArticleController::class,'aricleUpdate']);
+        Route::post('/delete' , [ArticleController::class,'articleDelete']);
         Route::post('/getUserAllArticle',[ArticleController::class,'serveUserAllArticle']);
+    });
+
+    Route::prefix('/bookmark')->group(function () {
+        Route::post('/store'  , [BookMarkController::class,'bookMarkStore']);
+        Route::post('/update' , [BookMarkController::class,'bookMarkUpdate']);
+        Route::post('/delete' , [BookMarkController::class,'bookMarkDelete']);
+        Route::post('/getUserAllBookMark',[BookMarkController::class,'serveUserAllBookMark']);
     });
 });
 

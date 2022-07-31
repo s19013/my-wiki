@@ -30,7 +30,7 @@ class TransitionController extends Controller
             userId:Auth::id(),
             articleId:$articleId
         );
-        return Inertia::render('ViewArticle',[
+        return Inertia::render('Article/ViewArticle',[
             'article'    => $article,
             'articleTag' => $articleTag,
         ]);
@@ -55,7 +55,7 @@ class TransitionController extends Controller
 
         //categoryによって変える
         if ($article->category == 2) {
-            return Inertia::render('EditArticle',[
+            return Inertia::render('Article/EditArticle',[
                 'originalArticle'     => $article,
                 'originalCheckedTag' => $articleTag,
             ]);

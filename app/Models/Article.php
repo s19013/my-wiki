@@ -34,6 +34,9 @@ class Article extends Model
 
     public static function updateArticle($articleId,$title,$body)
     {
+        // タイトルが産められてなかったら日時で埋める
+        if ($title == '') { $title = Carbon::now() ;}
+
         DB::transaction(function () use($articleId,$title,$body){
             Article::where('id','=',$articleId)
             ->update([
@@ -51,7 +54,7 @@ class Article extends Model
         ->first();
     }
 
-    public static function serveUserAllArticle($userId)
+    public static function serveUserAllArticle($userId,$category)
     {
         // まずはユーザーで絞った表を作る
         // whereで探すか副問合せで表を作るかどっちがよいか
@@ -63,7 +66,7 @@ class Article extends Model
 
         $userTable = Article::select('id','title','body')
         -> WhereNull('deleted_at')
-        -> where('category','=',2)
+        -> where('category','=',$category)
         -> where('user_id','=',$userId)
         -> orderBy('updated_at', 'desc')
         ->get();

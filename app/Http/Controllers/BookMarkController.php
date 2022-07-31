@@ -1,17 +1,17 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Http\Request;
 
+use Illuminate\Http\Request;
 
 use App\Models\ArticleTag;
 use App\Models\Article;
 use Auth;
 
-class ArticleController extends Controller
+class BookMarkController extends Controller
 {
-
-    public function articleStore(Request $request)
+    //
+    public function bookMarkStore(Request $request)
     {
         // CSRFトークンを再生成して、二重送信対策
         $request->session()->regenerateToken();
@@ -44,7 +44,7 @@ class ArticleController extends Controller
         }
     }
 
-    public function aricleUpdate(Request $request)
+    public function bookMarkUpdate(Request $request)
     {
         $request->session()->regenerateToken();
 
@@ -59,18 +59,18 @@ class ArticleController extends Controller
         );
     }
 
-    public function articleDelete(Request $request)
+    public function bookMarkDelete(Request $request)
     {
         $request->session()->regenerateToken();
-        Article::articleDelete(articleId:$request->articleId);
+        Article::deleteArticle(articleId:$request->articleId);
     }
 
-    public function serveUserAllArticle(Request $request)
+    public function serveUserAllBookMark(Request $request)
     {
         // タグと記事は別々?
         return Article::serveUserAllArticle(
             userId:Auth::id(),
-            category:2);;
+            category:1);
     }
 
     // 編集か新規かを分ける
