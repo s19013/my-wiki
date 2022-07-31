@@ -68,7 +68,9 @@ class ArticleController extends Controller
     public function serveUserAllArticle(Request $request)
     {
         // タグと記事は別々?
-        return Article::serveUserAllArticle(userId:Auth::id());
+        return Article::serveUserAllArticle(
+            userId:Auth::id(),
+            category:2);;
     }
 
     // 編集か新規かを分ける

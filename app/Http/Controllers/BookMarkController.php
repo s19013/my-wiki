@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\ArticleTag;
+use App\Models\Article;
+use Auth;
+
 class BookMarkController extends Controller
 {
     //
@@ -64,7 +68,9 @@ class BookMarkController extends Controller
     public function serveUserAllBookMark(Request $request)
     {
         // タグと記事は別々?
-        return Article::serveUserAllBookMark(userId:Auth::id());
+        return Article::serveUserAllArticle(
+            userId:Auth::id(),
+            category:1);
     }
 
     // 編集か新規かを分ける
