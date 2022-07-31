@@ -107,14 +107,14 @@ export default {
             })
             .then((res)=>{
                 this.articleSending = false
-                this.$inertia.get('/index')
+                this.$inertia.get('/Article/Search')
             })
         },
         deleteArticle() {
             // 消す処理
 
             //遷移
-            this.$inertia.get('/index')
+            this.$inertia.get('/Article/Search')
             console.log('called');
         },
     },
