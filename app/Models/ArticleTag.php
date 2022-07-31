@@ -62,7 +62,6 @@ class ArticleTag extends Model
                 ArticleTag::storeArticleTag(
                     tagId:$tag,
                     articleId:$articleId,
-                    userId:\Auth::id()
                 );
             }
         }
