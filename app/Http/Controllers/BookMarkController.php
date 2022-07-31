@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Models\ArticleTag;
-use App\Models\Article;
+use App\Models\BookMarkTag;
+use App\Models\BookMark;
 use Auth;
 
 class BookMarkController extends Controller
@@ -17,28 +17,25 @@ class BookMarkController extends Controller
         $request->session()->regenerateToken();
 
         // 記事を保存して記事のidを取得
-        $articleId = Article::storeArticle(
+        $bookmarkId = BookMark::storeBookMark(
                 userId   : Auth::id(),
-                title    : $request->articleTitle,
-                body     : $request->articleBody,
-                category : $request->category,
+                title    : $request->bookmarkTitle,
+                url     : $request->bookmarkUrl,
         );
 
         // なんのタグも設定されていない時
         if (empty($request->tagList) == true) {
-            ArticleTag::storeArticleTag(
-                userId    : Auth::id(),
+            BookMarkTag::storeBookMarkTag(
                 tagId     : null,
-                articleId : $articleId,
+                bookmarkId : $bookmarkId,
             );
         }
         //タグが設定されている時
         else {
             foreach($request->tagList as $tagId){
-                ArticleTag::storeArticleTag(
-                    userId    : Auth::id(),
+                BookMarkTag::storeBookMarkTag(
                     tagId     : $tagId,
-                    articleId : $articleId,
+                    bookmarkId : $bookmarkId,
                 );
             }
         }
@@ -48,13 +45,13 @@ class BookMarkController extends Controller
     {
         $request->session()->regenerateToken();
 
-        Article::updateArticle(
-            articleId:$request->articleId,
-            title:$request->articleTitle,
-            body :$request->articleBody
+        BookMark::updateBookMark(
+            bookmarkId:$request->bookmarkId,
+            title:$request->bookmarkTitle,
+            url :$request->bookmarkUrl
         );
-        ArticleTag::updateAricleTag(
-            articleId     :$request->articleId,
+        BookMarkTag::updateAricleTag(
+            bookmarkId     :$request->bookmarkId,
             updatedTagList:$request  ->tagList,
         );
     }
@@ -62,22 +59,20 @@ class BookMarkController extends Controller
     public function bookMarkDelete(Request $request)
     {
         $request->session()->regenerateToken();
-        Article::deleteArticle(articleId:$request->articleId);
+        BookMark::deleteBookMark(bookmarkId:$request->bookmarkId);
     }
 
     public function serveUserAllBookMark(Request $request)
     {
         // タグと記事は別々?
-        return Article::serveUserAllArticle(
-            userId:Auth::id(),
-            category:1);
+        return BookMark::serveUserAllBookMark(userId:Auth::id());
     }
 
     // 編集か新規かを分ける
     // public function DetermineProcessing(Request $request)
     // {
     //     //新規
-    //     if ($request->articleId == 0) { $this->articleStore($request); }
+    //     if ($request->bookmarkId == 0) { $this->bookmarkStore($request); }
     //     // 編集
     //     else {
     //         $this->aricleUpdate($request);
