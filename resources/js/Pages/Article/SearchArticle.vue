@@ -13,8 +13,7 @@
             v-model="pagination.current_page"
             :length="pagination.lastPage"
             :total-visible="5"
-
-    ></v-pagination>
+        ></v-pagination>
     <!-- @input="getAricle" -->
     </BaseLayout>
 </template>
