@@ -11,7 +11,7 @@
                             新規記事作成
                         </h2>
                     </Link>
-                    <Link :href="route('index')">
+                    <Link :href="route('CreateBookMark')">
                         <h2 class="createBookMark navButton">
                             <v-icon>mdi-bookmark-plus</v-icon>
                             新規ブックマーク作成
