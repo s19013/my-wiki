@@ -18,21 +18,9 @@
                         </v-btn>
                     </v-col>
                 </v-row>
-                <!-- タブ -->
+                <!--  -->
                 <v-row>
-                    <v-col>
-                        <ul class="tabLabel">
-                            <li @click="changeTab(0)" :class="{active: activeTab === 0,notActive: activeTab !== 0 }">
-                                本文
-                            </li>
-                            <li @click="changeTab(1)" :class="{active: activeTab === 1,notActive: activeTab !== 1 }">
-                                変換後
-                            </li>
-                        </ul>
-                    </v-col>
-
-                    <!--  -->
-                    <v-col><p class="error articleError" v-if="articleBodyErrorFlag">本文を入力してください</p></v-col>
+                    <v-col><p class="error articleError" v-if="articleBodyErrorFlag">urlを入力してください</p></v-col>
 
                     <!-- タグ -->
                     <v-col cols="2"><TagDialog ref="tagDialog" :originalCheckedTag=null></TagDialog></v-col>
@@ -40,14 +28,11 @@
                 </v-row>
                 <!-- md入力欄  -->
                 <div v-show="activeTab === 0">
-                    <v-textarea
-                        filled
-                        auto-grow
-                        label="本文 [必須]"
+                    <v-text-field
+                        label="url [必須]"
                         v-model = "articleBody"
-                    ></v-textarea>
+                    ></v-text-field>
                 </div>
-                <div v-show="activeTab === 1" class="markdown" v-html="compiledMarkdown()"></div>
             </v-form>
         </section>
         <!-- 送信中に表示 -->
@@ -98,23 +83,23 @@ export default {
         },100),150),
         submit(){
             this.articleSending = true
-            axios.post('/api/article/store',{
+            axios.post('/api/bookmark/store',{
                 // articleId:0,
                 articleTitle:this.articleTitle,
                 articleBody:this.articleBody,
-                category:2,
+                category:1,
                 tagList:this.$refs.tagDialog.serveCheckedTagListToParent()
             })
             .then((res)=>{
                 this.articleSending = false
-                this.$inertia.get('/index')
+                this.$inertia.get('/BookMark/Search')
             })
         },
         deleteArticle() {
             // 消す処理
 
             //遷移
-            this.$inertia.get('/index')
+            this.$inertia.get('/BookMark/Search')
             console.log('called');
         },
     },
