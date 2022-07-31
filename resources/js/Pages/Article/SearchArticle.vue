@@ -1,5 +1,5 @@
 <template>
-    <BaseLayout title="検索画面" pageTitle="検索画面">
+    <BaseLayout title="記事検索" pageTitle="記事検索">
         <v-container>
             <template v-for="article of articleList" :key="article.id">
                 <Link :href="'/ViewArticle/' + article.id">
