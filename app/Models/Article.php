@@ -16,7 +16,7 @@ class Article extends Model
         'body',
     ];
 
-    public static function storeArticle($title,$body,$userId,$category)
+    public static function storeArticle($title,$body,$userId)
     {
         // タイトルが産められてなかったら日時で埋める
         if ($title == '') { $title = Carbon::now() ;}
