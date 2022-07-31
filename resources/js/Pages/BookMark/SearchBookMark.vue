@@ -2,11 +2,10 @@
     <BaseLayout title="検索画面" pageTitle="検索画面">
         <v-container>
             <template v-for="article of articleList" :key="article.id">
-                <Link :href="'/ViewArticle/' + article.id">
                     <div class ="article ">
-                        <h2>{{article.title}}</h2>
+                        <!-- 別タブで開くようにする -->
+                        <a :href="article.body"><h2>{{article.title}}</h2></a>
                     </div>
-                </Link>
             </template>
         </v-container>
     </BaseLayout>
@@ -30,7 +29,7 @@ export default{
     },
     methods: {
         async getAricle(){
-            await axios.post('/api/article/getUserAllArticle',{
+            await axios.post('/api/bookmark/getUserAllBookMark',{
                 userId:this.$attrs.auth.user.id,
             })
             .then((res)=>{
