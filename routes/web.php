@@ -36,16 +36,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('test');
 
     Route::get('/CreateArticle', function () {
-        return Inertia::render('CreateArticle');
+        return Inertia::render('Article/CreateArticle');
     })->name('CreateArticle');
 
     Route::get('/ViewArticle/{articleId}', [TransitionController::class,'transitionToViewArticle'])->name('ViewAricle');
 
     Route::get('/EditArticle/{articleId}', [TransitionController::class,'transitionToEditArticle'])->name('EditAricle');
 
-    Route::get('/index', function () {
-        return Inertia::render('index');
-    })->name('index');
+    Route::get('/SearchArticle', function () {
+        return Inertia::render('Article/SearchArticle');
+    })->name('SearchArticle');
 
 
 });
