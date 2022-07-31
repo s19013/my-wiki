@@ -42,7 +42,7 @@ Route::middleware('auth:sanctum', 'throttle:60,1')->group(function () {
         Route::post('/store'  , [ArticleController::class,'articleStore']);
         Route::post('/update' , [ArticleController::class,'aricleUpdate']);
         Route::post('/delete' , [ArticleController::class,'articleDelete']);
-        Route::post('/getUserAllArticle',[ArticleController::class,'serveUserAllArticle']);
+        Route::get('/getUserAllArticle',[ArticleController::class,'serveUserAllArticle']);
     });
 
     Route::prefix('/bookmark')->group(function () {
