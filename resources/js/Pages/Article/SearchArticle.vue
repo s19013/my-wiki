@@ -9,6 +9,13 @@
                 </Link>
             </template>
         </v-container>
+        <v-pagination
+            v-model="pagination.current_page"
+            :length="pagination.lastPage"
+            :total-visible="5"
+
+    ></v-pagination>
+    <!-- @input="getAricle" -->
     </BaseLayout>
 </template>
 
@@ -20,7 +27,11 @@ import { Link } from '@inertiajs/inertia-vue3';
 export default{
     data() {
         return {
-            articleList:[]
+            articleList:null,
+            pagination:{
+                current_page: 1,
+                lastPage:1,
+            }
         }
     },
     components:{
@@ -30,20 +41,25 @@ export default{
     },
     methods: {
         async getAricle(){
-            await axios.post('/api/article/getUserAllArticle',{
-                userId:this.$attrs.auth.user.id,
+            await axios.get('/api/article/getUserAllArticle',{
+                params: {
+                    page: this.current_page,	// /api/pref?page=[page]の形
+                },
             })
             .then((res)=>{
                 console.log(res);
-                for (const article of res.data) {
-                    this.articleList.push({
-                        id:article.id,
-                        title:article.title,
-                        body:article.body
-                    })
-                }
+                this.pagination.current_page = res.data.current_page
+                this.pagination.lastPage= res.data.last_page
+                this.articleList = res.data.data
             })
         },
+    },
+    watch: {
+    // 厳密にはページネーションのボタン類を押すとpagination.current_pageが変化するのでそれをwatch
+    // ページネーションのボタン類を押した場合の処理
+        'pagination.current_page':function(newValue,oldValue){
+            this.getAricle();
+        }
     },
     mounted() {
         this.getAricle()
