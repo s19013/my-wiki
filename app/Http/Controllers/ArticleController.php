@@ -59,7 +59,7 @@ class ArticleController extends Controller
         );
     }
 
-    public function deleteArticle(Request $request)
+    public function articleDelete(Request $request)
     {
         $request->session()->regenerateToken();
         Article::deleteArticle(articleId:$request->articleId);
