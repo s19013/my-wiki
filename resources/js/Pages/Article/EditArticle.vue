@@ -103,7 +103,6 @@ export default {
                 articleId:this.originalArticle.id,
                 articleTitle:this.originalArticle.title,
                 articleBody:this.originalArticle.body,
-                category:2,
                 tagList:this.$refs.tagDialog.serveCheckedTagListToParent()
             })
             .then((res)=>{
