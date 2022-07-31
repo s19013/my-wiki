@@ -69,7 +69,7 @@ class Article extends Model
         -> where('category','=',$category)
         -> where('user_id','=',$userId)
         -> orderBy('updated_at', 'desc')
-        ->get();
+        -> paginate(5);
         return $userTable;
 
 
