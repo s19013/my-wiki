@@ -35,18 +35,32 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('test');
     })->name('test');
 
-    Route::get('/CreateArticle', function () {
-        return Inertia::render('Article/CreateArticle');
-    })->name('CreateArticle');
 
-    Route::get('/ViewArticle/{articleId}', [TransitionController::class,'transitionToViewArticle'])->name('ViewAricle');
+    Route::prefix('Article')->group(function () {
+        Route::get('/Create', function () {
+            return Inertia::render('Article/CreateArticle');
+        })->name('CreateArticle');
 
-    Route::get('/EditArticle/{articleId}', [TransitionController::class,'transitionToEditArticle'])->name('EditAricle');
+        Route::get('/View/{articleId}', [TransitionController::class,'transitionToViewArticle'])->name('ViewAricle');
 
-    Route::get('/SearchArticle', function () {
-        return Inertia::render('Article/SearchArticle');
-    })->name('SearchArticle');
+        Route::get('/Edit/{articleId}', [TransitionController::class,'transitionToEditArticle'])->name('EditAricle');
 
+        Route::get('/Search', function () {
+            return Inertia::render('Article/SearchArticle');
+        })->name('SearchArticle');
+    });
+
+    Route::prefix('BookMark')->group(function () {
+        Route::get('/Create', function () {
+            return Inertia::render('BookMark/CreateBookMark');
+        })->name('CreateBookMark');
+
+        Route::get('/Edit/{articleId}', [TransitionController::class,'transitionToEditArticle'])->name('EditBookMark');
+
+        Route::get('/Search', function () {
+            return Inertia::render('BookMark/SearchBookMark');
+        })->name('SearchBookMark');
+    });
 
 });
 
