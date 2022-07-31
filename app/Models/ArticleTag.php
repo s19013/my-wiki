@@ -13,16 +13,14 @@ class ArticleTag extends Model
     use HasFactory;
     protected $fillable = [
         'article_id',
-        // 'user_id',
         'tag_id',
     ];
 
-    public static function storeArticleTag($tagId,$articleId,$userId)
+    public static function storeArticleTag($tagId,$articleId)
     {
-        DB::transaction(function () use($tagId,$articleId,$userId){
+        DB::transaction(function () use($tagId,$articleId){
             ArticleTag::create([
                 'article_id' => $articleId,
-                'user_id'    => $userId,
                 'tag_id'     => $tagId,
             ]);
         });

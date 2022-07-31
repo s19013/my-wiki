@@ -22,12 +22,12 @@ class Article extends Model
         // タイトルが産められてなかったら日時で埋める
         if ($title == '') { $title = Carbon::now() ;}
 
-        return DB::transaction(function () use($title,$body,$userId,$category){
+        return DB::transaction(function () use($title,$body,$userId){
             $article = Article::create([
                 'user_id'  => $userId,
                 'title'    => $title,
                 'body'     => $body,
-                'category' => $category]);
+            ]);
             return $article->id;
         });
     }
