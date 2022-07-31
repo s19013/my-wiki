@@ -49,7 +49,7 @@ Route::middleware('auth:sanctum', 'throttle:60,1')->group(function () {
         Route::post('/store'  , [BookMarkController::class,'bookMarkStore']);
         Route::post('/update' , [BookMarkController::class,'bookMarkUpdate']);
         Route::post('/delete' , [BookMarkController::class,'bookMarkDelete']);
-        Route::post('/getUserAllBookMark',[BookMarkController::class,'serveUserAllBook']);
+        Route::post('/getUserAllBookMark',[BookMarkController::class,'serveUserAllBookMark']);
     });
 });
 
