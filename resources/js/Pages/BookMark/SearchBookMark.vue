@@ -1,13 +1,18 @@
 <template>
     <BaseLayout title="検索画面" pageTitle="検索画面">
         <v-container>
-            <template v-for="article of articleList" :key="article.id">
+            <template v-for="article of bookMarkList" :key="article.id">
                     <div class ="article ">
                         <!-- 別タブで開くようにする -->
                         <a :href="article.body"><h2>{{article.title}}</h2></a>
                     </div>
             </template>
         </v-container>
+        <v-pagination
+            v-model="pagination.current_page"
+            :length="pagination.lastPage"
+            :total-visible="5"
+        ></v-pagination>
     </BaseLayout>
 </template>
 
@@ -19,7 +24,11 @@ import { Link } from '@inertiajs/inertia-vue3';
 export default{
     data() {
         return {
-            articleList:[]
+            bookMarkList:null,
+            pagination:{
+                current_page: 1,
+                lastPage:1,
+            }
         }
     },
     components:{
@@ -28,24 +37,29 @@ export default{
         Link,
     },
     methods: {
-        async getAricle(){
-            await axios.post('/api/bookmark/getUserAllBookMark',{
-                userId:this.$attrs.auth.user.id,
+        async getBookMark(){
+            await axios.get('/api/bookmark/getUserAllBookMark',{
+                params: {
+                    page: this.current_page,	// /api/pref?page=[page]の形
+                },
             })
             .then((res)=>{
                 console.log(res);
-                for (const article of res.data) {
-                    this.articleList.push({
-                        id:article.id,
-                        title:article.title,
-                        body:article.body
-                    })
-                }
+                this.pagination.current_page = res.data.current_page
+                this.pagination.lastPage= res.data.last_page
+                this.bookMarkList = res.data.data
             })
         },
     },
+    watch: {
+    // 厳密にはページネーションのボタン類を押すとpagination.current_pageが変化するのでそれをwatch
+    // ページネーションのボタン類を押した場合の処理
+        'pagination.current_page':function(newValue,oldValue){
+            this.getBookMark();
+        }
+    },
     mounted() {
-        this.getAricle()
+        this.getBookMark()
     },
 }
 </script>
