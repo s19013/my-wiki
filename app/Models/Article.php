@@ -48,12 +48,12 @@ class Article extends Model
     //viewAricle用に指定された記事だけを取ってくる
     public static function serveArticle($articleId)
     {
-        return Article::select('id','title','body','category')
+        return Article::select('id','title','body')
         ->Where('id','=',$articleId)
         ->first();
     }
 
-    public static function serveUserAllArticle($userId,$category)
+    public static function serveUserAllArticle($userId)
     {
         // まずはユーザーで絞った表を作る
         // whereで探すか副問合せで表を作るかどっちがよいか
@@ -65,7 +65,6 @@ class Article extends Model
 
         $userTable = Article::select('id','title','body')
         -> WhereNull('deleted_at')
-        -> where('category','=',$category)
         -> where('user_id','=',$userId)
         -> orderBy('updated_at', 'desc')
         -> paginate(5);

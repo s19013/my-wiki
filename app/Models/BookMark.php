@@ -48,12 +48,12 @@ class BookMark extends Model
     //viewAricle用に指定された記事だけを取ってくる
     public static function serveBookMark($bookmarkId)
     {
-        return BookMark::select('id','title','url','category')
+        return BookMark::select('id','title','url')
         ->Where('id','=',$bookmarkId)
         ->first();
     }
 
-    public static function serveUserAllBookMark($userId,$category)
+    public static function serveUserAllBookMark($userId)
     {
         // まずはユーザーで絞った表を作る
         // whereで探すか副問合せで表を作るかどっちがよいか
@@ -65,7 +65,6 @@ class BookMark extends Model
 
         $userTable = BookMark::select('id','title','url')
         -> WhereNull('deleted_at')
-        -> where('category','=',$category)
         -> where('user_id','=',$userId)
         -> orderBy('updated_at', 'desc')
         -> paginate(5);
