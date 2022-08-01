@@ -43,6 +43,7 @@ Route::middleware('auth:sanctum', 'throttle:60,1')->group(function () {
         Route::post('/update' , [ArticleController::class,'aricleUpdate']);
         Route::post('/delete' , [ArticleController::class,'articleDelete']);
         Route::get('/getUserAllArticle',[ArticleController::class,'serveUserAllArticle']);
+        Route::post('/search' , [ArticleController::class,'articleSearch']);
     });
 
     Route::prefix('/bookmark')->group(function () {

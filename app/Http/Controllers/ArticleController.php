@@ -68,6 +68,14 @@ class ArticleController extends Controller
         return Article::serveUserAllArticle(userId:Auth::id());
     }
 
+    public function articleSearch(Request $request)
+    {
+        return Article::searchArticle(
+            userId:Auth::id(),
+            articleToSearch:$request->articleToSearch,
+            currentPage:$request->currentPage
+        );
+    }
     // 編集か新規かを分ける
     // public function DetermineProcessing(Request $request)
     // {

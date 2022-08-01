@@ -1,20 +1,33 @@
 <template>
     <BaseLayout title="記事検索" pageTitle="記事検索">
         <v-container>
+            <div class="searchArea">
+                <v-text-field
+                    v-model="articleToSearch"
+                    label="検索"
+                    clearable
+                ></v-text-field>
+                <v-btn color="submit"
+                    elevation="2"
+                    :disabled = "articleSerchLoading"
+                    @click="searchArticle()">
+                    <v-icon>mdi-magnify</v-icon>
+                    検索
+                </v-btn>
+            </div>
             <template v-for="article of articleList" :key="article.id">
                 <Link :href="'/Article/View/' + article.id">
-                    <div class ="article ">
+                    <div class ="article">
                         <h2>{{article.title}}</h2>
                     </div>
                 </Link>
             </template>
         </v-container>
         <v-pagination
-            v-model="pagination.current_page"
-            :length="pagination.lastPage"
-            :total-visible="5"
+            v-model="currentPage"
+            :length="pageCount"
+            :total-visible="7"
         ></v-pagination>
-    <!-- @input="getAricle" -->
     </BaseLayout>
 </template>
 
@@ -26,11 +39,11 @@ import { Link } from '@inertiajs/inertia-vue3';
 export default{
     data() {
         return {
+            articleToSearch:'',
             articleList:null,
-            pagination:{
-                current_page: 1,
-                lastPage:1,
-            }
+            currentPage: 1,
+            pageCount:1,
+            articleSerchLoading:false,
         }
     },
     components:{
@@ -39,29 +52,37 @@ export default{
         Link,
     },
     methods: {
-        async getAricle(){
-            await axios.get('/api/article/getUserAllArticle',{
-                params: {
-                    page: this.current_page,	// /api/pref?page=[page]の形
-                },
+        // 検索用
+        async searchArticle(){
+            this.currentPage = 1 //検索するのでリセットする
+            await axios.post('/api/article/search',{
+                currentPage:this.currentPage,
+                articleToSearch:this.articleToSearch
             })
-            .then((res)=>{
-                console.log(res);
-                this.pagination.current_page = res.data.current_page
-                this.pagination.lastPage= res.data.last_page
-                this.articleList = res.data.data
+            .then((res) =>{
+                this.pageCount= res.data.pageCount
+                this.articleList = res.data.articleList
+            })
+        },
+        async pagination(){
+            await axios.post('/api/article/search',{
+                currentPage:this.currentPage,
+                articleToSearch:this.articleToSearch
+            })
+            .then((res) =>{
+                this.articleList = res.data.articleList
             })
         },
     },
     watch: {
     // 厳密にはページネーションのボタン類を押すとpagination.current_pageが変化するのでそれをwatch
     // ページネーションのボタン類を押した場合の処理
-        'pagination.current_page':function(newValue,oldValue){
-            this.getAricle();
+        currentPage:function(newValue,oldValue){
+            this.pagination();
         }
     },
     mounted() {
-        this.getAricle()
+        this.searchArticle();
     },
 }
 </script>
@@ -76,5 +97,16 @@ export default{
 a{
     text-decoration: none;
     color: black;
+}
+.searchArea{
+    display:grid;
+    grid-template-columns:5fr 1fr;
+    .v-input{
+        grid-column: 1/2;
+    }
+    button{
+        grid-column: 2/3;
+        margin: 0 auto;
+    }
 }
 </style>

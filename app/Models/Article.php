@@ -4,8 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
 use DB;
 use Carbon\Carbon;
+use App\Http\Controllers\searchToolKit;
 
 class Article extends Model
 {
@@ -45,6 +47,15 @@ class Article extends Model
         });
     }
 
+    public static function deleteArticle($articleId)
+    {
+        // 論理削除
+        DB::transaction(function () use($articleId){
+            Article::where('id','=',$articleId)
+            ->update(['deleted_at' => date(Carbon::now())]);
+        });
+    }
+
     //viewAricle用に指定された記事だけを取ってくる
     public static function serveArticle($articleId)
     {
@@ -77,13 +88,50 @@ class Article extends Model
         // ->get();
     }
 
-    public static function deleteArticle($articleId)
+
+
+    public static function searchArticle($userId,$articleToSearch,$currentPage)
     {
-        // 論理削除
-        DB::transaction(function () use($articleId){
-            Article::where('id','=',$articleId)
-            ->update(['deleted_at' => date(Carbon::now())]);
-        });
+        //一度にとってくる数
+        $parPage = 1;
+
+        // %と_をエスケープ
+        $escaped = searchToolKit::sqlEscape($articleToSearch);
+        //and検索のために空白区切りでつくった配列を用意
+        $wordListToSearch = searchToolKit::preparationToAndSearch($escaped);
+
+        //クエリビルダ
+        $query = Article::select('id','title')
+        ->where('user_id','=',$userId)
+        ->whereNull('deleted_at');
+
+
+        // title名をlikeけんさく
+        foreach($wordListToSearch as $word){
+            $query->where('title','like',"%$word%");
+        }
+
+        //ヒット件数取得
+        $resultCount = $query->count();
+
+        //ページ数計算
+        $pageCount = (int)ceil($resultCount / $parPage);
+
+        //何件目から取得するか
+        $offset = $parPage*($currentPage-1);
+
+        //検索
+        $searchResults = $query->offset($offset)
+        ->limit($parPage)
+        ->get();
+
+        return response()->json(
+            [
+                "articleList" => $searchResults,
+                "pageCount"   => $pageCount
+            ],
+            200
+        );
     }
 
     // 削除済みか確かめる
