@@ -107,7 +107,7 @@ export default {
             })
             .then((res)=>{
                 this.articleSending = false
-                this.$inertia.get('/index')
+                this.$inertia.get('/Article/Search')
             })
         },
         deleteArticle() {
@@ -116,7 +116,7 @@ export default {
             axios.post('/api/article/delete',{articleId:this.originalArticle.id})
             .then((res) => {
                 //遷移
-                this.$inertia.get('/index')
+                this.$inertia.get('/Article/Search')
                 this.articleDeleting = false
             })
             .catch((error) => {
