@@ -20,7 +20,7 @@ class BookMarkController extends Controller
         $bookmarkId = BookMark::storeBookMark(
                 userId   : Auth::id(),
                 title    : $request->bookmarkTitle,
-                url     : $request->bookmarkUrl,
+                url      : $request->bookmarkUrl,
         );
 
         // なんのタグも設定されていない時
