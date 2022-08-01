@@ -88,7 +88,7 @@ class BookMark extends Model
         // ->get();
     }
 
-    public static function searchBookMark($userId,$bookMarkToSearch,$currentPage)
+    public static function searchBookMark($userId,$bookMarkToSearch,$currentPage,$tagList)
     {
         //一度にとってくる数
         $parPage = 1;
@@ -98,11 +98,36 @@ class BookMark extends Model
         //and検索のために空白区切りでつくった配列を用意
         $wordListToSearch = searchToolKit::preparationToAndSearch($escaped);
 
-        //クエリビルダ
-        $query = BookMark::select('id','title')
-        ->where('user_id','=',$userId)
-        ->whereNull('deleted_at');
+        //タグも検索する場合
+        if (!empty($tagList)) {
+            //book_markテーブルとbook_mark_tagsを結合
+            $subTable = DB::table('book_mark_tags')
+            ->select('book_marks.id','book_marks.title','book_marks.url')
+            ->leftJoin('book_marks','book_marks.id','=','book_mark_tags.book_mark_id')
+            ->where('book_marks.user_id','=',$userId)
+            ->WhereNull('book_marks.deleted_at')
+            ->WhereNull('book_mark_tags.deleted_at');
 
+            $isFirst = true;
+            foreach($tagList as $tag){
+                // 最初だけand検索
+                if ($isFirst == true) {
+                    $subTable->Where('book_mark_tags.tag_id','=',$tag);
+                    $isFirst = false;
+                }
+                $subTable->orWhere('book_mark_tags.tag_id','=',$tag);
+            }
+
+            $subTable->groupBy('book_marks.id')
+            ->having(DB::raw('count(*)'), '=', count($tagList));
+
+            $query = DB::table($subTable,'sub')
+            ->select('sub.id as id','sub.title as title','sub.url as url');
+        } else {
+            $query = BookMark::select('id','title')
+            ->where('user_id','=',$userId)
+            ->whereNull('deleted_at');
+        }
 
         // title名をlikeけんさく
         foreach($wordListToSearch as $word){
