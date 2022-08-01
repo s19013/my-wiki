@@ -4,8 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
 use DB;
 use Carbon\Carbon;
+use App\Http\Controllers\searchToolKit;
 
 class BookMark extends Model
 {
@@ -22,22 +24,22 @@ class BookMark extends Model
         if ($title == '') { $title = Carbon::now() ;}
 
         return DB::transaction(function () use($title,$url,$userId){
-            $bookmark = BookMark::create([
+            $bookMark = BookMark::create([
                 'user_id'  => $userId,
                 'title'    => $title,
                 'url'     => $url,
             ]);
-            return $bookmark->id;
+            return $bookMark->id;
         });
     }
 
-    public static function updateBookMark($bookmarkId,$title,$url)
+    public static function updateBookMark($bookMarkId,$title,$url)
     {
         // タイトルが産められてなかったら日時で埋める
         if ($title == '') { $title = Carbon::now() ;}
 
-        DB::transaction(function () use($bookmarkId,$title,$url){
-            BookMark::where('id','=',$bookmarkId)
+        DB::transaction(function () use($bookMarkId,$title,$url){
+            BookMark::where('id','=',$bookMarkId)
             ->update([
                 'title' => $title,
                 'url'  => $url,
@@ -45,11 +47,20 @@ class BookMark extends Model
         });
     }
 
+    public static function deleteBookMark($bookMarkId)
+    {
+        // 論理削除
+        DB::transaction(function () use($bookMarkId){
+            BookMark::where('id','=',$bookMarkId)
+            ->update(['deleted_at' => date(Carbon::now())]);
+        });
+    }
+
     //viewAricle用に指定された記事だけを取ってくる
-    public static function serveBookMark($bookmarkId)
+    public static function serveBookMark($bookMarkId)
     {
         return BookMark::select('id','title','url')
-        ->Where('id','=',$bookmarkId)
+        ->Where('id','=',$bookMarkId)
         ->first();
     }
 
@@ -77,40 +88,75 @@ class BookMark extends Model
         // ->get();
     }
 
-    public static function deleteBookMark($bookmarkId)
+    public static function searchBookMark($userId,$bookMarkToSearch,$currentPage)
     {
-        // 論理削除
-        DB::transaction(function () use($bookmarkId){
-            BookMark::where('id','=',$bookmarkId)
-            ->update(['deleted_at' => date(Carbon::now())]);
-        });
+        //一度にとってくる数
+        $parPage = 1;
+
+        // %と_をエスケープ
+        $escaped = searchToolKit::sqlEscape($bookMarkToSearch);
+        //and検索のために空白区切りでつくった配列を用意
+        $wordListToSearch = searchToolKit::preparationToAndSearch($escaped);
+
+        //クエリビルダ
+        $query = BookMark::select('id','title')
+        ->where('user_id','=',$userId)
+        ->whereNull('deleted_at');
+
+
+        // title名をlikeけんさく
+        foreach($wordListToSearch as $word){
+            $query->where('title','like',"%$word%");
+        }
+
+        //ヒット件数取得
+        $resultCount = $query->count();
+
+        //ページ数計算
+        $pageCount = (int)ceil($resultCount / $parPage);
+
+        //何件目から取得するか
+        $offset = $parPage*($currentPage-1);
+
+        //検索
+        $searchResults = $query->offset($offset)
+        ->limit($parPage)
+        ->get();
+
+        return response()->json(
+            [
+                "bookMarkList" => $searchResults,
+                "pageCount"    => $pageCount
+            ],
+            200
+        );
     }
 
     // 削除済みか確かめる
-    public static function checkBookMarkDeleted($bookmarkId)
+    public static function checkBookMarkDeleted($bookMarkId)
     {
         //削除されていないなら 記事のデータが帰ってくるはず
         //つまり帰り値がnullなら削除済みということ
-        $bookmark = BookMark::select('id')
+        $bookMark = BookMark::select('id')
         ->whereNull('deleted_at')
-        ->where('id','=',$bookmarkId)
+        ->where('id','=',$bookMarkId)
         ->first();
 
         // 帰り値がnull->削除済みならtrue
-        if ($bookmark == null) {return true;}
+        if ($bookMark == null) {return true;}
         else {return false;}
     }
 
     //他人の覗こうとしてないか確かめる
-    public static function preventPeep($bookmarkId,$userId)
+    public static function preventPeep($bookMarkId,$userId)
     {
-        $bookmark = BookMark::select('user_id')
+        $bookMark = BookMark::select('user_id')
         ->whereNull('deleted_at')
-        ->where('id','=',$bookmarkId)
+        ->where('id','=',$bookMarkId)
         ->first();
 
         //記事に紐づけられているuserIdとログイン中のユーザーのidを比較する
         // falseなら他人のを覗こうとしている
-        return ($bookmark->original['user_id']) == $userId ;
+        return ($bookMark->original['user_id']) == $userId ;
     }
 }

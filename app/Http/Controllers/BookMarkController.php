@@ -17,17 +17,17 @@ class BookMarkController extends Controller
         $request->session()->regenerateToken();
 
         // 記事を保存して記事のidを取得
-        $bookmarkId = BookMark::storeBookMark(
+        $bookMarkId = BookMark::storeBookMark(
                 userId   : Auth::id(),
-                title    : $request->bookmarkTitle,
-                url      : $request->bookmarkUrl,
+                title    : $request->bookMarkTitle,
+                url      : $request->bookMarkUrl,
         );
 
         // なんのタグも設定されていない時
         if (empty($request->tagList) == true) {
             BookMarkTag::storeBookMarkTag(
                 tagId     : null,
-                bookmarkId : $bookmarkId,
+                bookMarkId : $bookMarkId,
             );
         }
         //タグが設定されている時
@@ -35,7 +35,7 @@ class BookMarkController extends Controller
             foreach($request->tagList as $tagId){
                 BookMarkTag::storeBookMarkTag(
                     tagId     : $tagId,
-                    bookmarkId : $bookmarkId,
+                    bookMarkId : $bookMarkId,
                 );
             }
         }
@@ -46,20 +46,29 @@ class BookMarkController extends Controller
         $request->session()->regenerateToken();
 
         BookMark::updateBookMark(
-            bookmarkId:$request->bookmarkId,
-            title:$request->bookmarkTitle,
-            url :$request->bookmarkUrl
+            bookMarkId:$request->bookMarkId,
+            title:$request->bookMarkTitle,
+            url :$request->bookMarkUrl
         );
-        BookMarkTag::updateAricleTag(
-            bookmarkId     :$request->bookmarkId,
+        BookMarkTag::updateBookMarkTag(
+            bookMarkId     :$request->bookMarkId,
             updatedTagList:$request  ->tagList,
+        );
+    }
+
+    public function bookMarkSearch(Request $request)
+    {
+        return BookMark::searchBookMark(
+            userId:Auth::id(),
+            bookMarkToSearch:$request->bookMarkToSearch,
+            currentPage:$request->currentPage
         );
     }
 
     public function bookMarkDelete(Request $request)
     {
         $request->session()->regenerateToken();
-        BookMark::deleteBookMark(bookmarkId:$request->bookmarkId);
+        BookMark::deleteBookMark(bookMarkId:$request->bookMarkId);
     }
 
     public function serveUserAllBookMark(Request $request)

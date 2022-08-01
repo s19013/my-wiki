@@ -16,26 +16,26 @@ class BookMarkTag extends Model
         'tag_id',
     ];
 
-    public static function storeBookMarkTag($tagId,$bookmarkId)
+    public static function storeBookMarkTag($tagId,$bookMarkId)
     {
-        DB::transaction(function () use($tagId,$bookmarkId){
+        DB::transaction(function () use($tagId,$bookMarkId){
             BookMarkTag::create([
-                'book_mark_id' => $bookmarkId,
+                'book_mark_id' => $bookMarkId,
                 'tag_id'     => $tagId,
             ]);
         });
     }
 
-    public static function deleteBookMarkTag($tagId,$bookmarkId)
+    public static function deleteBookMarkTag($tagId,$bookMarkId)
     {
-        DB::transaction(function () use($tagId,$bookmarkId){
-            BookMarkTag::where('book_mark_id','=',$bookmarkId)
+        DB::transaction(function () use($tagId,$bookMarkId){
+            BookMarkTag::where('book_mark_id','=',$bookMarkId)
             ->where('tag_id','=',$tagId)
             ->update(['deleted_at' => date(Carbon::now())]);
         });
     }
 
-    public static function updateAricleTag($bookmarkId,$updatedTagList)
+    public static function updateBookMarkTag($bookMarkId,$updatedTagList)
     {
 
         // 消された､追加されたを確認する
@@ -43,7 +43,7 @@ class BookMarkTag extends Model
 
         // もとのタグを確認する
         $original = BookMarkTag::select('tag_id')
-        ->where('book_mark_id','=',$bookmarkId)
+        ->where('book_mark_id','=',$bookMarkId)
         ->get();
 
         foreach ($original as $tag){
@@ -61,7 +61,7 @@ class BookMarkTag extends Model
             foreach($addedTagList as $tag) {
                 BookMarkTag::storeBookMarkTag(
                     tagId:$tag,
-                    bookmarkId:$bookmarkId,
+                    bookMarkId:$bookMarkId,
                     userId:\Auth::id()
                 );
             }
@@ -72,14 +72,14 @@ class BookMarkTag extends Model
             foreach($deletedTagList as $tag) {
                 BookMarkTag::deleteBookMarkTag(
                     tagId:$tag,
-                    bookmarkId:$bookmarkId,
+                    bookMarkId:$bookMarkId,
                 );
             }
         }
     }
 
     //記事に関連付けられたタグを取得
-    public static function serveTagsRelatedToAricle($bookmarkId,$userId)
+    public static function serveTagsRelatedToAricle($bookMarkId,$userId)
     {
         // tagsターブルとくっつける
         // book_mark_tags.tag_id = tags.id
@@ -95,10 +95,10 @@ class BookMarkTag extends Model
         return BookMarkTag::select('sub_tags.id as id','sub_tags.name as name')
         ->leftJoin(DB::raw('('.$subTagTable.') AS sub_tags'),'book_mark_tags.tag_id','=','sub_tags.id')
         ->WhereNull('book_mark_tags.deleted_at') // 記事からはずされていないタグのみを取得
-        ->Where('book_mark_tags.book_markid','=',':$bookmarkId')
+        ->Where('book_mark_tags.book_markid','=',':$bookMarkId')
         ->setBindings([
             ':$userId'   => $userId,
-            ':$bookmarkId'=> $bookmarkId
+            ':$bookMarkId'=> $bookMarkId
         ])
         ->get();
     }
