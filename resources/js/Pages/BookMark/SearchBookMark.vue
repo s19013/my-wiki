@@ -4,7 +4,7 @@
             <template v-for="article of bookMarkList" :key="article.id">
                     <div class ="article ">
                         <!-- 別タブで開くようにする -->
-                        <a :href="article.body"><h2>{{article.title}}</h2></a>
+                        <a :href="article.url"><h2>{{article.title}}</h2></a>
                     </div>
             </template>
         </v-container>
