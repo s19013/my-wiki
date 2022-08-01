@@ -20,7 +20,7 @@ class BookMarkTag extends Model
     {
         DB::transaction(function () use($tagId,$bookmarkId){
             BookMarkTag::create([
-                'book_markid' => $bookmarkId,
+                'book_mark_id' => $bookmarkId,
                 'tag_id'     => $tagId,
             ]);
         });
@@ -29,7 +29,7 @@ class BookMarkTag extends Model
     public static function deleteBookMarkTag($tagId,$bookmarkId)
     {
         DB::transaction(function () use($tagId,$bookmarkId){
-            BookMarkTag::where('book_markid','=',$bookmarkId)
+            BookMarkTag::where('book_mark_id','=',$bookmarkId)
             ->where('tag_id','=',$tagId)
             ->update(['deleted_at' => date(Carbon::now())]);
         });
@@ -43,7 +43,7 @@ class BookMarkTag extends Model
 
         // もとのタグを確認する
         $original = BookMarkTag::select('tag_id')
-        ->where('book_markid','=',$bookmarkId)
+        ->where('book_mark_id','=',$bookmarkId)
         ->get();
 
         foreach ($original as $tag){
