@@ -8,7 +8,7 @@
                     </v-col>
                     <v-col cols="1"> <DeleteAlertComponent @deleteAricleTrigger="deleteArticle"></DeleteAlertComponent> </v-col>
                     <v-col cols="1">
-                        <Link :href="'/EditArticle/' + article.id">
+                        <Link :href="'/Article/Edit/' + article.id">
                             <v-btn class="longButton" color="#BBDEFB">
                                 <v-icon>mdi-pencil-plus</v-icon>
                                 編集
@@ -61,7 +61,7 @@ export default{
             axios.post('/api/article/delete',{articleId:this.article.id})
             .then((res) => {
                 //遷移
-                this.$inertia.get('/index')
+                this.$inertia.get('/Article/Search')
                 this.articleDeleting = false
             })
             .catch((error) => {
