@@ -1,17 +1,31 @@
 <template>
     <BaseLayout title="検索画面" pageTitle="検索画面">
         <v-container>
-            <template v-for="article of bookMarkList" :key="article.id">
-                    <div class ="article ">
-                        <!-- 別タブで開くようにする -->
-                        <a :href="article.url"><h2>{{article.title}}</h2></a>
-                    </div>
+            <div class="searchArea">
+                <v-text-field
+                    v-model="bookMarkToSearch"
+                    label="検索"
+                    clearable
+                ></v-text-field>
+                <v-btn color="submit"
+                    elevation="2"
+                    :disabled = "bookMarkSerchLoading"
+                    @click="search()">
+                    <v-icon>mdi-magnify</v-icon>
+                    検索
+                </v-btn>
+            </div>
+            <template v-for="bookMark of bookMarkList" :key="bookMark.id">
+                <div class ="article ">
+                    <!-- 別タブで開くようにする -->
+                    <a :href="bookMark.url"><h2>{{bookMark.title}}</h2></a>
+                </div>
             </template>
         </v-container>
         <v-pagination
-            v-model="pagination.current_page"
-            :length="pagination.lastPage"
-            :total-visible="5"
+            v-model="currentPage"
+            :length="pageCount"
+            :total-visible="7"
         ></v-pagination>
     </BaseLayout>
 </template>
@@ -24,11 +38,11 @@ import { Link } from '@inertiajs/inertia-vue3';
 export default{
     data() {
         return {
+            bookMarkToSearch:'',
             bookMarkList:null,
-            pagination:{
-                current_page: 1,
-                lastPage:1,
-            }
+            currentPage: 1,
+            pageCount:1,
+            bookMarkSerchLoading:false,
         }
     },
     components:{
@@ -37,29 +51,37 @@ export default{
         Link,
     },
     methods: {
-        async getBookMark(){
-            await axios.get('/api/bookmark/getUserAllBookMark',{
-                params: {
-                    page: this.current_page,	// /api/pref?page=[page]の形
-                },
+        // 検索用
+        async search(){
+            this.currentPage = 1 //検索するのでリセットする
+            await axios.post('/api/bookmark/search',{
+                currentPage:this.currentPage,
+                bookMarkToSearch:this.bookMarkToSearch
             })
-            .then((res)=>{
-                console.log(res);
-                this.pagination.current_page = res.data.current_page
-                this.pagination.lastPage= res.data.last_page
-                this.bookMarkList = res.data.data
+            .then((res) =>{
+                this.pageCount= res.data.pageCount
+                this.bookMarkList = res.data.bookMarkList
+            })
+        },
+        async pagination(){
+            await axios.post('/api/bookmark/search',{
+                currentPage:this.currentPage,
+                bookMarkToSearch:this.bookMarkToSearch
+            })
+            .then((res) =>{
+                this.bookMarkList = res.data.bookMarkList
             })
         },
     },
     watch: {
     // 厳密にはページネーションのボタン類を押すとpagination.current_pageが変化するのでそれをwatch
     // ページネーションのボタン類を押した場合の処理
-        'pagination.current_page':function(newValue,oldValue){
-            this.getBookMark();
+        currentPage:function(newValue,oldValue){
+            this.pagination();
         }
     },
     mounted() {
-        this.getBookMark()
+        this.search()
     },
 }
 </script>
@@ -74,5 +96,16 @@ export default{
 a{
     text-decoration: none;
     color: black;
+}
+.searchArea{
+    display:grid;
+    grid-template-columns:5fr 1fr;
+    .v-input{
+        grid-column: 1/2;
+    }
+    button{
+        grid-column: 2/3;
+        margin: 0 auto;
+    }
 }
 </style>
