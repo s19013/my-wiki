@@ -18,7 +18,7 @@
                 閉じる
                 </v-btn>
                 <!-- 検索窓とか -->
-                <v-row class="areaTagSerch">
+                <v-row class="searchArea">
                     <v-col cols="10">
                         <v-text-field
                             v-model="tagToSearch"
@@ -209,7 +209,7 @@ export default{
         }
     }
     .areaCreateNewTag{margin: 10px;}
-    .areaTagSerch{
+    .searchArea{
         margin: 20px 5px 5px 5px;
         .v-col{
             padding-top:0;
