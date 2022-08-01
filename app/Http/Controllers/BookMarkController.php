@@ -61,7 +61,8 @@ class BookMarkController extends Controller
         return BookMark::searchBookMark(
             userId:Auth::id(),
             bookMarkToSearch:$request->bookMarkToSearch,
-            currentPage:$request->currentPage
+            currentPage:$request->currentPage,
+            tagList:$request->tagList
         );
     }
 

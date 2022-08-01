@@ -15,6 +15,9 @@
                     検索
                 </v-btn>
             </div>
+
+            <TagDialog ref="tagDialog" class="w-50 mb-10" :originalCheckedTag=null></TagDialog>
+
             <template v-for="bookMark of bookMarkList" :key="bookMark.id">
                 <div class ="article ">
                     <!-- 別タブで開くようにする -->
@@ -34,6 +37,7 @@
 import BaseLayout from '@/Layouts/BaseLayout.vue'
 import { InertiaLink, InertiaHead } from '@inertiajs/inertia-vue3'
 import { Link } from '@inertiajs/inertia-vue3';
+import TagDialog from '@/Components/dialog/TagDialog.vue';
 
 export default{
     data() {
@@ -49,6 +53,7 @@ export default{
         BaseLayout,
         InertiaLink,
         Link,
+        TagDialog,
     },
     methods: {
         // 検索用
@@ -56,7 +61,8 @@ export default{
             this.currentPage = 1 //検索するのでリセットする
             await axios.post('/api/bookmark/search',{
                 currentPage:this.currentPage,
-                bookMarkToSearch:this.bookMarkToSearch
+                bookMarkToSearch:this.bookMarkToSearch,
+                tagList : this.$refs.tagDialog.serveCheckedTagListToParent()
             })
             .then((res) =>{
                 this.pageCount= res.data.pageCount
@@ -66,7 +72,8 @@ export default{
         async pagination(){
             await axios.post('/api/bookmark/search',{
                 currentPage:this.currentPage,
-                bookMarkToSearch:this.bookMarkToSearch
+                bookMarkToSearch:this.bookMarkToSearch,
+                tagList : this.$refs.tagDialog.serveCheckedTagListToParent()
             })
             .then((res) =>{
                 this.bookMarkList = res.data.bookMarkList
