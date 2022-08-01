@@ -7,53 +7,53 @@ use Illuminate\Database\Eloquent\Model;
 use DB;
 use Carbon\Carbon;
 
-class Article extends Model
+class BookMark extends Model
 {
     use HasFactory;
     protected $fillable = [
         'user_id',
         'title',
-        'body',
+        'url',
     ];
 
-    public static function storeArticle($title,$body,$userId)
+    public static function storeBookMark($title,$url,$userId)
     {
         // タイトルが産められてなかったら日時で埋める
         if ($title == '') { $title = Carbon::now() ;}
 
-        return DB::transaction(function () use($title,$body,$userId){
-            $article = Article::create([
+        return DB::transaction(function () use($title,$url,$userId){
+            $bookmark = BookMark::create([
                 'user_id'  => $userId,
                 'title'    => $title,
-                'body'     => $body,
+                'url'     => $url,
             ]);
-            return $article->id;
+            return $bookmark->id;
         });
     }
 
-    public static function updateArticle($articleId,$title,$body)
+    public static function updateBookMark($bookmarkId,$title,$url)
     {
         // タイトルが産められてなかったら日時で埋める
         if ($title == '') { $title = Carbon::now() ;}
 
-        DB::transaction(function () use($articleId,$title,$body){
-            Article::where('id','=',$articleId)
+        DB::transaction(function () use($bookmarkId,$title,$url){
+            BookMark::where('id','=',$bookmarkId)
             ->update([
                 'title' => $title,
-                'body'  => $body,
+                'url'  => $url,
             ]);
         });
     }
 
     //viewAricle用に指定された記事だけを取ってくる
-    public static function serveArticle($articleId)
+    public static function serveBookMark($bookmarkId)
     {
-        return Article::select('id','title','body')
-        ->Where('id','=',$articleId)
+        return BookMark::select('id','title','url')
+        ->Where('id','=',$bookmarkId)
         ->first();
     }
 
-    public static function serveUserAllArticle($userId)
+    public static function serveUserAllBookMark($userId)
     {
         // まずはユーザーで絞った表を作る
         // whereで探すか副問合せで表を作るかどっちがよいか
@@ -63,7 +63,7 @@ class Article extends Model
         // whereの優先順位
         // 削除されてない､category=2,ログインユーザー = user_id
 
-        $userTable = Article::select('id','title','body')
+        $userTable = BookMark::select('id','title','url')
         -> WhereNull('deleted_at')
         -> where('user_id','=',$userId)
         -> orderBy('updated_at', 'desc')
@@ -71,46 +71,46 @@ class Article extends Model
         return $userTable;
 
 
-        // return Article::select('id','title','body')
+        // return BookMark::select('id','title','url')
         // ->leftJoin('article_tags','articles.id','=', 'article_tags.article_id')
         // ->leftJoin('tags','article_tags.tag_id', '=' ,'tags.id')
         // ->get();
     }
 
-    public static function deleteArticle($articleId)
+    public static function deleteBookMark($bookmarkId)
     {
         // 論理削除
-        DB::transaction(function () use($articleId){
-            Article::where('id','=',$articleId)
+        DB::transaction(function () use($bookmarkId){
+            BookMark::where('id','=',$bookmarkId)
             ->update(['deleted_at' => date(Carbon::now())]);
         });
     }
 
     // 削除済みか確かめる
-    public static function checkArticleDeleted($articleId)
+    public static function checkBookMarkDeleted($bookmarkId)
     {
         //削除されていないなら 記事のデータが帰ってくるはず
         //つまり帰り値がnullなら削除済みということ
-        $article = Article::select('id')
+        $bookmark = BookMark::select('id')
         ->whereNull('deleted_at')
-        ->where('id','=',$articleId)
+        ->where('id','=',$bookmarkId)
         ->first();
 
         // 帰り値がnull->削除済みならtrue
-        if ($article == null) {return true;}
+        if ($bookmark == null) {return true;}
         else {return false;}
     }
 
     //他人の覗こうとしてないか確かめる
-    public static function preventPeep($articleId,$userId)
+    public static function preventPeep($bookmarkId,$userId)
     {
-        $article = Article::select('user_id')
+        $bookmark = BookMark::select('user_id')
         ->whereNull('deleted_at')
-        ->where('id','=',$articleId)
+        ->where('id','=',$bookmarkId)
         ->first();
 
         //記事に紐づけられているuserIdとログイン中のユーザーのidを比較する
         // falseなら他人のを覗こうとしている
-        return ($article->original['user_id']) == $userId ;
+        return ($bookmark->original['user_id']) == $userId ;
     }
 }

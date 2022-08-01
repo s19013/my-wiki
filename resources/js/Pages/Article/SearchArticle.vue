@@ -2,7 +2,7 @@
     <BaseLayout title="記事検索" pageTitle="記事検索">
         <v-container>
             <template v-for="article of articleList" :key="article.id">
-                <Link :href="'/ViewArticle/' + article.id">
+                <Link :href="'/Article/View/' + article.id">
                     <div class ="article ">
                         <h2>{{article.title}}</h2>
                     </div>

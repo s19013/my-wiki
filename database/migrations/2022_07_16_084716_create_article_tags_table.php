@@ -14,15 +14,15 @@ return new class extends Migration
     public function up()
     {
         Schema::create('article_tags', function (Blueprint $table) {
-            $table->unsignedBigInteger('article_id');;
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('article_id');
+            // $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('tag_id')->nullable()->default(null);
             $table->softDeletes();
             $table->timestamps();
 
             //インデックス
             $table->index('article_id');
-            $table->index('user_id');
+            // $table->index('user_id');
             $table->index('tag_id');
         });
     }

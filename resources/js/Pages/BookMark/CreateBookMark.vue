@@ -6,7 +6,7 @@
                 <v-row class="head">
                     <v-col cols="10">
                         <v-text-field
-                            v-model="articleTitle"
+                            v-model="bookmarkTitle"
                             label="タイトル"
                         ></v-text-field>
                     </v-col>
@@ -26,13 +26,11 @@
                     <v-col cols="2"><TagDialog ref="tagDialog" :originalCheckedTag=null></TagDialog></v-col>
 
                 </v-row>
-                <!-- md入力欄  -->
-                <div v-show="activeTab === 0">
-                    <v-text-field
+
+                <v-text-field
                         label="url [必須]"
-                        v-model = "articleBody"
-                    ></v-text-field>
-                </div>
+                        v-model = "bookmarkUrl"
+                ></v-text-field>
             </v-form>
         </section>
         <!-- 送信中に表示 -->
@@ -52,9 +50,8 @@ import axios from 'axios'
 export default {
     data() {
       return {
-        activeTab:0,
-        articleTitle:'',
-        articleBody: '',
+        bookmarkTitle:'',
+        bookmarkUrl: '',
 
         //loding
         articleLoding :false,
@@ -84,10 +81,8 @@ export default {
         submit(){
             this.articleSending = true
             axios.post('/api/bookmark/store',{
-                // articleId:0,
-                articleTitle:this.articleTitle,
-                articleBody:this.articleBody,
-                category:1,
+                bookmarkTitle:this.bookmarkTitle,
+                bookmarkUrl:this.bookmarkUrl,
                 tagList:this.$refs.tagDialog.serveCheckedTagListToParent()
             })
             .then((res)=>{

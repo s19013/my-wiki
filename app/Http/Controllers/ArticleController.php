@@ -21,13 +21,11 @@ class ArticleController extends Controller
                 userId   : Auth::id(),
                 title    : $request->articleTitle,
                 body     : $request->articleBody,
-                category : $request->category,
         );
 
         // なんのタグも設定されていない時
         if (empty($request->tagList) == true) {
             ArticleTag::storeArticleTag(
-                userId    : Auth::id(),
                 tagId     : null,
                 articleId : $articleId,
             );
@@ -36,7 +34,6 @@ class ArticleController extends Controller
         else {
             foreach($request->tagList as $tagId){
                 ArticleTag::storeArticleTag(
-                    userId    : Auth::id(),
                     tagId     : $tagId,
                     articleId : $articleId,
                 );
@@ -55,22 +52,20 @@ class ArticleController extends Controller
         );
         ArticleTag::updateAricleTag(
             articleId     :$request->articleId,
-            updatedTagList:$request  ->tagList,
+            updatedTagList:$request->tagList,
         );
     }
 
     public function articleDelete(Request $request)
     {
         $request->session()->regenerateToken();
-        Article::articleDelete(articleId:$request->articleId);
+        Article::deleteArticle(articleId:$request->articleId);
     }
 
     public function serveUserAllArticle(Request $request)
     {
         // タグと記事は別々?
-        return Article::serveUserAllArticle(
-            userId:Auth::id(),
-            category:2);;
+        return Article::serveUserAllArticle(userId:Auth::id());
     }
 
     // 編集か新規かを分ける

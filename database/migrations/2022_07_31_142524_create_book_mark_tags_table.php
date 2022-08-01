@@ -13,19 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('articles', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('user_id');
-            // $table->tinyInteger('category')->comment('リンク:1 記事:2');
-            $table->string('title');
-            $table->longText('body');
-            // $table->unsignedBigInteger('article_tag_id');
+        Schema::create('book_mark_tags', function (Blueprint $table) {
+            $table->unsignedBigInteger('book_mark_id');
+            $table->unsignedBigInteger('tag_id')->nullable()->default(null);
             $table->softDeletes();
             $table->timestamps();
 
             //インデックス
-            $table->index('user_id');
-            // $table->index('category');
+            $table->index('book_mark_id');
+            $table->index('tag_id');
         });
     }
 
@@ -36,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('articles');
+        Schema::dropIfExists('book_mark_tags');
     }
 };

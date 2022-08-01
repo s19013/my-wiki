@@ -13,11 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('article_tags', function (Blueprint $table) {
+        Schema::table('book_marks', function (Blueprint $table) {
             // 外部キー成約
-            $table->foreign('article_id')->references('id')->on('articles');
-            // $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('tag_id')->references('id')->on('tags');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
@@ -28,10 +26,9 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('article_tags', function (Blueprint $table) {
+        Schema::table('book_marks', function (Blueprint $table) {
             // 外部キー削除
-            $table->dropForeign('article_tags_user_id_foreign');
-            $table->dropForeign('article_tags_tag_id_foreign');
+            $table->dropForeign('book_marks_user_id_foreign');
         });
     }
 };

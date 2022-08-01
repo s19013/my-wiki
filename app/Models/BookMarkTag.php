@@ -8,42 +8,42 @@ use Illuminate\Database\Eloquent\Model;
 use DB;
 use Carbon\Carbon;
 
-class ArticleTag extends Model
+class BookMarkTag extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'article_id',
+        'book_mark_id',
         'tag_id',
     ];
 
-    public static function storeArticleTag($tagId,$articleId)
+    public static function storeBookMarkTag($tagId,$bookmarkId)
     {
-        DB::transaction(function () use($tagId,$articleId){
-            ArticleTag::create([
-                'article_id' => $articleId,
+        DB::transaction(function () use($tagId,$bookmarkId){
+            BookMarkTag::create([
+                'book_mark_id' => $bookmarkId,
                 'tag_id'     => $tagId,
             ]);
         });
     }
 
-    public static function deleteArticleTag($tagId,$articleId)
+    public static function deleteBookMarkTag($tagId,$bookmarkId)
     {
-        DB::transaction(function () use($tagId,$articleId){
-            ArticleTag::where('article_id','=',$articleId)
+        DB::transaction(function () use($tagId,$bookmarkId){
+            BookMarkTag::where('book_mark_id','=',$bookmarkId)
             ->where('tag_id','=',$tagId)
             ->update(['deleted_at' => date(Carbon::now())]);
         });
     }
 
-    public static function updateAricleTag($articleId,$updatedTagList)
+    public static function updateAricleTag($bookmarkId,$updatedTagList)
     {
 
         // 消された､追加されたを確認する
         $originalTagList = [];
 
         // もとのタグを確認する
-        $original = ArticleTag::select('tag_id')
-        ->where('article_id','=',$articleId)
+        $original = BookMarkTag::select('tag_id')
+        ->where('book_mark_id','=',$bookmarkId)
         ->get();
 
         foreach ($original as $tag){
@@ -59,9 +59,10 @@ class ArticleTag extends Model
         //追加
         if (!empty($addedTagList)) {
             foreach($addedTagList as $tag) {
-                ArticleTag::storeArticleTag(
+                BookMarkTag::storeBookMarkTag(
                     tagId:$tag,
-                    articleId:$articleId,
+                    bookmarkId:$bookmarkId,
+                    userId:\Auth::id()
                 );
             }
         }
@@ -69,19 +70,19 @@ class ArticleTag extends Model
         //削除
         if (!empty($deletedTagList)) {
             foreach($deletedTagList as $tag) {
-                ArticleTag::deleteArticleTag(
+                BookMarkTag::deleteBookMarkTag(
                     tagId:$tag,
-                    articleId:$articleId,
+                    bookmarkId:$bookmarkId,
                 );
             }
         }
     }
 
     //記事に関連付けられたタグを取得
-    public static function serveTagsRelatedToAricle($articleId,$userId)
+    public static function serveTagsRelatedToAricle($bookmarkId,$userId)
     {
         // tagsターブルとくっつける
-        // article_tags.tag_id = tags.id
+        // book_mark_tags.tag_id = tags.id
 
         // タグテーブルからログインユーザーの削除されていないタグを探す
         $subTagTable = DB::table('tags')
@@ -91,13 +92,13 @@ class ArticleTag extends Model
         ->toSql();
 
         // 記事からはずされていないタグを取得
-        return ArticleTag::select('sub_tags.id as id','sub_tags.name as name')
-        ->leftJoin(DB::raw('('.$subTagTable.') AS sub_tags'),'article_tags.tag_id','=','sub_tags.id')
-        ->WhereNull('article_tags.deleted_at') // 記事からはずされていないタグのみを取得
-        ->Where('article_tags.article_id','=',':$articleId')
+        return BookMarkTag::select('sub_tags.id as id','sub_tags.name as name')
+        ->leftJoin(DB::raw('('.$subTagTable.') AS sub_tags'),'book_mark_tags.tag_id','=','sub_tags.id')
+        ->WhereNull('book_mark_tags.deleted_at') // 記事からはずされていないタグのみを取得
+        ->Where('book_mark_tags.book_markid','=',':$bookmarkId')
         ->setBindings([
             ':$userId'   => $userId,
-            ':$articleId'=> $articleId
+            ':$bookmarkId'=> $bookmarkId
         ])
         ->get();
     }

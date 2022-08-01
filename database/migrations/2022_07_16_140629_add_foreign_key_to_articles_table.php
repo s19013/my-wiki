@@ -30,7 +30,7 @@ return new class extends Migration
         Schema::table('articles', function (Blueprint $table) {
             // 外部キー削除
             $table->dropForeign('articles_user_id_foreign');
-            $table->dropForeign('articles_article_tag_id_foreign');
+            // $table->dropForeign('articles_article_tag_id_foreign');
         });
     }
 };

@@ -13,19 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('articles', function (Blueprint $table) {
+        Schema::create('book_marks', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            // $table->tinyInteger('category')->comment('リンク:1 記事:2');
             $table->string('title');
-            $table->longText('body');
-            // $table->unsignedBigInteger('article_tag_id');
+            $table->longText('url');
             $table->softDeletes();
             $table->timestamps();
 
             //インデックス
             $table->index('user_id');
-            // $table->index('category');
         });
     }
 
@@ -36,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('articles');
+        Schema::dropIfExists('book_marks');
     }
 };

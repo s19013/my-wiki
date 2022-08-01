@@ -103,12 +103,11 @@ export default {
                 articleId:this.originalArticle.id,
                 articleTitle:this.originalArticle.title,
                 articleBody:this.originalArticle.body,
-                category:2,
                 tagList:this.$refs.tagDialog.serveCheckedTagListToParent()
             })
             .then((res)=>{
                 this.articleSending = false
-                this.$inertia.get('/index')
+                this.$inertia.get('/Article/Search')
             })
         },
         deleteArticle() {
@@ -117,7 +116,7 @@ export default {
             axios.post('/api/article/delete',{articleId:this.originalArticle.id})
             .then((res) => {
                 //遷移
-                this.$inertia.get('/index')
+                this.$inertia.get('/Article/Search')
                 this.articleDeleting = false
             })
             .catch((error) => {
