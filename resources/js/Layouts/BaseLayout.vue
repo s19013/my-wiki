@@ -20,9 +20,7 @@
             InertiaHead,
             originalHead
         },
-        props:{
-            title: String,
-            pageTitle: String
-        },
+        props:['title','pageTitle']
+        ,
     }
 </script>
