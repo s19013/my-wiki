@@ -12,3 +12,13 @@
     width: 40vw;
     padding: 10px;
 }
+.contentsContainer{
+    border:black solid 1px;
+    margin-bottom:20px;
+    padding: 5px;
+    cursor: pointer;
+}
+.contentsContainer a{
+    text-decoration: none;
+    color: black;
+}

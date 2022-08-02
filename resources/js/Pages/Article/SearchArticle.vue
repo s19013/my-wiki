@@ -44,7 +44,7 @@
 
             <template v-for="article of articleList" :key="article.id">
                 <Link :href="'/Article/View/' + article.id">
-                    <div class ="article" v-show="!loading">
+                    <div class ="contentsContainer" v-show="!loading">
                         <h2>{{article.title}}</h2>
                     </div>
                 </Link>
@@ -130,16 +130,6 @@ export default{
 </script>
 
 <style lang="scss" scoped>
-.article{
-    border:black solid 1px;
-    margin-bottom:20px;
-    padding: 5px;
-    cursor: pointer;
-}
-a{
-    text-decoration: none;
-    color: black;
-}
 .searchArea{
     display:grid;
     grid-template-columns:5fr 1fr;

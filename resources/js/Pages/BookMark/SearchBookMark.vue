@@ -22,7 +22,7 @@
             <loading v-show="loading"></loading>
 
             <template v-for="bookMark of bookMarkList" :key="bookMark.id">
-                <div class ="article" v-show="!loading">
+                <div class ="contentsContainer" v-show="!loading">
                     <!-- 別タブで開くようにする -->
                     <a :href="bookMark.url"><h2>{{bookMark.title}}</h2></a>
                 </div>
@@ -105,16 +105,6 @@ export default{
 </script>
 
 <style lang="scss" scoped>
-.article{
-    border:black solid 1px;
-    margin-bottom:20px;
-    padding: 5px;
-    cursor: pointer;
-}
-a{
-    text-decoration: none;
-    color: black;
-}
 .searchArea{
     display:grid;
     grid-template-columns:5fr 1fr;
