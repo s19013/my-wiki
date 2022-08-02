@@ -13,29 +13,26 @@
             persistent>
 
             <section class="Dialog tagDialog">
-                <v-btn color="#E57373"   x-small elevation="2" @click.stop="tagDialogFlagSwithch()">
-                <v-icon>mdi-close-box</v-icon>
-                閉じる
-                </v-btn>
+                <div class="clooseButton">
+                    <v-btn color="#E57373"   x-small elevation="2" @click.stop="tagDialogFlagSwithch()">
+                        <v-icon>mdi-close-box</v-icon>閉じる
+                    </v-btn>
+                </div>
                 <!-- 検索窓とか -->
-                <v-row class="searchArea">
-                    <v-col cols="10">
-                        <v-text-field
-                            v-model="tagToSearch"
-                            label="タグ検索"
-                            clearable
-                        ></v-text-field>
-                    </v-col>
-                    <v-col cols="1">
-                        <v-btn color="submit"
+                <div class="searchArea">
+                    <v-text-field
+                        v-model="tagToSearch"
+                        label="タグ検索"
+                        clearable
+                    ></v-text-field>
+                    <v-btn color="submit"
                         elevation="2"
                         :disabled = "tagSerchLoading"
-                        @click="searchTag()">
+                        @click.stop="searchTag()">
                         <v-icon>mdi-magnify</v-icon>
                         検索
-                        </v-btn>
-                    </v-col>
-                </v-row>
+                    </v-btn>
+                </div>
 
                 <!-- loadingアニメ -->
                 <loading v-show="tagSerchLoading"></loading>
@@ -222,12 +219,6 @@ export default{
         }
     }
     .areaCreateNewTag{margin: 10px;}
-    .searchArea{
-        margin: 20px 5px 5px 5px;
-        .v-col{
-            padding-top:0;
-            padding-bottom:0;
-        }
-    }
+    .clooseButton{margin-bottom: 20px;}
 }
 </style>

@@ -22,3 +22,17 @@
     text-decoration: none;
     color: black;
 }
+
+.searchArea{
+    display:grid;
+    grid-template-columns:15fr 1fr 3fr;
+}
+
+.searchArea .v-input{
+    grid-column: 1/2;
+}
+
+.searchArea button{
+    grid-column: 3/4;
+    margin: 0 auto;
+}

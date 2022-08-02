@@ -130,15 +130,4 @@ export default{
 </script>
 
 <style lang="scss" scoped>
-.searchArea{
-    display:grid;
-    grid-template-columns:5fr 1fr;
-    .v-input{
-        grid-column: 1/2;
-    }
-    button{
-        grid-column: 2/3;
-        margin: 0 auto;
-    }
-}
 </style>
