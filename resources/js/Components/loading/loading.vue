@@ -14,10 +14,10 @@
   font-size: 10px;
   position: relative;
   text-indent: -9999em;
-  border-top: 1.1em solid rgba(255, 255, 255, 0.2);
-  border-right: 1.1em solid rgba(255, 255, 255, 0.2);
-  border-bottom: 1.1em solid rgba(255, 255, 255, 0.2);
-  border-left: 1.1em solid #ffffff;
+  border-top: 1.1em solid #d0fff132;
+  border-right: 1.1em solid #d0fff132;
+  border-bottom: 1.1em solid #d0fff132;
+  border-left: 1.1em solid #d0fff1;
   -webkit-transform: translateZ(0);
   -ms-transform: translateZ(0);
   transform: translateZ(0);

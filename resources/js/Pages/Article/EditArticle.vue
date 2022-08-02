@@ -101,8 +101,8 @@ export default {
             this.articleSending = true
             axios.post('/api/article/update',{
                 articleId:this.originalArticle.id,
-                articleTitle:this.originalArticle.title,
-                articleBody:this.originalArticle.body,
+                articleTitle:this.articleTitle,
+                articleBody:this.articleBody,
                 tagList:this.$refs.tagDialog.serveCheckedTagListToParent()
             })
             .then((res)=>{

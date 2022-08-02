@@ -1,20 +1,63 @@
 <template>
     <BaseLayout title="記事検索" pageTitle="記事検索">
         <v-container>
+            <div class="searchArea">
+                <v-text-field
+                    v-model="articleToSearch"
+                    label="検索"
+                    clearable
+                ></v-text-field>
+                <v-btn color="submit"
+                    elevation="2"
+                    :disabled = "loading"
+                    @click="searchArticle()">
+                    <v-icon>mdi-magnify</v-icon>
+                    検索
+                </v-btn>
+            </div>
+
+            <details>
+                <summary>検索対象</summary>
+                <v-radio-group
+                v-model="searchTarget"
+                inline
+                >
+                    <v-radio
+                    label="タイトルのみ"
+                    value="title"
+                    ></v-radio>
+                    <v-radio
+                    label="本文のみ(低速)"
+                    value="body"
+                    ></v-radio>
+                    <!-- <v-radio
+                    label="タイトルまたは本文(低速)"
+                    value="titleAndBody"
+                    ></v-radio> -->
+                </v-radio-group>
+            </details>
+
+            <TagDialog ref="tagDialog" class="w-50 mb-10" :searchOnly="true"></TagDialog>
+
+            <!-- loadingアニメ -->
+            <loading v-show="loading"></loading>
+
             <template v-for="article of articleList" :key="article.id">
-                <Link :href="'/Article/View/' + article.id">
-                    <div class ="article ">
+                    <div class ="contentsContainer" v-show="!loading">
                         <h2>{{article.title}}</h2>
+                        <Link :href="'/Article/View/' + article.id">
+                            <v-btn color="submit" elevation="2">
+                                閲覧 編集
+                            </v-btn>
+                        </Link>
                     </div>
-                </Link>
             </template>
         </v-container>
         <v-pagination
-            v-model="pagination.current_page"
-            :length="pagination.lastPage"
-            :total-visible="5"
+            v-model="currentPage"
+            :length="pageCount"
+            :total-visible="7"
         ></v-pagination>
-    <!-- @input="getAricle" -->
     </BaseLayout>
 </template>
 
@@ -22,59 +65,72 @@
 import BaseLayout from '@/Layouts/BaseLayout.vue'
 import { InertiaLink, InertiaHead } from '@inertiajs/inertia-vue3'
 import { Link } from '@inertiajs/inertia-vue3';
+import TagDialog from '@/Components/dialog/TagDialog.vue';
+import loading from '@/Components/loading/loading.vue'
 
 export default{
     data() {
         return {
+            articleToSearch:'',
             articleList:null,
-            pagination:{
-                current_page: 1,
-                lastPage:1,
-            }
+            currentPage: 1,
+            pageCount:1,
+            loading:false,
+            searchTarget:"title"
         }
     },
     components:{
         BaseLayout,
         InertiaLink,
         Link,
+        TagDialog,
+        loading,
     },
     methods: {
-        async getAricle(){
-            await axios.get('/api/article/getUserAllArticle',{
-                params: {
-                    page: this.current_page,	// /api/pref?page=[page]の形
-                },
+        // 検索用
+        async searchArticle(){
+            this.loading = true
+            this.currentPage = 1 //検索するのでリセットする
+            await axios.post('/api/article/search',{
+                currentPage:this.currentPage,
+                articleToSearch:this.articleToSearch,
+                tagList : this.$refs.tagDialog.serveCheckedTagListToParent(),
+                searchTarget:this.searchTarget
             })
-            .then((res)=>{
-                console.log(res);
-                this.pagination.current_page = res.data.current_page
-                this.pagination.lastPage= res.data.last_page
-                this.articleList = res.data.data
+            .then((res) =>{
+                this.loading = false
+                this.pageCount= res.data.pageCount
+                this.articleList = res.data.articleList
             })
+            .catch((error) => { console.log(error); })
+        },
+        async pagination(){
+            this.loading = true
+            await axios.post('/api/article/search',{
+                currentPage:this.currentPage,
+                articleToSearch:this.articleToSearch,
+                tagList : this.$refs.tagDialog.serveCheckedTagListToParent(),
+                searchTarget:this.searchTarget
+            })
+            .then((res) =>{
+                this.loading = false
+                this.articleList = res.data.articleList
+            })
+            .catch((error) => { console.log(error); })
         },
     },
     watch: {
     // 厳密にはページネーションのボタン類を押すとpagination.current_pageが変化するのでそれをwatch
     // ページネーションのボタン類を押した場合の処理
-        'pagination.current_page':function(newValue,oldValue){
-            this.getAricle();
+        currentPage:function(newValue,oldValue){
+            this.pagination();
         }
     },
     mounted() {
-        this.getAricle()
+        this.searchArticle();
     },
 }
 </script>
 
 <style lang="scss" scoped>
-.article{
-    border:black solid 1px;
-    margin-bottom:20px;
-    padding: 5px;
-    cursor: pointer;
-}
-a{
-    text-decoration: none;
-    color: black;
-}
 </style>

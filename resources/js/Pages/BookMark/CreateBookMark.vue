@@ -6,13 +6,13 @@
                 <v-row class="head">
                     <v-col cols="10">
                         <v-text-field
-                            v-model="bookmarkTitle"
+                            v-model="bookMarkTitle"
                             label="タイトル"
                         ></v-text-field>
                     </v-col>
                     <v-col cols="1"> <DeleteAlertComponent @deleteAricleTrigger="deleteArticle"></DeleteAlertComponent> </v-col>
                     <v-col cols="1">
-                        <v-btn class="longButton" color="#BBDEFB" @click="submitCheck" :disabled="articleSending">
+                        <v-btn class="longButton" color="#BBDEFB" @click="submitCheck" :disabled="bookMarkSending">
                         <v-icon>mdi-content-save</v-icon>
                         保存
                         </v-btn>
@@ -20,7 +20,7 @@
                 </v-row>
                 <!--  -->
                 <v-row>
-                    <v-col><p class="error articleError" v-if="articleBodyErrorFlag">urlを入力してください</p></v-col>
+                    <v-col><p class="error articleError" v-if="bookMarkUrlErrorFlag">urlを入力してください</p></v-col>
 
                     <!-- タグ -->
                     <v-col cols="2"><TagDialog ref="tagDialog" :originalCheckedTag=null></TagDialog></v-col>
@@ -29,12 +29,12 @@
 
                 <v-text-field
                         label="url [必須]"
-                        v-model = "bookmarkUrl"
+                        v-model = "bookMarkUrl"
                 ></v-text-field>
             </v-form>
         </section>
         <!-- 送信中に表示 -->
-        <loadingDialog :loadingFlag="articleSending"></loadingDialog>
+        <loadingDialog :loadingFlag="bookMarkSending"></loadingDialog>
 
     </BaseLayout>
 </template>
@@ -50,15 +50,15 @@ import axios from 'axios'
 export default {
     data() {
       return {
-        bookmarkTitle:'',
-        bookmarkUrl: '',
+        bookMarkTitle:'',
+        bookMarkUrl: '',
 
         //loding
-        articleLoding :false,
-        articleSending:false,
+        bookMarkLoding :false,
+        bookMarkSending:false,
 
         // errorFlag
-        articleBodyErrorFlag:false,
+        bookMarkUrlErrorFlag:false,
       }
     },
     components:{
@@ -68,25 +68,24 @@ export default {
         BaseLayout,
     },
     methods: {
-        compiledMarkdown() {return marked(this.articleBody)},
         changeTab(num){this.activeTab = num},
         // 本文送信
         submitCheck:_.debounce(_.throttle(async function(){
-            if (this.articleBody =='') {
-                this.articleBodyErrorFlag = true
+            if (this.bookMarkUrl =='') {
+                this.bookMarkUrlErrorFlag = true
                 return
             }
             else {this.submit()}
         },100),150),
         submit(){
-            this.articleSending = true
+            this.bookMarkSending = true
             axios.post('/api/bookmark/store',{
-                bookmarkTitle:this.bookmarkTitle,
-                bookmarkUrl:this.bookmarkUrl,
+                bookMarkTitle:this.bookMarkTitle,
+                bookMarkUrl:this.bookMarkUrl,
                 tagList:this.$refs.tagDialog.serveCheckedTagListToParent()
             })
             .then((res)=>{
-                this.articleSending = false
+                this.bookMarkSending = false
                 this.$inertia.get('/BookMark/Search')
             })
         },

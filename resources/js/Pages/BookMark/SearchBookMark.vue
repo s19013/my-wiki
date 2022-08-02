@@ -1,17 +1,47 @@
 <template>
     <BaseLayout title="検索画面" pageTitle="検索画面">
         <v-container>
-            <template v-for="article of bookMarkList" :key="article.id">
-                    <div class ="article ">
-                        <!-- 別タブで開くようにする -->
-                        <a :href="article.url"><h2>{{article.title}}</h2></a>
-                    </div>
+            <div class="searchArea">
+                <v-text-field
+                    v-model="bookMarkToSearch"
+                    label="検索"
+                    clearable
+                ></v-text-field>
+                <v-btn color="submit"
+                    elevation="2"
+                    :disabled = "loading"
+                    @click="search()">
+                    <v-icon>mdi-magnify</v-icon>
+                    検索
+                </v-btn>
+            </div>
+
+            <TagDialog ref="tagDialog" class="w-50 mb-10" :searchOnly="true"></TagDialog>
+
+            <!-- loadingアニメ -->
+            <loading v-show="loading"></loading>
+
+            <template v-for="bookMark of bookMarkList" :key="bookMark.id">
+                <div class ="contentsContainer" v-show="!loading">
+                    <!-- 別タブで開くようにする -->
+                    <a :href="bookMark.url" target="_blank" rel="noopener noreferrer">
+                        <h2>
+                            <v-icon>mdi-arrow-top-left-bold-box-outline</v-icon>
+                            {{bookMark.title}}
+                        </h2>
+                    </a>
+                    <Link :href="'/BookMark/Edit/' + bookMark.id">
+                            <v-btn color="submit" elevation="2">
+                                編集
+                            </v-btn>
+                    </Link>
+                </div>
             </template>
         </v-container>
         <v-pagination
-            v-model="pagination.current_page"
-            :length="pagination.lastPage"
-            :total-visible="5"
+            v-model="currentPage"
+            :length="pageCount"
+            :total-visible="7"
         ></v-pagination>
     </BaseLayout>
 </template>
@@ -20,59 +50,69 @@
 import BaseLayout from '@/Layouts/BaseLayout.vue'
 import { InertiaLink, InertiaHead } from '@inertiajs/inertia-vue3'
 import { Link } from '@inertiajs/inertia-vue3';
+import TagDialog from '@/Components/dialog/TagDialog.vue';
+import loading from '@/Components/loading/loading.vue';
 
 export default{
     data() {
         return {
+            bookMarkToSearch:'',
             bookMarkList:null,
-            pagination:{
-                current_page: 1,
-                lastPage:1,
-            }
+            currentPage: 1,
+            pageCount:1,
+            loading:false,
         }
     },
     components:{
         BaseLayout,
         InertiaLink,
         Link,
+        TagDialog,
+        loading,
     },
     methods: {
-        async getBookMark(){
-            await axios.get('/api/bookmark/getUserAllBookMark',{
-                params: {
-                    page: this.current_page,	// /api/pref?page=[page]の形
-                },
+        // 検索用
+        async search(){
+            this.loading = true
+            this.currentPage = 1 //検索するのでリセットする
+            await axios.post('/api/bookmark/search',{
+                currentPage:this.currentPage,
+                bookMarkToSearch:this.bookMarkToSearch,
+                tagList : this.$refs.tagDialog.serveCheckedTagListToParent()
             })
-            .then((res)=>{
-                console.log(res);
-                this.pagination.current_page = res.data.current_page
-                this.pagination.lastPage= res.data.last_page
-                this.bookMarkList = res.data.data
+            .then((res) =>{
+                this.loading = false
+                this.pageCount= res.data.pageCount
+                this.bookMarkList = res.data.bookMarkList
             })
+            .catch((error) => { console.log(error); })
+        },
+        async pagination(){
+            this.loading = true
+            await axios.post('/api/bookmark/search',{
+                currentPage:this.currentPage,
+                bookMarkToSearch:this.bookMarkToSearch,
+                tagList : this.$refs.tagDialog.serveCheckedTagListToParent()
+            })
+            .then((res) =>{
+                this.loading = false
+                this.bookMarkList = res.data.bookMarkList
+            })
+            .catch((error) => { console.log(error); })
         },
     },
     watch: {
     // 厳密にはページネーションのボタン類を押すとpagination.current_pageが変化するのでそれをwatch
     // ページネーションのボタン類を押した場合の処理
-        'pagination.current_page':function(newValue,oldValue){
-            this.getBookMark();
+        currentPage:function(newValue,oldValue){
+            this.pagination();
         }
     },
     mounted() {
-        this.getBookMark()
+        this.search()
     },
 }
 </script>
 
 <style lang="scss" scoped>
-.article{
-    border:black solid 1px;
-    margin-bottom:20px;
-    padding: 5px;
-    cursor: pointer;
-}
-a{
-    text-decoration: none;
-    color: black;
-}
 </style>

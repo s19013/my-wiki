@@ -155,11 +155,4 @@ textarea {
 
 .head{margin-top: 10px;}
 .articleError{padding-top: 5px;}
-.v-input__details{
-    margin: 0;
-    padding: 0;
-    height: 0;
-    width: 0;
-}
-
 </style>

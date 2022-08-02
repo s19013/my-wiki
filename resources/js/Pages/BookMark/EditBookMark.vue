@@ -1,57 +1,39 @@
 <template>
-    <BaseLayout title="記事編集" pageTitle="記事編集">
+    <BaseLayout title="ブックマーク編集" pageTitle="ブックマーク編集">
         <section class="articleContainer">
             <v-form v-on:submit.prevent ="submit">
                 <!-- タイトル入力欄とボタン2つ -->
                 <v-row class="head">
                     <v-col cols="10">
                         <v-text-field
-                            v-model="articleTitle"
+                            v-model="bookMarkTitle"
                             label="タイトル"
                         ></v-text-field>
                     </v-col>
-                    <v-col cols="1"> <DeleteAlertComponent @deleteAricleTrigger="deleteArticle"></DeleteAlertComponent> </v-col>
+                    <v-col cols="1"> <DeleteAlertComponent @deleteAricleTrigger="deleteBookMark"></DeleteAlertComponent> </v-col>
                     <v-col cols="1">
-                        <v-btn class="longButton" color="#BBDEFB" @click="submitCheck" :disabled="articleSending">
+                        <v-btn class="longButton" color="#BBDEFB" @click="submitCheck" :disabled="bookMarkSending">
                         <v-icon>mdi-content-save</v-icon>
                         保存
                         </v-btn>
                     </v-col>
                 </v-row>
-                <!-- タブ -->
-                <v-row>
-                    <v-col>
-                        <ul class="tabLabel">
-                            <li @click="changeTab(0)" :class="{active: activeTab === 0,notActive: activeTab !== 0 }">
-                                本文
-                            </li>
-                            <li @click="changeTab(1)" :class="{active: activeTab === 1,notActive: activeTab !== 1 }">
-                                変換後
-                            </li>
-                        </ul>
-                    </v-col>
 
-                    <!--  -->
-                    <v-col><p class="error articleError" v-if="articleBodyErrorFlag">本文を入力してください</p></v-col>
+                <v-row>
+                    <v-col><p class="error articleError" v-if="bookMarkUrlErrorFlag">urlを入力してください</p></v-col>
 
                     <!-- タグ -->
-                    <v-col cols="2"><TagDialog ref="tagDialog" :originalCheckedTag="originalCheckedTag"></TagDialog></v-col>
-
+                    <v-col cols="2"><TagDialog ref="tagDialog" :originalCheckedTag=originalCheckedTag></TagDialog></v-col>
                 </v-row>
-                <!-- md入力欄  -->
-                <div v-show="activeTab === 0">
-                    <v-textarea
-                        filled
-                        auto-grow
-                        label="本文 [必須]"
-                        v-model = "articleBody"
-                    ></v-textarea>
-                </div>
-                <div v-show="activeTab === 1" class="markdown" v-html="compiledMarkdown()"></div>
+
+                <v-text-field
+                        label="url [必須]"
+                        v-model = "bookMarkUrl"
+                ></v-text-field>
             </v-form>
         </section>
         <!-- 送信中に表示 -->
-        <loadingDialog :loadingFlag="articleSending"></loadingDialog>
+        <loadingDialog :loadingFlag="bookMarkSending"></loadingDialog>
 
     </BaseLayout>
 </template>
@@ -68,18 +50,18 @@ export default {
     data() {
       return {
         activeTab:0,
-        articleTitle:'',
-        articleBody: '',
+        bookMarkTitle:'',
+        bookMarkUrl: '',
 
         //loding
-        articleLoding :false,
-        articleSending:false,
+        bookMarkLoding :false,
+        bookMarkSending:false,
 
         // errorFlag
-        articleBodyErrorFlag:false,
+        bookMarkUrlErrorFlag:false,
       }
     },
-    props:['originalArticle','originalCheckedTag'],
+    props:['originalBookMark','originalCheckedTag'],
     components:{
         DeleteAlertComponent,
         TagDialog,
@@ -87,64 +69,53 @@ export default {
         BaseLayout,
     },
     methods: {
-        compiledMarkdown() {return marked(this.articleBody)},
+        compiledMarkdown() {return marked(this.bookMarkUrl)},
         changeTab(num){this.activeTab = num},
         // 本文送信
         submitCheck:_.debounce(_.throttle(async function(){
-            if (this.articleBody =='') {
-                this.articleBodyErrorFlag = true
+            if (this.bookMarkUrl =='') {
+                this.bookMarkUrlErrorFlag = true
                 return
             }
             else {this.submit()}
         },100),150),
         submit(){
-            this.articleSending = true
-            axios.post('/api/article/update',{
-                articleId:this.originalArticle.id,
-                articleTitle:this.originalArticle.title,
-                articleBody:this.originalArticle.body,
-                category:2,
+            this.bookMarkSending = true
+            axios.post('/api/bookmark/update',{
+                bookMarkId:this.originalBookMark.id,
+                bookMarkTitle:this.bookMarkTitle,
+                bookMarkUrl:this.bookMarkUrl,
                 tagList:this.$refs.tagDialog.serveCheckedTagListToParent()
             })
             .then((res)=>{
-                this.articleSending = false
-                this.$inertia.get('/index')
+                this.bookMarkSending = false
+                this.$inertia.get('/bookmark/search')
             })
         },
-        deleteArticle() {
-            this.articleDeleting = true
+        deleteBookMark() {
+            this.bookMarkDeleting = true
             // 消す処理
-            axios.post('/api/article/delete',{articleId:this.originalArticle.id})
+            axios.post('/api/bookmark/delete',{bookMarkId:this.originalBookMark.id})
             .then((res) => {
                 //遷移
-                this.$inertia.get('/index')
-                this.articleDeleting = false
+                this.$inertia.get('/bookmark/search')
+                this.bookMarkDeleting = false
             })
             .catch((error) => {
-                this.articleDeleting = false
+                this.bookMarkDeleting = false
             })
         },
     },
     mounted() {
-        this.articleTitle = this.originalArticle.title
-        this.articleBody  = this.originalArticle.body
+        console.log(this.originalCheckedTag);
+        this.bookMarkTitle = this.originalBookMark.title
+        this.bookMarkUrl   = this.originalBookMark.url
     },
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .articleContainer {margin: 0 20px;}
-textarea {
-        width: 100%;
-        resize: none;
-        background-color: #f6f6f6;
-        padding: 20px;
-}
-.markdown{
-    padding: 0 10px;
-    word-break:break-word;
-    overflow-wrap:normal;
-}
 
 .tabLabel{
     li{
@@ -166,7 +137,7 @@ textarea {
 }
 
 .head{margin-top: 10px;}
-.articleError{padding-top: 5px;}
+.bookMarkError{padding-top: 5px;}
 .v-input__details{
     margin: 0;
     padding: 0;

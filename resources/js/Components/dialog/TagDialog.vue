@@ -3,7 +3,7 @@
         <!-- ダイアログを呼び出すためのボタン -->
         <v-btn class="longButton" color="submit" @click.stop="tagDialogFlagSwithch">
         <v-icon>mdi-tag</v-icon>
-        tag
+        タグ
         </v-btn>
 
         <!-- v-modelがv-ifとかの代わりになっている -->
@@ -13,32 +13,37 @@
             persistent>
 
             <section class="Dialog tagDialog">
-                <v-btn color="#E57373"   x-small elevation="2" @click.stop="tagDialogFlagSwithch()">
-                <v-icon>mdi-close-box</v-icon>
-                閉じる
-                </v-btn>
+                <div class="clooseButton">
+                    <v-btn color="#E57373"   x-small elevation="2" @click.stop="tagDialogFlagSwithch()">
+                        <v-icon>mdi-close-box</v-icon>閉じる
+                    </v-btn>
+                </div>
                 <!-- 検索窓とか -->
-                <v-row class="areaTagSerch">
-                    <v-col cols="10">
-                        <v-text-field
-                            v-model="tagToSearch"
-                            label="タグ検索"
-                            clearable
-                        ></v-text-field>
-                    </v-col>
-                    <v-col cols="1">
-                        <v-btn color="submit"
+                <div class="searchArea">
+                    <v-text-field
+                        v-model="tagToSearch"
+                        label="タグ検索"
+                        clearable
+                    ></v-text-field>
+                    <v-btn color="submit"
                         elevation="2"
                         :disabled = "tagSerchLoading"
-                        @click="searchTag()">
+                        @click.stop="searchTag()">
                         <v-icon>mdi-magnify</v-icon>
                         検索
-                        </v-btn>
-                    </v-col>
-                </v-row>
+                    </v-btn>
+                </div>
+
+                <v-btn
+                    variant="outlined"
+                    color="primary"
+                    @click.stop="clearAllCheck"
+                >
+                    チェックをすべて外す
+                </v-btn>
 
                 <!-- loadingアニメ -->
-                <loading v-if="tagSerchLoading"></loading>
+                <loading v-show="tagSerchLoading"></loading>
 
                 <!-- タグ一覧 -->
                 <v-list
@@ -54,31 +59,35 @@
                 </v-list>
 
                 <!--  -->
-                <v-btn
-                    class="longButton my-4"
-                    color="submit"
-                    v-if="!createNewTagFlag"
-                    @click.stop="createNewTagFlagSwitch">
-                    <v-icon>mdi-tag-plus</v-icon>
-                    新規作成
-                </v-btn>
-
-                <!-- 新規タグ作成 -->
-                <div class="areaCreateNewTag" v-if="createNewTagFlag">
-                    <p class="error" v-if="newTagErrorFlag">文字を入力してください</p>
-                    <p class="error" v-if="tagAlreadyExistsErrorFlag">そのタグはすでに登録されいます</p>
-
-                    <v-text-field v-model="newTag" label="新しいタグ"></v-text-field>
+                <div v-if="!searchOnly">
 
                     <v-btn
-                    class="longButton"
-                    color="#BBDEFB"
-                    elevation="2"
-                    :disabled="newTagSending"
-                    @click.stop="createNewTagCheck()">
-                    <v-icon>mdi-content-save</v-icon>
-                    作成
+                        class="longButton my-4"
+                        color="submit"
+                        v-show="!createNewTagFlag"
+                        @click.stop="createNewTagFlagSwitch">
+                        <v-icon>mdi-tag-plus</v-icon>
+                        新規作成
                     </v-btn>
+
+                    <!-- 新規タグ作成 -->
+                    <div class="areaCreateNewTag" v-show="createNewTagFlag">
+                        <p class="error" v-if="newTagErrorFlag">文字を入力してください</p>
+                        <p class="error" v-if="tagAlreadyExistsErrorFlag">そのタグはすでに登録されいます</p>
+
+                        <v-text-field v-model="newTag" label="新しいタグ"></v-text-field>
+
+                        <v-btn
+                        class="longButton"
+                        color="#BBDEFB"
+                        elevation="2"
+                        :disabled="newTagSending"
+                        @click.stop="createNewTagCheck()">
+                        <v-icon>mdi-content-save</v-icon>
+                        作成
+                        </v-btn>
+                    </div>
+
                 </div>
             </section>
         </v-dialog>
@@ -110,7 +119,16 @@ export default{
         tagSearchResultList:[]
       }
     },
-    props:['originalCheckedTag'],
+    props:{
+        originalCheckedTag:{
+            type:Array,
+            default:null
+        },
+        searchOnly:{
+            type:Boolean,
+            default:false,
+        }
+    },
     components:{loading},
     methods: {
         // 新規タグ作成
@@ -163,6 +181,10 @@ export default{
                 this.tagSerchLoading = false
             })
         },100),150),
+        //チェック全消し
+        clearAllCheck(){
+            this.checkedTagList = []
+        },
         // 切り替え
         createNewTagFlagSwitch(){ this.createNewTagFlag = !this.createNewTagFlag },
         tagDialogFlagSwithch(){
@@ -198,7 +220,7 @@ export default{
 <style lang="scss" scoped>
 .tagDialog{
     .v-list{
-        margin: 0;
+        margin :5px 0;
         padding:0;
         .v-list-item{
             padding:0 10px;
@@ -209,12 +231,6 @@ export default{
         }
     }
     .areaCreateNewTag{margin: 10px;}
-    .areaTagSerch{
-        margin: 20px 5px 5px 5px;
-        .v-col{
-            padding-top:0;
-            padding-bottom:0;
-        }
-    }
+    .clooseButton{margin-bottom: 20px;}
 }
 </style>

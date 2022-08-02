@@ -46,6 +46,16 @@ class ArticleTag extends Model
         ->where('article_id','=',$articleId)
         ->get();
 
+        // 元のタグが1つもついていなくて､新しくタグをつけようとしていたら
+        // アプデ前の$articleIdのtag_idがnullのデータを論理削除
+        if ($original[0]->original["tag_id"] == null && !empty($updatedTagList) ) {
+            ArticleTag::deleteArticleTag(
+                tagId:null,
+                articleId:$articleId,
+            );
+        }
+
+        //元のデータに紐付けられているタグを配列に入れる
         foreach ($original as $tag){
             array_push($originalTagList,$tag->original["tag_id"]);
         }
@@ -74,6 +84,16 @@ class ArticleTag extends Model
                     articleId:$articleId,
                 );
             }
+        }
+
+        // 紐付けられていたタグすべて削除されていたか
+        // すべて削除されたのならtag_id = nullのデータをついか
+        $isAllDeleted = array_diff($originalTagList,$deletedTagList);
+        if (empty($isAllDeleted)) {
+            ArticleTag::storeArticleTag(
+                tagId:null,
+                articleId:$articleId,
+            );
         }
     }
 

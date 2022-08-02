@@ -4,8 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
 use DB;
 use Carbon\Carbon;
+use App\Http\Controllers\searchToolKit;
 
 class Article extends Model
 {
@@ -45,6 +47,15 @@ class Article extends Model
         });
     }
 
+    public static function deleteArticle($articleId)
+    {
+        // 論理削除
+        DB::transaction(function () use($articleId){
+            Article::where('id','=',$articleId)
+            ->update(['deleted_at' => date(Carbon::now())]);
+        });
+    }
+
     //viewAricle用に指定された記事だけを取ってくる
     public static function serveArticle($articleId)
     {
@@ -77,13 +88,81 @@ class Article extends Model
         // ->get();
     }
 
-    public static function deleteArticle($articleId)
+
+
+    public static function searchArticle($userId,$articleToSearch,$currentPage,$tagList,$searchTarget)
     {
-        // 論理削除
-        DB::transaction(function () use($articleId){
-            Article::where('id','=',$articleId)
-            ->update(['deleted_at' => date(Carbon::now())]);
-        });
+        //一度にとってくる数
+        $parPage = 1;
+
+        // %と_をエスケープ
+        $escaped = searchToolKit::sqlEscape($articleToSearch);
+        //and検索のために空白区切りでつくった配列を用意
+        $wordListToSearch = searchToolKit::preparationToAndSearch($escaped);
+
+        //タグも検索する場合
+        if (!empty($tagList)) {
+            //book_markテーブルとbook_mark_tagsを結合
+            $subTable = DB::table('article_tags')
+            ->select('articles.id','articles.title','articles.body')
+            ->leftJoin('articles','articles.id','=','article_tags.article_id')
+            ->where('articles.user_id','=',$userId)
+            ->WhereNull('articles.deleted_at')
+            ->WhereNull('article_tags.deleted_at');
+
+            $isFirst = true;
+            foreach($tagList as $tag){
+                // 最初だけand検索
+                if ($isFirst == true) {
+                    $subTable->Where('article_tags.tag_id','=',$tag);
+                    $isFirst = false;
+                }
+                $subTable->orWhere('article_tags.tag_id','=',$tag);
+            }
+
+            $subTable->groupBy('articles.id')
+            ->having(DB::raw('count(*)'), '=', count($tagList));
+
+            //副問合せのテーブルから選択
+            $query = DB::table($subTable,'sub')
+            ->select('sub.id as id','sub.title as title','sub.body as body');
+        } else {
+            $query = Article::select('id','title')
+            ->where('user_id','=',$userId)
+            ->whereNull('deleted_at');
+        }
+
+        // title名だけでlike検索
+        if ($searchTarget == "title") {
+            foreach($wordListToSearch as $word){ $query->where('title','like',"%$word%"); }
+        }
+
+        // bodyだけでlike検索
+        if ($searchTarget == "body") {
+            foreach($wordListToSearch as $word){ $query->where('body','like',"%$word%"); }
+        }
+
+        //ヒット件数取得
+        $resultCount = $query->count();
+
+        //ページ数計算
+        $pageCount = (int)ceil($resultCount / $parPage);
+
+        //何件目から取得するか
+        $offset = $parPage*($currentPage-1);
+
+        //検索
+        $searchResults = $query->offset($offset)
+        ->limit($parPage)
+        ->get();
+
+        return response()->json(
+            [
+                "articleList" => $searchResults,
+                "pageCount"    => $pageCount
+            ],
+            200
+        );
     }
 
     // 削除済みか確かめる

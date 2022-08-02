@@ -1,22 +1,46 @@
 <template>
-    <div class="originalHead">
-        <h2>{{title}}</h2>
-        <v-btn @click="show = !show"> <v-icon> mdi-view-headline </v-icon> メニュー</v-btn>
+    <div>
+        <div class="originalHead">
+            <h2>{{pageTitle}}</h2>
+            <v-btn @click.stop = "show = !show"> <v-icon> mdi-view-headline </v-icon> メニュー</v-btn>
+        </div>
         <transition name="slide">
-            <nav v-if="show">
+            <nav v-show="show">
                 <div>
+                    <h2 class="titleAticle navButton"> <v-icon>mdi-note</v-icon> 記事 </h2>
+
                     <Link :href="route('CreateArticle')">
-                        <h2 class="createAticle navButton"  >
-                            <v-icon>mdi-note-plus</v-icon>
-                            新規記事作成
-                        </h2>
+                        <h3 class="navButton">
+                            <v-icon>mdi-plus</v-icon>
+                            新規作成
+                        </h3>
                     </Link>
+
+                    <Link :href="route('SearchArticle')">
+                        <h3 class="navButton">
+                            <v-icon>mdi-magnify</v-icon>
+                            検索
+                        </h3>
+                    </Link>
+
+                    <h2></h2>
+
+                    <h2 class="titleBookMark navButton"> <v-icon>mdi-bookmark</v-icon> ブックマーク </h2>
+
                     <Link :href="route('CreateBookMark')">
-                        <h2 class="createBookMark navButton">
-                            <v-icon>mdi-bookmark-plus</v-icon>
-                            新規ブックマーク作成
-                        </h2>
+                        <h3 class="navButton">
+                            <v-icon>mdi-plus</v-icon>
+                            新規作成
+                        </h3>
                     </Link>
+
+                    <Link :href="route('SearchBookMark')">
+                        <h3 class="navButton">
+                            <v-icon>mdi-magnify</v-icon>
+                            検索
+                        </h3>
+                    </Link>
+
                 </div>
             </nav>
         </transition>
@@ -34,7 +58,7 @@ export default{
     components:{
         Link,
     },
-    props:['title']
+    props:['pageTitle']
 }
 
 </script>
@@ -57,17 +81,6 @@ export default{
         grid-column: 3/4;
     }
 }
-    // nav {
-    //     background: #0bd;
-    //     position: absolute;
-    //     z-index: 10;//これで10前のレイヤーへ
-    //     right: 0; //初期の位置
-    //     top:6vmin;
-    //     overflow-x: hidden;
-    //     text-align: center;
-    //     width: 0;
-    //     height: 100vh;
-    //     transition: .2s; /* アニメ */
 
 /* メニュー */
 nav {
@@ -81,21 +94,34 @@ nav {
     //ボタンと被らないように頭の位置を下げる
     top:3vmax;
     a{
-        margin: 0 5px ;
+        cursor: pointer;
         text-decoration: none;
-        color: rgb(248, 248, 248);
+        color: rgb(0, 0, 0);
     }
     .navButton{
         display: grid;
-        grid-template-columns:1fr 1fr 10fr 1fr;
+        grid-template-columns:2fr 1fr 4fr 2fr;
     }
-    i{grid-column: 2/3;}
+    i{
+        grid-column: 2/3;
+        margin: 0 0 0 auto;
+    }
     h2 {
+        color: rgb(250, 250, 250);
+        text-align:center;
         grid-column: 3/4;
         padding:10px;
+        cursor: default;
     }
-    .createAticle   { background-color:rgb(26, 130, 195) ;}
-    .createBookMark { background-color:rgb(77, 26, 195) ;}
+    h3 {
+        background-color: rgb(212, 212, 212);
+        text-align:center;
+        grid-column: 3/4;
+        padding:5px 0;
+        margin :0 0 10px 0;
+    }
+    .titleAticle   { background-color:rgb(26, 130, 195) ;}
+    .titleBookMark { background-color:rgb(64, 21, 166) ;}
 }
 
 // アニメ

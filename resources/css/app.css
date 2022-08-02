@@ -2,6 +2,9 @@
 /* @import "tailwindcss/components"; */
 @import "tailwindcss/utilities";
 /* tailwindcss邪魔 */
+body{
+    background-color: #f5f5f5;
+}
 .longButton{width:100%}
 .error{
     color: rgb(190, 0, 0);
@@ -11,4 +14,37 @@
     background: #e1e1e1;
     width: 40vw;
     padding: 10px;
+}
+.contentsContainer{
+    display: grid;
+    grid-template-columns:10fr 1fr;
+    background-color: #e1e1e1;
+    border:black solid 1px;
+    margin-bottom:20px;
+    padding: 5px;
+    /* cursor: pointer; */
+}
+.contentsContainer button{
+    width: 100%;
+}
+.contentsContainer h2{
+    grid-column: 1/2;
+}
+.contentsContainer a{
+    text-decoration: none;
+    color: black;
+}
+
+.searchArea{
+    display:grid;
+    grid-template-columns:5fr 1fr;
+}
+
+.searchArea .v-input{
+    grid-column: 1/2;
+}
+
+.searchArea button{
+    grid-column: 2/3;
+    margin: 0 10px;
 }
