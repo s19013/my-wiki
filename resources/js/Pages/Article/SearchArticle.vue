@@ -16,6 +16,27 @@
                 </v-btn>
             </div>
 
+            <details>
+                <summary>検索対象</summary>
+                <v-radio-group
+                v-model="searchTarget"
+                inline
+                >
+                    <v-radio
+                    label="タイトルのみ"
+                    value="title"
+                    ></v-radio>
+                    <v-radio
+                    label="本文のみ(低速)"
+                    value="body"
+                    ></v-radio>
+                    <!-- <v-radio
+                    label="タイトルまたは本文(低速)"
+                    value="titleAndBody"
+                    ></v-radio> -->
+                </v-radio-group>
+            </details>
+
             <TagDialog ref="tagDialog" class="w-50 mb-10" :originalCheckedTag=null></TagDialog>
 
             <template v-for="article of articleList" :key="article.id">
@@ -48,6 +69,7 @@ export default{
             currentPage: 1,
             pageCount:1,
             articleSerchLoading:false,
+            searchTarget:"title"
         }
     },
     components:{
@@ -63,7 +85,8 @@ export default{
             await axios.post('/api/article/search',{
                 currentPage:this.currentPage,
                 articleToSearch:this.articleToSearch,
-                tagList : this.$refs.tagDialog.serveCheckedTagListToParent()
+                tagList : this.$refs.tagDialog.serveCheckedTagListToParent(),
+                searchTarget:this.searchTarget
             })
             .then((res) =>{
                 this.pageCount= res.data.pageCount
@@ -74,7 +97,8 @@ export default{
             await axios.post('/api/article/search',{
                 currentPage:this.currentPage,
                 articleToSearch:this.articleToSearch,
-                tagList : this.$refs.tagDialog.serveCheckedTagListToParent()
+                tagList : this.$refs.tagDialog.serveCheckedTagListToParent(),
+                searchTarget:this.searchTarget
             })
             .then((res) =>{
                 this.articleList = res.data.articleList

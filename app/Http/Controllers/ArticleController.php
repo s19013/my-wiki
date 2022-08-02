@@ -75,6 +75,7 @@ class ArticleController extends Controller
             articleToSearch:$request->articleToSearch,
             currentPage:$request->currentPage,
             tagList:$request->tagList,
+            searchTarget:$request->searchTarget
         );
     }
     // 編集か新規かを分ける

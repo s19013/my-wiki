@@ -90,7 +90,7 @@ class Article extends Model
 
 
 
-    public static function searchArticle($userId,$articleToSearch,$currentPage,$tagList)
+    public static function searchArticle($userId,$articleToSearch,$currentPage,$tagList,$searchTarget)
     {
         //一度にとってくる数
         $parPage = 1;
@@ -132,9 +132,14 @@ class Article extends Model
             ->whereNull('deleted_at');
         }
 
-        // title名をlikeけんさく
-        foreach($wordListToSearch as $word){
-            $query->where('title','like',"%$word%");
+        // title名だけでlike検索
+        if ($searchTarget == "title") {
+            foreach($wordListToSearch as $word){ $query->where('title','like',"%$word%"); }
+        }
+
+        // bodyだけでlike検索
+        if ($searchTarget == "body") {
+            foreach($wordListToSearch as $word){ $query->where('body','like',"%$word%"); }
         }
 
         //ヒット件数取得
