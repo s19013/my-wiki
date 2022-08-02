@@ -1,6 +1,6 @@
 <template>
     <div class="originalHead">
-        <h2>{{title}}</h2>
+        <h2>{{pageTitle}}</h2>
         <v-btn @click.stop = "show = !show"> <v-icon> mdi-view-headline </v-icon> メニュー</v-btn>
         <transition name="slide">
             <nav v-show="show">
@@ -34,7 +34,7 @@ export default{
     components:{
         Link,
     },
-    props:['title']
+    props:['pageTitle']
 }
 
 </script>
