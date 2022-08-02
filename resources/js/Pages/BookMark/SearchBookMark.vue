@@ -9,7 +9,7 @@
                 ></v-text-field>
                 <v-btn color="submit"
                     elevation="2"
-                    :disabled = "bookMarkSerchLoading"
+                    :disabled = "loading"
                     @click="search()">
                     <v-icon>mdi-magnify</v-icon>
                     検索
@@ -18,8 +18,11 @@
 
             <TagDialog ref="tagDialog" class="w-50 mb-10" :searchOnly="true"></TagDialog>
 
+            <!-- loadingアニメ -->
+            <loading v-show="loading"></loading>
+
             <template v-for="bookMark of bookMarkList" :key="bookMark.id">
-                <div class ="article ">
+                <div class ="article" v-show="!loading">
                     <!-- 別タブで開くようにする -->
                     <a :href="bookMark.url"><h2>{{bookMark.title}}</h2></a>
                 </div>
@@ -38,6 +41,7 @@ import BaseLayout from '@/Layouts/BaseLayout.vue'
 import { InertiaLink, InertiaHead } from '@inertiajs/inertia-vue3'
 import { Link } from '@inertiajs/inertia-vue3';
 import TagDialog from '@/Components/dialog/TagDialog.vue';
+import loading from '@/Components/loading/loading.vue';
 
 export default{
     data() {
@@ -46,7 +50,7 @@ export default{
             bookMarkList:null,
             currentPage: 1,
             pageCount:1,
-            bookMarkSerchLoading:false,
+            loading:false,
         }
     },
     components:{
@@ -54,10 +58,12 @@ export default{
         InertiaLink,
         Link,
         TagDialog,
+        loading,
     },
     methods: {
         // 検索用
         async search(){
+            this.loading = true
             this.currentPage = 1 //検索するのでリセットする
             await axios.post('/api/bookmark/search',{
                 currentPage:this.currentPage,
@@ -65,19 +71,24 @@ export default{
                 tagList : this.$refs.tagDialog.serveCheckedTagListToParent()
             })
             .then((res) =>{
+                this.loading = false
                 this.pageCount= res.data.pageCount
                 this.bookMarkList = res.data.bookMarkList
             })
+            .catch((error) => { console.log(error); })
         },
         async pagination(){
+            this.loading = true
             await axios.post('/api/bookmark/search',{
                 currentPage:this.currentPage,
                 bookMarkToSearch:this.bookMarkToSearch,
                 tagList : this.$refs.tagDialog.serveCheckedTagListToParent()
             })
             .then((res) =>{
+                this.loading = false
                 this.bookMarkList = res.data.bookMarkList
             })
+            .catch((error) => { console.log(error); })
         },
     },
     watch: {
