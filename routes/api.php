@@ -43,7 +43,7 @@ Route::middleware('auth:sanctum', 'throttle:60,1')->group(function () {
         Route::post('/update' , [ArticleController::class,'aricleUpdate']);
         Route::post('/delete' , [ArticleController::class,'articleDelete']);
         Route::post('/search' , [ArticleController::class,'articleSearch']);
-        Route::get('/getUserAllArticle',[ArticleController::class,'serveUserAllArticle']);
+        // Route::get('/getUserAllArticle',[ArticleController::class,'serveUserAllArticle']);
     });
 
     Route::prefix('/bookmark')->group(function () {
@@ -51,7 +51,7 @@ Route::middleware('auth:sanctum', 'throttle:60,1')->group(function () {
         Route::post('/update' , [BookMarkController::class,'bookMarkUpdate']);
         Route::post('/delete' , [BookMarkController::class,'bookMarkDelete']);
         Route::post('/search' , [BookMarkController::class,'bookMarkSearch']);
-        Route::get('/getUserAllBookMark',[BookMarkController::class,'serveUserAllBookMark']);
+        // Route::get('/getUserAllBookMark',[BookMarkController::class,'serveUserAllBookMark']);
     });
 });
 
