@@ -20,7 +20,7 @@
                 </v-row>
                 <!--  -->
                 <v-row>
-                    <v-col><p class="error articleError" v-if="bookMarkBodyErrorFlag">urlを入力してください</p></v-col>
+                    <v-col><p class="error articleError" v-if="bookMarkUrlErrorFlag">urlを入力してください</p></v-col>
 
                     <!-- タグ -->
                     <v-col cols="2"><TagDialog ref="tagDialog" :originalCheckedTag=null></TagDialog></v-col>
@@ -58,7 +58,7 @@ export default {
         bookMarkSending:false,
 
         // errorFlag
-        bookMarkBodyErrorFlag:false,
+        bookMarkUrlErrorFlag:false,
       }
     },
     components:{
@@ -72,7 +72,7 @@ export default {
         // 本文送信
         submitCheck:_.debounce(_.throttle(async function(){
             if (this.bookMarkUrl =='') {
-                this.bookMarkBodyErrorFlag = true
+                this.bookMarkUrlErrorFlag = true
                 return
             }
             else {this.submit()}
