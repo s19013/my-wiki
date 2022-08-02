@@ -125,7 +125,7 @@ class BookMark extends Model
             $query = DB::table($subTable,'sub')
             ->select('sub.id as id','sub.title as title','sub.url as url');
         } else {
-            $query = BookMark::select('id','title')
+            $query = BookMark::select('id','title','url')
             ->where('user_id','=',$userId)
             ->whereNull('deleted_at');
         }
