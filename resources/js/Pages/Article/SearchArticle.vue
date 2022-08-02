@@ -44,8 +44,11 @@
 
             <template v-for="article of articleList" :key="article.id">
                     <div class ="contentsContainer" v-show="!loading">
+                        <h2>{{article.title}}</h2>
                         <Link :href="'/Article/View/' + article.id">
-                            <h2>{{article.title}}</h2>
+                            <v-btn color="submit" elevation="2">
+                                閲覧 編集
+                            </v-btn>
                         </Link>
                     </div>
             </template>
