@@ -121,6 +121,7 @@ class BookMark extends Model
             $subTable->groupBy('book_marks.id')
             ->having(DB::raw('count(*)'), '=', count($tagList));
 
+            //副問合せのテーブルから選択
             $query = DB::table($subTable,'sub')
             ->select('sub.id as id','sub.title as title','sub.url as url');
         } else {
