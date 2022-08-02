@@ -24,7 +24,9 @@
             <template v-for="bookMark of bookMarkList" :key="bookMark.id">
                 <div class ="contentsContainer" v-show="!loading">
                     <!-- 別タブで開くようにする -->
-                    <a :href="bookMark.url"><h2>{{bookMark.title}}</h2></a>
+                    <a :href="bookMark.url" target="_blank" rel="noopener noreferrer">
+                        <h2>{{bookMark.title}}</h2>
+                    </a>
                 </div>
             </template>
         </v-container>
