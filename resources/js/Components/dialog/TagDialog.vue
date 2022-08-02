@@ -3,7 +3,7 @@
         <!-- ダイアログを呼び出すためのボタン -->
         <v-btn class="longButton" color="submit" @click.stop="tagDialogFlagSwithch">
         <v-icon>mdi-tag</v-icon>
-        tag
+        タグ
         </v-btn>
 
         <!-- v-modelがv-ifとかの代わりになっている -->
