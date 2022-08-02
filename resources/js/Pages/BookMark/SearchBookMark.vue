@@ -16,7 +16,7 @@
                 </v-btn>
             </div>
 
-            <TagDialog ref="tagDialog" class="w-50 mb-10" :originalCheckedTag=null></TagDialog>
+            <TagDialog ref="tagDialog" class="w-50 mb-10" :searchOnly="true"></TagDialog>
 
             <template v-for="bookMark of bookMarkList" :key="bookMark.id">
                 <div class ="article ">

@@ -54,31 +54,35 @@
                 </v-list>
 
                 <!--  -->
-                <v-btn
-                    class="longButton my-4"
-                    color="submit"
-                    v-if="!createNewTagFlag"
-                    @click.stop="createNewTagFlagSwitch">
-                    <v-icon>mdi-tag-plus</v-icon>
-                    新規作成
-                </v-btn>
-
-                <!-- 新規タグ作成 -->
-                <div class="areaCreateNewTag" v-if="createNewTagFlag">
-                    <p class="error" v-if="newTagErrorFlag">文字を入力してください</p>
-                    <p class="error" v-if="tagAlreadyExistsErrorFlag">そのタグはすでに登録されいます</p>
-
-                    <v-text-field v-model="newTag" label="新しいタグ"></v-text-field>
+                <div v-if="!searchOnly">
 
                     <v-btn
-                    class="longButton"
-                    color="#BBDEFB"
-                    elevation="2"
-                    :disabled="newTagSending"
-                    @click.stop="createNewTagCheck()">
-                    <v-icon>mdi-content-save</v-icon>
-                    作成
+                        class="longButton my-4"
+                        color="submit"
+                        v-if="!createNewTagFlag"
+                        @click.stop="createNewTagFlagSwitch">
+                        <v-icon>mdi-tag-plus</v-icon>
+                        新規作成
                     </v-btn>
+
+                    <!-- 新規タグ作成 -->
+                    <div class="areaCreateNewTag" v-if="createNewTagFlag">
+                        <p class="error" v-if="newTagErrorFlag">文字を入力してください</p>
+                        <p class="error" v-if="tagAlreadyExistsErrorFlag">そのタグはすでに登録されいます</p>
+
+                        <v-text-field v-model="newTag" label="新しいタグ"></v-text-field>
+
+                        <v-btn
+                        class="longButton"
+                        color="#BBDEFB"
+                        elevation="2"
+                        :disabled="newTagSending"
+                        @click.stop="createNewTagCheck()">
+                        <v-icon>mdi-content-save</v-icon>
+                        作成
+                        </v-btn>
+                    </div>
+
                 </div>
             </section>
         </v-dialog>
@@ -110,7 +114,16 @@ export default{
         tagSearchResultList:[]
       }
     },
-    props:['originalCheckedTag'],
+    props:{
+        originalCheckedTag:{
+            type:Array,
+            default:null
+        },
+        searchOnly:{
+            type:Boolean,
+            default:false,
+        }
+    },
     components:{loading},
     methods: {
         // 新規タグ作成

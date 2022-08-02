@@ -37,7 +37,7 @@
                 </v-radio-group>
             </details>
 
-            <TagDialog ref="tagDialog" class="w-50 mb-10" :originalCheckedTag=null></TagDialog>
+            <TagDialog ref="tagDialog" class="w-50 mb-10" :searchOnly="true"></TagDialog>
 
             <template v-for="article of articleList" :key="article.id">
                 <Link :href="'/Article/View/' + article.id">
