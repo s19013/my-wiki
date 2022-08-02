@@ -43,11 +43,11 @@
             <loading v-show="loading"></loading>
 
             <template v-for="article of articleList" :key="article.id">
-                <Link :href="'/Article/View/' + article.id">
                     <div class ="contentsContainer" v-show="!loading">
-                        <h2>{{article.title}}</h2>
+                        <Link :href="'/Article/View/' + article.id">
+                            <h2>{{article.title}}</h2>
+                        </Link>
                     </div>
-                </Link>
             </template>
         </v-container>
         <v-pagination
