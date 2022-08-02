@@ -25,8 +25,16 @@
                 <div class ="contentsContainer" v-show="!loading">
                     <!-- 別タブで開くようにする -->
                     <a :href="bookMark.url" target="_blank" rel="noopener noreferrer">
-                        <h2>{{bookMark.title}}</h2>
+                        <h2>
+                            <v-icon>mdi-arrow-top-left-bold-box-outline</v-icon>
+                            {{bookMark.title}}
+                        </h2>
                     </a>
+                    <Link :href="'/BookMark/Edit/' + bookMark.id">
+                            <v-btn color="submit" elevation="2">
+                                編集
+                            </v-btn>
+                    </Link>
                 </div>
             </template>
         </v-container>
