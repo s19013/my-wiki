@@ -46,6 +46,15 @@ class BookMarkTag extends Model
         ->where('book_mark_id','=',$bookMarkId)
         ->get();
 
+        // 元のタグが1つもついていなくて､新しくタグをつけようとしていたら
+        // アプデ前の$book_mark_Idのtag_idがnullのデータを論理削除
+        if ($original[0]->original["tag_id"] == null && !empty($updatedTagList) ) {
+            BookMarkTag::deleteArticleTag(
+                tagId:null,
+                bookMarkId:$bookMarkId,
+            );
+        }
+
         foreach ($original as $tag){
             array_push($originalTagList,$tag->original["tag_id"]);
         }
@@ -75,6 +84,16 @@ class BookMarkTag extends Model
                     bookMarkId:$bookMarkId,
                 );
             }
+        }
+
+        // 紐付けられていたタグすべて削除されていたか
+        // すべて削除されたのならtag_id = nullのデータをついか
+        $isAllDeleted = array_diff($originalTagList,$deletedTagList);
+        if (empty($isAllDeleted)) {
+            BookMarkTag::storeArticleTag(
+                tagId:null,
+                bookMarkId:$bookMarkId,
+            );
         }
     }
 
