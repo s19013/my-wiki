@@ -32,7 +32,7 @@
                     </v-col>
 
                     <!--  -->
-                    <v-col><p class="error articleError" v-if="articleBodyErrorFlag">本文を入力してください</p></v-col>
+                    <v-col><p class="error articleError" v-show="articleBodyErrorFlag">本文を入力してください</p></v-col>
 
                     <!-- タグ -->
                     <v-col cols="2"><TagDialog ref="tagDialog" :originalCheckedTag="originalCheckedTag"></TagDialog></v-col>

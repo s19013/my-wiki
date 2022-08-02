@@ -1,9 +1,9 @@
 <template>
     <div class="originalHead">
         <h2>{{title}}</h2>
-        <v-btn @click="show = !show"> <v-icon> mdi-view-headline </v-icon> メニュー</v-btn>
+        <v-btn @click.stop = "show = !show"> <v-icon> mdi-view-headline </v-icon> メニュー</v-btn>
         <transition name="slide">
-            <nav v-if="show">
+            <nav v-show="show">
                 <div>
                     <Link :href="route('CreateArticle')">
                         <h2 class="createAticle navButton"  >

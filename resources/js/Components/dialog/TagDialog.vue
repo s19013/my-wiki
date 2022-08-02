@@ -54,7 +54,7 @@
                 </v-list>
 
                 <!--  -->
-                <div v-if="!searchOnly">
+                <div v-show="!searchOnly">
 
                     <v-btn
                         class="longButton my-4"
@@ -67,8 +67,8 @@
 
                     <!-- 新規タグ作成 -->
                     <div class="areaCreateNewTag" v-if="createNewTagFlag">
-                        <p class="error" v-if="newTagErrorFlag">文字を入力してください</p>
-                        <p class="error" v-if="tagAlreadyExistsErrorFlag">そのタグはすでに登録されいます</p>
+                        <p class="error" v-show="newTagErrorFlag">文字を入力してください</p>
+                        <p class="error" v-show="tagAlreadyExistsErrorFlag">そのタグはすでに登録されいます</p>
 
                         <v-text-field v-model="newTag" label="新しいタグ"></v-text-field>
 

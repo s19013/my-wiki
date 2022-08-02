@@ -20,7 +20,7 @@
                 </v-row>
                 <!--  -->
                 <v-row>
-                    <v-col><p class="error articleError" v-if="bookMarkBodyErrorFlag">urlを入力してください</p></v-col>
+                    <v-col><p class="error articleError" v-show="bookMarkBodyErrorFlag">urlを入力してください</p></v-col>
 
                     <!-- タグ -->
                     <v-col cols="2"><TagDialog ref="tagDialog" :originalCheckedTag=null></TagDialog></v-col>
