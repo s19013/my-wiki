@@ -34,6 +34,14 @@
                     </v-btn>
                 </div>
 
+                <v-btn
+                    variant="outlined"
+                    color="primary"
+                    @click.stop="clearAllCheck"
+                >
+                    チェックをすべて外す
+                </v-btn>
+
                 <!-- loadingアニメ -->
                 <loading v-show="tagSerchLoading"></loading>
 
@@ -173,6 +181,10 @@ export default{
                 this.tagSerchLoading = false
             })
         },100),150),
+        //チェック全消し
+        clearAllCheck(){
+            this.checkedTagList = []
+        },
         // 切り替え
         createNewTagFlagSwitch(){ this.createNewTagFlag = !this.createNewTagFlag },
         tagDialogFlagSwithch(){
@@ -208,7 +220,7 @@ export default{
 <style lang="scss" scoped>
 .tagDialog{
     .v-list{
-        margin: 0;
+        margin :5px 0;
         padding:0;
         .v-list-item{
             padding:0 10px;
