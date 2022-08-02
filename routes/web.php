@@ -55,7 +55,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             return Inertia::render('BookMark/CreateBookMark');
         })->name('CreateBookMark');
 
-        Route::get('/Edit/{articleId}', [TransitionController::class,'transitionToEditArticle'])->name('EditBookMark');
+        Route::get('/Edit/{articleId}', [TransitionController::class,'transitionToEditBookMark'])->name('EditBookMark');
 
         Route::get('/Search', function () {
             return Inertia::render('BookMark/SearchBookMark');
