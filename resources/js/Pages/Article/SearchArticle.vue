@@ -15,6 +15,9 @@
                     検索
                 </v-btn>
             </div>
+
+            <TagDialog ref="tagDialog" class="w-50 mb-10" :originalCheckedTag=null></TagDialog>
+
             <template v-for="article of articleList" :key="article.id">
                 <Link :href="'/Article/View/' + article.id">
                     <div class ="article">
@@ -35,6 +38,7 @@
 import BaseLayout from '@/Layouts/BaseLayout.vue'
 import { InertiaLink, InertiaHead } from '@inertiajs/inertia-vue3'
 import { Link } from '@inertiajs/inertia-vue3';
+import TagDialog from '@/Components/dialog/TagDialog.vue';
 
 export default{
     data() {
@@ -50,6 +54,7 @@ export default{
         BaseLayout,
         InertiaLink,
         Link,
+        TagDialog,
     },
     methods: {
         // 検索用
@@ -57,7 +62,8 @@ export default{
             this.currentPage = 1 //検索するのでリセットする
             await axios.post('/api/article/search',{
                 currentPage:this.currentPage,
-                articleToSearch:this.articleToSearch
+                articleToSearch:this.articleToSearch,
+                tagList : this.$refs.tagDialog.serveCheckedTagListToParent()
             })
             .then((res) =>{
                 this.pageCount= res.data.pageCount
@@ -67,7 +73,8 @@ export default{
         async pagination(){
             await axios.post('/api/article/search',{
                 currentPage:this.currentPage,
-                articleToSearch:this.articleToSearch
+                articleToSearch:this.articleToSearch,
+                tagList : this.$refs.tagDialog.serveCheckedTagListToParent()
             })
             .then((res) =>{
                 this.articleList = res.data.articleList

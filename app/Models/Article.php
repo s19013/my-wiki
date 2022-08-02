@@ -90,7 +90,7 @@ class Article extends Model
 
 
 
-    public static function searchArticle($userId,$articleToSearch,$currentPage)
+    public static function searchArticle($userId,$articleToSearch,$currentPage,$tagList)
     {
         //一度にとってくる数
         $parPage = 1;
@@ -100,11 +100,37 @@ class Article extends Model
         //and検索のために空白区切りでつくった配列を用意
         $wordListToSearch = searchToolKit::preparationToAndSearch($escaped);
 
-        //クエリビルダ
-        $query = Article::select('id','title')
-        ->where('user_id','=',$userId)
-        ->whereNull('deleted_at');
+        //タグも検索する場合
+        if (!empty($tagList)) {
+            //book_markテーブルとbook_mark_tagsを結合
+            $subTable = DB::table('article_tags')
+            ->select('articles.id','articles.title','articles.body')
+            ->leftJoin('articles','articles.id','=','article_tags.article_id')
+            ->where('articles.user_id','=',$userId)
+            ->WhereNull('articles.deleted_at')
+            ->WhereNull('article_tags.deleted_at');
 
+            $isFirst = true;
+            foreach($tagList as $tag){
+                // 最初だけand検索
+                if ($isFirst == true) {
+                    $subTable->Where('article_tags.tag_id','=',$tag);
+                    $isFirst = false;
+                }
+                $subTable->orWhere('article_tags.tag_id','=',$tag);
+            }
+
+            $subTable->groupBy('articles.id')
+            ->having(DB::raw('count(*)'), '=', count($tagList));
+
+            //副問合せのテーブルから選択
+            $query = DB::table($subTable,'sub')
+            ->select('sub.id as id','sub.title as title','sub.body as body');
+        } else {
+            $query = Article::select('id','title')
+            ->where('user_id','=',$userId)
+            ->whereNull('deleted_at');
+        }
 
         // title名をlikeけんさく
         foreach($wordListToSearch as $word){
@@ -128,7 +154,7 @@ class Article extends Model
         return response()->json(
             [
                 "articleList" => $searchResults,
-                "pageCount"   => $pageCount
+                "pageCount"    => $pageCount
             ],
             200
         );

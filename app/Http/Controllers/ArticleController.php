@@ -73,7 +73,8 @@ class ArticleController extends Controller
         return Article::searchArticle(
             userId:Auth::id(),
             articleToSearch:$request->articleToSearch,
-            currentPage:$request->currentPage
+            currentPage:$request->currentPage,
+            tagList:$request->tagList,
         );
     }
     // 編集か新規かを分ける
