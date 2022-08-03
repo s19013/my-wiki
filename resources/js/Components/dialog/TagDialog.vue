@@ -213,6 +213,9 @@ export default{
             this.tagAlreadyExistsErrorFlag = false
             this.newTagErrorFlag = false
 
+            //チェックを外す
+            this.onlyCheckedFlag = false
+
             //開くときは全部取得した状態に
             if (this.tagDialogFlag == true) { this.searchTag() }
         },
