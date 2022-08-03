@@ -27,7 +27,7 @@ class Tag extends Model
 
     public static function store($userId,$tag)
     {
-        // すでにdbに存在していないか確かめる
+        // ログインユーザーが既に登録していないか確かめる
         $tag_exists = Tag::where('user_id','=',$userId)
         ->where('name','=',$tag)
         ->exists();//existsでダブっていればtrue
@@ -71,7 +71,7 @@ class Tag extends Model
         //and検索のために空白区切りでつくった配列を用意
         $wordListToSearch = searchToolKit::preparationToAndSearch($escaped);
 
-        //クエリビルダ
+        //ログインユーザーのタグを探す
         $query = Tag::select('id','name')
         ->where('user_id','=',$userId);
 
