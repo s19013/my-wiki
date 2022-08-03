@@ -6,6 +6,7 @@
         </div>
         <transition name="slide">
             <nav v-show="show">
+                <h4 class="navButton closeButton" @click.stop = "show = !show"> <v-icon> mdi-close-box</v-icon>閉じる</h4>
                 <div>
                     <h2 class="titleAticle navButton"> <v-icon>mdi-note</v-icon> 記事 </h2>
 
@@ -100,7 +101,7 @@ nav {
     // 強制的に右端に置く
     right: 0;
     //ボタンと被らないように頭の位置を下げる
-    top:6vh;
+    top:0;
     a{
         cursor: pointer;
         text-decoration: none;
@@ -114,19 +115,27 @@ nav {
         grid-column: 2/3;
         margin: 0 0 0 auto;
     }
-    h2 {
-        color: rgb(250, 250, 250);
+
+    h2,h3,h4{
         text-align:center;
         grid-column: 3/4;
+    }
+
+    h2 {
+        color: rgb(250, 250, 250);
         padding:10px;
         cursor: default;
     }
     h3 {
         background-color: rgb(212, 212, 212);
-        text-align:center;
-        grid-column: 3/4;
         padding:5px 0;
         margin :0 0 10px 0;
+    }
+    h4 {
+        background-color: rgb(212, 212, 212);
+        padding:5px 0;
+        margin :0 0 10px 0;
+        cursor: pointer;
     }
     .titleAticle   { background-color:rgb(26, 130, 195) ;}
     .titleBookMark { background-color:rgb(64, 21, 166) ;}
