@@ -41,6 +41,13 @@
                         </h3>
                     </Link>
 
+                    <Link :href="route('logout')" method="post">
+                        <h3 class="navButton logout">
+                            <v-icon>mdi-logout</v-icon>
+                            Log Out
+                        </h3>
+                    </Link>
+
                 </div>
             </nav>
         </transition>
@@ -66,7 +73,7 @@ export default{
 <style lang="scss" scoped>
 .originalHead{
     background-color: rgb(127, 255, 174);
-    height: 3vmax;
+    height: 6vh;
     margin-bottom:10px;
     display: grid;
     grid-template-columns:1fr 5fr 1fr;
@@ -86,13 +93,13 @@ export default{
 nav {
     background: rgb(234, 234, 234);
     z-index: 10;//これで10前のレイヤーへ
-    height: 100vh;
+    height: 95vh;
     width: 40vw;
     // 強制的に右端に置く
     position: absolute;
     right: 0;
     //ボタンと被らないように頭の位置を下げる
-    top:3vmax;
+    top:6vh;
     a{
         cursor: pointer;
         text-decoration: none;
@@ -122,6 +129,11 @@ nav {
     }
     .titleAticle   { background-color:rgb(26, 130, 195) ;}
     .titleBookMark { background-color:rgb(64, 21, 166) ;}
+    .logout {
+        margin: 40vh 0;
+        background-color:rgb(131, 6, 6) ;
+        color:aliceblue
+    }
 }
 
 // アニメ
