@@ -262,6 +262,6 @@ export default{
         }
     }
     .areaCreateNewTag{margin: 10px;}
-    .clooseButton{margin-bottom: 20px;}
+    .clooseButton{margin-bottom: 10px;}
 }
 </style>
