@@ -14,8 +14,9 @@
 
             <section class="Dialog tagDialog">
                 <div class="clooseButton">
-                    <v-btn color="#E57373"   x-small elevation="2" @click.stop="tagDialogFlagSwithch()">
-                        <v-icon>mdi-close-box</v-icon>閉じる
+                    <v-btn color="#E57373" size="small" elevation="2" @click.stop="tagDialogFlagSwithch()">
+                        <v-icon
+                        >mdi-close-box</v-icon>閉じる
                     </v-btn>
                 </div>
                 <!-- 検索窓とか -->
@@ -34,13 +35,25 @@
                     </v-btn>
                 </div>
 
-                <v-btn
-                    variant="outlined"
-                    color="primary"
-                    @click.stop="clearAllCheck"
-                >
-                    チェックをすべて外す
-                </v-btn>
+                <div>
+                    <v-row>
+                        <v-col cols="3">
+                            <v-btn
+                            variant="outlined"
+                            color="primary"
+                            size="small"
+                            @click.stop="clearAllCheck"
+                            >
+                                チェックをすべて外す
+                            </v-btn>
+                        </v-col>
+                        <v-col cols="3"></v-col>
+                        <v-col cols="6">
+                            <input type="checkbox" id="checked" v-model="onlyCheckedFlag">
+                            <label for="checked">チェックがついているタグだけを表示</label>
+                        </v-col>
+                    </v-row>
+                </div>
 
                 <!-- loadingアニメ -->
                 <loading v-show="tagSerchLoading"></loading>
@@ -52,7 +65,7 @@
                     max-height="50vh">
 
                     <v-list-item v-for="tag of tagSearchResultList" :key="tag.id">
-                        <input type="checkbox" :id="tag.id" v-model="checkedTagList" :value="tag.id">
+                        <input type="checkbox" :id="tag.id" v-model="checkedTagList" :value="{id:tag.id,name:tag.name}">
                         <label :for="tag.id">{{tag.name}}</label>
                     </v-list-item>
 
@@ -103,6 +116,7 @@ export default{
         newTag:'',
 
         // flag
+        onlyCheckedFlag:false,
         createNewTagFlag:false,
         tagDialogFlag:false,
 
@@ -182,9 +196,7 @@ export default{
             })
         },100),150),
         //チェック全消し
-        clearAllCheck(){
-            this.checkedTagList = []
-        },
+        clearAllCheck(){this.checkedTagList = []},
         // 切り替え
         createNewTagFlagSwitch(){ this.createNewTagFlag = !this.createNewTagFlag },
         tagDialogFlagSwithch(){
@@ -201,11 +213,30 @@ export default{
             this.tagAlreadyExistsErrorFlag = false
             this.newTagErrorFlag = false
 
+            //チェックを外す
+            this.onlyCheckedFlag = false
+
             //開くときは全部取得した状態に
             if (this.tagDialogFlag == true) { this.searchTag() }
         },
         //親にチェックリストを渡す
-        serveCheckedTagListToParent(){ return this.checkedTagList},
+        serveCheckedTagListToParent(){
+            // this.checkedTagListにnameも追加しないといけなくなったのでそのままthis.checkedTagListを返せない
+            // -> 返そうものならバックの処理に大きな変更が必要になる
+            // ここでidだけの配列を作って返すほうが変更が少ない
+            var temp = []
+            for (const tag of this.checkedTagList){ temp.push(tag["id"]) }
+            return temp
+        },
+    },
+    watch:{
+        onlyCheckedFlag:function(){
+            //チェックがついているタグだけを表示
+            if (this.onlyCheckedFlag == true) { this.tagSearchResultList = this.checkedTagList }
+            else if (this.onlyCheckedFlag == false && this.tagDialogFlag == true) {
+                this.searchTag()
+            }
+        }
     },
     mounted() {
         if (this.originalCheckedTag != null) {

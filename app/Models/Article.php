@@ -93,7 +93,7 @@ class Article extends Model
     public static function searchArticle($userId,$articleToSearch,$currentPage,$tagList,$searchTarget)
     {
         //一度にとってくる数
-        $parPage = 1;
+        $parPage = 10;
 
         // %と_をエスケープ
         $escaped = searchToolKit::sqlEscape($articleToSearch);

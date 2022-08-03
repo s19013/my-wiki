@@ -17,24 +17,15 @@
             </div>
 
             <details>
-                <summary>検索対象</summary>
-                <v-radio-group
-                v-model="searchTarget"
-                inline
-                >
-                    <v-radio
-                    label="タイトルのみ"
-                    value="title"
-                    ></v-radio>
-                    <v-radio
-                    label="本文のみ(低速)"
-                    value="body"
-                    ></v-radio>
-                    <!-- <v-radio
-                    label="タイトルまたは本文(低速)"
-                    value="titleAndBody"
-                    ></v-radio> -->
-                </v-radio-group>
+                <summary >検索対象</summary>
+                <input type="radio" id="option1" value="title" v-model="searchTarget" />
+                <label for="option1" class="me-6">タイトルのみ</label>
+
+                <input type="radio" id="option2" value="body" v-model="searchTarget" />
+                <label for="option2" class="me-6">本文のみ(低速)</label>
+
+                <!-- <input type="radio" id="option3" value="titleAndBody" v-model="searchTarget" />
+                <label for="option3">タイトルまたは本文(低速)</label> -->
             </details>
 
             <TagDialog ref="tagDialog" class="w-50 mb-10" :searchOnly="true"></TagDialog>
@@ -133,4 +124,8 @@ export default{
 </script>
 
 <style lang="scss" scoped>
+details{
+    margin-bottom: 15px;
+    input,label,summary{ cursor: pointer; }
+}
 </style>

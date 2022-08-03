@@ -1,5 +1,5 @@
 <template>
-    <BaseLayout title="検索画面" pageTitle="検索画面">
+    <BaseLayout title="ブックマーク検索" pageTitle="ブックマーク検索">
         <v-container>
             <div class="searchArea">
                 <v-text-field
