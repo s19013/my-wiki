@@ -93,10 +93,11 @@ export default{
 nav {
     background: rgb(234, 234, 234);
     z-index: 10;//これで10前のレイヤーへ
-    height: 95vh;
+    height: 100vh;
     width: 40vw;
+    position: fixed; /* ウィンドウを基準に画面に固定 */
+    // position: absolute;
     // 強制的に右端に置く
-    position: absolute;
     right: 0;
     //ボタンと被らないように頭の位置を下げる
     top:6vh;
@@ -130,7 +131,9 @@ nav {
     .titleAticle   { background-color:rgb(26, 130, 195) ;}
     .titleBookMark { background-color:rgb(64, 21, 166) ;}
     .logout {
-        margin: 40vh 0;
+        position: absolute;
+        top:85vh;
+        width: 100%;
         background-color:rgb(131, 6, 6) ;
         color:aliceblue
     }
