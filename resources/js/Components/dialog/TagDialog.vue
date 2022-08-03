@@ -14,8 +14,9 @@
 
             <section class="Dialog tagDialog">
                 <div class="clooseButton">
-                    <v-btn color="#E57373"   x-small elevation="2" @click.stop="tagDialogFlagSwithch()">
-                        <v-icon>mdi-close-box</v-icon>閉じる
+                    <v-btn color="#E57373" size="small" elevation="2" @click.stop="tagDialogFlagSwithch()">
+                        <v-icon
+                        >mdi-close-box</v-icon>閉じる
                     </v-btn>
                 </div>
                 <!-- 検索窓とか -->
@@ -37,6 +38,7 @@
                 <v-btn
                     variant="outlined"
                     color="primary"
+                    size="small"
                     @click.stop="clearAllCheck"
                 >
                     チェックをすべて外す
