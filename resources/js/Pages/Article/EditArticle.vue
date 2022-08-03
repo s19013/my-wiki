@@ -120,7 +120,8 @@ export default {
                 this.articleDeleting = false
             })
             .catch((error) => {
-                this.articleDeleting = false
+                console.log(error);
+                this.articleSending = false
             })
         },
     },

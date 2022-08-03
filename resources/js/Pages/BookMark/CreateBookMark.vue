@@ -85,8 +85,12 @@ export default {
                 tagList:this.$refs.tagDialog.serveCheckedTagListToParent()
             })
             .then((res)=>{
-                this.bookMarkSending = false
                 this.$inertia.get('/BookMark/Search')
+                this.bookMarkSending = false
+            })
+            .catch((error) => {
+                console.log(error);
+                this.articleSending = false
             })
         },
         deleteArticle() {

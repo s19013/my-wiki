@@ -102,7 +102,8 @@ export default {
                 this.bookMarkDeleting = false
             })
             .catch((error) => {
-                this.bookMarkDeleting = false
+                console.log(error);
+                this.articleSending = false
             })
         },
     },

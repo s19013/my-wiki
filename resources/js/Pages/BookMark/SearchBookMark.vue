@@ -81,11 +81,14 @@ export default{
                 tagList : this.$refs.tagDialog.serveCheckedTagListToParent()
             })
             .then((res) =>{
-                this.loading = false
                 this.pageCount= res.data.pageCount
                 this.bookMarkList = res.data.bookMarkList
+                this.loading = false
             })
-            .catch((error) => { console.log(error); })
+            .catch((error) => {
+                console.log(error);
+                this.loading = false
+            })
         },
         async pagination(){
             this.loading = true
@@ -95,10 +98,13 @@ export default{
                 tagList : this.$refs.tagDialog.serveCheckedTagListToParent()
             })
             .then((res) =>{
-                this.loading = false
                 this.bookMarkList = res.data.bookMarkList
+                this.loading = false
             })
-            .catch((error) => { console.log(error); })
+            .catch((error) => {
+                console.log(error);
+                this.loading = false
+            })
         },
     },
     watch: {

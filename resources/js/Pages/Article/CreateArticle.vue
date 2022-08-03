@@ -105,8 +105,12 @@ export default {
                 tagList:this.$refs.tagDialog.serveCheckedTagListToParent()
             })
             .then((res)=>{
-                this.articleSending = false
                 this.$inertia.get('/Article/Search')
+                this.articleSending = false
+            })
+            .catch((error) => {
+                console.log(error);
+                this.articleSending = false
             })
         },
         deleteArticle() {
