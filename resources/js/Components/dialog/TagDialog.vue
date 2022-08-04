@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- ダイアログを呼び出すためのボタン -->
-        <v-btn class="longButton" color="submit" @click.stop="tagDialogFlagSwithch">
+        <v-btn class="longButton" color="submit" size="small" @click.stop="tagDialogFlagSwithch">
         <v-icon>mdi-tag</v-icon>
         タグ
         </v-btn>
@@ -141,7 +141,7 @@ export default{
         searchOnly:{
             type:Boolean,
             default:false,
-        }
+        },
     },
     components:{loading},
     methods: {
