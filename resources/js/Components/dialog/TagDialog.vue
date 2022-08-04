@@ -240,7 +240,7 @@ export default{
     },
     mounted() {
         // 元の記事にタグがついていなかった場合
-        if (this.originalCheckedTag[0].id == null) { return }
+        // if (this.originalCheckedTag[0].id == null) { return }
         if (this.originalCheckedTag != null) {
             for (const tag of this.originalCheckedTag) {
                     this.checkedTagList.push(tag.id)
