@@ -243,7 +243,7 @@ export default{
         // if (this.originalCheckedTag[0].id == null) { return }
         if (this.originalCheckedTag != null) {
             for (const tag of this.originalCheckedTag) {
-                    this.checkedTagList.push(tag.id)
+                    this.checkedTagList.push({id:tag.id,name:tag.name})
             }
         }
     },
