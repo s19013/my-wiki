@@ -89,7 +89,7 @@ export default {
             })
             .then((res)=>{
                 this.bookMarkSending = false
-                this.$inertia.get('/bookmark/search')
+                this.$inertia.get('/BookMark/Search')
             })
         },
         deleteBookMark() {
