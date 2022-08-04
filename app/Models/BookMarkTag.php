@@ -85,14 +85,17 @@ class BookMarkTag extends Model
             }
         }
 
-        // 紐付けられていたタグすべて削除されていたか
-        // すべて削除されたのならtag_id = nullのデータをついか
-        $isAllDeleted = array_diff($originalTagList,$deletedTagList);
-        if (empty($isAllDeleted)) {
-            BookMarkTag::storeBookMarkTag(
-                tagId:null,
-                bookMarkId:$bookMarkId,
-            );
+        // 元のデータに何かしらのタグがつけられていてが
+        // 紐付けられていたタグすべて削除されていた場合
+        // tag_id = nullのデータをついか
+        if ($original[0]->original["tag_id"] != null) {
+            $isAllDeleted = array_diff($originalTagList,$deletedTagList);
+            if (empty($isAllDeleted)) {
+                BookMarkTag::storeBookMarkTag(
+                    tagId:null,
+                    bookMarkId:$bookMarkId,
+                );
+            }
         }
     }
 
