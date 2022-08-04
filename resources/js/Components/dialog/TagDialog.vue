@@ -257,10 +257,11 @@ export default{
         .v-list-item{
             padding:0 10px;
         }
-        label{
+    }
+    label{
             font-size: 1.5vmax;
             padding-left: 10px;
-        }
+            width: 100%;
     }
     .areaCreateNewTag{margin: 10px;}
     .clooseButton{margin-bottom: 10px;}
