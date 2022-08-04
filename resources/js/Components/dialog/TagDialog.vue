@@ -62,7 +62,7 @@
                 <v-list
                     class="overflow-y-auto mx-auto"
                     width="100%"
-                    max-height="50vh">
+                    max-height="45vh">
 
                     <v-list-item v-for="tag of tagSearchResultList" :key="tag.id">
                         <input type="checkbox" :id="tag.id" v-model="checkedTagList" :value="{id:tag.id,name:tag.name}">
@@ -240,8 +240,7 @@ export default{
     },
     mounted() {
         // 元の記事にタグがついていなかった場合
-        // if (this.originalCheckedTag[0].id == null) { return }
-        if (this.originalCheckedTag != null) {
+        if (this.originalCheckedTag != null && this.originalCheckedTag[0].id != null) {
             for (const tag of this.originalCheckedTag) {
                     this.checkedTagList.push({id:tag.id,name:tag.name})
             }
