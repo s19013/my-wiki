@@ -21,11 +21,11 @@ class TransitionController extends Controller
     {
         //削除された記事ならindexに戻す
         $isDeleted = Article::checkArticleDeleted(articleId:$articleId);
-        if ($isDeleted == true ) { return redirect()->route('index'); }
+        if ($isDeleted == true ) { return redirect()->route('SearchArticle'); }
 
         // 他人の記事を覗こうとしているならindexに戻す
         $isSamePerson = Article::preventPeep(articleId:$articleId,userId:Auth::id());
-        if ($isSamePerson == false) { return redirect()->route('index'); }
+        if ($isSamePerson == false) { return redirect()->route('SearchArticle');}
 
 
         $article = Article::serveArticle(articleId:$articleId);
