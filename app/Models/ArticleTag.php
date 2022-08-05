@@ -41,13 +41,14 @@ class ArticleTag extends Model
         // 消された､追加されたを確認する
         $originalTagList = [];
 
-        // もとのタグを確認する
+        // 更新前の記事に紐付けられていたタグを取得
         $original = ArticleTag::select('tag_id')
         ->where('article_id','=',$articleId)
         ->get();
 
-        // 元のタグが1つもついていなくて､新しくタグをつけようとしていたら
-        // アプデ前の$articleIdのtag_idがnullのデータを論理削除
+        // 更新前は記事にタグが1つもついていなくて
+        // 更新後にはタグが紐付けられていたら
+        // 更新前の$articleIdのtag_idがnullのデータを論理削除
         if ($original[0]->original["tag_id"] == null && !empty($updatedTagList) ) {
             ArticleTag::deleteArticleTag(
                 tagId:null,
@@ -88,12 +89,14 @@ class ArticleTag extends Model
 
         // 紐付けられていたタグすべて削除されていたか
         // すべて削除されたのならtag_id = nullのデータをついか
-        $isAllDeleted = array_diff($originalTagList,$deletedTagList);
-        if (empty($isAllDeleted)) {
-            ArticleTag::storeArticleTag(
-                tagId:null,
-                articleId:$articleId,
-            );
+        if ($original[0]->original["tag_id"] != null) {
+            $isAllDeleted = array_diff($originalTagList,$deletedTagList);
+            if (empty($isAllDeleted)) {
+                ArticleTag::storeArticleTag(
+                    tagId:null,
+                    articleId:$articleId,
+                );
+            }
         }
     }
 

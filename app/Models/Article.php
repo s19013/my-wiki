@@ -102,32 +102,32 @@ class Article extends Model
 
         //タグも検索する場合
         if (!empty($tagList)) {
-            //book_markテーブルとbook_mark_tagsを結合
+            //articleテーブルとarticle_tags,tagsを結合
             $subTable = DB::table('article_tags')
-            ->select('articles.id','articles.title','articles.body')
+            ->select('articles.id','articles.title','articles.body','articles.updated_at')
             ->leftJoin('articles','articles.id','=','article_tags.article_id')
+            ->leftJoin('tags','tags.id','=','article_tags.tag_id')
             ->where('articles.user_id','=',$userId)
-            ->WhereNull('articles.deleted_at')
-            ->WhereNull('article_tags.deleted_at');
-
-            $isFirst = true;
-            foreach($tagList as $tag){
-                // 最初だけand検索
-                if ($isFirst == true) {
-                    $subTable->Where('article_tags.tag_id','=',$tag);
-                    $isFirst = false;
+            ->where(function($subTable) {
+                $subTable->WhereNull('articles.deleted_at')
+                         ->WhereNull('article_tags.deleted_at')
+                         ->WhereNull('tags.deleted_at');
+            })
+            ->where(function($subTable) use($tagList) {
+                foreach($tagList as $tag){
+                    $subTable->orWhere('article_tags.tag_id','=',$tag);
                 }
-                $subTable->orWhere('article_tags.tag_id','=',$tag);
-            }
+            });
 
+            //ここの説明は別のドキュメントで
             $subTable->groupBy('articles.id')
             ->having(DB::raw('count(*)'), '=', count($tagList));
 
             //副問合せのテーブルから選択
             $query = DB::table($subTable,'sub')
-            ->select('sub.id as id','sub.title as title','sub.body as body');
+            ->select('sub.id as id','sub.title as title','sub.body as body','sub.updated_at as updated_at');
         } else {
-            $query = Article::select('id','title')
+            $query = Article::select('id','title','body')
             ->where('user_id','=',$userId)
             ->whereNull('deleted_at');
         }
@@ -151,6 +151,9 @@ class Article extends Model
         //何件目から取得するか
         $offset = $parPage*($currentPage-1);
 
+        //ソート
+        $sort = $query->orderBy('updated_at','desc');
+
         //検索
         $searchResults = $query->offset($offset)
         ->limit($parPage)
@@ -158,7 +161,7 @@ class Article extends Model
 
         return response()->json(
             [
-                "articleList" => $searchResults,
+                "articleList"  => $searchResults,
                 "pageCount"    => $pageCount
             ],
             200

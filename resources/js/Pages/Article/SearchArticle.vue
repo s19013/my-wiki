@@ -89,11 +89,14 @@ export default{
                 searchTarget:this.searchTarget
             })
             .then((res) =>{
-                this.loading = false
                 this.pageCount= res.data.pageCount
                 this.articleList = res.data.articleList
+                this.loading = false
             })
-            .catch((error) => { console.log(error); })
+            .catch((error) => {
+                console.log(error);
+                this.loading = false
+            })
         },
         async pagination(){
             this.loading = true
@@ -104,10 +107,13 @@ export default{
                 searchTarget:this.searchTarget
             })
             .then((res) =>{
-                this.loading = false
                 this.articleList = res.data.articleList
+                this.loading = false
             })
-            .catch((error) => { console.log(error); })
+            .catch((error) => {
+                console.log(error);
+                this.loading = false
+            })
         },
     },
     watch: {

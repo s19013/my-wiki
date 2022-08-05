@@ -12,7 +12,8 @@ body{
 }
 .Dialog{
     background: #e1e1e1;
-    width: 40vw;
+    max-height: 95vh;
+    width: 50vw;
     padding: 10px;
 }
 .contentsContainer{
@@ -47,4 +48,8 @@ body{
 .searchArea button{
     grid-column: 2/3;
     margin: 0 10px;
+}
+
+.v-pagination__list{
+    margin-bottom: 50px;
 }

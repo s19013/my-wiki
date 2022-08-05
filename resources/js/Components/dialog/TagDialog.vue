@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- ダイアログを呼び出すためのボタン -->
-        <v-btn class="longButton" color="submit" @click.stop="tagDialogFlagSwithch">
+        <v-btn class="longButton" color="submit" size="small" @click.stop="tagDialogFlagSwithch">
         <v-icon>mdi-tag</v-icon>
         タグ
         </v-btn>
@@ -62,7 +62,7 @@
                 <v-list
                     class="overflow-y-auto mx-auto"
                     width="100%"
-                    max-height="50vh">
+                    max-height="45vh">
 
                     <v-list-item v-for="tag of tagSearchResultList" :key="tag.id">
                         <input type="checkbox" :id="tag.id" v-model="checkedTagList" :value="{id:tag.id,name:tag.name}">
@@ -141,7 +141,7 @@ export default{
         searchOnly:{
             type:Boolean,
             default:false,
-        }
+        },
     },
     components:{loading},
     methods: {
@@ -239,9 +239,10 @@ export default{
         }
     },
     mounted() {
-        if (this.originalCheckedTag != null) {
+        // 元の記事にタグがついていなかった場合
+        if (this.originalCheckedTag != null && this.originalCheckedTag[0].id != null) {
             for (const tag of this.originalCheckedTag) {
-                    this.checkedTagList.push(tag.id)
+                    this.checkedTagList.push({id:tag.id,name:tag.name})
             }
         }
     },
@@ -256,12 +257,13 @@ export default{
         .v-list-item{
             padding:0 10px;
         }
-        label{
+    }
+    label{
             font-size: 1.5vmax;
             padding-left: 10px;
-        }
+            width: 100%;
     }
     .areaCreateNewTag{margin: 10px;}
-    .clooseButton{margin-bottom: 20px;}
+    .clooseButton{margin-bottom: 10px;}
 }
 </style>

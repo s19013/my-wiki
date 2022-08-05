@@ -65,7 +65,8 @@ export default{
                 this.articleDeleting = false
             })
             .catch((error) => {
-                this.articleDeleting = false
+                console.log(error);
+                this.articleSending = false
             })
         },
     },
@@ -84,7 +85,7 @@ textarea {
     margin-top:10px;
     margin-bottom:30px;
     padding: 10px;
-    border:black solid 1px;
+    // border:black solid 1px;
     word-break:break-word;
     overflow-wrap:normal;
 }
