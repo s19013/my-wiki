@@ -17,3 +17,7 @@ export default defineConfig({
         }),
     ],
 });
+
+module.exports = {
+    outDir: "dist"
+}
