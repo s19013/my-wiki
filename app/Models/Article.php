@@ -104,7 +104,7 @@ class Article extends Model
         if (!empty($tagList)) {
             //articleテーブルとarticle_tags,tagsを結合
             $subTable = DB::table('article_tags')
-            ->select('articles.id','articles.title','articles.body')
+            ->select('articles.id','articles.title','articles.body','articles.updated_at')
             ->leftJoin('articles','articles.id','=','article_tags.article_id')
             ->leftJoin('tags','tags.id','=','article_tags.tag_id')
             ->where('articles.user_id','=',$userId)
@@ -125,7 +125,7 @@ class Article extends Model
 
             //副問合せのテーブルから選択
             $query = DB::table($subTable,'sub')
-            ->select('sub.id as id','sub.title as title','sub.body as body');
+            ->select('sub.id as id','sub.title as title','sub.body as body','sub.updated_at as updated_at');
         } else {
             $query = Article::select('id','title','body')
             ->where('user_id','=',$userId)
@@ -150,6 +150,9 @@ class Article extends Model
 
         //何件目から取得するか
         $offset = $parPage*($currentPage-1);
+
+        //ソート
+        $sort = $query->orderBy('updated_at','desc');
 
         //検索
         $searchResults = $query->offset($offset)

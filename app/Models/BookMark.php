@@ -102,7 +102,7 @@ class BookMark extends Model
         if (!empty($tagList)) {
             //articleテーブルとarticle_tags,tagsを結合
             $subTable = DB::table('book_mark_tags')
-            ->select('book_marks.id','book_marks.title','book_marks.url')
+            ->select('book_marks.id','book_marks.title','book_marks.url','book_marks.updated_at')
             ->leftJoin('book_marks','book_marks.id','=','book_mark_tags.book_mark_id')
             ->leftJoin('tags','tags.id','=','book_mark_tags.tag_id')
             ->where('book_marks.user_id','=',$userId)
@@ -122,7 +122,7 @@ class BookMark extends Model
 
             //副問合せのテーブルから選択
             $query = DB::table($subTable,'sub')
-            ->select('sub.id as id','sub.title as title','sub.url as url');
+            ->select('sub.id as id','sub.title as title','sub.url as url','sub.updated_at as updated_at');
         } else {
             $query = BookMark::select('id','title','url')
             ->where('user_id','=',$userId)
@@ -142,6 +142,9 @@ class BookMark extends Model
 
         //何件目から取得するか
         $offset = $parPage*($currentPage-1);
+
+        //ソート
+        $sort = $query->orderBy('updated_at','desc');
 
         //検索
         $searchResults = $query->offset($offset)
