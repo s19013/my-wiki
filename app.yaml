@@ -1,0 +1,25 @@
+runtime: php81 #言語を指定する（PHP java Phython go等）
+# runtime: php814
+
+env: standard
+env_variables:
+  APP_KEY: base64:x3+8bMZMTRYXBGi44xnj3e8Q9b3Gt8sepZstnJA27r0=
+  APP_STORAGE: /tmp
+  VIEW_COMPILED_PATH: /tmp
+  SESSION_DRIVER: cookie
+
+
+instance_class: F1 #一番性能が低い28インスタンス時間
+automatic_scaling: #待機するインスタンス時間は最大一つ、3000ms超えたらインスタンス起動
+  min_idle_instances: automatic
+  max_idle_instances: 1 #待機するインスタンスは最大１つ
+  max_instances: 2
+  min_pending_latency: 3000ms #3000ms超えたらインスタンス起動
+  max_pending_latency: automatic
+
+
+
+
+
+
+
