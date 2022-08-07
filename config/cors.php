@@ -19,7 +19,8 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    // 'allowed_origins' => ['*'],
+    'allowed_origins' => ['http://34.168.7.200/'], // 本番環境用
 
     'allowed_origins_patterns' => [],
 
