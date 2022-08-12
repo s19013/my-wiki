@@ -17,6 +17,12 @@ use Auth;
 
 class TransitionController extends Controller
 {
+    //やはりここで違反処理をまとめておこう
+    //返り値booleanでtrueだったらもとの関数からリダイレクトしよう
+
+
+
+    //記事閲覧画面に遷移する時の処理
     public function transitionToViewArticle($articleId)
     {
         //削除された記事ならindexに戻す
@@ -28,18 +34,23 @@ class TransitionController extends Controller
         if ($isSamePerson == false) { return redirect()->route('SearchArticle');}
 
 
+        //記事を取り出す
         $article = Article::serveArticle(articleId:$articleId);
 
+        //記事に紐付けられたタグを取り出す
         $articleTag = ArticleTag::serveTagsRelatedToAricle(
             userId:Auth::id(),
             articleId:$articleId
         );
+
+
         return Inertia::render('Article/ViewArticle',[
             'article'    => $article,
             'articleTag' => $articleTag,
         ]);
     }
 
+    //記事編集画面に遷移する時の処理
     public function transitionToEditArticle($articleId)
     {
         //削除された記事ならindexに戻す
@@ -50,8 +61,10 @@ class TransitionController extends Controller
         $isSamePerson = Article::preventPeep(articleId:$articleId,userId:Auth::id());
         if ($isSamePerson == false) { return redirect()->route('SearchArticle'); }
 
+        //記事を取り出す
         $article = Article::serveArticle(articleId:$articleId);
 
+        //記事に紐付けられたタグを取り出す
         $articleTag = ArticleTag::serveTagsRelatedToAricle(
             userId:Auth::id(),
             articleId:$articleId
@@ -64,6 +77,7 @@ class TransitionController extends Controller
         ]);
     }
 
+    //ブックマーク編集画面に遷移する時の処理
     public function transitionToEditBookMark($bookMarkId)
     {
         //削除された記事ならindexに戻す

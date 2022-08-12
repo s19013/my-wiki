@@ -9,7 +9,7 @@ use Auth;
 
 class TagController extends Controller
 {
-    //
+    //新規タグ登録
     public function tagStore(Request $request)
     {
         // CSRFトークンを再生成して、二重送信対策
@@ -20,6 +20,7 @@ class TagController extends Controller
         );
     }
 
+    //タグ検索
     public function tagSearch(Request $request)
     {
         return Tag::search(

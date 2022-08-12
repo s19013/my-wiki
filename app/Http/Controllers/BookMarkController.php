@@ -10,7 +10,7 @@ use Auth;
 
 class BookMarkController extends Controller
 {
-    //
+    //新規ブックマーク作成
     public function bookMarkStore(Request $request)
     {
         // CSRFトークンを再生成して、二重送信対策
@@ -41,21 +41,27 @@ class BookMarkController extends Controller
         }
     }
 
+    //ブックマークの更新
     public function bookMarkUpdate(Request $request)
     {
+        // CSRFトークンを再生成して、二重送信対策
         $request->session()->regenerateToken();
 
+        //ブックマークの更新
         BookMark::updateBookMark(
             bookMarkId:$request->bookMarkId,
             title:$request->bookMarkTitle,
             url :$request->bookMarkUrl
         );
+
+        //タグの更新
         BookMarkTag::updateBookMarkTag(
             bookMarkId     :$request->bookMarkId,
             updatedTagList:$request  ->tagList,
         );
     }
 
+    //ブックマーク検索
     public function bookMarkSearch(Request $request)
     {
         return BookMark::searchBookMark(
@@ -68,7 +74,9 @@ class BookMarkController extends Controller
 
     public function bookMarkDelete(Request $request)
     {
+        // CSRFトークンを再生成して、二重送信対策
         $request->session()->regenerateToken();
+
         BookMark::deleteBookMark(bookMarkId:$request->bookMarkId);
     }
 
