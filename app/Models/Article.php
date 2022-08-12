@@ -18,6 +18,7 @@ class Article extends Model
         'body',
     ];
 
+    //新規記事登録
     public static function storeArticle($title,$body,$userId)
     {
         // タイトルが産められてなかったら日時で埋める
@@ -29,10 +30,12 @@ class Article extends Model
                 'title'    => $title,
                 'body'     => $body,
             ]);
+            //紐付けられたタグをデータベースに登録するのに記事のidが必要なのでidだけを返す
             return $article->id;
         });
     }
 
+    //記事更新
     public static function updateArticle($articleId,$title,$body)
     {
         // タイトルが産められてなかったら日時で埋める
@@ -47,6 +50,7 @@ class Article extends Model
         });
     }
 
+    //記事削除
     public static function deleteArticle($articleId)
     {
         // 論理削除
@@ -90,13 +94,15 @@ class Article extends Model
 
 
 
+    //検索する数
     public static function searchArticle($userId,$articleToSearch,$currentPage,$tagList,$searchTarget)
     {
         //一度にとってくる数
-        $parPage = 10;
+        $parPage = config('perPage');
 
         // %と_をエスケープ
         $escaped = searchToolKit::sqlEscape($articleToSearch);
+
         //and検索のために空白区切りでつくった配列を用意
         $wordListToSearch = searchToolKit::preparationToAndSearch($escaped);
 
@@ -109,6 +115,7 @@ class Article extends Model
             ->leftJoin('tags','tags.id','=','article_tags.tag_id')
             ->where('articles.user_id','=',$userId)
             ->where(function($subTable) {
+                //削除されてないものたちだけを取り出す
                 $subTable->WhereNull('articles.deleted_at')
                          ->WhereNull('article_tags.deleted_at')
                          ->WhereNull('tags.deleted_at');
@@ -127,17 +134,18 @@ class Article extends Model
             $query = DB::table($subTable,'sub')
             ->select('sub.id as id','sub.title as title','sub.body as body','sub.updated_at as updated_at');
         } else {
+            //タグ検索が不要な場合
             $query = Article::select('id','title','body')
             ->where('user_id','=',$userId)
             ->whereNull('deleted_at');
         }
 
-        // title名だけでlike検索
+        // title名だけでlike検索する場合
         if ($searchTarget == "title") {
             foreach($wordListToSearch as $word){ $query->where('title','like',"%$word%"); }
         }
 
-        // bodyだけでlike検索
+        // bodyだけでlike検索する場合
         if ($searchTarget == "body") {
             foreach($wordListToSearch as $word){ $query->where('body','like',"%$word%"); }
         }
@@ -178,7 +186,7 @@ class Article extends Model
         ->where('id','=',$articleId)
         ->first();
 
-        // 帰り値がnull->削除済みならtrue
+        // 返り値がnull->削除されている
         if ($article == null) {return true;}
         else {return false;}
     }

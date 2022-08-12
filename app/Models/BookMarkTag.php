@@ -16,6 +16,7 @@ class BookMarkTag extends Model
         'tag_id',
     ];
 
+    //ブックマークに紐付けらたタグを登録
     public static function storeBookMarkTag($tagId,$bookMarkId)
     {
         DB::transaction(function () use($tagId,$bookMarkId){
@@ -26,6 +27,7 @@ class BookMarkTag extends Model
         });
     }
 
+    //ブックマークからはずされたタグを削除
     public static function deleteBookMarkTag($tagId,$bookMarkId)
     {
         DB::transaction(function () use($tagId,$bookMarkId){
@@ -35,6 +37,7 @@ class BookMarkTag extends Model
         });
     }
 
+    //ブックマークに紐付けられているタグを更新
     public static function updateBookMarkTag($bookMarkId,$updatedTagList)
     {
 
@@ -85,10 +88,10 @@ class BookMarkTag extends Model
             }
         }
 
-        // 元のデータに何かしらのタグがつけられていてが
-        // 紐付けられていたタグすべて削除されていた場合
-        // tag_id = nullのデータをついか
+        // 紐付けられていたタグすべて削除されたのならtag_id = nullのデータをついか
+        // もともとブックマークにタグがついていたか確認
         if ($original[0]->original["tag_id"] != null) {
+            //もともとついていたタグがすべてはずされたか確認
             $isAllDeleted = array_diff($originalTagList,$deletedTagList);
             if (empty($isAllDeleted)) {
                 BookMarkTag::storeBookMarkTag(
