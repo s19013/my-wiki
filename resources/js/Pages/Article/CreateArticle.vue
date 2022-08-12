@@ -88,14 +88,16 @@ export default {
     methods: {
         compiledMarkdown() {return marked(this.articleBody)},
         changeTab(num){this.activeTab = num},
-        // 本文送信
+        // 本文送信前のチェック
         submitCheck:_.debounce(_.throttle(async function(){
+            //本文が空だったらエラーだして送信しない
             if (this.articleBody =='') {
                 this.articleBodyErrorFlag = true
                 return
             }
             else {this.submit()}
         },100),150),
+        // 本文送信
         submit(){
             this.articleSending = true
             axios.post('/api/article/store',{
@@ -106,15 +108,13 @@ export default {
             })
             .then((res)=>{
                 this.$inertia.get('/Article/Search')
-                this.articleSending = false
             })
             .catch((error) => {
                 console.log(error);
-                this.articleSending = false
             })
+            this.articleSending = false
         },
         deleteArticle() {
-            // 消す処理
 
             //遷移
             this.$inertia.get('/Article/Search')

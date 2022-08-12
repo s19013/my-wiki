@@ -34,7 +34,9 @@ export default {
         }
     },
     methods: {
+        //切り替え
         deleteDialogFlagSwitch(){this.deleteDialogFlag = !this.deleteDialogFlag},
+        //ダイアログ内の削除するボタンを押したことを親に伝える
         deleteAricle(){this.$emit("deleteAricleTrigger");}
     },
 }

@@ -35,6 +35,7 @@
                     </v-btn>
                 </div>
 
+                <!-- 操作ボタン -->
                 <div>
                     <v-row>
                         <v-col cols="3">
@@ -180,8 +181,10 @@ export default{
         },
         // タグ検索
         searchTag:_.debounce(_.throttle(async function(){
+
             this.tagSerchLoading = true
             this.tagSearchResultList = []
+
             await axios.post('/api/tag/search',{
                 tag:this.tagToSearch
             })
