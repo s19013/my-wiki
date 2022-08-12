@@ -60,39 +60,14 @@ class Article extends Model
         });
     }
 
-    //viewAricle用に指定された記事だけを取ってくる
+    //指定された記事だけを取ってくる
+    //閲覧画面,編集画面で使う
     public static function serveArticle($articleId)
     {
         return Article::select('id','title','body')
         ->Where('id','=',$articleId)
         ->first();
     }
-
-    public static function serveUserAllArticle($userId)
-    {
-        // まずはユーザーで絞った表を作る
-        // whereで探すか副問合せで表を作るかどっちがよいか
-        // 削除されていない記事を取って来る
-        // 記事だからcategory = 2
-
-        // whereの優先順位
-        // 削除されてない､category=2,ログインユーザー = user_id
-
-        $userTable = Article::select('id','title','body')
-        -> WhereNull('deleted_at')
-        -> where('user_id','=',$userId)
-        -> orderBy('updated_at', 'desc')
-        -> paginate(5);
-        return $userTable;
-
-
-        // return Article::select('id','title','body')
-        // ->leftJoin('article_tags','articles.id','=', 'article_tags.article_id')
-        // ->leftJoin('tags','article_tags.tag_id', '=' ,'tags.id')
-        // ->get();
-    }
-
-
 
     //検索する数
     public static function searchArticle($userId,$articleToSearch,$currentPage,$tagList,$searchTarget)

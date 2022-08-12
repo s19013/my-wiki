@@ -17,15 +17,6 @@ class Tag extends Model
         'user_id',
     ];
 
-
-    public static function getUserAllTag($userId)
-    {
-        return Tag::select('id','name')
-        ->where('user_id','=',$userId)
-        ->orderBy('name')
-        ->get();
-    }
-
     //新規タグ登録
     public static function store($userId,$tag)
     {
@@ -54,15 +45,6 @@ class Tag extends Model
             ["message" => "stored"],
             200
         );
-    }
-
-    public static function serveAddedTag($userId)
-    {
-        // 一番新しく追加したタグだけを取り出す
-        return Tag::select('id','name')
-        ->where('user_id','=',$userId)
-        ->orderBy('created_at', 'desc')
-        ->first();
     }
 
     //タグを検索する

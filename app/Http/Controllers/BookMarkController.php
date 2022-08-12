@@ -80,12 +80,6 @@ class BookMarkController extends Controller
         BookMark::deleteBookMark(bookMarkId:$request->bookMarkId);
     }
 
-    public function serveUserAllBookMark(Request $request)
-    {
-        // タグと記事は別々?
-        return BookMark::serveUserAllBookMark(userId:Auth::id());
-    }
-
     // 編集か新規かを分ける
     // public function DetermineProcessing(Request $request)
     // {

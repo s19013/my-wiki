@@ -70,14 +70,6 @@ class ArticleController extends Controller
         Article::deleteArticle(articleId:$request->articleId);
     }
 
-
-
-    public function serveUserAllArticle(Request $request)
-    {
-        // タグと記事は別々?
-        return Article::serveUserAllArticle(userId:Auth::id());
-    }
-
     //記事検索
     public function articleSearch(Request $request)
     {
