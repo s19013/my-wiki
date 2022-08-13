@@ -72,6 +72,8 @@ class Article extends Model
     //検索する数
     public static function searchArticle($userId,$articleToSearch,$currentPage,$tagList,$searchTarget)
     {
+        //ページネーションをする
+
         //一度にとってくる数
         $parPage = (int)config('app.parPage');
 

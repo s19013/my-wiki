@@ -70,6 +70,8 @@ class BookMark extends Model
 
     public static function searchBookMark($userId,$bookMarkToSearch,$currentPage,$tagList)
     {
+        //ページネーションをする
+
         //一度にとってくる数
         $parPage = (int)config('app.parPage');
 
