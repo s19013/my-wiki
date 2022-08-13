@@ -50,6 +50,7 @@
                         </v-col>
                         <v-col cols="3"></v-col>
                         <v-col cols="6">
+                            <!-- この部分を既存チェックボックスという -->
                             <input type="checkbox" id="checked" v-model="onlyCheckedFlag">
                             <label for="checked">チェックがついているタグだけを表示</label>
                         </v-col>
@@ -132,7 +133,7 @@ export default{
         // tagList
         checkedTagList:[],
         tagSearchResultList:[],
-        allTagList:[],//キャッシュ チェックがついているチェックボックスのつけ外しで使う
+        tagListCash:[],//キャッシュ 既存チェックボックスのつけ外しで使う
       }
     },
     props:{
@@ -194,11 +195,12 @@ export default{
             //ローディングアニメ開始
             this.tagSerchLoading = true
 
-            //配列初期化
-            this.tagSearchResultList = []
-
-            //チェックがついているタグだけを表示するチェックを外す
+            //既存チェックボックスのチェックを外す
             this.onlyCheckedFlag = false
+
+            //配列,キャッシュ初期化
+            this.tagSearchResultList = []
+            this.tagListCash = []//キャッシュをクリアするのは既存チェックボックスを外す時に出てくるバグを防ぐため
 
             await axios.post('/api/tag/search',{
                 tag:this.tagToSearch
@@ -211,7 +213,7 @@ export default{
                     })
                 }
                 //キャッシュにコピー
-                this.allTagList = [...this.tagSearchResultList]
+                this.tagListCash = [...this.tagSearchResultList]
                 //ローディングアニメ解除
                 this.tagSerchLoading = false
             })
@@ -252,14 +254,15 @@ export default{
     },
     watch:{
         onlyCheckedFlag:function(){
+            //チェックをつけた場合
             if (this.onlyCheckedFlag == true) {
                 //チェックがついているタグだけを表示
-                 this.tagSearchResultList = this.checkedTagList
+                this.tagSearchResultList = this.checkedTagList
             }
             else if (this.onlyCheckedFlag == false && this.tagDialogFlag == true) {
                 //全タグのキャッシュに置き換える
                 //参照元を変えるだけなので読み込みが早い
-                this.tagSearchResultList = this.allTagList
+                this.tagSearchResultList = this.tagListCash
             }
         }
     },
