@@ -40,9 +40,7 @@ class ArticleTag extends Model
     //記事に紐付けられているタグを更新
     public static function updateAricleTag($articleId,$updatedTagList)
     {
-
-        // 消された､追加されたを確認する
-        $originalTagList = [];
+        $originalTagList = []; //元データに紐付けられていたタグを入れるリスト
 
         // 更新前の記事に紐付けられていたタグを取得
         $original = ArticleTag::select('tag_id')

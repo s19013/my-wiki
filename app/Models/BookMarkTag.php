@@ -40,9 +40,7 @@ class BookMarkTag extends Model
     //ブックマークに紐付けられているタグを更新
     public static function updateBookMarkTag($bookMarkId,$updatedTagList)
     {
-
-        // 消された､追加されたを確認する
-        $originalTagList = [];
+        $originalTagList = []; //元データに紐付けられていたタグを入れるリスト
 
         // もとのタグを確認する
         $original = BookMarkTag::select('tag_id')
