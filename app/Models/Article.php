@@ -153,11 +153,10 @@ class Article extends Model
         );
     }
 
-    // 削除済みか確かめる
+    // 削除済みかどうか確かめる
     public static function checkArticleDeleted($articleId)
     {
         //削除されていないなら 記事のデータが帰ってくるはず
-        //つまり帰り値がnullなら削除済みということ
         $article = Article::select('id')
         ->whereNull('deleted_at')
         ->where('id','=',$articleId)
@@ -177,7 +176,8 @@ class Article extends Model
         ->first();
 
         //記事に紐づけられているuserIdとログイン中のユーザーのidを比較する
-        // falseなら他人のを覗こうとしている
-        return ($article->original['user_id']) == $userId ;
+        // true :自分のを覗こうとしている
+        // false:他人のを覗こうとしている
+        return ($article->original['user_id']) == $userId;
     }
 }
