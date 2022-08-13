@@ -71,7 +71,7 @@ class BookMark extends Model
     public static function searchBookMark($userId,$bookMarkToSearch,$currentPage,$tagList)
     {
         //一度にとってくる数
-        $parPage = config('perPage');
+        $parPage = (int)config('app.parPage');
 
         // %と_をエスケープ
         $escaped = searchToolKit::sqlEscape($bookMarkToSearch);
