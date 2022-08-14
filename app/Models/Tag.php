@@ -17,14 +17,7 @@ class Tag extends Model
         'user_id',
     ];
 
-    public static function getUserAllTag($userId)
-    {
-        return Tag::select('id','name')
-        ->where('user_id','=',$userId)
-        ->orderBy('name')
-        ->get();
-    }
-
+    //新規タグ登録
     public static function store($userId,$tag)
     {
         // ログインユーザーが既に登録していないか確かめる
@@ -40,7 +33,7 @@ class Tag extends Model
             );
         }
 
-        // 保存する
+        // かぶってなかったら保存する
         DB::transaction(function () use($userId,$tag){
             Tag::create([
                 'user_id' => $userId,
@@ -54,15 +47,7 @@ class Tag extends Model
         );
     }
 
-    public static function serveAddedTag($userId)
-    {
-        // 一番新しく追加したタグだけを取り出す
-        return Tag::select('id','name')
-        ->where('user_id','=',$userId)
-        ->orderBy('created_at', 'desc')
-        ->first();
-    }
-
+    //タグを検索する
     public static function search($userId,$tag)
     {
         // %と_をエスケープ

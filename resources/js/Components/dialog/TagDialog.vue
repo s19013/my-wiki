@@ -35,6 +35,7 @@
                     </v-btn>
                 </div>
 
+                <!-- 操作ボタン -->
                 <div>
                     <v-row>
                         <v-col cols="3">
@@ -49,6 +50,7 @@
                         </v-col>
                         <v-col cols="3"></v-col>
                         <v-col cols="6">
+                            <!-- この部分を既存チェックボックスという -->
                             <input type="checkbox" id="checked" v-model="onlyCheckedFlag">
                             <label for="checked">チェックがついているタグだけを表示</label>
                         </v-col>
@@ -130,22 +132,25 @@ export default{
 
         // tagList
         checkedTagList:[],
-        tagSearchResultList:[]
+        tagSearchResultList:[],
+        tagListCash:[],//キャッシュ 既存チェックボックスのつけ外しで使う
       }
     },
     props:{
         originalCheckedTag:{
+            //更新や閲覧画面で既にチェックがついているタグを受け取るため
             type:Array,
             default:null
         },
         searchOnly:{
+            //記事検索などでは新規作成を表示させないようにするため
             type:Boolean,
             default:false,
         },
     },
     components:{loading},
     methods: {
-        // 新規タグ作成
+        //エラーチェック
         createNewTagCheck:_.debounce(_.throttle(async function(){
             if (this.newTag == '') {
                 this.newTagErrorFlag = true
@@ -153,19 +158,24 @@ export default{
             }
             else {this.createNewTag()}
         },100),150),
+        // 新規タグ作成
         createNewTag(){
+            //ローディングアニメ開始
             this.newTagSending = true
+
             axios.post('/api/tag/store',{
                 tag   :this.newTag
             })
             .then((res)=>{
                 // 読み込み直し
-                this.tagToSearch = ''
                 this.searchTag()
-                // this.getAddedTag()
+
                 // 入力欄を消す
                 this.createNewTagFlag=false
                 this.newTag=''
+
+                //検索欄をリセット
+                this.tagToSearch = ''
 
                 //エラーを消す
                 this.tagAlreadyExistsErrorFlag = false
@@ -176,12 +186,22 @@ export default{
                 // ダブりエラー
                 if (error.response.status == 400) { this.tagAlreadyExistsErrorFlag = true }
             })
+            //ローディングアニメ解除
             this.newTagSending = false
         },
         // タグ検索
         searchTag:_.debounce(_.throttle(async function(){
+
+            //ローディングアニメ開始
             this.tagSerchLoading = true
+
+            //既存チェックボックスのチェックを外す
+            this.onlyCheckedFlag = false
+
+            //配列,キャッシュ初期化
             this.tagSearchResultList = []
+            this.tagListCash = []//キャッシュをクリアするのは既存チェックボックスを外す時に出てくるバグを防ぐため
+
             await axios.post('/api/tag/search',{
                 tag:this.tagToSearch
             })
@@ -192,6 +212,9 @@ export default{
                         name:tag.name
                     })
                 }
+                //キャッシュにコピー
+                this.tagListCash = [...this.tagSearchResultList]
+                //ローディングアニメ解除
                 this.tagSerchLoading = false
             })
         },100),150),
@@ -231,10 +254,15 @@ export default{
     },
     watch:{
         onlyCheckedFlag:function(){
-            //チェックがついているタグだけを表示
-            if (this.onlyCheckedFlag == true) { this.tagSearchResultList = this.checkedTagList }
+            //チェックをつけた場合
+            if (this.onlyCheckedFlag == true) {
+                //チェックがついているタグだけを表示
+                this.tagSearchResultList = this.checkedTagList
+            }
             else if (this.onlyCheckedFlag == false && this.tagDialogFlag == true) {
-                this.searchTag()
+                //全タグのキャッシュに置き換える
+                //参照元を変えるだけなので読み込みが早い
+                this.tagSearchResultList = this.tagListCash
             }
         }
     },

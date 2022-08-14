@@ -18,6 +18,7 @@ class BookMark extends Model
         'url',
     ];
 
+    //新規ブックマーク作成
     public static function storeBookMark($title,$url,$userId)
     {
         // タイトルが産められてなかったら日時で埋める
@@ -33,6 +34,7 @@ class BookMark extends Model
         });
     }
 
+    //ブックマーク更新
     public static function updateBookMark($bookMarkId,$title,$url)
     {
         // タイトルが産められてなかったら日時で埋める
@@ -47,6 +49,7 @@ class BookMark extends Model
         });
     }
 
+    //ブックマーク削除
     public static function deleteBookMark($bookMarkId)
     {
         // 論理削除
@@ -56,7 +59,8 @@ class BookMark extends Model
         });
     }
 
-    //viewAricle用に指定された記事だけを取ってくる
+    //指定された記事だけを取ってくる
+    //編集画面で使う
     public static function serveBookMark($bookMarkId)
     {
         return BookMark::select('id','title','url')
@@ -64,34 +68,12 @@ class BookMark extends Model
         ->first();
     }
 
-    public static function serveUserAllBookMark($userId)
-    {
-        // まずはユーザーで絞った表を作る
-        // whereで探すか副問合せで表を作るかどっちがよいか
-        // 削除されていない記事を取って来る
-        // 記事だからcategory = 2
-
-        // whereの優先順位
-        // 削除されてない､category=2,ログインユーザー = user_id
-
-        $userTable = BookMark::select('id','title','url')
-        -> WhereNull('deleted_at')
-        -> where('user_id','=',$userId)
-        -> orderBy('updated_at', 'desc')
-        -> paginate(5);
-        return $userTable;
-
-
-        // return BookMark::select('id','title','url')
-        // ->leftJoin('article_tags','articles.id','=', 'article_tags.article_id')
-        // ->leftJoin('tags','article_tags.tag_id', '=' ,'tags.id')
-        // ->get();
-    }
-
     public static function searchBookMark($userId,$bookMarkToSearch,$currentPage,$tagList)
     {
+        //ページネーションをする
+
         //一度にとってくる数
-        $parPage = 10;
+        $parPage = (int)config('app.parPage');
 
         // %と_をエスケープ
         $escaped = searchToolKit::sqlEscape($bookMarkToSearch);

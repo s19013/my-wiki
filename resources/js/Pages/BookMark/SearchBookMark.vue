@@ -90,6 +90,7 @@ export default{
                 this.loading = false
             })
         },
+        // ページめくり
         async pagination(){
             this.loading = true
             await axios.post('/api/bookmark/search',{

@@ -10,7 +10,7 @@ use Auth;
 
 class ArticleController extends Controller
 {
-
+    //新規記事作成
     public function articleStore(Request $request)
     {
         // CSRFトークンを再生成して、二重送信対策
@@ -41,33 +41,36 @@ class ArticleController extends Controller
         }
     }
 
+    //記事更新
     public function aricleUpdate(Request $request)
     {
+        // CSRFトークンを再生成して、二重送信対策
         $request->session()->regenerateToken();
 
+        // 記事更新
         Article::updateArticle(
             articleId:$request->articleId,
             title:$request->articleTitle,
             body :$request->articleBody
         );
+
+        //タグ更新
         ArticleTag::updateAricleTag(
             articleId     :$request->articleId,
             updatedTagList:$request->tagList,
         );
     }
 
+    //記事削除
     public function articleDelete(Request $request)
     {
+        // CSRFトークンを再生成して、二重送信対策
         $request->session()->regenerateToken();
+
         Article::deleteArticle(articleId:$request->articleId);
     }
 
-    public function serveUserAllArticle(Request $request)
-    {
-        // タグと記事は別々?
-        return Article::serveUserAllArticle(userId:Auth::id());
-    }
-
+    //記事検索
     public function articleSearch(Request $request)
     {
         return Article::searchArticle(

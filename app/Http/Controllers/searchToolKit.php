@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 class searchToolKit extends Controller
 {
+    //sqlでlike検索する前にするエスケープ処理
     public static function sqlEscape($arg)
     {
         // %と_をエスケープ
@@ -22,6 +23,7 @@ class searchToolKit extends Controller
         return $escaped;
     }
 
+    //and検索できるように空白で区切って､配列にする
     public static function preparationToAndSearch($arg)
     {
         // 全角スペースを半角に変換

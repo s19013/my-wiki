@@ -16,6 +16,7 @@ class ArticleTag extends Model
         'tag_id',
     ];
 
+    //記事に紐付けらたタグを登録
     public static function storeArticleTag($tagId,$articleId)
     {
         DB::transaction(function () use($tagId,$articleId){
@@ -26,6 +27,7 @@ class ArticleTag extends Model
         });
     }
 
+    //記事からはずされたタグを削除
     public static function deleteArticleTag($tagId,$articleId)
     {
         DB::transaction(function () use($tagId,$articleId){
@@ -35,11 +37,10 @@ class ArticleTag extends Model
         });
     }
 
+    //記事に紐付けられているタグを更新
     public static function updateAricleTag($articleId,$updatedTagList)
     {
-
-        // 消された､追加されたを確認する
-        $originalTagList = [];
+        $originalTagList = []; //元データに紐付けられていたタグを入れるリスト
 
         // 更新前の記事に紐付けられていたタグを取得
         $original = ArticleTag::select('tag_id')
@@ -87,9 +88,10 @@ class ArticleTag extends Model
             }
         }
 
-        // 紐付けられていたタグすべて削除されていたか
-        // すべて削除されたのならtag_id = nullのデータをついか
+        // 紐付けられていたタグすべて削除されたのならtag_id = nullのデータをついか
+        // もともと記事にタグがついていたか確認
         if ($original[0]->original["tag_id"] != null) {
+            //もともとついていたタグがすべてはずされたか確認
             $isAllDeleted = array_diff($originalTagList,$deletedTagList);
             if (empty($isAllDeleted)) {
                 ArticleTag::storeArticleTag(
