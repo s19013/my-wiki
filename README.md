@@ -7,58 +7,119 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+# my-wiki
+## リンク
+http://35.230.90.39/
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 概要
+ブックマークや記事をタグをつけて保存する｡
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 使った技術
+* php
+* laravel
+* vue.js
+* javascript
+* html
+* css
+* gcp
+* computer engine
+* apach
+* mariaDB
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 制作背景
+laravelとvueを組み合わせた何かを作りたかった｡  
+chromeのブックマーク機能に不満があった｡  
 
-## Learning Laravel
+## 実装した大まかな機能
+* ユーザー登録
+* ログイン
+* ログアウト
+* ブックマーク
+    * 作成
+    * 検索
+    * 編集
+* 記事
+    * 作成
+    * 検索
+    * 閲覧
+    * 編集
+* タグ
+    * 作成
+    * 検索
+    * 編集
+## 苦労したところ
+* デプロイはまだなれていない
+* タグで絞り込み検索する時のsql文
+* spa認証の実装
+* ''の中は自動補完がきかないのでミスが多々あった
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 反省
+* inertiaのいいところを活かせていないと思う
+* git commitの頻度が低くてctrl+zを連打するような場面が多かった
+* 頭に入っている情報が断片的だとわかった｡もう一度技術書や学習サイトなどで体型的に学び治す必要がある
+* transitionが全体的にわからない
+* それなりに計画は立てていたが結局行き当たりばったりになった
+* あれが必要､これが必要と後になってわかって出戻りが多々あった
+* 苦労というよりは時間がかかってしまったことがきになる
+* .envは初期はgitで追跡されないが追跡しないといつどこを変えたかわからなくなるので追跡させたほうが良いかもしれない
+* inertiaを今回で初めて触ったのでinertiaを理解するところ
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 理解が曖昧なところ
+* viteの設定
+* spa認証
+* .envの書き方
+* inertia
+* apache
+* セキュリティ
 
-## Laravel Sponsors
+## 今後追加(改善)したい機能
+* 見た目
+    * スマホに対応させる
+* 記事､ブックマーク登録､編集
+    * よくよく考えればブックマークを保存する時,urlの前後の空白を消さなくてはならない(正規表現で消せば良いと思う)
+    * fromを正しく使う
+    * vueのバリデーションを正しく使う
+    * 記事の登録はapi通信でなくても良いと思うので修正
+    * markedでは機能が不十分に感じるので他のパッケージを探す
+        * 引用の書き方が反映されない
+* 記事やブックマークの検索
+    * 検索オプション追加
+    * 日時で絞り込む
+    * ならびえ
+    * 記事検索で本文の最初1行だけ表示されるようにする(パフォーマンスと相談)
+    * 検索などで何もヒットしなかった時のメッセージを表示させる
+    * pagination Postにする必要はなかった
+    * タグなしのブックマーク､記事を検索できるように
+* その他
+    * たまにスクロールバーがあらわないバグ
+    * apiで通信する必要がないのにapi通信しているのでそこを治す
+    * コンポーネント化できそうなものが多いのでコンポーネント化する
+    * テスト系のコードを書いて見る(assert()とかphpunitとかを使えばよいらしい?)
+    * `cron`やシェルスクリプトを使ってデータベースの定期自動バックアップを取りたい
+    * `https`化する
+    * ほぼ同じことしてる部分があるのでまとめてしまいたいという気持ちもあるが帰って読みにくいコードになるのではないか?
+    * transitionContorollerをarticleとbookmarkで分ける
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## faq
+Q:laravelを使った理由は?
+A:現段階でサーバーサイド言語でまともに使える言語がphpしかなかったため｡
+  rubyよりもlaravelを採用している会社が若干多かったため
 
-### Premium Partners
+Q:vueを採用した理由は?
+A:laravelと組み合わせて開発されることが多いため
+  reactよりも難易度が低いらしいため
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+Q:gcpを採用した理由は?
+A:awsもしくは､gcpを採用している会社が多く､awsは前回使ったので今回はgcpを使って見ようと思った｡
 
-## Contributing
+Q:spa認証を採用した理由は?
+A:トークンを発行せず､クッキーを使って通信するのでこちらのほうが簡単ではと考えたから｡
+スマホアプリを作る予定はないため
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Q:独自ドメインを設定していない理由は
+A:お金がかかるから
 
-## Code of Conduct
+Q:awsとqcpの両方を使ってみた感想は?
+A:※一部機能の一部しか触ってない人間の意見として聞いて頂きたい
+  awsにはlight sailというあらかじめlamp環境が用意されているサービスがあるためお手軽さはawsの方が上かもしれない
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
