@@ -17,7 +17,11 @@ http://35.230.90.39/
 ## 使った技術
 * php
 * laravel
+* laravel breeze
+* laravel sanctum
 * vue.js
+* vuetify
+* inertia
 * javascript
 * html
 * css
