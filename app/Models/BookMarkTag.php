@@ -118,6 +118,7 @@ class BookMarkTag extends Model
         ->leftJoin(DB::raw('('.$subTagTable.') AS sub_tags'),'book_mark_tags.tag_id','=','sub_tags.id')
         ->WhereNull('book_mark_tags.deleted_at') // 記事からはずされていないタグのみを取得
         ->Where('book_mark_tags.book_mark_id','=',':$bookMarkId')
+        ->orderBy('name')
         ->setBindings([
             ':$userId'   => $userId,
             ':$bookMarkId'=> $bookMarkId
