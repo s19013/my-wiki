@@ -35,7 +35,12 @@
                     <v-col><p class="error articleError" v-if="articleBodyErrorFlag">本文を入力してください</p></v-col>
 
                     <!-- タグ -->
-                    <v-col cols="2"><TagDialog ref="tagDialog" :originalCheckedTag="originalCheckedTag"></TagDialog></v-col>
+                    <v-col cols="2">
+                        <TagDialog ref="tagDialog"
+                            :originalCheckedTagList="originalCheckedTagList"
+                            @closedTagDialog       ="updateCheckedTagList"
+                        ></TagDialog>
+                    </v-col>
 
                 </v-row>
                 <!-- md入力欄  -->
@@ -49,6 +54,7 @@
                 </div>
                 <div v-show="activeTab === 1" class="markdown" v-html="compiledMarkdown()"></div>
             </v-form>
+            <TagList :tagList="checkedTagList"/>
         </section>
         <!-- 送信中に表示 -->
         <loadingDialog :loadingFlag="articleSending"></loadingDialog>
@@ -59,6 +65,7 @@
 <script>
 import {marked} from 'marked';
 import TagDialog from '@/Components/dialog/TagDialog.vue';
+import TagList from '@/Components/TagList.vue';
 import DeleteAlertComponent from '@/Components/dialog/DeleteAlertDialog.vue';
 import loadingDialog from '@/Components/loading/loadingDialog.vue';
 import BaseLayout from '@/Layouts/BaseLayout.vue'
@@ -70,6 +77,7 @@ export default {
         activeTab:0,
         articleTitle:'',
         articleBody: '',
+        checkedTagList:[],
 
         //loding
         articleLoding :false,
@@ -79,16 +87,18 @@ export default {
         articleBodyErrorFlag:false,
       }
     },
-    props:['originalArticle','originalCheckedTag'],
+    props:['originalArticle','originalCheckedTagList'],
     components:{
         DeleteAlertComponent,
         TagDialog,
+        TagList,
         loadingDialog,
         BaseLayout,
     },
     methods: {
         compiledMarkdown() {return marked(this.articleBody)},
         changeTab(num){this.activeTab = num},
+        updateCheckedTagList (list) { this.checkedTagList = list },
         // 本文送信
         submitCheck:_.debounce(_.throttle(async function(){
             if (this.articleBody =='') {
@@ -128,6 +138,7 @@ export default {
     mounted() {
         this.articleTitle = this.originalArticle.title
         this.articleBody  = this.originalArticle.body
+        this.checkedTagList = this.originalCheckedTagList
     },
 }
 </script>

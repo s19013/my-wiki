@@ -35,7 +35,12 @@
                     <v-col><p class="error articleError" v-if="articleBodyErrorFlag">本文を入力してください</p></v-col>
 
                     <!-- タグ -->
-                    <v-col cols="2"><TagDialog ref="tagDialog" :originalCheckedTag=null></TagDialog></v-col>
+                    <v-col cols="2">
+                        <TagDialog ref="tagDialog"
+                            :originalCheckedTag=null
+                            @closedTagDialog="updateCheckedTagList"
+                            />
+                    </v-col>
 
                 </v-row>
                 <!-- md入力欄  -->
@@ -49,6 +54,7 @@
                 </div>
                 <div v-show="activeTab === 1" class="markdown" v-html="compiledMarkdown()"></div>
             </v-form>
+            <TagList :tagList="checkedTagList"/>
         </section>
         <!-- 送信中に表示 -->
         <loadingDialog :loadingFlag="articleSending"></loadingDialog>
@@ -59,6 +65,7 @@
 <script>
 import {marked} from 'marked';
 import TagDialog from '@/Components/dialog/TagDialog.vue';
+import TagList from '@/Components/TagList.vue';
 import DeleteAlertComponent from '@/Components/dialog/DeleteAlertDialog.vue';
 import loadingDialog from '@/Components/loading/loadingDialog.vue';
 import BaseLayout from '@/Layouts/BaseLayout.vue'
@@ -69,7 +76,8 @@ export default {
       return {
         activeTab:0,
         articleTitle:'',
-        articleBody: '',
+        articleBody :'',
+        checkedTagList:[],
 
         //loding
         articleLoding :false,
@@ -82,11 +90,13 @@ export default {
     components:{
         DeleteAlertComponent,
         TagDialog,
+        TagList,
         loadingDialog,
         BaseLayout,
     },
     methods: {
         compiledMarkdown() {return marked(this.articleBody)},
+        updateCheckedTagList (list) { this.checkedTagList = list },
         changeTab(num){this.activeTab = num},
         // 本文送信前のチェック
         submitCheck:_.debounce(_.throttle(async function(){
@@ -101,7 +111,6 @@ export default {
         submit(){
             this.articleSending = true
             axios.post('/api/article/store',{
-                // articleId:0,
                 articleTitle:this.articleTitle,
                 articleBody:this.articleBody,
                 tagList:this.$refs.tagDialog.serveCheckedTagListToParent()

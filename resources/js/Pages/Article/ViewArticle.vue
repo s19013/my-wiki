@@ -21,12 +21,7 @@
                 <div class="markdown" v-html="compiledMarkdown()"></div>
 
                 <!-- タブ -->
-                <div class="tab">
-                    <p><v-icon>mdi-tag</v-icon> つけたタグ</p>
-                    <ul >
-                        <li v-for="tag of articleTag" :key="tag">{{tag.name}}</li>
-                    </ul>
-                </div>
+                <TagList :tagList="articleTag"/>
         </section>
         <loadingDialog :loadingFlag="articleDeleting"></loadingDialog>
     </BaseLayout>
@@ -36,9 +31,12 @@
 import {marked} from 'marked';
 import DeleteAlertComponent from '@/Components/dialog/DeleteAlertDialog.vue';
 import loadingDialog from '@/Components/loading/loadingDialog.vue';
+import TagList from '@/Components/TagList.vue';
 import BaseLayout from '@/Layouts/BaseLayout.vue'
 import { Link } from '@inertiajs/inertia-vue3';
 import axios from 'axios'
+
+
 export default{
     data() {
       return {
@@ -48,11 +46,12 @@ export default{
     },
     props:['article','articleTag'],
     components:{
-        DeleteAlertComponent,
-        loadingDialog,
-        BaseLayout,
-        Link
-    },
+    DeleteAlertComponent,
+    loadingDialog,
+    TagList,
+    BaseLayout,
+    Link,
+},
     methods: {
         compiledMarkdown() {return marked(this.article.body)},
         deleteArticle() {
