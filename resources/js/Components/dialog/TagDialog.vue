@@ -14,7 +14,7 @@
 
             <section class="Dialog tagDialog">
                 <div class="clooseButton">
-                    <v-btn color="#E57373" size="small" elevation="2" @click.stop="tagDialogFlagSwithch()">
+                    <v-btn color="#E57373" size="small" elevation="2" @click.stop="closeTagDialog()">
                         <v-icon
                         >mdi-close-box</v-icon>閉じる
                     </v-btn>
@@ -241,6 +241,16 @@ export default{
 
             //開くときは全部取得した状態に
             if (this.tagDialogFlag == true) { this.searchTag() }
+        },
+        closeTagDialog(){ //閉じる時用
+            this.tagDialogFlagSwithch()
+            this.checkedTagList = this.checkedTagList.sort(this.sortArrayByName)
+            this.$emit('closedTagDialog',this.checkedTagList)
+        },
+        sortArrayByName(x, y){
+            if (x.name < y.name) {return -1;}
+            if (x.name > y.name) {return 1;}
+            return 0;
         },
         //親にチェックリストを渡す
         serveCheckedTagListToParent(){
