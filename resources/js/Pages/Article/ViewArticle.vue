@@ -21,7 +21,7 @@
                 <div class="markdown" v-html="compiledMarkdown()"></div>
 
                 <!-- タブ -->
-                <TagList :tagList="articleTag"/>
+                <TagList :tagList="articleTagList"/>
         </section>
         <loadingDialog :loadingFlag="articleDeleting"></loadingDialog>
     </BaseLayout>
@@ -44,7 +44,7 @@ export default{
         articleDeleting:false,
       }
     },
-    props:['article','articleTag'],
+    props:['article','articleTagList'],
     components:{
     DeleteAlertComponent,
     loadingDialog,
