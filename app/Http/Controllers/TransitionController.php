@@ -72,7 +72,7 @@ class TransitionController extends Controller
 
 
         return Inertia::render('Article/EditArticle',[
-            'originalArticle'     => $article,
+            'originalArticle'        => $article,
             'originalCheckedTagList' => $articleTag,
         ]);
     }
@@ -97,7 +97,7 @@ class TransitionController extends Controller
 
 
         return Inertia::render('BookMark/EditBookMark',[
-            'originalBookMark'     => $bookMark,
+            'originalBookMark'         => $bookMark,
             'originalCheckedTagList'   => $bookMarkTag,
         ]);
     }
