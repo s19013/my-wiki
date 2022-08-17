@@ -26,7 +26,7 @@ class BookMarkController extends Controller
         // なんのタグも設定されていない時
         if (empty($request->tagList) == true) {
             BookMarkTag::storeBookMarkTag(
-                tagId     : null,
+                tagId      : null,
                 bookMarkId : $bookMarkId,
             );
         }
@@ -34,7 +34,7 @@ class BookMarkController extends Controller
         else {
             foreach($request->tagList as $tagId){
                 BookMarkTag::storeBookMarkTag(
-                    tagId     : $tagId,
+                    tagId      : $tagId,
                     bookMarkId : $bookMarkId,
                 );
             }
@@ -51,13 +51,13 @@ class BookMarkController extends Controller
         BookMark::updateBookMark(
             bookMarkId:$request->bookMarkId,
             title:$request->bookMarkTitle,
-            url :$request->bookMarkUrl
+            url  :$request->bookMarkUrl
         );
 
         //タグの更新
         BookMarkTag::updateBookMarkTag(
             bookMarkId     :$request->bookMarkId,
-            updatedTagList:$request  ->tagList,
+            updatedTagList :$request->tagList,
         );
     }
 
@@ -68,7 +68,7 @@ class BookMarkController extends Controller
             userId:Auth::id(),
             bookMarkToSearch:$request->bookMarkToSearch,
             currentPage:$request->currentPage,
-            tagList:$request->tagList
+            tagList    :$request->tagList
         );
     }
 
