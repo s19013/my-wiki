@@ -140,7 +140,10 @@ export default{
         originalCheckedTagList:{
             //更新や閲覧画面で既にチェックがついているタグを受け取るため
             type:Array,
-            default:[]
+            default:[{id:null,name:null}],
+            // 何も紐付けられていない時データベースから渡される配列は以下のようになる
+            // [[id => null,name => null]]
+            // デフォルトもこのかたちに合わせる
         },
         searchOnly:{
             //記事検索などでは新規作成を表示させないようにするため
@@ -277,14 +280,14 @@ export default{
         }
     },
     mounted() {
-        this.checkedTagList = this.originalCheckedTagList
-        //originalCheckedTagListの中が完全に空ではなかったら
-        // if (this.originalCheckedTagList != null && this.originalCheckedTagList[0].id != null) {
-        //     for (const tag of this.originalCheckedTagList) {
-        //         // checkedTagListに代入
-        //         this.checkedTagList.push({id:tag.id,name:tag.name})
-        //     }
-        // }
+        //originalCheckedTagListの中が完全に空ではなかったら代入
+        if (this.originalCheckedTagList[0].id != null) {
+            // for (const tag of this.originalCheckedTagList) {
+            //     // checkedTagListに代入
+            //     this.checkedTagList.push({id:tag.id,name:tag.name})
+            // }
+            this.checkedTagList = this.originalCheckedTagList
+        }
     },
 }
 </script>
