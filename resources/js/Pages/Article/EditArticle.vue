@@ -74,8 +74,9 @@ import axios from 'axios'
 export default {
     data() {
       return {
+        activeTab:0,
         articleTitle:'',
-        articleBody : '',
+        articleBody: '',
         checkedTagList:[],
 
         //loding
@@ -96,6 +97,7 @@ export default {
     },
     methods: {
         compiledMarkdown() {return marked(this.articleBody)},
+        changeTab(num){this.activeTab = num},
         updateCheckedTagList (list) { this.checkedTagList = list },
         // 本文送信
         submitCheck:_.debounce(_.throttle(async function(){
