@@ -17,63 +17,60 @@ use Auth;
 
 class TransitionController extends Controller
 {
-    //やはりここで違反処理をまとめておこう
-    //返り値booleanでtrueだったらもとの関数からリダイレクトしよう
+    // 記事の共通処理をまとめる
+    public function commonProcessing($articleId)
+    {
+        //削除された記事ならExceptionを投げる
+        $isDeleted = Article::checkArticleDeleted(articleId:$articleId);
+        if ($isDeleted == true ) { throw new \Exception("illegal"); }
+
+        // 他人の記事を覗こうとしているならExceptionを投げる
+        $isSamePerson = Article::preventPeep(articleId:$articleId,userId:Auth::id());
+        if ($isSamePerson == false) { throw new \Exception("illegal"); }
+
+        //記事を取り出す
+        $article = Article::serveArticle(articleId:$articleId);
+
+        //記事に紐付けられたタグを取り出す
+        $articleTag = ArticleTag::serveTagsRelatedToAricle(
+            userId:Auth::id(),
+            articleId:$articleId
+        );
+
+        return [
+            'article'        => $article,
+            'articleTagList' => $articleTag,
+        ];
+    }
 
 
 
     //記事閲覧画面に遷移する時の処理
     public function transitionToViewArticle($articleId)
     {
-        //削除された記事ならindexに戻す
-        $isDeleted = Article::checkArticleDeleted(articleId:$articleId);
-        if ($isDeleted == true ) { return redirect()->route('SearchArticle'); }
+        try {
+            $returnValue = $this->commonProcessing($articleId);
+        } catch (\Exception $e) {
+            //違法行為をしていたら検索画面に強制リダイレクト
+            return redirect()->route('SearchArticle');
+        }
 
-        // 他人の記事を覗こうとしているならindexに戻す
-        $isSamePerson = Article::preventPeep(articleId:$articleId,userId:Auth::id());
-        if ($isSamePerson == false) { return redirect()->route('SearchArticle');}
-
-
-        //記事を取り出す
-        $article = Article::serveArticle(articleId:$articleId);
-
-        //記事に紐付けられたタグを取り出す
-        $articleTag = ArticleTag::serveTagsRelatedToAricle(
-            userId:Auth::id(),
-            articleId:$articleId
-        );
-
-
-        return Inertia::render('Article/ViewArticle',[
-            'article'        => $article,
-            'articleTagList' => $articleTag,
-        ]);
+        return Inertia::render('Article/ViewArticle',$returnValue);
     }
 
     //記事編集画面に遷移する時の処理
     public function transitionToEditArticle($articleId)
     {
-        //削除された記事ならindexに戻す
-        $isDeleted = Article::checkArticleDeleted(articleId:$articleId);
-        if ($isDeleted == true ) { return redirect()->route('SearchArticle'); }
-
-        // 他人の記事を覗こうとしているならindexに戻す
-        $isSamePerson = Article::preventPeep(articleId:$articleId,userId:Auth::id());
-        if ($isSamePerson == false) { return redirect()->route('SearchArticle'); }
-
-        //記事を取り出す
-        $article = Article::serveArticle(articleId:$articleId);
-
-        //記事に紐付けられたタグを取り出す
-        $articleTag = ArticleTag::serveTagsRelatedToAricle(
-            userId:Auth::id(),
-            articleId:$articleId
-        );
-
+        try {
+            $returnValue = $this->commonProcessing($articleId);
+        } catch (\Exception $e) {
+            //違法行為をしていたら検索画面に強制リダイレクト
+            return redirect()->route('SearchArticle');
+        }
 
         return Inertia::render('Article/EditArticle',[
-            'originalArticle'        => $article,
-            'originalCheckedTagList' => $articleTag,
+            'originalArticle'        => $returnValue['article'],
+            'originalCheckedTagList' => $returnValue['articleTagList']
         ]);
     }
 
