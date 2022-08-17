@@ -32,14 +32,14 @@ class TransitionController extends Controller
         $article = Article::serveArticle(articleId:$articleId);
 
         //記事に紐付けられたタグを取り出す
-        $articleTag = ArticleTag::serveTagsRelatedToAricle(
+        $articleTagList = ArticleTag::serveTagsRelatedToAricle(
             userId:Auth::id(),
             articleId:$articleId
         );
 
         return [
             'article'        => $article,
-            'articleTagList' => $articleTag,
+            'articleTagList' => $articleTagList,
         ];
     }
 
@@ -87,7 +87,7 @@ class TransitionController extends Controller
 
         $bookMark = BookMark::serveBookMark(bookMarkId:$bookMarkId);
 
-        $bookMarkTag = BookMarkTag::serveTagsRelatedToAricle(
+        $bookMarkTagList = BookMarkTag::serveTagsRelatedToAricle(
             userId:Auth::id(),
             bookMarkId:$bookMarkId
         );
@@ -95,7 +95,7 @@ class TransitionController extends Controller
 
         return Inertia::render('BookMark/EditBookMark',[
             'originalBookMark'         => $bookMark,
-            'originalCheckedTagList'   => $bookMarkTag,
+            'originalCheckedTagList'   => $bookMarkTagList,
         ]);
     }
 }
