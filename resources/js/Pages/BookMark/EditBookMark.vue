@@ -23,7 +23,12 @@
                     <v-col><p class="error articleError" v-if="bookMarkUrlErrorFlag">urlを入力してください</p></v-col>
 
                     <!-- タグ -->
-                    <v-col cols="2"><TagDialog ref="tagDialog" :originalCheckedTag=originalCheckedTag></TagDialog></v-col>
+                    <v-col cols="2">
+                        <TagDialog ref="tagDialog"
+                            :originalCheckedTagList=originalCheckedTagList
+                            @closedTagDialog       ="updateCheckedTagList"
+                        ></TagDialog>
+                        </v-col>
                 </v-row>
 
                 <v-text-field
@@ -31,6 +36,7 @@
                         v-model = "bookMarkUrl"
                 ></v-text-field>
             </v-form>
+            <TagList :tagList="checkedTagList"/>
         </section>
         <!-- 送信中に表示 -->
         <loadingDialog :loadingFlag="bookMarkSending"></loadingDialog>
@@ -41,6 +47,7 @@
 <script>
 import {marked} from 'marked';
 import TagDialog from '@/Components/dialog/TagDialog.vue';
+import TagList from '@/Components/TagList.vue';
 import DeleteAlertComponent from '@/Components/dialog/DeleteAlertDialog.vue';
 import loadingDialog from '@/Components/loading/loadingDialog.vue';
 import BaseLayout from '@/Layouts/BaseLayout.vue'
@@ -49,9 +56,9 @@ import axios from 'axios'
 export default {
     data() {
       return {
-        activeTab:0,
         bookMarkTitle:'',
         bookMarkUrl: '',
+        checkedTagList:[],
 
         //loding
         bookMarkLoding :false,
@@ -61,16 +68,17 @@ export default {
         bookMarkUrlErrorFlag:false,
       }
     },
-    props:['originalBookMark','originalCheckedTag'],
+    props:['originalBookMark','originalCheckedTagList'],
     components:{
         DeleteAlertComponent,
         TagDialog,
+        TagList,
         loadingDialog,
         BaseLayout,
     },
     methods: {
         compiledMarkdown() {return marked(this.bookMarkUrl)},
-        changeTab(num){this.activeTab = num},
+        updateCheckedTagList (list) { this.checkedTagList = list },
         // 本文送信
         submitCheck:_.debounce(_.throttle(async function(){
             if (this.bookMarkUrl =='') {
@@ -108,9 +116,9 @@ export default {
         },
     },
     mounted() {
-        console.log(this.originalCheckedTag);
         this.bookMarkTitle = this.originalBookMark.title
         this.bookMarkUrl   = this.originalBookMark.url
+        this.checkedTagList = this.originalCheckedTagList
     },
 }
 </script>
