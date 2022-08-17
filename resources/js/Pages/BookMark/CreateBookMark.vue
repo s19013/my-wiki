@@ -32,6 +32,7 @@
                         v-model = "bookMarkUrl"
                 ></v-text-field>
             </v-form>
+            <TagList :tagList="checkedTagList"/>
         </section>
         <!-- 送信中に表示 -->
         <loadingDialog :loadingFlag="bookMarkSending"></loadingDialog>
@@ -42,6 +43,7 @@
 <script>
 import {marked} from 'marked';
 import TagDialog from '@/Components/dialog/TagDialog.vue';
+import TagList from '@/Components/TagList.vue';
 import DeleteAlertComponent from '@/Components/dialog/DeleteAlertDialog.vue';
 import loadingDialog from '@/Components/loading/loadingDialog.vue';
 import BaseLayout from '@/Layouts/BaseLayout.vue'
@@ -69,6 +71,7 @@ export default {
     },
     methods: {
         changeTab(num){this.activeTab = num},
+        updateCheckedTagList (list) { this.checkedTagList = list },
         // 本文送信
         submitCheck:_.debounce(_.throttle(async function(){
             if (this.bookMarkUrl =='') {
