@@ -45,8 +45,8 @@ class TransitionController extends Controller
 
 
         return Inertia::render('Article/ViewArticle',[
-            'article'    => $article,
-            'articleTag' => $articleTag,
+            'article'        => $article,
+            'articleTagList' => $articleTag,
         ]);
     }
 
@@ -72,8 +72,8 @@ class TransitionController extends Controller
 
 
         return Inertia::render('Article/EditArticle',[
-            'originalArticle'     => $article,
-            'originalCheckedTag' => $articleTag,
+            'originalArticle'        => $article,
+            'originalCheckedTagList' => $articleTag,
         ]);
     }
 
@@ -97,8 +97,8 @@ class TransitionController extends Controller
 
 
         return Inertia::render('BookMark/EditBookMark',[
-            'originalBookMark'     => $bookMark,
-            'originalCheckedTag'   => $bookMarkTag,
+            'originalBookMark'         => $bookMark,
+            'originalCheckedTagList'   => $bookMarkTag,
         ]);
     }
 }

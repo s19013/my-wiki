@@ -12,6 +12,9 @@ window.axios = axios;
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
+// ↓これは別のサブドメインで実行されるSPAからのアプリケーションでの認証に問題がある場合に有効化すれば良い?
+// axios.defaults.withCredentials = true;
+
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting

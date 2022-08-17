@@ -14,7 +14,7 @@
 
             <section class="Dialog tagDialog">
                 <div class="clooseButton">
-                    <v-btn color="#E57373" size="small" elevation="2" @click.stop="tagDialogFlagSwithch()">
+                    <v-btn color="#E57373" size="small" elevation="2" @click.stop="closeTagDialog()">
                         <v-icon
                         >mdi-close-box</v-icon>閉じる
                     </v-btn>
@@ -137,10 +137,13 @@ export default{
       }
     },
     props:{
-        originalCheckedTag:{
+        originalCheckedTagList:{
             //更新や閲覧画面で既にチェックがついているタグを受け取るため
             type:Array,
-            default:null
+            default:[{id:null,name:null}],
+            // 何も紐付けられていない時データベースから渡される配列は以下のようになる
+            // [[id => null,name => null]]
+            // デフォルトもこのかたちに合わせる
         },
         searchOnly:{
             //記事検索などでは新規作成を表示させないようにするため
@@ -242,6 +245,16 @@ export default{
             //開くときは全部取得した状態に
             if (this.tagDialogFlag == true) { this.searchTag() }
         },
+        closeTagDialog(){ //閉じる時用
+            this.tagDialogFlagSwithch()
+            this.checkedTagList = this.checkedTagList.sort(this.sortArrayByName)
+            this.$emit('closedTagDialog',this.checkedTagList)
+        },
+        sortArrayByName(x, y){
+            if (x.name < y.name) {return -1;}
+            if (x.name > y.name) {return 1;}
+            return 0;
+        },
         //親にチェックリストを渡す
         serveCheckedTagListToParent(){
             // this.checkedTagListにnameも追加しないといけなくなったのでそのままthis.checkedTagListを返せない
@@ -267,11 +280,13 @@ export default{
         }
     },
     mounted() {
-        // 元の記事にタグがついていなかった場合
-        if (this.originalCheckedTag != null && this.originalCheckedTag[0].id != null) {
-            for (const tag of this.originalCheckedTag) {
-                    this.checkedTagList.push({id:tag.id,name:tag.name})
-            }
+        //originalCheckedTagListの中が完全に空ではなかったら代入
+        if (this.originalCheckedTagList[0].id != null) {
+            // for (const tag of this.originalCheckedTagList) {
+            //     // checkedTagListに代入
+            //     this.checkedTagList.push({id:tag.id,name:tag.name})
+            // }
+            this.checkedTagList = this.originalCheckedTagList
         }
     },
 }

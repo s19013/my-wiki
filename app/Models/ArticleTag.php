@@ -120,6 +120,7 @@ class ArticleTag extends Model
         ->leftJoin(DB::raw('('.$subTagTable.') AS sub_tags'),'article_tags.tag_id','=','sub_tags.id')
         ->WhereNull('article_tags.deleted_at') // 記事からはずされていないタグのみを取得
         ->Where('article_tags.article_id','=',':$articleId')
+        ->orderBy('name')
         ->setBindings([
             ':$userId'   => $userId,
             ':$articleId'=> $articleId
