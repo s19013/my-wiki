@@ -9,12 +9,13 @@ class searchToolKit extends Controller
     //sqlでlike検索する前にするエスケープ処理
     public static function sqlEscape($arg)
     {
-        // %と_をエスケープ
+        // %をエスケープ
         $escaped = preg_replace(
         '/%/',
         '\%',
         $arg);
 
+        // _をエスケープ
         $escaped = preg_replace(
         '/_/',
         '\_',
