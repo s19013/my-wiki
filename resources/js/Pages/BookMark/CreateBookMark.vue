@@ -1,107 +1,41 @@
 <template>
-    <BaseLayout title="新規作成" pageTitle="新規作成">
-        <section class="articleContainer">
-            <v-form v-on:submit.prevent ="submit">
-                <!-- タイトル入力欄とボタン2つ -->
-                <v-row class="head">
-                    <v-col cols="10">
-                        <v-text-field
-                            v-model="bookMarkTitle"
-                            label="タイトル"
-                        ></v-text-field>
-                    </v-col>
-                    <v-col cols="1"> <DeleteAlertComponent @deleteAricleTrigger="deleteArticle"></DeleteAlertComponent> </v-col>
-                    <v-col cols="1">
-                        <v-btn class="longButton" color="#BBDEFB" @click="submitCheck" :disabled="bookMarkSending">
-                        <v-icon>mdi-content-save</v-icon>
-                        保存
-                        </v-btn>
-                    </v-col>
-                </v-row>
-                <!--  -->
-                <v-row>
-                    <v-col><p class="error articleError" v-if="bookMarkUrlErrorFlag">urlを入力してください</p></v-col>
-
-                    <!-- タグ -->
-                    <v-col cols="2"><TagDialog ref="tagDialog" :originalCheckedTag=null></TagDialog></v-col>
-
-                </v-row>
-
-                <v-text-field
-                        label="url [必須]"
-                        v-model = "bookMarkUrl"
-                ></v-text-field>
-            </v-form>
-            <TagList :tagList="checkedTagList"/>
-        </section>
-        <!-- 送信中に表示 -->
-        <loadingDialog :loadingFlag="bookMarkSending"></loadingDialog>
-
-    </BaseLayout>
+    <BaseBookMarkLayout
+        ref="BaseBookMarkLayout"
+        title="新規作成"
+        pageTitle="新規作成"
+        @triggerSubmit = "submit"
+        @triggerDeleteBookMark = "deleteBookMark"
+    >
+    </BaseBookMarkLayout>
 </template>
 
 <script>
-import {marked} from 'marked';
-import TagDialog from '@/Components/dialog/TagDialog.vue';
-import TagList from '@/Components/TagList.vue';
-import DeleteAlertComponent from '@/Components/dialog/DeleteAlertDialog.vue';
-import loadingDialog from '@/Components/loading/loadingDialog.vue';
-import BaseLayout from '@/Layouts/BaseLayout.vue'
-import axios from 'axios'
+import BaseBookMarkLayout from '@/Layouts/BaseBookMarkLayout.vue'
 
 export default {
     data() {
-      return {
-        bookMarkTitle:'',
-        bookMarkUrl: '',
-
-        //loding
-        bookMarkLoding :false,
-        bookMarkSending:false,
-
-        // errorFlag
-        bookMarkUrlErrorFlag:false,
-      }
+      return {}
     },
-    components:{
-        DeleteAlertComponent,
-        TagDialog,
-        loadingDialog,
-        BaseLayout,
-    },
+    components:{BaseBookMarkLayout},
     methods: {
-        changeTab(num){this.activeTab = num},
-        updateCheckedTagList (list) { this.checkedTagList = list },
-        // 本文送信
-        submitCheck:_.debounce(_.throttle(async function(){
-            if (this.bookMarkUrl =='') {
-                this.bookMarkUrlErrorFlag = true
-                return
-            }
-            else {this.submit()}
-        },100),150),
-        submit(){
-            this.bookMarkSending = true
+        submit({
+            bookMarkTitle,
+            bookMarkUrl,
+            tagList,
+        }){
+            this.$refs.BaseBookMarkLayout.switchBookMarkSending()
             axios.post('/api/bookmark/store',{
-                bookMarkTitle:this.bookMarkTitle,
-                bookMarkUrl:this.bookMarkUrl,
-                tagList:this.$refs.tagDialog.serveCheckedTagListToParent()
+                bookMarkTitle:bookMarkTitle,
+                bookMarkUrl  :bookMarkUrl,
+                tagList      :tagList,
             })
-            .then((res)=>{
-                this.$inertia.get('/BookMark/Search')
-                this.bookMarkSending = false
-            })
-            .catch((error) => {
-                console.log(error);
-                this.articleSending = false
-            })
+            .then((res)=>{this.$inertia.get('/BookMark/Search')})
+            .catch((error) => {console.log(error);})
+            this.$refs.BaseBookMarkLayout.switchBookMarkSending()
         },
-        deleteArticle() {
-            // 消す処理
-
+        deleteBookMark() {
             //遷移
             this.$inertia.get('/BookMark/Search')
-            console.log('called');
         },
     },
 }
