@@ -1,7 +1,7 @@
 <template>
     <BaseLayout :title="title" :pageTitle="pageTitle">
         <section class="articleContainer">
-            <v-form v-on:submit.prevent ="submit">
+            <v-form v-on:submit.prevent ="submitCheck">
                 <!-- タイトル入力欄とボタン2つ -->
                 <v-row class="head">
                     <v-col cols="10">
