@@ -140,10 +140,7 @@ export default{
         originalCheckedTagList:{
             //更新や閲覧画面で既にチェックがついているタグを受け取るため
             type:Array,
-            default:[{id:null,name:null}],
-            // 何も紐付けられていない時データベースから渡される配列は以下のようになる
-            // [[id => null,name => null]]
-            // デフォルトもこのかたちに合わせる
+            default:null,
         },
         searchOnly:{
             //記事検索などでは新規作成を表示させないようにするため
@@ -281,11 +278,7 @@ export default{
     },
     mounted() {
         //originalCheckedTagListの中が完全に空ではなかったら代入
-        if (this.originalCheckedTagList[0].id != null) {
-            // for (const tag of this.originalCheckedTagList) {
-            //     // checkedTagListに代入
-            //     this.checkedTagList.push({id:tag.id,name:tag.name})
-            // }
+        if (this.originalCheckedTagList != null) {
             this.checkedTagList = this.originalCheckedTagList
         }
     },
