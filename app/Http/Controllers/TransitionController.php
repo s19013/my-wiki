@@ -37,6 +37,11 @@ class TransitionController extends Controller
             articleId:$articleId
         );
 
+        //記事に何もタグが紐付けられなかったらnullを入れる こうしないと後の処理でバグが出る
+        if ($articleTagList[0]->getAttributes()['id'] == null) {
+            $articleTagList = null;
+        }
+
         return [
             'article'        => $article,
             'articleTagList' => $articleTagList,
@@ -91,6 +96,11 @@ class TransitionController extends Controller
             userId:Auth::id(),
             bookMarkId:$bookMarkId
         );
+
+        //ブックマークに何もタグが紐付けられなかったらnullを入れる こうしないと後の処理でバグが出る
+        if ($bookMarkTagList[0]->getAttributes()['id'] == null) {
+            $bookMarkTagList = null;
+        }
 
 
         return Inertia::render('BookMark/EditBookMark',[
