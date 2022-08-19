@@ -113,14 +113,13 @@ export default {
         originalCheckedTagList:{
             type:Array,
             default:null
-            // default:[{id:null,name:null}]
         },
     },
     methods: {
         compiledMarkdown() {return marked(this.articleBody)},
+        changeTab(num){this.activeTab = num},
         updateCheckedTagList (list) { this.checkedTagList = list },
         switchArticleSending(){this.articleSending = !this.articleSending},
-        changeTab(num){this.activeTab = num},
         // 本文送信前のチェック
         submitCheck:_.debounce(_.throttle(async function(){
             //本文が空だったらエラーだして送信しない
