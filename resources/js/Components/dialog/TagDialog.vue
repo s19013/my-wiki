@@ -21,11 +21,13 @@
                 </div>
                 <!-- 検索窓とか -->
                 <div class="searchArea">
-                    <v-text-field
-                        v-model="tagToSearch"
-                        label="タグ検索"
-                        clearable
-                    ></v-text-field>
+                    <v-form v-on:submit.prevent ="searchTag()">
+                        <v-text-field
+                            v-model="tagToSearch"
+                            label="タグ検索"
+                            clearable
+                        ></v-text-field>
+                    </v-form>
                     <v-btn color="submit"
                         elevation="2"
                         :disabled = "tagSerchLoading"
@@ -90,7 +92,9 @@
                         <p class="error" v-if="newTagErrorFlag">文字を入力してください</p>
                         <p class="error" v-if="tagAlreadyExistsErrorFlag">そのタグはすでに登録されいます</p>
 
-                        <v-text-field v-model="newTag" label="新しいタグ"></v-text-field>
+                        <v-form v-on:submit.prevent ="createNewTagCheck">
+                            <v-text-field v-model="newTag" label="新しいタグ"></v-text-field>
+                        </v-form>
 
                         <v-btn
                         class="longButton"
