@@ -14,6 +14,9 @@ http://hide-no-server.com/
 ## 概要
 ブックマークや記事をタグをつけて保存する｡
 
+## 開発メモ(すごく雑)
+https://github.com/s19013/my-wiki/tree/main/dev_memo
+
 ## 使った技術
 * php
 * laravel
