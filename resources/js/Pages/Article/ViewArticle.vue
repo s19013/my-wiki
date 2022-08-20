@@ -81,10 +81,9 @@ textarea {
     padding: 20px;
 }
 .markdown{
-    margin-top:10px;
+    margin-top:20px;
     margin-bottom:30px;
     padding: 10px;
-    // border:black solid 1px;
     word-break:break-word;
     overflow-wrap:normal;
 }

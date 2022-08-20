@@ -1,124 +1,54 @@
 <template>
-    <BaseLayout title="ブックマーク編集" pageTitle="ブックマーク編集">
-        <section class="articleContainer">
-            <v-form v-on:submit.prevent ="submit">
-                <!-- タイトル入力欄とボタン2つ -->
-                <v-row class="head">
-                    <v-col cols="10">
-                        <v-text-field
-                            v-model="bookMarkTitle"
-                            label="タイトル"
-                        ></v-text-field>
-                    </v-col>
-                    <v-col cols="1"> <DeleteAlertComponent @deleteAricleTrigger="deleteBookMark"></DeleteAlertComponent> </v-col>
-                    <v-col cols="1">
-                        <v-btn class="longButton" color="#BBDEFB" @click="submitCheck" :disabled="bookMarkSending">
-                        <v-icon>mdi-content-save</v-icon>
-                        保存
-                        </v-btn>
-                    </v-col>
-                </v-row>
-
-                <v-row>
-                    <v-col><p class="error articleError" v-if="bookMarkUrlErrorFlag">urlを入力してください</p></v-col>
-
-                    <!-- タグ -->
-                    <v-col cols="2">
-                        <TagDialog ref="tagDialog"
-                            :originalCheckedTagList=originalCheckedTagList
-                            @closedTagDialog       ="updateCheckedTagList"
-                        ></TagDialog>
-                        </v-col>
-                </v-row>
-
-                <v-text-field
-                        label="url [必須]"
-                        v-model = "bookMarkUrl"
-                ></v-text-field>
-            </v-form>
-            <TagList :tagList="checkedTagList"/>
-        </section>
-        <!-- 送信中に表示 -->
-        <loadingDialog :loadingFlag="bookMarkSending"></loadingDialog>
-
-    </BaseLayout>
+    <BaseBookMarkLayout
+        ref="BaseBookMarkLayout"
+        title="記事編集"
+        pageTitle="記事編集"
+        :originalBookMarkTitle   ="originalBookMark.title"
+        :originalBookMarkUrl     ="originalBookMark.url"
+        :originalCheckedTagList  ="originalCheckedTagList"
+        @triggerSubmit           = "submit"
+        @triggerDeleteBookMark   = "deleteBookMark"
+        >
+    </BaseBookMarkLayout>
 </template>
 
 <script>
-import {marked} from 'marked';
-import TagDialog from '@/Components/dialog/TagDialog.vue';
-import TagList from '@/Components/TagList.vue';
-import DeleteAlertComponent from '@/Components/dialog/DeleteAlertDialog.vue';
-import loadingDialog from '@/Components/loading/loadingDialog.vue';
-import BaseLayout from '@/Layouts/BaseLayout.vue'
-import axios from 'axios'
+import BaseBookMarkLayout from '@/Layouts/BaseBookMarkLayout.vue'
 
 export default {
     data() {
-      return {
-        bookMarkTitle:'',
-        bookMarkUrl: '',
-        checkedTagList:[],
-
-        //loding
-        bookMarkLoding :false,
-        bookMarkSending:false,
-
-        // errorFlag
-        bookMarkUrlErrorFlag:false,
-      }
+      return {}
     },
     props:['originalBookMark','originalCheckedTagList'],
     components:{
-        DeleteAlertComponent,
-        TagDialog,
-        TagList,
-        loadingDialog,
-        BaseLayout,
+        BaseBookMarkLayout
     },
     methods: {
-        compiledMarkdown() {return marked(this.bookMarkUrl)},
-        updateCheckedTagList (list) { this.checkedTagList = list },
-        // 本文送信
-        submitCheck:_.debounce(_.throttle(async function(){
-            if (this.bookMarkUrl =='') {
-                this.bookMarkUrlErrorFlag = true
-                return
-            }
-            else {this.submit()}
-        },100),150),
-        submit(){
-            this.bookMarkSending = true
+        submit({
+            bookMarkTitle,
+            bookMarkUrl,
+            tagList,
+        }){
+            this.$refs.BaseBookMarkLayout.switchBookMarkSending()
             axios.post('/api/bookmark/update',{
-                bookMarkId:this.originalBookMark.id,
-                bookMarkTitle:this.bookMarkTitle,
-                bookMarkUrl:this.bookMarkUrl,
-                tagList:this.$refs.tagDialog.serveCheckedTagListToParent()
+                bookMarkId   :this.originalBookMark.id,
+                bookMarkTitle:bookMarkTitle,
+                bookMarkUrl  :bookMarkUrl,
+                tagList      :tagList
             })
-            .then((res)=>{
-                this.bookMarkSending = false
-                this.$inertia.get('/BookMark/Search')
-            })
+            .then((res)=>{this.$inertia.get('/BookMark/Search')})
+            .catch((err)=>{console.log(err);})
+            this.$refs.BaseBookMarkLayout.switchBookMarkSending()
         },
         deleteBookMark() {
-            this.bookMarkDeleting = true
             // 消す処理
             axios.post('/api/bookmark/delete',{bookMarkId:this.originalBookMark.id})
-            .then((res) => {
-                //遷移
-                this.$inertia.get('/bookmark/search')
-                this.bookMarkDeleting = false
-            })
-            .catch((error) => {
-                console.log(error);
-                this.articleSending = false
-            })
+            .then((res)=>{this.$inertia.get('/BookMark/Search')})
+            .catch((error) => {console.log(error);})
         },
     },
     mounted() {
-        this.bookMarkTitle = this.originalBookMark.title
-        this.bookMarkUrl   = this.originalBookMark.url
-        this.checkedTagList = this.originalCheckedTagList
+
     },
 }
 </script>
