@@ -251,6 +251,7 @@ export default{
             this.checkedTagList = this.checkedTagList.sort(this.sortArrayByName)
             this.$emit('closedTagDialog',this.checkedTagList)
         },
+        //タグを名前順でソート
         sortArrayByName(x, y){
             if (x.name < y.name) {return -1;}
             if (x.name > y.name) {return 1;}
@@ -271,6 +272,7 @@ export default{
             //チェックをつけた場合
             if (this.onlyCheckedFlag == true) {
                 //チェックがついているタグだけを表示
+                this.checkedTagList.sort(this.sortArrayByName)
                 this.tagSearchResultList = this.checkedTagList
             }
             else if (this.onlyCheckedFlag == false && this.tagDialogFlag == true) {
