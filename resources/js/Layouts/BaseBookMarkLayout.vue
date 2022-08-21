@@ -113,7 +113,7 @@ export default {
                 tagList      :this.$refs.tagDialog.serveCheckedTagListToParent()
             })
         },
-        deleteBookMark() {this.$emit('triggerDeleteArticle')},
+        deleteBookMark() {this.$emit('triggerDeleteBookMark')},
     },
     mounted() {this.checkedTagList = this.originalCheckedTagList},
 }
