@@ -1,9 +1,9 @@
 <template>
     <div>
         <!-- ダイアログを呼び出すためのボタン -->
-        <v-btn class="longButton" color="submit" size="small" @click.stop="tagDialogFlagSwithch">
-        <v-icon>mdi-tag</v-icon>
-        タグ
+        <v-btn class="longButton" color="submit" size="small" @click.stop="openTagDialog()">
+            <v-icon>mdi-tag</v-icon>
+            タグ
         </v-btn>
 
         <!-- v-modelがv-ifとかの代わりになっている -->
@@ -24,7 +24,7 @@
                 ref = "SearchField"
                 searchLabel="タグ検索"
                 :loadingFlag="tagSerchLoading"
-                @triggerSearch="searchTag"
+                @triggerSearch="searchBranch"
                 >
                 </SearchField>
 
@@ -113,9 +113,10 @@ export default{
         newTag:'',
 
         // flag
-        onlyCheckedFlag :false,
-        createNewTagFlag:false,
-        tagDialogFlag   :false,
+        onlyCheckedFlag  :false,
+        createNewTagFlag :false,
+        tagDialogFlag    :false,
+        isFirstSearchFlag:true,
 
         //loding
         tagSerchLoading:false,
@@ -128,7 +129,8 @@ export default{
         // tagList
         checkedTagList     :[],
         tagSearchResultList:[],
-        tagListCash        :[],//キャッシュ 既存チェックボックスのつけ外しで使う
+        tagCashList        :[],//全件検索のキャッシュ
+        allTagCashList     :[],//全件検索のキャッシュ
       }
     },
     props:{
@@ -165,15 +167,16 @@ export default{
                 tag   :this.newTag
             })
             .then((res)=>{
+                //検索欄をリセット
+                this.$refs.SearchField.resetKeyword()
+
                 // 読み込み直し
-                this.searchTag()
+                this.isFirstSearchFlag = true
+                this.searchAllTag()
 
                 // 入力欄を消す
                 this.createNewTagFlag=false
-                this.newTag=''
-
-                //検索欄をリセット
-                this.tagToSearch = ''
+                this.newTag=null
 
                 //エラーを消す
                 this.tagAlreadyExistsErrorFlag = false
@@ -188,8 +191,22 @@ export default{
             this.newTagSending = false
         },
         // タグ検索
-        searchTag:_.debounce(_.throttle(async function(){
-
+        searchBranch:_.debounce(_.throttle(function(){
+            if (this.$refs.SearchField.serveKeywordToParent() == "") {
+                //初期ローディング以外の全件検索だったらキャッシュを使う
+                if (this.isFirstSearchFlag == false) {
+                    this.tagSearchResultList = this.allTagCashList
+                    this.tagCashList         = this.allTagCashList
+                }
+                // 初期ローディング､更新後の全件検索
+                else {this.searchAllTag()}
+            }
+            // 他の検索
+            else {this.searchTag()}
+            console.log(this.tagSerchLoading);
+        },100),150),
+        // 全件検索
+        async searchAllTag(){
             //ローディングアニメ開始
             this.tagSerchLoading = true
 
@@ -198,8 +215,40 @@ export default{
 
             //配列,キャッシュ初期化
             this.tagSearchResultList = []
-            this.tagListCash         = []//キャッシュをクリアするのは既存チェックボックスを外す時に出てくるバグを防ぐため
+            this.tagCashList         = []//キャッシュをクリアするのは既存チェックボックスを外す時に出てくるバグを防ぐため
 
+            await axios.post('/api/tag/search',{tag:''})
+            .then((res)=>{
+                for (const tag of res.data) {
+                    this.tagSearchResultList.push({
+                        id:tag.id,
+                        name:tag.name
+                    })
+                }
+                //キャッシュにコピー
+                this.allTagCashList = [...this.tagSearchResultList]
+                this.tagCashList    = [...this.tagSearchResultList]
+            })
+            .catch((err)=>{console.log(err);})
+
+            //ローディングアニメ解除
+            this.tagSerchLoading = false
+
+            //初期ローディングフラグを切る
+            this.isFirstSearchFlag = false
+        },
+        // タグ検索
+        async searchTag(){
+            //ローディングアニメ開始
+            this.tagSerchLoading = true
+            console.log(this.tagSerchLoading);
+
+            //既存チェックボックスのチェックを外す
+            this.onlyCheckedFlag = false
+
+            //配列,キャッシュ初期化
+            this.tagSearchResultList = []
+            this.tagCashList         = []//キャッシュをクリアするのは既存チェックボックスを外す時に出てくるバグを防ぐため
             await axios.post('/api/tag/search',{
                 tag:this.$refs.SearchField.serveKeywordToParent()
             })
@@ -211,39 +260,39 @@ export default{
                     })
                 }
                 //キャッシュにコピー
-                this.tagListCash = [...this.tagSearchResultList]
-                //ローディングアニメ解除
-                this.tagSerchLoading = false
+                this.tagCashList = [...this.tagSearchResultList]
             })
             .catch((err)=>{console.log(err);})
-        },100),150),
+
+            //ローディングアニメ解除
+            this.tagSerchLoading = false
+        },
         //チェック全消し
         clearAllCheck(){this.checkedTagList = []},
         // 切り替え
         createNewTagFlagSwitch(){ this.createNewTagFlag = !this.createNewTagFlag },
-        tagDialogFlagSwithch(){
-            this.tagDialogFlag = !this.tagDialogFlag
-
+        tagDialogFlagSwithch(){this.tagDialogFlag = !this.tagDialogFlag},
+        //
+        openTagDialog() {
+            this.tagDialogFlagSwithch()
+            this.searchAllTag()
+        },
+        closeTagDialog(){
+            this.tagDialogFlagSwithch()
             // 新規登録の入力欄を消す
             this.createNewTagFlag =false
             this.newTag           = ''
-
-            // 検索窓を初期化
-            this.tagToSearch = ''
 
             //エラーを消す
             this.tagAlreadyExistsErrorFlag = false
             this.newTagErrorFlag           = false
 
-            //チェックを外す
+            //既存チェックのチェックを外す
             this.onlyCheckedFlag = false
 
-            //開くときは全部取得した状態に
-            if (this.tagDialogFlag == true) { this.searchTag() }
-        },
-        closeTagDialog(){ //閉じる時用
-            this.tagDialogFlagSwithch()
+            // チェックをつけたタグをソード
             this.checkedTagList = this.checkedTagList.sort(this.sortArrayByName)
+
             this.$emit('closedTagDialog',this.checkedTagList)
         },
         //タグを名前順でソート
@@ -273,7 +322,7 @@ export default{
             else if (this.onlyCheckedFlag == false && this.tagDialogFlag == true) {
                 //全タグのキャッシュに置き換える
                 //参照元を変えるだけなので読み込みが早い
-                this.tagSearchResultList = this.tagListCash
+                this.tagSearchResultList = this.tagCashList
             }
         }
     },
