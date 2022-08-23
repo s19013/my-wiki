@@ -106,7 +106,7 @@
 
 <script>
 import loading from '@/Components/loading/loading.vue'
-import SearchFieldVue from '@/Components/SearchField.vue';
+import SearchField from '@/Components/SearchField.vue';
 export default{
     data() {
       return {
