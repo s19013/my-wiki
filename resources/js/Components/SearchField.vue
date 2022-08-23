@@ -9,7 +9,7 @@
             ></v-text-field>
             <v-btn color="submit"
                 elevation="2"
-                :disabled = "loading"
+                :disabled = "loadingFlag"
                 @click.stop="triggerSearch()">
                 <v-icon>mdi-magnify</v-icon>
                 検索
