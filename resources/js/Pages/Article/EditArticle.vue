@@ -30,10 +30,10 @@ export default {
         }){
             this.$refs.BaseArticleLayout.switchArticleSending()
             axios.post('/api/article/update',{
-                articleId:this.originalArticle.id,
+                articleId   :this.originalArticle.id,
                 articleTitle:articleTitle,
-                articleBody:articleBody,
-                tagList:tagList
+                articleBody :articleBody,
+                tagList     :tagList
             })
             .then((res)=>{
                 this.$inertia.get('/Article/Search')
@@ -64,7 +64,7 @@ export default {
 <style lang="scss">
 .articleContainer {margin: 0 20px;}
 textarea {
-        width: 100%;
+        width : 100%;
         resize: none;
         background-color: #f6f6f6;
         padding: 20px;
@@ -77,19 +77,19 @@ textarea {
 
 .tabLabel{
     li{
-        display: inline-block;
+        display   : inline-block;
         list-style:none;
-        border:black solid 1px;
+        border :black solid 1px;
         padding:10px 20px;
     }
     .active{
         font-weight: bold;
-        cursor: default;
+        cursor     : default;
     }
 
     .notActive{
         background: #919191;
-        color: black;
+        color : black;
         cursor: pointer;
     }
 }
@@ -97,10 +97,10 @@ textarea {
 .head{margin-top: 10px;}
 .articleError{padding-top: 5px;}
 .v-input__details{
-    margin: 0;
+    margin : 0;
     padding: 0;
-    height: 0;
-    width: 0;
+    height : 0;
+    width  : 0;
 }
 
 </style>

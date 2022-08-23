@@ -54,8 +54,8 @@ import BaseLayout from '@/Layouts/BaseLayout.vue'
 export default {
     data() {
       return {
-        bookMarkTitle:this.originalBookMarkTitle,
-        bookMarkUrl:this.originalBookMarkUrl,
+        bookMarkTitle :this.originalBookMarkTitle,
+        bookMarkUrl   :this.originalBookMarkUrl,
         checkedTagList:[],
 
         //loding
@@ -75,23 +75,23 @@ export default {
     emits: ['triggerSubmit','triggerDeleteArticle'],
     props:{
         title:{
-            type:String,
+            type   :String,
             default:''
         },
         pageTitle:{
-            type:String,
+            type   :String,
             default:''
         },
         originalBookMarkTitle:{
-            type:String,
+            type   :String,
             default:''
         },
         originalBookMarkUrl:{
-            type:String,
+            type   :String,
             default:''
         },
         originalCheckedTagList:{
-            type:Array,
+            type   :Array,
             default:null
         },
     },
@@ -125,18 +125,18 @@ export default {
 .tabLabel{
     li{
         display: inline-block;
-        list-style:none;
-        border:black solid 1px;
+        border :black solid 1px;
         padding:10px 20px;
+        list-style:none;
     }
     .active{
         font-weight: bold;
-        cursor: default;
+        cursor     : default;
     }
 
     .notActive{
         background: #919191;
-        color: black;
+        color : black;
         cursor: pointer;
     }
 }
@@ -144,10 +144,10 @@ export default {
 .head{margin-top: 10px;}
 .bookMarkError{padding-top: 5px;}
 .v-input__details{
-    margin: 0;
+    margin : 0;
     padding: 0;
-    height: 0;
-    width: 0;
+    height : 0;
+    width  : 0;
 }
 
 </style>

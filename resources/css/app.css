@@ -36,20 +36,6 @@ body{
     color: black;
 }
 
-.searchArea{
-    display:grid;
-    grid-template-columns:5fr 1fr;
-}
-
-.searchArea .v-input{
-    grid-column: 1/2;
-}
-
-.searchArea button{
-    grid-column: 2/3;
-    margin: 0 10px;
-}
-
 .v-pagination__list{
     margin-bottom: 50px;
 }

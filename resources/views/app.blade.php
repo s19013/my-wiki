@@ -12,6 +12,9 @@
         <!-- Fonts -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
 
+        {{-- icon --}}
+        <link rel="icon" type="image/png" href="/favicon.png">
+
         <!-- Scripts -->
         @routes
         @vite('resources/js/app.js')

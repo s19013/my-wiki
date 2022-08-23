@@ -1,20 +1,13 @@
 <template>
     <BaseLayout title="ブックマーク検索" pageTitle="ブックマーク検索">
         <v-container>
-            <div class="searchArea">
-                <v-text-field
-                    v-model="bookMarkToSearch"
-                    label="検索"
-                    clearable
-                ></v-text-field>
-                <v-btn color="submit"
-                    elevation="2"
-                    :disabled = "loading"
-                    @click="search()">
-                    <v-icon>mdi-magnify</v-icon>
-                    検索
-                </v-btn>
-            </div>
+            <SearchField
+                ref        = "SearchField"
+                searchLabel="タグ検索"
+                :loadingFlag  ="loading"
+                @triggerSearch="search"
+                >
+            </SearchField>
 
             <TagDialog ref="tagDialog" class="w-50 mb-10" :searchOnly="true"></TagDialog>
 
@@ -48,64 +41,61 @@
 
 <script>
 import BaseLayout from '@/Layouts/BaseLayout.vue'
-import { InertiaLink, InertiaHead } from '@inertiajs/inertia-vue3'
 import { Link } from '@inertiajs/inertia-vue3';
 import TagDialog from '@/Components/dialog/TagDialog.vue';
 import loading from '@/Components/loading/loading.vue';
+import SearchField from '@/Components/SearchField.vue';
 
 export default{
     data() {
         return {
-            bookMarkToSearch:'',
             bookMarkList:null,
-            currentPage: 1,
-            pageCount:1,
-            loading:false,
+            currentPage : 1,
+            pageCount   :1,
+            loading     :false,
         }
     },
     components:{
         BaseLayout,
-        InertiaLink,
         Link,
         TagDialog,
         loading,
+        SearchField
     },
     methods: {
         // 検索用
         async search(){
-            this.loading = true
+            this.loading     = true
             this.currentPage = 1 //検索するのでリセットする
             await axios.post('/api/bookmark/search',{
-                currentPage:this.currentPage,
-                bookMarkToSearch:this.bookMarkToSearch,
-                tagList : this.$refs.tagDialog.serveCheckedTagListToParent()
+                currentPage     :this.currentPage,
+                bookMarkToSearch:this.$refs.SearchField.serveKeywordToParent(),
+                tagList         : this.$refs.tagDialog.serveCheckedTagListToParent()
             })
             .then((res) =>{
-                this.pageCount= res.data.pageCount
+                this.pageCount    = res.data.pageCount
                 this.bookMarkList = res.data.bookMarkList
-                this.loading = false
             })
             .catch((error) => {
                 console.log(error);
-                this.loading = false
             })
+            this.loading = false
         },
         // ページめくり
         async pagination(){
             this.loading = true
             await axios.post('/api/bookmark/search',{
-                currentPage:this.currentPage,
+                currentPage     :this.currentPage,
                 bookMarkToSearch:this.bookMarkToSearch,
-                tagList : this.$refs.tagDialog.serveCheckedTagListToParent()
+                tagList         : this.$refs.tagDialog.serveCheckedTagListToParent()
             })
             .then((res) =>{
                 this.bookMarkList = res.data.bookMarkList
-                this.loading = false
             })
             .catch((error) => {
                 console.log(error);
-                this.loading = false
             })
+            this.loading = false
         },
     },
     watch: {

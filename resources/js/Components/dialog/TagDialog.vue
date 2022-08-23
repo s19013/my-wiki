@@ -19,23 +19,14 @@
                         >mdi-close-box</v-icon>閉じる
                     </v-btn>
                 </div>
-                <!-- 検索窓とか -->
-                <div class="searchArea">
-                    <v-form v-on:submit.prevent ="searchTag()">
-                        <v-text-field
-                            v-model="tagToSearch"
-                            label="タグ検索"
-                            clearable
-                        ></v-text-field>
-                    </v-form>
-                    <v-btn color="submit"
-                        elevation="2"
-                        :disabled = "tagSerchLoading"
-                        @click.stop="searchTag()">
-                        <v-icon>mdi-magnify</v-icon>
-                        検索
-                    </v-btn>
-                </div>
+
+                <SearchField
+                ref = "SearchField"
+                searchLabel="タグ検索"
+                :loadingFlag="tagSerchLoading"
+                @triggerSearch="searchTag"
+                >
+                </SearchField>
 
                 <!-- 操作ボタン -->
                 <div>
@@ -115,44 +106,47 @@
 
 <script>
 import loading from '@/Components/loading/loading.vue'
+import SearchField from '@/Components/SearchField.vue';
 export default{
     data() {
       return {
-        tagToSearch:'',
         newTag:'',
 
         // flag
-        onlyCheckedFlag:false,
+        onlyCheckedFlag :false,
         createNewTagFlag:false,
-        tagDialogFlag:false,
+        tagDialogFlag   :false,
 
         //loding
         tagSerchLoading:false,
-        newTagSending:false,
+        newTagSending  :false,
 
         // errorFlag
-        newTagErrorFlag:false,
+        newTagErrorFlag          :false,
         tagAlreadyExistsErrorFlag:false,
 
         // tagList
-        checkedTagList:[],
+        checkedTagList     :[],
         tagSearchResultList:[],
-        tagListCash:[],//キャッシュ 既存チェックボックスのつけ外しで使う
+        tagListCash        :[],//キャッシュ 既存チェックボックスのつけ外しで使う
       }
     },
     props:{
         originalCheckedTagList:{
             //更新や閲覧画面で既にチェックがついているタグを受け取るため
-            type:Array,
+            type   :Array,
             default:null,
         },
         searchOnly:{
             //記事検索などでは新規作成を表示させないようにするため
-            type:Boolean,
+            type   :Boolean,
             default:false,
         },
     },
-    components:{loading},
+    components:{
+        loading,
+        SearchField
+    },
     methods: {
         //エラーチェック
         createNewTagCheck:_.debounce(_.throttle(async function(){
@@ -204,10 +198,10 @@ export default{
 
             //配列,キャッシュ初期化
             this.tagSearchResultList = []
-            this.tagListCash = []//キャッシュをクリアするのは既存チェックボックスを外す時に出てくるバグを防ぐため
+            this.tagListCash         = []//キャッシュをクリアするのは既存チェックボックスを外す時に出てくるバグを防ぐため
 
             await axios.post('/api/tag/search',{
-                tag:this.tagToSearch
+                tag:this.$refs.SearchField.serveKeywordToParent()
             })
             .then((res)=>{
                 for (const tag of res.data) {
@@ -221,6 +215,7 @@ export default{
                 //ローディングアニメ解除
                 this.tagSerchLoading = false
             })
+            .catch((err)=>{console.log(err);})
         },100),150),
         //チェック全消し
         clearAllCheck(){this.checkedTagList = []},
@@ -231,14 +226,14 @@ export default{
 
             // 新規登録の入力欄を消す
             this.createNewTagFlag =false
-            this.newTag = ''
+            this.newTag           = ''
 
             // 検索窓を初期化
             this.tagToSearch = ''
 
             //エラーを消す
             this.tagAlreadyExistsErrorFlag = false
-            this.newTagErrorFlag = false
+            this.newTagErrorFlag           = false
 
             //チェックを外す
             this.onlyCheckedFlag = false

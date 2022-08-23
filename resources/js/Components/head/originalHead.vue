@@ -74,18 +74,18 @@ export default{
 <style lang="scss" scoped>
 .originalHead{
     background-color: rgb(127, 255, 174);
-    height: 6vh;
-    margin-bottom:10px;
-    display: grid;
+    height        : 6vh;
+    margin-bottom :10px;
+    display       : grid;
     grid-template-columns:1fr 5fr 1fr;
     h2{
         grid-column: 2/3;
-        text-align:center
+        text-align :center
     }
     button{
         margin: auto;
         height: 80%;
-        width: 90%;
+        width : 90%;
         grid-column: 3/4;
     }
 }
@@ -93,19 +93,16 @@ export default{
 /* メニュー */
 nav {
     background: rgb(234, 234, 234);
-    z-index: 10;//これで10前のレイヤーへ
-    height: 100vh;
-    width: 40vw;
+    z-index : 10;//これで10前のレイヤーへ
+    height  : 100vh;
+    width   : 40vw;
     position: fixed; /* ウィンドウを基準に画面に固定 */
-    // position: absolute;
-    // 強制的に右端に置く
-    right: 0;
-    //ボタンと被らないように頭の位置を下げる
-    top:0;
+    right   : 0;// 強制的に右端に置く
+    top     :0;//ボタンと被らないように頭の位置を下げる
     a{
         cursor: pointer;
+        color : rgb(0, 0, 0);
         text-decoration: none;
-        color: rgb(0, 0, 0);
     }
     .navButton{
         display: grid;
@@ -113,18 +110,18 @@ nav {
     }
     i{
         grid-column: 2/3;
-        margin: 0 0 0 auto;
+        margin     : 0 0 0 auto;
     }
 
     h2,h3,h4{
-        text-align:center;
+        text-align :center;
         grid-column: 3/4;
     }
 
     h2 {
-        color: rgb(250, 250, 250);
+        color  : rgb(250, 250, 250);
+        cursor : default;
         padding:10px;
-        cursor: default;
     }
     h3 {
         background-color: rgb(212, 212, 212);
@@ -135,14 +132,14 @@ nav {
         background-color: rgb(212, 212, 212);
         padding:5px 0;
         margin :0 0 10px 0;
-        cursor: pointer;
+        cursor : pointer;
     }
     .titleAticle   { background-color:rgb(26, 130, 195) ;}
     .titleBookMark { background-color:rgb(64, 21, 166) ;}
     .logout {
         position: absolute;
-        top:85vh;
-        width: 100%;
+        top     :85vh;
+        width   : 100%;
         background-color:rgb(131, 6, 6) ;
         color:aliceblue
     }

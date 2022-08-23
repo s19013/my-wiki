@@ -1,8 +1,8 @@
 <template>
     <BaseBookMarkLayout
-        ref="BaseBookMarkLayout"
+        ref  ="BaseBookMarkLayout"
         title="新規作成"
-        pageTitle="新規作成"
+        pageTitle      ="新規作成"
         @triggerSubmit = "submit"
         @triggerDeleteBookMark = "deleteBookMark"
     >
@@ -44,32 +44,32 @@ export default {
 <style lang="scss">
 .articleContainer {margin: 0 20px;}
 textarea {
-        width: 100%;
-        resize: none;
-        background-color: #f6f6f6;
+        width  : 100%;
+        resize : none;
         padding: 20px;
+        background-color: #f6f6f6;
 }
 .markdown{
-    padding: 0 10px;
+    padding   : 0 10px;
     word-break:break-word;
     overflow-wrap:normal;
 }
 
 .tabLabel{
     li{
-        display: inline-block;
+        display   : inline-block;
         list-style:none;
-        border:black solid 1px;
+        border :black solid 1px;
         padding:10px 20px;
     }
     .active{
         font-weight: bold;
-        cursor: default;
+        cursor     : default;
     }
 
     .notActive{
         background: #919191;
-        color: black;
+        color : black;
         cursor: pointer;
     }
 }
@@ -77,10 +77,10 @@ textarea {
 .head{margin-top: 10px;}
 .articleError{padding-top: 5px;}
 .v-input__details{
-    margin: 0;
+    margin : 0;
     padding: 0;
-    height: 0;
-    width: 0;
+    height : 0;
+    width  : 0;
 }
 
 </style>

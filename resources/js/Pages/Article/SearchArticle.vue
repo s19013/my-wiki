@@ -1,20 +1,14 @@
 <template>
     <BaseLayout title="記事検索" pageTitle="記事検索">
         <v-container>
-            <div class="searchArea">
-                <v-text-field
-                    v-model="articleToSearch"
-                    label="検索"
-                    clearable
-                ></v-text-field>
-                <v-btn color="submit"
-                    elevation="2"
-                    :disabled = "loading"
-                    @click="searchArticle()">
-                    <v-icon>mdi-magnify</v-icon>
-                    検索
-                </v-btn>
-            </div>
+
+            <SearchField
+                ref = "SearchField"
+                searchLabel   ="タグ検索"
+                :loadingFlag  ="loading"
+                @triggerSearch="searchArticle"
+                >
+            </SearchField>
 
             <details>
                 <summary >検索対象</summary>
@@ -54,15 +48,14 @@
 
 <script>
 import BaseLayout from '@/Layouts/BaseLayout.vue'
-import { InertiaLink, InertiaHead } from '@inertiajs/inertia-vue3'
 import { Link } from '@inertiajs/inertia-vue3';
 import TagDialog from '@/Components/dialog/TagDialog.vue';
 import loading from '@/Components/loading/loading.vue'
+import SearchField from '@/Components/SearchField.vue';
 
 export default{
     data() {
         return {
-            articleToSearch:'',
             articleList:null,
             currentPage: 1,
             pageCount:1,
@@ -72,10 +65,10 @@ export default{
     },
     components:{
         BaseLayout,
-        InertiaLink,
         Link,
         TagDialog,
         loading,
+        SearchField,
     },
     methods: {
         // 検索用
@@ -83,20 +76,17 @@ export default{
             this.loading = true
             this.currentPage = 1 //検索するのでリセットする
             await axios.post('/api/article/search',{
-                currentPage:this.currentPage,
-                articleToSearch:this.articleToSearch,
-                tagList : this.$refs.tagDialog.serveCheckedTagListToParent(),
+                currentPage    :this.currentPage,
+                articleToSearch:this.$refs.SearchField.serveKeywordToParent(),
+                tagList     : this.$refs.tagDialog.serveCheckedTagListToParent(),
                 searchTarget:this.searchTarget
             })
             .then((res) =>{
                 this.pageCount= res.data.pageCount
                 this.articleList = res.data.articleList
-                this.loading = false
             })
-            .catch((error) => {
-                console.log(error);
-                this.loading = false
-            })
+            .catch((error) => {console.log(error);})
+            this.loading = false
         },
         // ページめくり
         async pagination(){
