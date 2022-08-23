@@ -84,17 +84,17 @@
                         <p class="error" v-if="tagAlreadyExistsErrorFlag">そのタグはすでに登録されいます</p>
 
                         <v-form v-on:submit.prevent ="createNewTagCheck">
-                            <v-text-field v-model="newTag" label="新しいタグ"></v-text-field>
+                            <v-text-field v-model="newTag" label="新しいタグ" outlined hide-details="false"></v-text-field>
                         </v-form>
 
                         <v-btn
-                        class="longButton"
-                        color="#BBDEFB"
-                        elevation="2"
-                        :disabled="newTagSending"
-                        @click.stop="createNewTagCheck()">
-                        <v-icon>mdi-content-save</v-icon>
-                        作成
+                            class="longButton"
+                            color="#BBDEFB"
+                            elevation="2"
+                            :disabled="newTagSending"
+                            @click.stop="createNewTagCheck()">
+                            <v-icon>mdi-content-save</v-icon>
+                            作成
                         </v-btn>
                     </div>
 
@@ -349,7 +349,10 @@ export default{
             padding-left: 10px;
             width: 100%;
     }
-    .areaCreateNewTag{margin: 10px;}
+    .areaCreateNewTag{
+        margin: 10px;
+        button{margin-top: 10px;}
+    }
     .clooseButton{margin-bottom: 10px;}
 }
 </style>
