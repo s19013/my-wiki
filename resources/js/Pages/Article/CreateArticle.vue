@@ -1,10 +1,10 @@
 <template>
     <BaseArticleLayout
-    ref="BaseArticleLayout"
-    title="新規作成"
-    pageTitle="新規作成"
-    @triggerSubmit = "submit"
-    @triggerDeleteArticle = "deleteArticle"
+        ref  ="BaseArticleLayout"
+        title="新規作成"
+        pageTitle      ="新規作成"
+        @triggerSubmit = "submit"
+        @triggerDeleteArticle = "deleteArticle"
     >
     </BaseArticleLayout>
 </template>
@@ -14,9 +14,7 @@ import BaseArticleLayout from '@/Layouts/BaseArticleLayout.vue'
 
 export default {
     data() {
-      return {
-
-      }
+      return {}
     },
     components:{
         BaseArticleLayout
@@ -29,11 +27,10 @@ export default {
             tagList,
         }){
             this.$refs.BaseArticleLayout.articleSending = true
-            console.log(this.$refs.BaseArticleLayout.articleSending);
             axios.post('/api/article/store',{
                 articleTitle:articleTitle,
-                articleBody:articleBody,
-                tagList:tagList
+                articleBody :articleBody,
+                tagList     :tagList
             })
             .then((res)=>{
                 this.$inertia.get('/Article/Search')
@@ -42,7 +39,6 @@ export default {
                 console.log(error);
             })
             this.$refs.BaseArticleLayout.articleSending = false
-            console.log(this.$refs.BaseArticleLayout.articleSending);
         },
         deleteArticle() {
             //遷移

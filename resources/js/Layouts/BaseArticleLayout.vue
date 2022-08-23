@@ -73,9 +73,9 @@ import BaseLayout from '@/Layouts/BaseLayout.vue'
 export default {
     data() {
       return {
-        activeTab:0,
-        articleTitle:this.originalArticleTitle,
-        articleBody :this.originalArticleBody,
+        activeTab     :0,
+        articleTitle  :this.originalArticleTitle,
+        articleBody   :this.originalArticleBody,
         checkedTagList:[],
 
         //loding
@@ -95,23 +95,23 @@ export default {
     emits: ['triggerSubmit','triggerDeleteArticle'],
     props:{
         title:{
-            type:String,
+            type   :String,
             default:''
         },
         pageTitle:{
-            type:String,
+            type   :String,
             default:''
         },
         originalArticleTitle:{
-            type:String,
+            type   :String,
             default:''
         },
         originalArticleBody:{
-            type:String,
+            type   :String,
             default:''
         },
         originalCheckedTagList:{
-            type:Array,
+            type  :Array,
             default:null
         },
     },
@@ -148,32 +148,32 @@ export default {
 <style lang="scss">
 .articleContainer {margin: 0 20px;}
 textarea {
-        width: 100%;
-        resize: none;
-        background-color: #f6f6f6;
+        width  : 100%;
+        resize : none;
         padding: 20px;
+        background-color: #f6f6f6;
 }
 .markdown{
-    padding: 0 10px;
-    word-break:break-word;
+    padding      : 0 10px;
+    word-break   :break-word;
     overflow-wrap:normal;
 }
 
 .tabLabel{
     li{
-        display: inline-block;
+        display   : inline-block;
         list-style:none;
-        border:black solid 1px;
+        border :black solid 1px;
         padding:10px 20px;
     }
     .active{
         font-weight: bold;
-        cursor: default;
+        cursor     : default;
     }
 
     .notActive{
         background: #919191;
-        color: black;
+        color : black;
         cursor: pointer;
     }
 }

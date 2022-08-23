@@ -2,7 +2,7 @@
     <BaseLayout title="ブックマーク検索" pageTitle="ブックマーク検索">
         <v-container>
             <SearchField
-                ref = "SearchField"
+                ref        = "SearchField"
                 searchLabel="タグ検索"
                 :loadingFlag  ="loading"
                 @triggerSearch="search"
@@ -50,9 +50,9 @@ export default{
     data() {
         return {
             bookMarkList:null,
-            currentPage: 1,
-            pageCount:1,
-            loading:false,
+            currentPage : 1,
+            pageCount   :1,
+            loading     :false,
         }
     },
     components:{
@@ -65,39 +65,37 @@ export default{
     methods: {
         // 検索用
         async search(){
-            this.loading = true
+            this.loading     = true
             this.currentPage = 1 //検索するのでリセットする
             await axios.post('/api/bookmark/search',{
-                currentPage:this.currentPage,
+                currentPage     :this.currentPage,
                 bookMarkToSearch:this.$refs.SearchField.serveKeywordToParent(),
-                tagList : this.$refs.tagDialog.serveCheckedTagListToParent()
+                tagList         : this.$refs.tagDialog.serveCheckedTagListToParent()
             })
             .then((res) =>{
-                this.pageCount= res.data.pageCount
+                this.pageCount    = res.data.pageCount
                 this.bookMarkList = res.data.bookMarkList
-                this.loading = false
             })
             .catch((error) => {
                 console.log(error);
-                this.loading = false
             })
+            this.loading = false
         },
         // ページめくり
         async pagination(){
             this.loading = true
             await axios.post('/api/bookmark/search',{
-                currentPage:this.currentPage,
+                currentPage     :this.currentPage,
                 bookMarkToSearch:this.bookMarkToSearch,
-                tagList : this.$refs.tagDialog.serveCheckedTagListToParent()
+                tagList         : this.$refs.tagDialog.serveCheckedTagListToParent()
             })
             .then((res) =>{
                 this.bookMarkList = res.data.bookMarkList
-                this.loading = false
             })
             .catch((error) => {
                 console.log(error);
-                this.loading = false
             })
+            this.loading = false
         },
     },
     watch: {
