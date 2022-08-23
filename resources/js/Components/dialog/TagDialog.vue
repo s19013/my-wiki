@@ -113,33 +113,33 @@ export default{
         newTag:'',
 
         // flag
-        onlyCheckedFlag:false,
+        onlyCheckedFlag :false,
         createNewTagFlag:false,
-        tagDialogFlag:false,
+        tagDialogFlag   :false,
 
         //loding
         tagSerchLoading:false,
-        newTagSending:false,
+        newTagSending  :false,
 
         // errorFlag
-        newTagErrorFlag:false,
+        newTagErrorFlag          :false,
         tagAlreadyExistsErrorFlag:false,
 
         // tagList
-        checkedTagList:[],
+        checkedTagList     :[],
         tagSearchResultList:[],
-        tagListCash:[],//キャッシュ 既存チェックボックスのつけ外しで使う
+        tagListCash        :[],//キャッシュ 既存チェックボックスのつけ外しで使う
       }
     },
     props:{
         originalCheckedTagList:{
             //更新や閲覧画面で既にチェックがついているタグを受け取るため
-            type:Array,
+            type   :Array,
             default:null,
         },
         searchOnly:{
             //記事検索などでは新規作成を表示させないようにするため
-            type:Boolean,
+            type   :Boolean,
             default:false,
         },
     },
@@ -198,7 +198,7 @@ export default{
 
             //配列,キャッシュ初期化
             this.tagSearchResultList = []
-            this.tagListCash = []//キャッシュをクリアするのは既存チェックボックスを外す時に出てくるバグを防ぐため
+            this.tagListCash         = []//キャッシュをクリアするのは既存チェックボックスを外す時に出てくるバグを防ぐため
 
             await axios.post('/api/tag/search',{
                 tag:this.$refs.SearchField.serveKeywordToParent()
@@ -226,14 +226,14 @@ export default{
 
             // 新規登録の入力欄を消す
             this.createNewTagFlag =false
-            this.newTag = ''
+            this.newTag           = ''
 
             // 検索窓を初期化
             this.tagToSearch = ''
 
             //エラーを消す
             this.tagAlreadyExistsErrorFlag = false
-            this.newTagErrorFlag = false
+            this.newTagErrorFlag           = false
 
             //チェックを外す
             this.onlyCheckedFlag = false
