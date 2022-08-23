@@ -22,7 +22,7 @@
 export default{
     data() {
         return {
-            keyword:''
+            keyword:""
         }
     },
     props:{
@@ -37,7 +37,8 @@ export default{
     },
     methods: {
         triggerSearch(){this.$emit('triggerSearch')},
-        serveKeywordToParent(){return this.keyword}
+        serveKeywordToParent(){return this.keyword},
+        resetKeyword(){this.keyword=""}
     },
 }
 
