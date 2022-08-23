@@ -47,7 +47,8 @@ export default{
 form{
     display:grid;
     grid-template-columns:5fr 1fr;
-    margin: 20px 0;
+    margin-top: 10px;
+    margin-bottom: 20px;
     .v-input{grid-column: 1/2;}
     button  {
         grid-column: 2/3;
