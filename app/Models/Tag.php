@@ -20,13 +20,9 @@ class Tag extends Model
     //新規タグ登録
     public static function store($userId,$tag)
     {
-        // ログインユーザーが既に登録していないか確かめる
-        $tag_exists = Tag::where('user_id','=',$userId)
-        ->where('name','=',$tag)
-        ->exists();//existsでダブっていればtrue
 
         // すでにあったらエラーを返す
-        if ($tag_exists == true) {
+        if (self::isAllreadyExists($userId,$tag) == true) {
             return response()->json(
                 ["message" => "already exists"],
                 400
@@ -68,5 +64,13 @@ class Tag extends Model
         $query->orderBy('name');
 
         return $query->get();
+    }
+
+    // ログインユーザーが既に登録していないか確かめる
+    public static function  isAllreadyExists($userId,$tag)
+    {
+        return Tag::where('user_id','=',$userId)
+        ->where('name','=',$tag)
+        ->exists();//existsでダブっていればtrue
     }
 }
