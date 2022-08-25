@@ -169,4 +169,12 @@ class BookMark extends Model
         // falseなら他人のを覗こうとしている
         return ($bookMark->original['user_id']) == $userId ;
     }
+
+    // ログインユーザーが既に登録していないか確かめる
+    public static function  isAllreadyExists($userId,$url)
+    {
+        return $url_exists = BookMark::where('user_id','=',$userId)
+        ->where('url','=',$url)
+        ->exists();//existsでダブっていればtrue
+    }
 }
