@@ -16,6 +16,15 @@ class BookMarkController extends Controller
         // CSRFトークンを再生成して、二重送信対策
         $request->session()->regenerateToken();
 
+        //urlがすでに登録されているか確かめる
+        $isAllreadyExists =BookMark::isAllreadyExists(Auth::id(),$request->bookMarkUrl);
+        if ($isAllreadyExists == true) {
+            return response()->json(
+                ["message" => "already exists"],
+                400
+            );
+        }
+
         // 記事を保存して記事のidを取得
         $bookMarkId = BookMark::storeBookMark(
                 userId   : Auth::id(),
