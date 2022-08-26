@@ -45,7 +45,7 @@ export default {
     methods: {
         compiledMarkdown() {return marked(this.body)},
         changeTab(num){this.activeTab = num},
-        serveBodyToParent(){return this.body}
+        serveBody(){return this.body}
     },
 }
 </script>
