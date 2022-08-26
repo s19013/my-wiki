@@ -1,10 +1,13 @@
 <template>
     <div>
         <!-- ダイアログを呼び出すためのボタン -->
-        <v-btn class="longButton" color="submit" size="small" @click.stop="openTagDialog()">
-            <v-icon>mdi-tag</v-icon>
-            タグ
-        </v-btn>
+        <div class="dialogAndList">
+            <v-btn color="submit" size="small" @click.stop="openTagDialog()">
+                <v-icon>mdi-tag</v-icon>
+                タグ
+            </v-btn>
+            <TagList :tagList="checkedTagList"/>
+        </div>
 
         <!-- v-modelがv-ifとかの代わりになっている -->
         <v-dialog
@@ -107,6 +110,7 @@
 <script>
 import loading from '@/Components/loading/loading.vue'
 import SearchField from '@/Components/SearchField.vue';
+import TagList from '@/Components/TagList.vue';
 export default{
     data() {
       return {
@@ -147,7 +151,8 @@ export default{
     },
     components:{
         loading,
-        SearchField
+        SearchField,
+        TagList
     },
     methods: {
         //エラーチェック
@@ -345,14 +350,46 @@ export default{
         }
     }
     label{
-            font-size: 1.5vmax;
-            padding-left: 10px;
-            width: 100%;
+        font-size: 1.5vmax;
+        padding-left: 10px;
+        width: 100%;
     }
     .areaCreateNewTag{
         margin: 10px;
         button{margin-top: 10px;}
     }
     .clooseButton{margin-bottom: 10px;}
+}
+
+@media (min-width: 601px){
+    .dialogAndList{
+        display:grid;
+        grid-template-rows:0.5fr 0.5fr;
+        grid-template-columns:5fr 1fr;
+        margin:20px 0;
+        .tagList{
+            grid-row: 1/3;
+            grid-column: 1/2;
+        }
+        button{
+            grid-row: 1/3;
+            grid-column: 2/3;
+        }
+    }
+}
+
+@media (max-width: 600px){
+.dialogAndList{
+        display:grid;
+        grid-template-rows:auto auto;
+        margin:20px 0;
+        .tagList{
+            grid-row: 2/3;
+        }
+        button{
+            margin-bottom:20px;
+            grid-row: 1/2;
+        }
+    }
 }
 </style>

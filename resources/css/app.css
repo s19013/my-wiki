@@ -39,3 +39,12 @@ body{
 .v-pagination__list{
     margin-bottom: 50px;
 }
+
+@media (max-width: 960px){
+    .Dialog{
+        background: #e1e1e1;
+        max-height: 95vh;
+        width: 80vw;
+        padding: 10px;
+    }
+}
