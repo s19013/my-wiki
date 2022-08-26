@@ -183,9 +183,9 @@ export default{
                 this.newTagErrorFlag = false
             })
             .catch((error) =>{
-                // console.log(error.response);
                 // ダブりエラー
                 if (error.response.status == 400) { this.tagAlreadyExistsErrorFlag = true }
+                else{console.log(error.response);}
             })
             //ローディングアニメ解除
             this.newTagSending = false
