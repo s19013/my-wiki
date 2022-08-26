@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import DeleteButton from '@/Components/DeleteButton.vue';
+import DeleteButton from '@/Components/button/DeleteButton.vue';
 export default {
     data() {
         return {
