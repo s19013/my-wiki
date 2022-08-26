@@ -9,7 +9,7 @@
                 >
             </SearchField>
 
-            <TagDialog ref="tagDialog" class="w-50 mb-10" :searchOnly="true"></TagDialog>
+            <TagDialog ref="tagDialog" class="mb-10" :searchOnly="true"></TagDialog>
 
             <!-- loadingアニメ -->
             <loading v-show="loading"></loading>

@@ -1,10 +1,7 @@
 <template>
-    <div>
+    <div class="deleteAlertDialog">
      <!-- ダイアログを呼び出すためのボタン -->
-    <v-btn color="error" @click.stop="deleteDialogFlagSwitch">
-        <v-icon>mdi-trash-can</v-icon>
-        削除
-    </v-btn>
+    <DeleteButton @click="deleteDialogFlagSwitch"/>
 
     <v-dialog
       v-model="deleteDialogFlag"
@@ -27,11 +24,15 @@
 </template>
 
 <script>
+import DeleteButton from '@/Components/button/DeleteButton.vue';
 export default {
     data() {
         return {
             deleteDialogFlag:false,
         }
+    },
+    components:{
+        DeleteButton
     },
     methods: {
         //切り替え

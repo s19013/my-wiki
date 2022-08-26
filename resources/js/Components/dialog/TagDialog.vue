@@ -379,6 +379,7 @@ export default{
 }
 
 @media (max-width: 600px){
+.tagDialog{label{font-size: 18px;}}
 .dialogAndList{
         display:grid;
         grid-template-rows:auto auto;

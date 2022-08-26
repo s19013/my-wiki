@@ -3,27 +3,25 @@
         <div class="articleContainer">
             <v-form v-on:submit.prevent ="submitCheck">
                 <!-- タイトル入力欄とボタン2つ -->
-                <v-row class="head">
-                    <v-col cols="10">
-                        <v-text-field
-                            v-model="articleTitle"
-                            label="タイトル"
-                            outlined hide-details="false"
-                        ></v-text-field>
-                    </v-col>
-                    <v-col cols="1"> <DeleteAlertComponent @deleteAricleTrigger="deleteArticle"></DeleteAlertComponent> </v-col>
-                    <v-col cols="1">
-                        <v-btn class="longButton" color="#BBDEFB" @click="submitCheck" :disabled="articleSending">
-                        <v-icon>mdi-content-save</v-icon>
-                        保存
-                        </v-btn>
-                    </v-col>
-                </v-row>
+                <div class="head">
+                    <DeleteAlertComponent @deleteAricleTrigger="deleteArticle"/>
+                    <SaveButton
+                        :disabled="articleSending"
+                        @click="submitCheck()"
+                    />
+                </div>
+                <v-text-field
+                    v-model="articleTitle"
+                    label="タイトル"
+                    outlined hide-details="false"
+                />
+
                 <TagDialog
                     ref="tagDialog"
                     :originalCheckedTagList=originalCheckedTagList
-                    @closedTagDialog="updateCheckedTagList"
                 />
+
+                <p class="error articleError" v-if="articleBodyErrorFlag">本文を入力してください</p>
                 <ArticleBody
                     ref="articleBody"
                     :originalArticleBody="originalArticleBody"
@@ -44,6 +42,7 @@ import DeleteAlertComponent from '@/Components/dialog/DeleteAlertDialog.vue';
 import loadingDialog from '@/Components/loading/loadingDialog.vue';
 import BaseLayout from '@/Layouts/BaseLayout.vue'
 import ArticleBody from '@/Components/article/ArticleBody.vue';
+import SaveButton from '@/Components/button/SaveButton.vue';
 
 export default {
     data() {
@@ -64,7 +63,8 @@ export default {
         TagList,
         loadingDialog,
         BaseLayout,
-        ArticleBody
+        ArticleBody,
+        SaveButton
     },
     emits: ['triggerSubmit','triggerDeleteArticle'],
     props:{
@@ -90,7 +90,6 @@ export default {
         },
     },
     methods: {
-        updateCheckedTagList (list) { this.checkedTagList = list },
         switchArticleSending(){this.articleSending = !this.articleSending},
         // 本文送信前のチェック
         submitCheck:_.debounce(_.throttle(async function(){
@@ -119,6 +118,18 @@ export default {
 
 <style lang="scss">
 .articleContainer {margin: 0 20px;}
-.head{margin-top: 10px;}
+.head{
+    display: grid;
+    grid-template-columns:10fr auto auto;
+    margin: 10px;
+    .deleteAlertDialog{
+        grid-column: 2/3;
+    }
+    .saveButton{
+        margin-left:10px ;
+        grid-column: 3/4;
+    }
+
+}
 .articleError{padding-top: 5px;}
 </style>
