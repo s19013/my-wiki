@@ -1,6 +1,6 @@
 <template>
     <BaseLayout :title="title" :pageTitle="pageTitle">
-        <section class="articleContainer">
+        <div class="articleContainer">
             <v-form v-on:submit.prevent ="submitCheck">
                 <!-- タイトル入力欄とボタン2つ -->
                 <v-row class="head">
@@ -18,44 +18,21 @@
                         </v-btn>
                     </v-col>
                 </v-row>
-                <!-- タブ -->
-                <v-row>
-                    <v-col>
-                        <ul class="tabLabel">
-                            <li @click="changeTab(0)" :class="{active: activeTab === 0,notActive: activeTab !== 0 }">
-                                本文
-                            </li>
-                            <li @click="changeTab(1)" :class="{active: activeTab === 1,notActive: activeTab !== 1 }">
-                                変換後
-                            </li>
-                        </ul>
-                    </v-col>
-
-                    <!--  -->
-                    <v-col><p class="error articleError" v-if="articleBodyErrorFlag">本文を入力してください</p></v-col>
-
-                    <!-- タグ -->
-                    <v-col cols="2">
-                        <TagDialog ref="tagDialog"
+                <TagList :tagList="checkedTagList"/>
+                <v-col cols="2">
+                        <TagDialog
+                            ref="tagDialog"
                             :originalCheckedTagList=originalCheckedTagList
                             @closedTagDialog="updateCheckedTagList"
                             />
-                    </v-col>
+                </v-col>
+                <ArticleBody
+                    ref="articleBody"
+                    :originalArticleBody="originalArticleBody"
+                />
 
-                </v-row>
-                <!-- md入力欄  -->
-                <div v-show="activeTab === 0">
-                    <v-textarea
-                        filled
-                        auto-grow
-                        label="本文 [必須]"
-                        v-model = "articleBody"
-                    ></v-textarea>
-                </div>
-                <div v-show="activeTab === 1" class="markdown" v-html="compiledMarkdown()"></div>
             </v-form>
-            <TagList :tagList="checkedTagList"/>
-        </section>
+        </div>
         <!-- 送信中に表示 -->
         <loadingDialog :loadingFlag="articleSending"></loadingDialog>
 
@@ -63,19 +40,17 @@
 </template>
 
 <script>
-import {marked} from 'marked';
 import TagDialog from '@/Components/dialog/TagDialog.vue';
 import TagList from '@/Components/TagList.vue';
 import DeleteAlertComponent from '@/Components/dialog/DeleteAlertDialog.vue';
 import loadingDialog from '@/Components/loading/loadingDialog.vue';
 import BaseLayout from '@/Layouts/BaseLayout.vue'
+import ArticleBody from '@/Components/article/ArticleBody.vue';
 
 export default {
     data() {
       return {
-        activeTab     :0,
         articleTitle  :this.originalArticleTitle,
-        articleBody   :this.originalArticleBody,
         checkedTagList:[],
 
         //loding
@@ -91,6 +66,7 @@ export default {
         TagList,
         loadingDialog,
         BaseLayout,
+        ArticleBody
     },
     emits: ['triggerSubmit','triggerDeleteArticle'],
     props:{
@@ -116,14 +92,12 @@ export default {
         },
     },
     methods: {
-        compiledMarkdown() {return marked(this.articleBody)},
-        changeTab(num){this.activeTab = num},
         updateCheckedTagList (list) { this.checkedTagList = list },
         switchArticleSending(){this.articleSending = !this.articleSending},
         // 本文送信前のチェック
         submitCheck:_.debounce(_.throttle(async function(){
             //本文が空だったらエラーだして送信しない
-            if (this.articleBody =='') {
+            if (this.$refs.articleBody.serveBody() =='') {
                 this.articleBodyErrorFlag = true
                 return
             }
@@ -133,7 +107,7 @@ export default {
         submit(){
             this.$emit('triggerSubmit',{
                 articleTitle:this.articleTitle,
-                articleBody :this.articleBody,
+                articleBody :this.$refs.articleBody.serveBody(),
                 tagList     :this.$refs.tagDialog.serveCheckedTagListToParent()
             })
         },
@@ -147,37 +121,6 @@ export default {
 
 <style lang="scss">
 .articleContainer {margin: 0 20px;}
-textarea {
-        width  : 100%;
-        resize : none;
-        padding: 20px;
-        background-color: #f6f6f6;
-}
-.markdown{
-    padding      : 0 10px;
-    word-break   :break-word;
-    overflow-wrap:normal;
-}
-
-.tabLabel{
-    li{
-        display   : inline-block;
-        list-style:none;
-        border :black solid 1px;
-        padding:10px 20px;
-    }
-    .active{
-        font-weight: bold;
-        cursor     : default;
-    }
-
-    .notActive{
-        background: #919191;
-        color : black;
-        cursor: pointer;
-    }
-}
-
 .head{margin-top: 10px;}
 .articleError{padding-top: 5px;}
 </style>
