@@ -153,4 +153,11 @@ nav {
 //off
 .slide-leave-active { transition: all .4s ease; }
 .slide-leave-to{ transform: translateX(100%); }
+
+@media (max-width: 960px){
+    nav{width: 70%;}
+}
+@media (max-width: 600px){
+    nav{width: 100%;}
+}
 </style>
