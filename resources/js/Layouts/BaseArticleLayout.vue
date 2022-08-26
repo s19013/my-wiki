@@ -8,6 +8,7 @@
                         <v-text-field
                             v-model="articleTitle"
                             label="タイトル"
+                            outlined hide-details="false"
                         ></v-text-field>
                     </v-col>
                     <v-col cols="1"> <DeleteAlertComponent @deleteAricleTrigger="deleteArticle"></DeleteAlertComponent> </v-col>
@@ -18,14 +19,11 @@
                         </v-btn>
                     </v-col>
                 </v-row>
-                <TagList :tagList="checkedTagList"/>
-                <v-col cols="2">
-                        <TagDialog
-                            ref="tagDialog"
-                            :originalCheckedTagList=originalCheckedTagList
-                            @closedTagDialog="updateCheckedTagList"
-                            />
-                </v-col>
+                <TagDialog
+                    ref="tagDialog"
+                    :originalCheckedTagList=originalCheckedTagList
+                    @closedTagDialog="updateCheckedTagList"
+                />
                 <ArticleBody
                     ref="articleBody"
                     :originalArticleBody="originalArticleBody"
