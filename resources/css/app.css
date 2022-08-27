@@ -16,25 +16,6 @@ body{
     width: 50vw;
     padding: 10px;
 }
-.contentsContainer{
-    display: grid;
-    grid-template-columns:10fr 1fr;
-    background-color: #e1e1e1;
-    border:black solid 1px;
-    margin-bottom:20px;
-    padding: 5px;
-    /* cursor: pointer; */
-}
-.contentsContainer button{
-    width: 100%;
-}
-.contentsContainer h2{
-    grid-column: 1/2;
-}
-.contentsContainer a{
-    text-decoration: none;
-    color: black;
-}
 
 .v-pagination__list{
     margin-bottom: 50px;
