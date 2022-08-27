@@ -15,20 +15,12 @@
             <loading v-show="loading"></loading>
 
             <template v-for="bookMark of bookMarkList" :key="bookMark.id">
-                <div class ="contentsContainer" v-show="!loading">
-                    <!-- 別タブで開くようにする -->
-                    <a :href="bookMark.url" target="_blank" rel="noopener noreferrer">
-                        <h2>
-                            <v-icon>mdi-arrow-top-left-bold-box-outline</v-icon>
-                            {{bookMark.title}}
-                        </h2>
-                    </a>
-                    <Link :href="'/BookMark/Edit/' + bookMark.id">
-                            <v-btn color="submit" elevation="2">
-                                編集
-                            </v-btn>
-                    </Link>
-                </div>
+                <BookMarkContainer
+                    :title="bookMark.title"
+                    :url  ="bookMark.url"
+                    :id   ="bookMark.id"
+                    :loading="loading"
+                />
             </template>
         </v-container>
         <v-pagination
@@ -45,6 +37,7 @@ import { Link } from '@inertiajs/inertia-vue3';
 import TagDialog from '@/Components/dialog/TagDialog.vue';
 import loading from '@/Components/loading/loading.vue';
 import SearchField from '@/Components/SearchField.vue';
+import BookMarkContainer from '@/Components/contents/BookMarkContainer.vue';
 
 export default{
     data() {
@@ -60,7 +53,8 @@ export default{
         Link,
         TagDialog,
         loading,
-        SearchField
+        SearchField,
+        BookMarkContainer
     },
     methods: {
         // 検索用
