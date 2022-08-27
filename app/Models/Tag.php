@@ -71,6 +71,7 @@ class Tag extends Model
     {
         return Tag::where('user_id','=',$userId)
         ->where('name','=',$tag)
+        ->whereNull('deleted_at')
         ->exists();//existsでダブっていればtrue
     }
 }

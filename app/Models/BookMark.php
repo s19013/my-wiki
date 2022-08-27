@@ -175,6 +175,7 @@ class BookMark extends Model
     {
         return $url_exists = BookMark::where('user_id','=',$userId)
         ->where('url','=',$url)
+        ->whereNull('deleted_at')
         ->exists();//existsでダブっていればtrue
     }
 }
