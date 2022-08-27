@@ -15,7 +15,7 @@
                     <p @click.stop="deleteDialogFlagSwitch()">もどる</p>
                 </v-col>
                 <v-col cols="2">
-                    <p class="error" @click.stop="deleteAricle()">削除する</p>
+                    <p class="error" @click.stop="deleteTrigger()">削除する</p>
                 </v-col>
             </v-row>
         </section>
@@ -38,7 +38,7 @@ export default {
         //切り替え
         deleteDialogFlagSwitch(){this.deleteDialogFlag = !this.deleteDialogFlag},
         //ダイアログ内の削除するボタンを押したことを親に伝える
-        deleteAricle(){this.$emit("deleteAricleTrigger");}
+        deleteTrigger(){this.$emit("deleteTrigger");}
     },
 }
 </script>

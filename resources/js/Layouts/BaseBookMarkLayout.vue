@@ -4,7 +4,7 @@
             <v-form v-on:submit.prevent ="submitCheck">
                 <!-- タイトル入力欄とボタン2つ -->
                 <div class="head">
-                    <DeleteAlertComponent @deleteAricleTrigger="deleteBookMark"/>
+                    <DeleteAlertComponent @deleteTrigger="deleteBookMark"/>
                     <SaveButton
                         :disabled="bookMarkSending"
                         @click="submitCheck()"
