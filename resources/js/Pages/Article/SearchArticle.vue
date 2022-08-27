@@ -28,14 +28,11 @@
             <loading v-show="loading"></loading>
 
             <template v-for="article of articleList" :key="article.id">
-                    <div class ="contentsContainer" v-show="!loading">
-                        <h2>{{article.title}}</h2>
-                        <Link :href="'/Article/View/' + article.id">
-                            <v-btn color="submit" elevation="2">
-                                閲覧 編集
-                            </v-btn>
-                        </Link>
-                    </div>
+                <ArticleContainer
+                    :title  ="article.title"
+                    :id     ="article.id"
+                    :loading="loading"
+                />
             </template>
         </v-container>
         <v-pagination
@@ -48,10 +45,10 @@
 
 <script>
 import BaseLayout from '@/Layouts/BaseLayout.vue'
-import { Link } from '@inertiajs/inertia-vue3';
 import TagDialog from '@/Components/dialog/TagDialog.vue';
 import loading from '@/Components/loading/loading.vue'
 import SearchField from '@/Components/SearchField.vue';
+import ArticleContainer from '@/Components/contents/ArticleContainer.vue';
 
 export default{
     data() {
@@ -65,10 +62,10 @@ export default{
     },
     components:{
         BaseLayout,
-        Link,
         TagDialog,
         loading,
         SearchField,
+        ArticleContainer
     },
     methods: {
         // 検索用
