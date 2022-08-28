@@ -5,7 +5,7 @@
                 <div class="head">
                     <DeleteAlertComponent
                         type="bookmark"
-                        @deleteTrigger="deleteBookMark"
+                        @deleteTrigger="deleteArticle"
                     />
                     <Link :href="'/Article/Edit/' + article.id">
                         <v-btn class="longButton editButton" color="#BBDEFB">
