@@ -21,7 +21,7 @@
                     :originalCheckedTagList=originalCheckedTagList
                 />
 
-                <p class="error articleError" v-if="articleBodyErrorFlag">本文を入力してください</p>
+                <p class="error" v-if="articleBodyErrorFlag">本文を入力してください</p>
                 <ArticleBody
                     ref="articleBody"
                     :originalArticleBody="originalArticleBody"
@@ -131,5 +131,4 @@ export default {
     }
 
 }
-.articleError{padding-top: 5px;}
 </style>
