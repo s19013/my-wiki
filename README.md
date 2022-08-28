@@ -81,6 +81,7 @@ https://github.com/s19013/my-wiki/tree/main/dev_memo
 * セキュリティ
 * laravelのもっと深いところ
 * vueのもっと深いところ
+* v-formのprevent
 
 ## 今後追加(改善)したい機能
 * 見た目
@@ -109,6 +110,7 @@ https://github.com/s19013/my-wiki/tree/main/dev_memo
     * `https`化する
     * ほぼ同じことしてる部分があるのでまとめてしまいたいという気持ちもあるが帰って読みにくいコードになるのではないか?
     * transitionContorollerをarticleとbookmarkで分ける
+    <!-- * 将来的には公開したい｡広告などをつけたい(ドメイン代､サーバー代を回収できる程度の利益を出したい) -->
 
 ## faq
 Q:laravelを使った理由は?  
