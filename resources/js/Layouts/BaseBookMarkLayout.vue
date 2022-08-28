@@ -1,33 +1,33 @@
 <template>
     <BaseLayout :title="title" :pageTitle="pageTitle">
         <div class="articleContainer">
-            <v-form v-on:submit.prevent ="submitCheck">
+            <div class="head">
+                <DeleteAlertComponent
+                    type="bookmark"
+                    @deleteTrigger="deleteBookMark"
+                />
+                <SaveButton
+                    :disabled="bookMarkSending"
+                    @click="submitCheck()"
+                />
+            </div>
+            <TagDialog
+                ref="tagDialog"
+                :originalCheckedTagList=originalCheckedTagList
+            />
+            <p class="error" v-if="bookMarkUrlErrorFlag">urlを入力してください</p>
+            <p class="error" v-if="alreadyExistErrorFlag">そのURLはすでに登録されています</p>
+            <v-form @submit.prevent>
                 <!-- タイトル入力欄とボタン2つ -->
-                <div class="head">
-                    <DeleteAlertComponent
-                        type="bookmark"
-                        @deleteTrigger="deleteBookMark"
-                    />
-                    <SaveButton
-                        :disabled="bookMarkSending"
-                        @click="submitCheck()"
-                    />
-                </div>
                 <v-text-field
                     v-model="bookMarkTitle"
                     label="タイトル"
                     outlined hide-details="false"
-                />
 
-                <TagDialog
-                    ref="tagDialog"
-                    :originalCheckedTagList=originalCheckedTagList
                 />
-
-                <p class="error articleError" v-if="bookMarkUrlErrorFlag">urlを入力してください</p>
                 <v-text-field
-                        label="url [必須]"
-                        v-model = "bookMarkUrl"
+                    label="url [必須]"
+                    v-model = "bookMarkUrl"
                 ></v-text-field>
             </v-form>
         </div>
@@ -56,7 +56,8 @@ export default {
         bookMarkSending:false,
 
         // errorFlag
-        bookMarkUrlErrorFlag:false,
+        bookMarkUrlErrorFlag :false,
+        alreadyExistErrorFlag:false,
       }
     },
     components:{
@@ -91,6 +92,7 @@ export default {
         },
     },
     methods: {
+        switchAlreadyExistErrorFlag(){this.alreadyExistErrorFlag = !this.alreadyExistErrorFlag},
         switchBookMarkSending(){this.bookMarkSending = !this.bookMarkSending},
         // 本文送信
         submitCheck:_.debounce(_.throttle(async function(){
@@ -128,7 +130,6 @@ export default {
     }
 
 }
-.bookMarkError{padding-top: 5px;}
 
 
 </style>
