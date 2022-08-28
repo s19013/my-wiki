@@ -58,7 +58,7 @@ textarea {
         background-color: #f6f6f6;
 }
 .markdown{
-    padding      : 0 10px;
+    margin:20px;
     word-break   :break-word;
     overflow-wrap:normal;
 }

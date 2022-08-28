@@ -2,20 +2,19 @@
     <BaseLayout :title="'my-wiki ' + article.title" pageTitle="記事観覧">
         <div class="articleContainer">
                 <!-- タイトルとボタン2つ -->
-                <v-row class="head">
-                    <v-col cols="10">
-                        <h1>{{article.title}}</h1>
-                    </v-col>
-                    <v-col cols="1"> <DeleteAlertComponent @deleteTrigger="deleteArticle"></DeleteAlertComponent> </v-col>
-                    <v-col cols="1">
-                        <Link :href="'/Article/Edit/' + article.id">
-                            <v-btn class="longButton" color="#BBDEFB">
-                                <v-icon>mdi-pencil-plus</v-icon>
-                                編集
-                            </v-btn>
-                        </Link>
-                    </v-col>
-                </v-row>
+                <div class="head">
+                    <DeleteAlertComponent
+                        type="bookmark"
+                        @deleteTrigger="deleteBookMark"
+                    />
+                    <Link :href="'/Article/Edit/' + article.id">
+                        <v-btn class="longButton editButton" color="#BBDEFB">
+                            <v-icon>mdi-pencil-plus</v-icon>
+                            編集
+                        </v-btn>
+                    </Link>
+                </div>
+                <h1 class="title">{{article.title}}</h1>
 
                 <!-- md表示 -->
                 <div class="markdown" v-html="compiledMarkdown()"></div>
@@ -72,16 +71,33 @@ export default{
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .articleContainer {margin: 0 20px;}
+.title{
+    padding: 2px;
+    border:black solid 1px;
+}
 .markdown{
-    margin-top:20px;
-    margin-bottom:30px;
-    padding: 10px;
-    word-break:break-word;
+    margin:20px;
+    word-break   :break-word;
     overflow-wrap:normal;
+}
+.head{
+    display: grid;
+    grid-template-columns:10fr auto auto;
+    margin: 10px;
+    .deleteAlertDialog{
+        grid-column: 2/3;
+    }
+    .editButton{
+        margin-left:10px ;
+        grid-column: 3/4;
+    }
+
 }
 
 .head{margin-top: 10px;}
-
+@media (max-width: 600px){
+    .editButton{height: 3.5vh;}
+}
 </style>
