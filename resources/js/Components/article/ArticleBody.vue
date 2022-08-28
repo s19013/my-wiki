@@ -18,7 +18,8 @@
         <div v-show="activeTab === 0">
             <v-textarea
                 filled
-                auto-grow
+                no-resize
+                rows="20"
                 label="本文 [必須]"
                 v-model = "body"
             ></v-textarea>
@@ -54,7 +55,7 @@ export default {
 textarea {
         width  : 100%;
         resize : none;
-        padding: 20px;
+        // padding: 20px;
         background-color: #f6f6f6;
 }
 .markdown{
