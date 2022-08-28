@@ -1,24 +1,23 @@
 <template>
     <BaseLayout :title="title" :pageTitle="pageTitle">
         <div class="articleContainer">
-            <v-form v-on:submit.prevent ="submitCheck">
+            <div class="head">
+                <DeleteAlertComponent @deleteTrigger="deleteArticle"/>
+                <SaveButton
+                    :disabled="articleSending"
+                    @click="submitCheck()"
+                />
+            </div>
+            <TagDialog
+                ref="tagDialog"
+                :originalCheckedTagList=originalCheckedTagList
+            />
+            <v-form v-on:submit.prevent>
                 <!-- タイトル入力欄とボタン2つ -->
-                <div class="head">
-                    <DeleteAlertComponent @deleteTrigger="deleteArticle"/>
-                    <SaveButton
-                        :disabled="articleSending"
-                        @click="submitCheck()"
-                    />
-                </div>
                 <v-text-field
                     v-model="articleTitle"
                     label="タイトル"
                     outlined hide-details="false"
-                />
-
-                <TagDialog
-                    ref="tagDialog"
-                    :originalCheckedTagList=originalCheckedTagList
                 />
 
                 <p class="error" v-if="articleBodyErrorFlag">本文を入力してください</p>
@@ -116,7 +115,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .articleContainer {margin: 0 20px;}
 .head{
     display: grid;
@@ -129,6 +128,6 @@ export default {
         margin-left:10px ;
         grid-column: 3/4;
     }
-
 }
+.v-input{margin-bottom: 1.5rem;}
 </style>
