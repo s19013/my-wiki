@@ -24,11 +24,16 @@
                     v-model="bookMarkTitle"
                     label="タイトル"
                     outlined hide-details="false"
-
+                    @keydown.enter.exact="this.$refs.url.focus()"
+                    @keydown.ctrl.enter.exact="submitCheck"
+                    @keydown.meta.enter.exact="submitCheck"
                 />
                 <v-text-field
+                    ref="url"
                     label="url [必須]"
                     v-model = "bookMarkUrl"
+                    @keydown.ctrl.enter.exact="submitCheck"
+                    @keydown.meta.enter.exact="submitCheck"
                 ></v-text-field>
             </v-form>
         </div>
