@@ -13,6 +13,7 @@
             </div>
             <TagDialog
                 ref="tagDialog"
+                text = "つけたタグ"
                 :originalCheckedTagList=originalCheckedTagList
             />
             <p class="error" v-if="bookMarkUrlErrorFlag">urlを入力してください</p>

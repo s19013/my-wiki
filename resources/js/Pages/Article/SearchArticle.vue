@@ -22,7 +22,11 @@
                 <label for="option3">タイトルまたは本文(低速)</label> -->
             </details>
 
-            <TagDialog ref="tagDialog" class="mb-10" :searchOnly="true"></TagDialog>
+            <TagDialog
+                ref="tagDialog"
+                class="mb-10"
+                text = "検索するタグ"
+                :searchOnly="true"/>
 
             <!-- loadingアニメ -->
             <loading v-show="loading"></loading>

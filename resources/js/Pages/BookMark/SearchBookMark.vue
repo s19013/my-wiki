@@ -6,13 +6,16 @@
                 searchLabel="タグ検索"
                 :loadingFlag  ="loading"
                 @triggerSearch="search"
-                >
-            </SearchField>
+                />
 
-            <TagDialog ref="tagDialog" class="mb-10" :searchOnly="true"></TagDialog>
+            <TagDialog
+                ref="tagDialog"
+                class="mb-10"
+                text = "検索するタグ"
+                :searchOnly="true"/>
 
             <!-- loadingアニメ -->
-            <loading v-show="loading"></loading>
+            <loading v-show="loading"/>
 
             <template v-for="bookMark of bookMarkList" :key="bookMark.id">
                 <BookMarkContainer
@@ -26,7 +29,7 @@
         <v-pagination
             v-model="currentPage"
             :length="pageCount"
-        ></v-pagination>
+        />
     </BaseLayout>
 </template>
 
