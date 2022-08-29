@@ -1,7 +1,7 @@
 <template>
     <div class="deleteAlertDialog">
      <!-- ダイアログを呼び出すためのボタン -->
-    <DeleteButton @click="deleteDialogFlagSwitch"/>
+    <DeleteButton @click.stop="deleteDialogFlagSwitch"/>
 
     <v-dialog
       v-model="deleteDialogFlag"
@@ -46,6 +46,22 @@ export default {
         //textの切り替え
         if(this.type.toLowerCase() == 'article'){ this.text = "この記事を削除しますか" }
         else {this.text = "このブックマークを削除しますか"}
+
+        //キーボード受付
+        document.addEventListener('keydown', (event)=>{
+            console.log(event);
+            //ダイアログが開いている時有効にする
+            if(this.deleteDialogFlag == true){
+                if (event.key === "Enter") {
+                    this.deleteTrigger()
+                    return
+                }
+                if (event.key === "Escape") {
+                    this.deleteDialogFlag = false
+                    return
+                }
+            }
+        })
     },
 }
 </script>
