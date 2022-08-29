@@ -4,10 +4,10 @@
         <v-row>
             <v-col>
                 <ul class="tabLabel">
-                    <li @click="changeTab(0)" :class="{active: activeTab === 0,notActive: activeTab !== 0 }">
+                    <li @click="changeTab()" :class="{active: activeTab === 1,notActive: activeTab !== 1 }">
                         本文
                     </li>
-                    <li @click="changeTab(1)" :class="{active: activeTab === 1,notActive: activeTab !== 1 }">
+                    <li @click="changeTab()" :class="{active: activeTab === -1,notActive: activeTab !== -1 }">
                         変換後
                     </li>
                 </ul>
@@ -15,7 +15,7 @@
         </v-row>
 
         <!-- md入力欄  -->
-        <div v-show="activeTab === 0">
+        <div v-show="activeTab === 1">
             <v-textarea
                 ref="textarea"
                 filled
@@ -23,9 +23,10 @@
                 rows="20"
                 label="本文 [必須]"
                 v-model = "body"
+                @keydown.shift.enter.exact="changeTab"
             ></v-textarea>
         </div>
-        <div v-show="activeTab === 1" class="markdown" v-html="compiledMarkdown()"></div>
+        <div v-show="activeTab === -1" class="markdown" v-html="compiledMarkdown()"></div>
     </div>
 </template>
 
@@ -34,7 +35,7 @@ import {marked} from 'marked';
 export default {
     data() {
         return {
-            activeTab :0,
+            activeTab :1,
             body      :this.originalArticleBody,
         }
     },
@@ -46,9 +47,13 @@ export default {
     },
     methods: {
         compiledMarkdown() {return marked(this.body)},
-        changeTab(num){this.activeTab = num},
+        changeTab(){
+            this.activeTab *= -1
+            if (this.activeTab === 1) {this.focusToBody()}
+        },
         serveBody(){return this.body},
-        focusToBody(){ this.$nextTick(() => this.$refs.textarea.focus()) }
+        focusToBody(){ this.$nextTick(() => this.$refs.textarea.focus()) },
+
     },
 }
 </script>
