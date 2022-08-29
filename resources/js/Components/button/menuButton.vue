@@ -64,4 +64,9 @@ export default{
             margin     : auto;
         }
     }
+@media (max-width: 600px){
+    .menuButton{
+        padding: 0.5rem 0;
+    }
+}
 </style>
