@@ -358,7 +358,7 @@ export default{
     }
     .clooseButton{margin-bottom: 0.5rem;}
     .existCheckbox{
-        label{font-size: 1.2rem;}
+        label{font-size: 1.1rem;}
         margin:0.5rem 0;
     }
 }
