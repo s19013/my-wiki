@@ -1,5 +1,5 @@
 <template>
-    <div class ="articleContainer" v-show="!loading">
+    <div class ="content" v-show="!loading">
         <h2>{{title}}</h2>
         <Link :href="'/Article/View/' + id">
             <v-btn color="submit" elevation="2">
@@ -18,12 +18,11 @@ export default{
 </script>
 
 <style scoped lang="scss">
-.articleContainer{
+.content{
     display: grid;
     grid-template-columns:10fr 1fr;
     background-color: #e1e1e1;
     border:black solid 1px;
-    margin-bottom:20px;
     padding: 5px;
     button{width: 100%;}
     h2{grid-column: 1/2;}

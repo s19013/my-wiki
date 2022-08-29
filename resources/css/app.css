@@ -2,6 +2,9 @@
 /* @import "tailwindcss/components"; */
 @import "tailwindcss/utilities";
 /* tailwindcss邪魔 */
+html {
+ overflow-y: scroll;
+}
 body{
     background-color: #f5f5f5;
 }
@@ -27,7 +30,7 @@ body{
     .Dialog{
         background: #e1e1e1;
         max-height: 95vh;
-        width: 80vw;
+        width: 85vw;
         padding: 10px;
     }
 }

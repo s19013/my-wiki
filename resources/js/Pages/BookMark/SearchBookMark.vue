@@ -6,13 +6,16 @@
                 searchLabel="タグ検索"
                 :loadingFlag  ="loading"
                 @triggerSearch="search"
-                >
-            </SearchField>
+                />
 
-            <TagDialog ref="tagDialog" class="mb-10" :searchOnly="true"></TagDialog>
+            <TagDialog
+                ref="tagDialog"
+                class="mb-10"
+                text = "検索するタグ"
+                :searchOnly="true"/>
 
             <!-- loadingアニメ -->
-            <loading v-show="loading"></loading>
+            <loading v-show="loading"/>
 
             <template v-for="bookMark of bookMarkList" :key="bookMark.id">
                 <BookMarkContainer
@@ -26,8 +29,7 @@
         <v-pagination
             v-model="currentPage"
             :length="pageCount"
-            :total-visible="7"
-        ></v-pagination>
+        />
     </BaseLayout>
 </template>
 
@@ -42,10 +44,10 @@ import BookMarkContainer from '@/Components/contents/BookMarkContainer.vue';
 export default{
     data() {
         return {
-            bookMarkList:null,
-            currentPage : 1,
-            pageCount   :1,
-            loading     :false,
+            bookMarkList :null,
+            currentPage  : 1,
+            pageCount    :1,
+            loading      :false,
         }
     },
     components:{
@@ -106,4 +108,5 @@ export default{
 </script>
 
 <style lang="scss" scoped>
+.content{margin-bottom: 1.2rem;}
 </style>

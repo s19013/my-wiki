@@ -10,6 +10,7 @@
             </div>
             <TagDialog
                 ref="tagDialog"
+                text = "つけたタグ"
                 :originalCheckedTagList=originalCheckedTagList
             />
             <v-form v-on:submit.prevent>

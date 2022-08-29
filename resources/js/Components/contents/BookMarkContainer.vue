@@ -1,5 +1,5 @@
 <template>
-    <div class ="bookMarkContainer" v-show="!loading">
+    <div class ="content" v-show="!loading">
         <!-- 別タブで開くようにする -->
         <a :href="url" target="_blank" rel="noopener noreferrer">
             <h2>
@@ -24,7 +24,7 @@ export default{
 </script>
 
 <style scoped lang="scss">
-.bookMarkContainer{
+.content{
     display: grid;
     grid-template-columns:10fr 1fr;
     background-color: #e1e1e1;

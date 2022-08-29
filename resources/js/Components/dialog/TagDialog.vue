@@ -6,7 +6,10 @@
                 <v-icon>mdi-tag</v-icon>
                 タグ
             </v-btn>
-            <TagList :tagList="checkedTagList"/>
+            <TagList
+                :tagList="checkedTagList"
+                :text="text"
+            />
         </div>
 
         <!-- v-modelがv-ifとかの代わりになっている -->
@@ -32,25 +35,20 @@
                 </SearchField>
 
                 <!-- 操作ボタン -->
-                <div>
-                    <v-row>
-                        <v-col cols="3">
-                            <v-btn
-                            variant="outlined"
-                            color="primary"
-                            size="small"
-                            @click.stop="clearAllCheck"
-                            >
-                                チェックをすべて外す
-                            </v-btn>
-                        </v-col>
-                        <v-col cols="3"></v-col>
-                        <v-col cols="6">
-                            <!-- この部分を既存チェックボックスという -->
-                            <input type="checkbox" id="checked" v-model="onlyCheckedFlag">
-                            <label for="checked">チェックがついているタグだけを表示</label>
-                        </v-col>
-                    </v-row>
+                <div class="control">
+                    <v-btn
+                        variant="outlined"
+                        color="primary"
+                        size="small"
+                        @click.stop="clearAllCheck"
+                        >
+                            チェックをすべて外す
+                    </v-btn>
+                    <div class="existCheckbox">
+                        <!-- この部分を既存チェックボックスという -->
+                        <input type="checkbox" id="checked" v-model="onlyCheckedFlag">
+                        <label for="checked">チェックがついているタグだけを表示</label>
+                    </div>
                 </div>
 
                 <!-- loadingアニメ -->
@@ -147,6 +145,10 @@ export default{
             //記事検索などでは新規作成を表示させないようにするため
             type   :Boolean,
             default:false,
+        },
+        text:{
+            type:String,
+            default:"つけたタグ"
         },
     },
     components:{
@@ -343,30 +345,36 @@ export default{
 <style lang="scss" scoped>
 .tagDialog{
     .v-list{
-        margin :5px 0;
         padding:0;
-        .v-list-item{
-            padding:0 10px;
-        }
+        .v-list-item{padding:0 1rem;}
     }
     label{
-        font-size: 1.5vmax;
-        padding-left: 10px;
-        width: 100%;
+        font-size: 1.5rem;
+        padding-left: 0.5rem;
     }
     .areaCreateNewTag{
-        margin: 10px;
-        button{margin-top: 10px;}
+        margin:1rem 0;
+        button{margin-top: 0.8rem;}
     }
-    .clooseButton{margin-bottom: 10px;}
+    .clooseButton{margin-bottom: 0.5rem;}
+    .existCheckbox{
+        label{font-size: 1.1rem;}
+        margin:0.5rem 0;
+    }
 }
 
 @media (min-width: 601px){
+    .control{
+        display:grid;
+        grid-template-columns:0.6fr 0.1fr 1fr;
+        .v-btn{grid-column:1/2}
+        .existCheckbox{grid-column:3/4}
+    }
     .dialogAndList{
         display:grid;
-        grid-template-rows:0.5fr 0.5fr;
+        grid-template-rows:auto auto;
         grid-template-columns:5fr 1fr;
-        margin:20px 0;
+        margin:1.2rem 0;
         .tagList{
             grid-row: 1/3;
             grid-column: 1/2;
@@ -379,16 +387,16 @@ export default{
 }
 
 @media (max-width: 600px){
-.tagDialog{label{font-size: 18px;}}
+.tagDialog{label{font-size: 1.2rem;}}
 .dialogAndList{
         display:grid;
         grid-template-rows:auto auto;
-        margin:20px 0;
+        margin:1.2rem 0;
         .tagList{
             grid-row: 2/3;
         }
         button{
-            margin-bottom:20px;
+            margin-bottom:1rem;
             grid-row: 1/2;
         }
     }

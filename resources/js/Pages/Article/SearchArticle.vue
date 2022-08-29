@@ -10,6 +10,12 @@
                 >
             </SearchField>
 
+            <TagDialog
+                ref="tagDialog"
+                class="mb-10"
+                text = "検索するタグ"
+                :searchOnly="true"/>
+
             <details>
                 <summary >検索対象</summary>
                 <input type="radio" id="option1" value="title" v-model="searchTarget" />
@@ -21,8 +27,6 @@
                 <!-- <input type="radio" id="option3" value="titleAndBody" v-model="searchTarget" />
                 <label for="option3">タイトルまたは本文(低速)</label> -->
             </details>
-
-            <TagDialog ref="tagDialog" class="mb-10" :searchOnly="true"></TagDialog>
 
             <!-- loadingアニメ -->
             <loading v-show="loading"></loading>
@@ -38,7 +42,6 @@
         <v-pagination
             v-model="currentPage"
             :length="pageCount"
-            :total-visible="7"
         ></v-pagination>
     </BaseLayout>
 </template>
@@ -118,6 +121,7 @@ export default{
 </script>
 
 <style lang="scss" scoped>
+.content{margin-bottom: 1.2rem;}
 details{
     margin-bottom: 15px;
     input,label,summary{ cursor: pointer; }

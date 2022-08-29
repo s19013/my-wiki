@@ -1,6 +1,6 @@
 <template>
     <div class="tagList">
-        <p><v-icon>mdi-tag</v-icon> つけたタグ</p>
+        <p><v-icon>mdi-tag</v-icon>{{text}}</p>
             <ul >
                     <li v-for="tag of tagList" :key="tag">{{tag.name}}</li>
             </ul>
@@ -17,6 +17,10 @@ export default{
         tagList:{
             type:Array,
             default:null
+        },
+        text:{
+            type:String,
+            default:"つけたタグ"
         },
     },
 }
