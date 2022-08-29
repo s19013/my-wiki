@@ -6,9 +6,10 @@
         </div>
         <transition name="slide">
             <nav v-show="show">
-                <h3 class="closeButton"
-                align="center"
-                @click.stop = "show = !show"> <v-icon> mdi-close-box</v-icon>閉じる</h3>
+                <div class="closeButton">
+                    <p><v-icon> mdi-close-box</v-icon></p>
+                    <h3 @click.stop = "show = !show">閉じる</h3>
+                </div>
                 <div>
                     <menuLabel
                         backgroundColor='#1a81c1'
@@ -127,12 +128,12 @@ nav {
         padding:5px 0;
         margin-bottom:1rem;
         cursor : pointer;
-        i{
+        p{
             grid-column: 2/3;
             margin     : auto;
         }
         h3{
-            text-align :center;
+            text-align: center;
             grid-column: 3/4;
             margin: auto;
         }
