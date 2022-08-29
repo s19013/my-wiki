@@ -13,7 +13,7 @@ defineProps({
     <Head title="Welcome" />
 
     <div class="relative flex items-top justify-center min-h-screen bg-gray-100  sm:items-center sm:pt-0">
-        <div v-if="canLogin" class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
+        <div v-if="canLogin" class=" fixed top-0 right-0 px-6 pb-5 pt-2" >
             <Link v-if="$page.props.auth.user" :href="route('SearchBookMark')" class="text-sm text-gray-700 underline">
                 Home
             </Link>
@@ -30,7 +30,7 @@ defineProps({
         </div>
 
         <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
-            <div class="flex justify-center pt-8 sm:justify-start sm:pt-0">
+            <div class="flex justify-center pt-10 sm:justify-start sm:pt-0">
                 <h1>My-Wiki</h1>
             </div>
 
