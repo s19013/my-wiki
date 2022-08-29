@@ -9,15 +9,10 @@
     >
         <section class="Dialog">
             <h2>{{text}}</h2>
-            <v-row>
-                <v-col cols=""></v-col>
-                <v-col cols="2">
-                    <p @click.stop="deleteDialogFlagSwitch()">もどる</p>
-                </v-col>
-                <v-col cols="2">
-                    <p class="error" @click.stop="deleteTrigger()">削除する</p>
-                </v-col>
-            </v-row>
+            <div class="control">
+                <p class="back"  @click.stop="deleteDialogFlagSwitch()" >もどる</p>
+                <p class="error delete" @click.stop="deleteTrigger()" >削除する</p>
+            </div>
         </section>
     </v-dialog>
     </div>
@@ -57,13 +52,25 @@ export default {
 
 <style lang="scss" scoped>
 .Dialog{
-    .v-col{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
     p{
         cursor: pointer;
+
     }
+}
+@media (min-width: 601px){
+    .control{
+        display:grid;
+        grid-template-columns:3fr 1.5fr 0.1fr 1.5fr;
+        margin-top: 1rem;
+        .back{grid-column: 2/3;}
+        .delete{grid-column: 4/5;}
+        p{
+            text-align: center;
+            margin: auto;
+        }
+    }
+}
+@media (max-width: 600px){
+    p{margin-top: 1rem;}
 }
 </style>
