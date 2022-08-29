@@ -2,7 +2,10 @@
     <BaseLayout :title="title" :pageTitle="pageTitle">
         <div class="articleContainer">
             <div class="head">
-                <DeleteAlertComponent @deleteTrigger="deleteArticle"/>
+                <DeleteAlertComponent
+                    ref="deleteAlert"
+                    @deleteTrigger="deleteArticle"
+                />
                 <SaveButton
                     :disabled="articleSending"
                     @click="submitCheck()"
@@ -125,6 +128,11 @@ export default {
             console.log(event);
             if (event.shiftKey) {
                 if(event.ctrlKey || event.key === "Meta"){this.changeTab()}
+                return
+            }
+            if (event.key === "Delete") {
+                this.$refs.deleteAlert.deleteDialogFlagSwitch()
+                return
             }
         })
     },
