@@ -115,8 +115,7 @@ export default {
         },
         deleteArticle() { this.$emit('triggerDeleteArticle') },
         focusToBody(){
-            console.log(this.$refs.articleBody.focusToBody());
-            // this.$nextTick(() => this.$refs.articleBody.focus())
+            this.$nextTick(() => this.$refs.articleBody.focusToBody())
         }
     },
     mounted() {
