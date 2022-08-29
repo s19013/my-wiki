@@ -30,6 +30,8 @@
                     :originalArticleBody="originalArticleBody"
                     @keydown.ctrl.enter.exact="submitCheck"
                     @keydown.meta.enter.exact="submitCheck"
+                    @keydown.shift.meta.exact="changeTab()"
+                    @keydown.shift.ctrl.exact="changeTab()"
                 />
 
             </v-form>
@@ -114,12 +116,17 @@ export default {
             })
         },
         deleteArticle() { this.$emit('triggerDeleteArticle') },
-        focusToBody(){
-            this.$nextTick(() => this.$refs.articleBody.focusToBody())
-        }
+        focusToBody(){this.$refs.articleBody.focusToBody()},
+        changeTab(){this.$refs.articleBody.changeTab()},
     },
     mounted() {
         this.checkedTagList = this.originalCheckedTagList
+        document.addEventListener('keydown', (event)=>{
+            console.log(event);
+            if (event.shiftKey) {
+                if(event.ctrlKey || event.key === "Meta"){this.changeTab()}
+            }
+        })
     },
 }
 </script>
