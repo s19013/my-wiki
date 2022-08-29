@@ -124,6 +124,7 @@ export default {
     },
     mounted() {
         this.checkedTagList = this.originalCheckedTagList
+        //キーボード受付
         document.addEventListener('keydown', (event)=>{
             console.log(event);
             if (event.shiftKey) {
