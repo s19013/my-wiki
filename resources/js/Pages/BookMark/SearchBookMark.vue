@@ -26,7 +26,6 @@
         <v-pagination
             v-model="currentPage"
             :length="pageCount"
-            :total-visible="7"
         ></v-pagination>
     </BaseLayout>
 </template>
@@ -42,10 +41,10 @@ import BookMarkContainer from '@/Components/contents/BookMarkContainer.vue';
 export default{
     data() {
         return {
-            bookMarkList:null,
-            currentPage : 1,
-            pageCount   :1,
-            loading     :false,
+            bookMarkList :null,
+            currentPage  : 1,
+            pageCount    :1,
+            loading      :false,
         }
     },
     components:{

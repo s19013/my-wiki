@@ -38,7 +38,6 @@
         <v-pagination
             v-model="currentPage"
             :length="pageCount"
-            :total-visible="7"
         ></v-pagination>
     </BaseLayout>
 </template>
