@@ -51,9 +51,10 @@ form{
     margin-top: 10px;
     margin-bottom: 20px;
     .v-input{grid-column: 1/2;}
-    button  {
+    .v-btn  {
         grid-column: 2/3;
-        margin: 0 10px;
+        margin-left: 1rem;
+        width:90%;
     }
 }
 
