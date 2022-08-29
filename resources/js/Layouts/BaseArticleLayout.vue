@@ -19,13 +19,17 @@
                     v-model="articleTitle"
                     label="タイトル"
                     outlined hide-details="false"
-                    @keydown.enter="focusToBody()"
+                    @keydown.enter.exact="focusToBody()"
+                    @keydown.ctrl.enter.exact="submitCheck"
+                    @keydown.meta.enter.exact="submitCheck"
                 />
 
                 <p class="error" v-if="articleBodyErrorFlag">本文を入力してください</p>
                 <ArticleBody
                     ref="articleBody"
                     :originalArticleBody="originalArticleBody"
+                    @keydown.ctrl.enter.exact="submitCheck"
+                    @keydown.meta.enter.exact="submitCheck"
                 />
 
             </v-form>
