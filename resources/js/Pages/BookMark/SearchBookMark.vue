@@ -106,4 +106,5 @@ export default{
 </script>
 
 <style lang="scss" scoped>
+.content{margin-bottom: 1.2rem;}
 </style>
