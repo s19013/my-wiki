@@ -6,48 +6,65 @@
         </div>
         <transition name="slide">
             <nav v-show="show">
-                <h4 class="navButton closeButton" @click.stop = "show = !show"> <v-icon> mdi-close-box</v-icon>閉じる</h4>
+                <h3 class="closeButton"
+                align="center"
+                @click.stop = "show = !show"> <v-icon> mdi-close-box</v-icon>閉じる</h3>
                 <div>
-                    <h2 class="titleAticle navButton"> <v-icon>mdi-note</v-icon> 記事 </h2>
+                    <menuLabel
+                        backgroundColor='#1a81c1'
+                        textColor='#fafafa'
+                        text="記事"
+                        icon="mdi-note"
+                    />
 
-                    <Link :href="route('CreateArticle')">
-                        <h3 class="navButton">
-                            <v-icon>mdi-plus</v-icon>
-                            新規作成
-                        </h3>
-                    </Link>
 
-                    <Link :href="route('SearchArticle')">
-                        <h3 class="navButton">
-                            <v-icon>mdi-magnify</v-icon>
-                            検索
-                        </h3>
-                    </Link>
+                    <menuButton
+                        backgroundColor='#d4d4d4'
+                        textColor='#000000'
+                        text="新規作成"
+                        icon="mdi-plus"
+                        :path="route('CreateArticle')"
+                    />
+
+                    <menuButton
+                        backgroundColor='#d4d4d4'
+                        text="検索"
+                        icon="mdi-magnify"
+                        :path="route('SearchArticle')"
+                    />
 
                     <h2></h2>
 
-                    <h2 class="titleBookMark navButton"> <v-icon>mdi-bookmark</v-icon> ブックマーク </h2>
+                    <menuLabel
+                        backgroundColor='#4015a6'
+                        textColor='#fafafa'
+                        text="ブックマーク"
+                        icon="mdi-bookmark"
+                    />
 
-                    <Link :href="route('CreateBookMark')">
-                        <h3 class="navButton">
-                            <v-icon>mdi-plus</v-icon>
-                            新規作成
-                        </h3>
-                    </Link>
+                    <menuButton
+                        backgroundColor='#d4d4d4'
+                        text="新規作成"
+                        icon="mdi-plus"
+                        :path="route('CreateBookMark')"
+                    />
 
-                    <Link :href="route('SearchBookMark')">
-                        <h3 class="navButton">
-                            <v-icon>mdi-magnify</v-icon>
-                            検索
-                        </h3>
-                    </Link>
+                    <menuButton
+                        backgroundColor='#d4d4d4'
+                        text="検索"
+                        icon="mdi-magnify"
+                        :path="route('SearchBookMark')"
+                    />
 
-                    <Link :href="route('logout')" method="post">
-                        <h3 class="navButton logout">
-                            <v-icon>mdi-logout</v-icon>
-                            Log Out
-                        </h3>
-                    </Link>
+                    <menuButton
+                        class="logout"
+                        textColor="#f0f8ff"
+                        backgroundColor='#830606'
+                        text="ログアウト"
+                        icon="mdi-logout"
+                        :path="route('logout')"
+                        method="post"
+                    />
 
                 </div>
             </nav>
@@ -57,6 +74,8 @@
 
 <script>
 import { Link } from '@inertiajs/inertia-vue3';
+import menuLabel from '@/Components/menuLabel.vue';
+import menuButton from '@/Components/button/menuButton.vue';
 export default{
     data() {
         return {
@@ -65,6 +84,8 @@ export default{
     },
     components:{
         Link,
+        menuLabel,
+        menuButton
     },
     props:['pageTitle']
 }
@@ -99,49 +120,28 @@ nav {
     position: fixed; /* ウィンドウを基準に画面に固定 */
     right   : 0;// 強制的に右端に置く
     top     :0;//ボタンと被らないように頭の位置を下げる
-    a{
-        cursor: pointer;
-        color : rgb(0, 0, 0);
-        text-decoration: none;
-    }
-    .navButton{
+    .closeButton{
         display: grid;
         grid-template-columns:2fr 1fr 4fr 2fr;
-    }
-    i{
-        grid-column: 2/3;
-        margin     : 0 0 0 auto;
-    }
-
-    h2,h3,h4{
-        text-align :center;
-        grid-column: 3/4;
-    }
-
-    h2 {
-        color  : rgb(250, 250, 250);
-        cursor : default;
-        padding:10px;
-    }
-    h3 {
-        background-color: rgb(212, 212, 212);
+        background-color: #d4d4d4;
         padding:5px 0;
-        margin :0 0 10px 0;
-    }
-    h4 {
-        background-color: rgb(212, 212, 212);
-        padding:5px 0;
-        margin :0 0 10px 0;
+        margin-bottom:1rem;
         cursor : pointer;
+        i{
+            grid-column: 2/3;
+            margin     : auto;
+        }
+        h3{
+            text-align :center;
+            grid-column: 3/4;
+            margin: auto;
+        }
     }
-    .titleAticle   { background-color:rgb(26, 130, 195) ;}
-    .titleBookMark { background-color:rgb(64, 21, 166) ;}
     .logout {
         position: absolute;
-        top     :85vh;
+        top     :90vh;
         width   : 100%;
-        background-color:rgb(131, 6, 6) ;
-        color:aliceblue
+        background-color:#830606;
     }
 }
 
@@ -161,3 +161,5 @@ nav {
     nav{width: 100%;}
 }
 </style>
+
+
