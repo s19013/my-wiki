@@ -23,7 +23,8 @@
                 rows="20"
                 label="本文 [必須]"
                 v-model = "body"
-                @keydown.shift.enter.exact="changeTab"
+                @keydown.shift.ctrl.exact="changeTab"
+                @keydown.shift.meta.exact="changeTab"
             ></v-textarea>
         </div>
         <div v-show="activeTab === -1" class="markdown" v-html="compiledMarkdown()"></div>
