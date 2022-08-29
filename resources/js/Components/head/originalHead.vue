@@ -6,9 +6,9 @@
         </div>
         <transition name="slide">
             <nav v-show="show">
-                <div class="closeButton">
+                <div class="closeButton" @click.stop = "show = !show">
                     <p><v-icon> mdi-close-box</v-icon></p>
-                    <h3 @click.stop = "show = !show">閉じる</h3>
+                    <h3>閉じる</h3>
                 </div>
                 <div>
                     <menuLabel
