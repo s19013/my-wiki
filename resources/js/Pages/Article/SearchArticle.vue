@@ -10,6 +10,12 @@
                 >
             </SearchField>
 
+            <TagDialog
+                ref="tagDialog"
+                class="mb-10"
+                text = "検索するタグ"
+                :searchOnly="true"/>
+
             <details>
                 <summary >検索対象</summary>
                 <input type="radio" id="option1" value="title" v-model="searchTarget" />
@@ -21,12 +27,6 @@
                 <!-- <input type="radio" id="option3" value="titleAndBody" v-model="searchTarget" />
                 <label for="option3">タイトルまたは本文(低速)</label> -->
             </details>
-
-            <TagDialog
-                ref="tagDialog"
-                class="mb-10"
-                text = "検索するタグ"
-                :searchOnly="true"/>
 
             <!-- loadingアニメ -->
             <loading v-show="loading"></loading>
