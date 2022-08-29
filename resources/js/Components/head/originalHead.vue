@@ -77,13 +77,13 @@ export default{
     height        : 6vh;
     margin-bottom :10px;
     display       : grid;
-    grid-template-columns:1fr 5fr 1fr;
+    grid-template-columns:1fr 4fr 1fr 0.1fr;
     h2{
         grid-column: 2/3;
         text-align :center
     }
     button{
-        margin: auto;
+        margin:auto;
         height: 80%;
         width : 90%;
         grid-column: 3/4;
