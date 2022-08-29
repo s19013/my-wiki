@@ -19,6 +19,7 @@
                     v-model="articleTitle"
                     label="タイトル"
                     outlined hide-details="false"
+                    @keydown.enter="focusToBody()"
                 />
 
                 <p class="error" v-if="articleBodyErrorFlag">本文を入力してください</p>
@@ -109,6 +110,10 @@ export default {
             })
         },
         deleteArticle() { this.$emit('triggerDeleteArticle') },
+        focusToBody(){
+            console.log(this.$refs.articleBody.focusToBody());
+            // this.$nextTick(() => this.$refs.articleBody.focus())
+        }
     },
     mounted() {
         this.checkedTagList = this.originalCheckedTagList

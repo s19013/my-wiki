@@ -17,6 +17,7 @@
         <!-- md入力欄  -->
         <div v-show="activeTab === 0">
             <v-textarea
+                ref="textarea"
                 filled
                 no-resize
                 rows="20"
@@ -33,8 +34,8 @@ import {marked} from 'marked';
 export default {
     data() {
         return {
-            activeTab     :0,
-            body   :this.originalArticleBody,
+            activeTab :0,
+            body      :this.originalArticleBody,
         }
     },
     props:{
@@ -46,7 +47,8 @@ export default {
     methods: {
         compiledMarkdown() {return marked(this.body)},
         changeTab(num){this.activeTab = num},
-        serveBody(){return this.body}
+        serveBody(){return this.body},
+        focusToBody(){ this.$nextTick(() => this.$refs.textarea.focus()) }
     },
 }
 </script>
