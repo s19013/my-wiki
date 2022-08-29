@@ -126,7 +126,6 @@ export default {
         this.checkedTagList = this.originalCheckedTagList
         //キーボード受付
         document.addEventListener('keydown', (event)=>{
-            console.log(event);
             if (event.shiftKey) {
                 if(event.ctrlKey || event.key === "Meta"){this.changeTab()}
                 return
