@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="searchField">
         <v-form v-on:submit.prevent ="triggerSearch()">
             <v-text-field
                 v-model="keyword"
@@ -53,7 +53,7 @@ form{
     .v-input{grid-column: 1/2;}
     .v-btn  {
         grid-column: 2/3;
-        margin-left: 1rem;
+        margin:0 1rem;
         width:90%;
     }
 }
