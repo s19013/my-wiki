@@ -6,7 +6,10 @@
                 <v-icon>mdi-tag</v-icon>
                 タグ
             </v-btn>
-            <TagList :tagList="checkedTagList"/>
+            <TagList
+                :tagList="checkedTagList"
+                :text="text"
+            />
         </div>
 
         <!-- v-modelがv-ifとかの代わりになっている -->
@@ -147,6 +150,10 @@ export default{
             //記事検索などでは新規作成を表示させないようにするため
             type   :Boolean,
             default:false,
+        },
+        text:{
+            type:String,
+            default:"つけたタグ"
         },
     },
     components:{
