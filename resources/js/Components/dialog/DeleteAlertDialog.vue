@@ -1,7 +1,7 @@
 <template>
     <div class="deleteAlertDialog">
      <!-- ダイアログを呼び出すためのボタン -->
-    <DeleteButton @click.stop="deleteDialogFlagSwitch"/>
+    <DeleteButton @click="deleteDialogFlagSwitch"/>
 
     <v-dialog
       v-model="deleteDialogFlag"
