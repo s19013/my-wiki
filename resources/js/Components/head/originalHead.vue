@@ -159,6 +159,7 @@ nav {
     nav{width: 70%;}
 }
 @media (max-width: 600px){
+    .originalHead{grid-template-columns:1.5fr 2fr 1.5fr 0.1fr;}
     nav{width: 100%;}
 }
 </style>
