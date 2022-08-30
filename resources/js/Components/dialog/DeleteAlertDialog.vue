@@ -68,8 +68,8 @@ export default {
 <style lang="scss" scoped>
 .Dialog{
     p{
+        width: 100%;
         cursor: pointer;
-
     }
 }
 @media (min-width: 601px){
