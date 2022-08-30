@@ -17,6 +17,6 @@ export default{
 
 <style lang="scss" scoped>
 @media (max-width: 600px){
-    .v-btn{height: 3.5vh;}
+    .v-btn{height: 2.2rem;}
 }
 </style>
