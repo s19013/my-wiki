@@ -338,6 +338,17 @@ export default{
         if (this.originalCheckedTagList != null) {
             this.checkedTagList = this.originalCheckedTagList
         }
+
+        //キーボード受付
+        document.addEventListener('keydown', (event)=>{
+            //ダイアログが開いている時有効にする
+            if(this.tagDialogFlag == true){
+                if (event.key === "Escape") {
+                    this.tagDialogFlag = false
+                    return
+                }
+            }
+        })
     },
 }
 </script>
@@ -351,6 +362,7 @@ export default{
     label{
         font-size: 1.5rem;
         padding-left: 0.5rem;
+        width:100%;
     }
     .areaCreateNewTag{
         margin:1rem 0;
@@ -368,7 +380,10 @@ export default{
         display:grid;
         grid-template-columns:0.6fr 0.1fr 1fr;
         .v-btn{grid-column:1/2}
-        .existCheckbox{grid-column:3/4}
+        .existCheckbox{
+            text-align: right;
+            grid-column:3/4
+        }
     }
     .dialogAndList{
         display:grid;

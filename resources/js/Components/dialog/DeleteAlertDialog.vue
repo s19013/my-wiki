@@ -46,6 +46,21 @@ export default {
         //textの切り替え
         if(this.type.toLowerCase() == 'article'){ this.text = "この記事を削除しますか" }
         else {this.text = "このブックマークを削除しますか"}
+
+        //キーボード受付
+        document.addEventListener('keydown', (event)=>{
+            //ダイアログが開いている時有効にする
+            if(this.deleteDialogFlag == true){
+                if (event.key === "Enter") {
+                    this.deleteTrigger()
+                    return
+                }
+                if (event.key === "Escape") {
+                    this.deleteDialogFlag = false
+                    return
+                }
+            }
+        })
     },
 }
 </script>
@@ -53,8 +68,8 @@ export default {
 <style lang="scss" scoped>
 .Dialog{
     p{
+        width: 100%;
         cursor: pointer;
-
     }
 }
 @media (min-width: 601px){

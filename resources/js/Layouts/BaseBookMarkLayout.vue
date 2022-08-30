@@ -24,11 +24,16 @@
                     v-model="bookMarkTitle"
                     label="タイトル"
                     outlined hide-details="false"
-
+                    @keydown.enter.exact="this.$refs.url.focus()"
+                    @keydown.ctrl.enter.exact="submitCheck"
+                    @keydown.meta.enter.exact="submitCheck"
                 />
                 <v-text-field
+                    ref="url"
                     label="url [必須]"
                     v-model = "bookMarkUrl"
+                    @keydown.ctrl.enter.exact="submitCheck"
+                    @keydown.meta.enter.exact="submitCheck"
                 ></v-text-field>
             </v-form>
         </div>
@@ -117,16 +122,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.articleContainer {margin: 0 20px;}
+.articleContainer {
+    margin: 0 20px;
+    margin-top: 2rem;
+}
 .head{
     display: grid;
     grid-template-columns:10fr auto auto;
-    margin: 10px;
+    margin-bottom: 1.5rem ;
     .deleteAlertDialog{
         grid-column: 2/3;
     }
     .saveButton{
-        margin-left:10px ;
+        margin-left:1rem ;
         grid-column: 3/4;
     }
 

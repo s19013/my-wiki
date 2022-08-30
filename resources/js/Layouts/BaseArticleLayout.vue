@@ -2,7 +2,10 @@
     <BaseLayout :title="title" :pageTitle="pageTitle">
         <div class="articleContainer">
             <div class="head">
-                <DeleteAlertComponent @deleteTrigger="deleteArticle"/>
+                <DeleteAlertComponent
+                    ref="deleteAlert"
+                    @deleteTrigger="deleteArticle"
+                />
                 <SaveButton
                     :disabled="articleSending"
                     @click="submitCheck()"
@@ -19,12 +22,19 @@
                     v-model="articleTitle"
                     label="タイトル"
                     outlined hide-details="false"
+                    @keydown.enter.exact="focusToBody()"
+                    @keydown.ctrl.enter.exact="submitCheck"
+                    @keydown.meta.enter.exact="submitCheck"
                 />
 
                 <p class="error" v-if="articleBodyErrorFlag">本文を入力してください</p>
                 <ArticleBody
                     ref="articleBody"
                     :originalArticleBody="originalArticleBody"
+                    @keydown.ctrl.enter.exact="submitCheck"
+                    @keydown.meta.enter.exact="submitCheck"
+                    @keydown.shift.meta.exact="changeTab()"
+                    @keydown.shift.ctrl.exact="changeTab()"
                 />
 
             </v-form>
@@ -109,24 +119,40 @@ export default {
             })
         },
         deleteArticle() { this.$emit('triggerDeleteArticle') },
+        focusToBody(){this.$refs.articleBody.focusToBody()},
+        changeTab(){this.$refs.articleBody.changeTab()},
     },
     mounted() {
         this.checkedTagList = this.originalCheckedTagList
+        //キーボード受付
+        document.addEventListener('keydown', (event)=>{
+            if (event.shiftKey) {
+                if(event.ctrlKey || event.key === "Meta"){this.changeTab()}
+                return
+            }
+            if (event.key === "Delete") {
+                this.$refs.deleteAlert.deleteDialogFlagSwitch()
+                return
+            }
+        })
     },
 }
 </script>
 
 <style lang="scss" scoped>
-.articleContainer {margin: 0 20px;}
+.articleContainer {
+    margin: 0 20px;
+    margin-top: 2rem;
+}
 .head{
     display: grid;
     grid-template-columns:10fr auto auto;
-    margin: 10px;
+    margin-bottom: 1.5rem ;
     .deleteAlertDialog{
         grid-column: 2/3;
     }
     .saveButton{
-        margin-left:10px ;
+        margin-left:1rem ;
         grid-column: 3/4;
     }
 }
