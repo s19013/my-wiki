@@ -9,5 +9,5 @@ DBNAME='my-wiki'
 
 # eval echo $(mysql -u $DBUSER -p$DBPASSWORD -D $DBNAME --table -B < periodicDeletion.sql)
 # eval echo $(mysql -u $DBUSER -p$DBPASSWORD -D $DBNAME --table < periodicDeletion.sql ) > result.txt
-echo "test ok " >result.txt
+echo "test ok " >/home/hideya670/result.txt
 
