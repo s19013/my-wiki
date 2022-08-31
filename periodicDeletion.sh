@@ -8,5 +8,6 @@ DBNAME='my-wiki'
 # DATETIME=`date +%Y%m%d`
 
 # eval echo $(mysql -u $DBUSER -p$DBPASSWORD -D $DBNAME --table -B < periodicDeletion.sql)
-eval echo $(mysql -u $DBUSER -p$DBPASSWORD -D $DBNAME --table < periodicDeletion.sql ) > result.txt
+# eval echo $(mysql -u $DBUSER -p$DBPASSWORD -D $DBNAME --table < periodicDeletion.sql ) > result.txt
+echo "test ok " >result.txt
 
