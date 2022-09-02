@@ -1,10 +1,14 @@
--- articles
-SELECT id,title,deleted_at FROM `articles` WHERE `deleted_at` IS NOT NULL;
+-- 一意のidを参照している場合
+-- 参照先を消してから参照元を消さないとエラーがでる
+-- だからこの順番
+
 -- article_tags
--- SELECT article_id , deleted_at FROM `article_tags` WHERE `deleted_at` is NOT null;
--- book_marks
--- SELECT id FROM `book_marks` WHERE `deleted_at` IS NOT NULL;
+DELETE FROM `article_tags` WHERE article_id in (SELECT id FROM `articles` WHERE `deleted_at` is NOT null);
+-- articles
+DELETE FROM `articles` WHERE deleted_at is not null;
 -- book_mark_tags
--- SELECT deleted_at FROM `book_mark_tags` WHERE `deleted_at` is NOT null;
+DELETE FROM `book_mark_tags` WHERE book_mark_id in (SELECT id FROM `book_marks` WHERE `deleted_at` is NOT null);
+-- book_marks
+DELETE FROM `book_marks` WHERE deleted_at is not null;
 -- tags
--- SELECT * FROM `tags` WHERE `deleted_at` is not null
+DELETE FROM `tags` WHERE deleted_at is not null;
