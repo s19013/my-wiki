@@ -1,8 +1,8 @@
 #!/bin/bash
 #31日分保存
 
-DBUSER='windows' #ローカル
-# DBUSER='root'
+# DBUSER='windows' #ローカル
+DBUSER='root'
 DBPASSWORD='gemini0522'
 # DBHOST='xxx.xx.x.x'
 DBNAME='my-wiki'
@@ -26,4 +26,4 @@ date=`date +%Y-%m-%d-%H-%M`
 # mysqldump --single-transaction -u root -p sample > ./sample.dump
 
 # バックアップ実行
-mysqldump --single-transaction -u $DBUSER -p$DBPASSWORD $DBNAME | gzip > $exportDirectryPath/$DBNAME$date.dump.gz
+mysqldump --single-transaction -u $DBUSER -p$DBPASSWORD $DBNAME | gzip > $exportDirectryPath/$DBNAME-$date.dump.gz
