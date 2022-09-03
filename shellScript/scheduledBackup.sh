@@ -13,8 +13,6 @@ exportDirectryPath='/home/hideya670/backup/my-wiki'
 
 date=`date +%Y-%m-%d-%H:%M`
 
-filename="my-wiki-"
-
 #31日前の古いファイル
 # 31日立ってから実験して見ようと思う
 # oldfile=`date --date "31 days ago" +%Y-%m-%d-%H:%M`
@@ -26,4 +24,4 @@ filename="my-wiki-"
 # mysqldump --single-transaction -u root -p sample > ./sample.dump
 
 # バックアップ実行
-mysqldump --single-transaction -u $DBUSER -p$DBPASSWORD $DBNAME | gzip > $dirpath/$filename$date.dump.gz
+mysqldump --single-transaction -u $DBUSER -p$DBPASSWORD $DBNAME > $dirpath/$DBNAME$date.dump
