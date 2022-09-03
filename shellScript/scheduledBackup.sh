@@ -1,7 +1,7 @@
 #31日分保存
 
-DBUSER='windows' #ローカル
-# DBUSER='root'
+# DBUSER='windows' #ローカル
+DBUSER='root'
 DBPASSWORD='gemini0522'
 # DBHOST='xxx.xx.x.x'
 DBNAME='my-wiki'
