@@ -7,4 +7,4 @@ DBNAME='my-wiki'
 # PORT='3306'
 # DATETIME=`date +%Y%m%d`
 
-mysql -u $DBUSER -p$DBPASSWORD -D $DBNAME --table -B < periodicDeletion.sql
+mysql -u $DBUSER -p$DBPASSWORD -D $DBNAME < periodicDeletion.sql
