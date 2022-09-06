@@ -1,8 +1,8 @@
 <template>
     <div class="menuLabel"
-    :style="backgroundColorComp">
-        <p :style="textColorComp"><v-icon>{{icon}}</v-icon></p>
-        <h2 :style="textColorComp">
+    :style=[backgroundColorComp,textColorComp]>
+        <p><v-icon>{{icon}}</v-icon></p>
+        <h2>
             {{text}}
         </h2>
     </div>
