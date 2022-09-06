@@ -1,9 +1,9 @@
 <template>
     <div class="menuButton"
-    :style="backgroundColorComp">
+    :style=[backgroundColorComp,textColorComp]>
         <Link :href="path" :method="method">
-            <p :style="textColorComp"><v-icon>{{icon}}</v-icon></p>
-            <h3 :style="textColorComp"> {{text}} </h3>
+            <p><v-icon>{{icon}}</v-icon></p>
+            <h3> {{text}} </h3>
         </Link>
     </div>
 </template>
