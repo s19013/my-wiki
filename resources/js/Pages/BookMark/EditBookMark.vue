@@ -42,7 +42,7 @@ export default {
         },
         deleteBookMark() {
             // 消す処理
-            axios.post('/api/bookmark/delete',{bookMarkId:this.originalBookMark.id})
+            axios.delete('/api/bookmark/'+ this.originalBookMark.id)
             .then((res)=>{this.$inertia.get('/BookMark/Search')})
             .catch((error) => {console.log(error);})
         },

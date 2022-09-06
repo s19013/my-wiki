@@ -25,11 +25,11 @@
                     :loading="loading"
                 />
             </template>
+            <v-pagination
+                v-model="currentPage"
+                :length="pageCount"
+            />
         </v-container>
-        <v-pagination
-            v-model="currentPage"
-            :length="pageCount"
-        />
     </BaseLayout>
 </template>
 

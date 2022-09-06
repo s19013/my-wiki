@@ -56,7 +56,7 @@ export default{
         deleteArticle() {
             this.articleDeleting = true
             // 消す処理
-            axios.post('/api/article/delete',{articleId:this.article.id})
+            axios.delete('/api/article/'+this.article.id)
             .then((res) => {
                 //遷移
                 this.$inertia.get('/Article/Search')

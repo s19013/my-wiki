@@ -41,14 +41,14 @@ Route::middleware('auth:sanctum', 'throttle:60,1')->group(function () {
     Route::prefix('/article')->group(function () {
         Route::post('/store'  , [ArticleController::class,'articleStore']);
         Route::post('/update' , [ArticleController::class,'aricleUpdate']);
-        Route::post('/delete' , [ArticleController::class,'articleDelete']);
+        Route::delete('/{articleId}' , [ArticleController::class,'articleDelete']);
         Route::post('/search' , [ArticleController::class,'articleSearch']);
     });
 
     Route::prefix('/bookmark')->group(function () {
         Route::post('/store'  , [BookMarkController::class,'bookMarkStore']);
         Route::post('/update' , [BookMarkController::class,'bookMarkUpdate']);
-        Route::post('/delete' , [BookMarkController::class,'bookMarkDelete']);
+        Route::delete('/{bookMarkId}' , [BookMarkController::class,'bookMarkDelete']);
         Route::post('/search' , [BookMarkController::class,'bookMarkSearch']);
     });
 });

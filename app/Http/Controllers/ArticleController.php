@@ -62,12 +62,12 @@ class ArticleController extends Controller
     }
 
     //記事削除
-    public function articleDelete(Request $request)
+    public function articleDelete($articleId)
     {
         // CSRFトークンを再生成して、二重送信対策
-        $request->session()->regenerateToken();
+        // $request->session()->regenerateToken();
 
-        Article::deleteArticle(articleId:$request->articleId);
+        Article::deleteArticle(articleId:$articleId);
     }
 
     //記事検索

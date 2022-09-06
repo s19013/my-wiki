@@ -38,11 +38,11 @@
                     :loading="loading"
                 />
             </template>
-        </v-container>
         <v-pagination
             v-model="currentPage"
             :length="pageCount"
         ></v-pagination>
+        </v-container>
     </BaseLayout>
 </template>
 
