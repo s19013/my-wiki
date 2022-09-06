@@ -81,12 +81,12 @@ class BookMarkController extends Controller
         );
     }
 
-    public function bookMarkDelete(Request $request)
+    public function bookMarkDelete($bookMarkId)
     {
         // CSRFトークンを再生成して、二重送信対策
-        $request->session()->regenerateToken();
+        // $request->session()->regenerateToken();
 
-        BookMark::deleteBookMark(bookMarkId:$request->bookMarkId);
+        BookMark::deleteBookMark(bookMarkId:$bookMarkId);
     }
 
     // 編集か新規かを分ける
