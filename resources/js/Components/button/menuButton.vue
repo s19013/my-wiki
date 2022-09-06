@@ -2,8 +2,8 @@
     <div class="menuButton"
     :style=[backgroundColorComp,textColorComp]>
         <Link :href="path" :method="method">
-            <p><v-icon>{{icon}}</v-icon></p>
-            <h3> {{text}} </h3>
+            <v-icon>{{icon}}</v-icon>
+            <p> {{text}} </p>
         </Link>
     </div>
 </template>
@@ -43,6 +43,8 @@ export default{
     .menuButton{
         background-color: var(--background-color);
         margin-bottom:0.8rem;
+        font-size :1.3rem;
+        color:var(--color);
         a{
             display: grid;
             grid-template-columns:2fr 1fr 4fr 2fr;
@@ -50,15 +52,12 @@ export default{
             color : var(--color);
             text-decoration: none;
         }
-        p{
-            font-size :1.4rem;
-            color:var(--color);
+        i{
             grid-column: 2/3;
             margin     : auto;
         }
-
-        h3{
-            color:var(--color);
+        p{
+            font-weight: bold;
             text-align :center;
             grid-column: 3/4;
             margin     : auto;
