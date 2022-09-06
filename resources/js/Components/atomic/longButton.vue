@@ -4,8 +4,8 @@
             @click.stop="clickTrigger"
             :style=[backgroundColorComp,textColorComp]
         >
-            <p class="icon"><v-icon>{{icon}}</v-icon></p>
-            <p class="text">{{text}}</p>
+            <v-icon>{{icon}}</v-icon>
+            <p>{{text}}</p>
         </v-btn>
     </div>
 </template>
