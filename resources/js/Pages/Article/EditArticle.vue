@@ -45,7 +45,7 @@ export default {
         deleteArticle() {
             this.$refs.BaseArticleLayout.switchArticleSending()
             // 消す処理
-            axios.post('/api/article/delete',{articleId:this.originalArticle.id})
+            axios.delete('/api/article/' + this.originalArticle.id)
             .then((res) => {
                 //遷移
                 this.$inertia.get('/Article/Search')
