@@ -1,44 +1,163 @@
 <template>
-    <div class="longButton">
-        <v-btn
+    <div class="longButton" :class=haveIcon>
+        <button
+            type="button"
             @click.stop="clickTrigger"
-            :style=[backgroundColorComp,textColorComp]
-        >
+            :style=[backgroundColorComp,backgroundColorBrightnessComp,backgroundColorDarknessComp,textColorComp,textColorBrightnessComp,textColorDarknessComp]>
             <v-icon>{{icon}}</v-icon>
             <p>{{text}}</p>
-        </v-btn>
+        </button>
     </div>
 </template>
 
 <script>
 export default{
     props:{
-        text:{type:String},
-        icon:{},
-        backgroundColor:{default:"#ffffff"},
-        textColor:{default:"#000000"},
+        text:{
+            type:String,
+            default:null
+        },
+        icon:{
+            type:String,
+            default:null
+        },
+        backgroundColor:{
+            type:Object,
+            default:[0,0,98,1]//hsla型
+        },
+        textColor:{
+            type:Object,
+            default:[0,0,0,1]//hsla型
+        },
     },
     methods: {
-        clickTrigger(){this.$emit('clickTrigger');}
+        clickTrigger(){this.$emit('clickTrigger');},
     },
     computed: {
-        textColorComp() {
-          return {'--color' : this.textColor,}
+        // アイコンがあるかどうか
+        haveIcon(){
+            if (this.icon !== null) {return "haveIconDisplay" }
+            // else {return "noIconDisplay" }
         },
+        // 文字色
+        // 基礎
+        textColorComp() {
+            return {
+                'color-h':this.textColor[0],
+                'color-s':this.textColor[1] + "%",
+                'color-l':this.textColor[2] + "%",
+                'color-a':this.textColor[3],
+            }
+        },
+        textColorBrightnessComp(){
+            return {
+                'color-brightness-s':this.textColor[1] - 10 + "%",
+                'color-brightness-l':this.textColor[2] + 10 + "%"
+            }
+        },
+        textColorDarknessComp(){
+            return {
+                'color-darkness-l':this.textColor[2] - 20 + "%"
+            }
+        },
+        // 背景色
+        // 基礎
         backgroundColorComp(){
-            return {'--background-color':this.backgroundColor}
+            return {
+                '--background-color-h':this.backgroundColor[0],
+                '--background-color-s':this.backgroundColor[1] + "%",
+                '--background-color-l':this.backgroundColor[2] + "%",
+                '--background-color-a':this.backgroundColor[3],
+            }
+        },
+        backgroundColorBrightnessComp(){
+            return {
+                '--background-color-brightness-s':this.backgroundColor[1] - 10 + "%",
+                '--background-color-brightness-l':this.backgroundColor[2] + 10 + "%"
+            }
+        },
+        backgroundColorDarknessComp(){
+            return {
+                '--background-color-darkness-l':this.backgroundColor[2] - 20 + "%"
+            }
         }
-    }
+    },
 }
 </script>
 
 <style lang="scss" scoped>
-button{width: 100%;}
-.normalButton{
+.longButton{
     font-size :1rem;
-    color:var(--color);
+    color:hsla(
+        var(--color-h),
+        var(--color-s),
+        var(--color-l),
+        var(--color-a),
+    );
+    button{
+        border-radius: 5px;
+        background-color: hsla(
+            var(--background-color-h),
+            var(--background-color-s),
+            var(--background-color-l),
+            var(--background-color-a)
+        );
+        width: 100%;
+        padding:0.4rem 0;
+        box-shadow:  0 2px 3px 0 rgb(0, 0, 0,0.6);
+        transition: .1s;
+        p{font-weight: bold;}
+    }
+    :hover {
+        background-color: hsla(
+            var(--background-color-h),
+            var(--background-color-brightness-s),
+            var(--background-color-brightness-l),
+            var(--background-color-a)
+        );
+    }
+    :active {
+        background-color: hsla(
+            var(--background-color-h),
+            var(--background-color-brightness-s),
+            var(--background-color-darkness-l),
+            var(--background-color-a)
+        );
+        box-shadow:  0 0 0 0 rgba(0, 0, 0, 0.2);
+    }
 }
+
+//アイコンがある時ようの表示の仕方
+.haveIconDisplay{
+    button{
+        display: grid;
+        grid-template-columns: 0.8fr 1fr  2fr 0.8fr;
+        i{
+            margin: auto;
+            grid-column: 2/3;
+        }
+        p{
+            margin: auto;
+            grid-column: 3/4;
+        }
+    }
+}
+
 @media (max-width: 600px){
-    .v-btn{height: 2.2rem;}
+    .haveIconDisplay{
+        button{
+            display: grid;
+            grid-template-columns: 1fr  2fr ;
+            i{
+                margin: auto;
+                grid-column: 1/2;
+            }
+            p{
+                margin: auto;
+                grid-column: 2/3;
+            }
+        }
+    }
 }
+
 </style>
