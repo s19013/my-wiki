@@ -52,7 +52,6 @@ import DeleteAlertComponent from '@/Components/dialog/DeleteAlertDialog.vue';
 import loadingDialog from '@/Components/loading/loadingDialog.vue';
 import BaseLayout from '@/Layouts/BaseLayout.vue'
 import ArticleBody from '@/Components/article/ArticleBody.vue';
-import SaveButton from '@/Components/button/SaveButton.vue';
 
 export default {
     data() {
@@ -74,7 +73,6 @@ export default {
         loadingDialog,
         BaseLayout,
         ArticleBody,
-        SaveButton
     },
     emits: ['triggerSubmit','triggerDeleteArticle'],
     props:{
