@@ -2,9 +2,12 @@
     <div>
         <!-- ダイアログを呼び出すためのボタン -->
         <div class="dialogAndList">
-            <v-btn color="submit" size="small" @click.stop="openTagDialog()">
+            <v-btn color="submit"
+                size="small"
+                class="global_css_haveIconButton_Margin"
+                @click.stop="openTagDialog()">
                 <v-icon>mdi-tag</v-icon>
-                タグ
+                <p>タグ</p>
             </v-btn>
             <TagList
                 :tagList="checkedTagList"
@@ -18,7 +21,7 @@
             scrollable
             persistent>
 
-            <section class="Dialog tagDialog">
+            <section class="global_css_Dialog tagDialog">
                 <div class="clooseButton">
                     <v-btn color="#E57373" size="small" elevation="2" @click.stop="closeTagDialog()">
                         <v-icon
@@ -71,31 +74,31 @@
                 <div v-if="!searchOnly">
 
                     <v-btn
-                        class="longButton my-4"
+                        class="global_css_haveIconButton_Margin my-4 global_css_longButton"
                         color="submit"
                         v-show="!createNewTagFlag"
                         @click.stop="createNewTagFlagSwitch">
                         <v-icon>mdi-tag-plus</v-icon>
-                        新規作成
+                        <p>新規作成</p>
                     </v-btn>
 
                     <!-- 新規タグ作成 -->
                     <div class="areaCreateNewTag" v-show="createNewTagFlag">
-                        <p class="error" v-if="newTagErrorFlag">文字を入力してください</p>
-                        <p class="error" v-if="tagAlreadyExistsErrorFlag">そのタグはすでに登録されいます</p>
+                        <p class="global_css_error" v-if="newTagErrorFlag">文字を入力してください</p>
+                        <p class="global_css_error" v-if="tagAlreadyExistsErrorFlag">そのタグはすでに登録されいます</p>
 
                         <v-form v-on:submit.prevent ="createNewTagCheck">
                             <v-text-field v-model="newTag" label="新しいタグ" outlined hide-details="false"></v-text-field>
                         </v-form>
 
                         <v-btn
-                            class="longButton"
+                            class="global_css_haveIconButton_Margin global_css_longButton"
                             color="#BBDEFB"
                             elevation="2"
                             :disabled="newTagSending"
                             @click.stop="createNewTagCheck()">
                             <v-icon>mdi-content-save</v-icon>
-                            作成
+                            <p>作成</p>
                         </v-btn>
                     </div>
 

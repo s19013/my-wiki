@@ -6,18 +6,18 @@
                     type="bookmark"
                     @deleteTrigger="deleteBookMark"
                 />
-                <SaveButton
-                    :disabled="bookMarkSending"
-                    @click="submitCheck()"
-                />
+                <v-btn color="#BBDEFB" class="global_css_haveIconButton_Margin" @click="submitCheck()" :disabled="bookMarkSending">
+                    <v-icon>mdi-content-save</v-icon>
+                    <p>保存</p>
+                </v-btn>
             </div>
             <TagDialog
                 ref="tagDialog"
                 text = "つけたタグ"
                 :originalCheckedTagList=originalCheckedTagList
             />
-            <p class="error" v-if="bookMarkUrlErrorFlag">urlを入力してください</p>
-            <p class="error" v-if="alreadyExistErrorFlag">そのURLはすでに登録されています</p>
+            <p class="global_css_error" v-if="bookMarkUrlErrorFlag">urlを入力してください</p>
+            <p class="global_css_error" v-if="alreadyExistErrorFlag">そのURLはすでに登録されています</p>
             <v-form @submit.prevent>
                 <!-- タイトル入力欄とボタン2つ -->
                 <v-text-field
@@ -49,7 +49,6 @@ import TagList from '@/Components/TagList.vue';
 import DeleteAlertComponent from '@/Components/dialog/DeleteAlertDialog.vue';
 import loadingDialog from '@/Components/loading/loadingDialog.vue';
 import BaseLayout from '@/Layouts/BaseLayout.vue'
-import SaveButton from '@/Components/button/SaveButton.vue';
 
 export default {
     data() {
@@ -72,7 +71,6 @@ export default {
         TagList,
         loadingDialog,
         BaseLayout,
-        SaveButton,
     },
     emits: ['triggerSubmit','triggerDeleteBookMark'],
     props:{
@@ -128,7 +126,8 @@ export default {
 }
 .head{
     display: grid;
-    grid-template-columns:10fr auto auto;
+    grid-template-columns:9fr auto auto;
+    gap:2rem;
     margin-bottom: 1.5rem ;
     .deleteAlertDialog{
         grid-column: 2/3;

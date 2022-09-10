@@ -2,7 +2,7 @@
     <div class="deleteAlertDialog">
      <!-- ダイアログを呼び出すためのボタン -->
 
-    <v-btn color="error" @click.stop="deleteDialogFlagSwitch()">
+    <v-btn color="error" class="global_css_haveIconButton_Margin"  @click.stop="deleteDialogFlagSwitch()">
         <v-icon>mdi-trash-can</v-icon>
         <p>削除</p>
     </v-btn>
@@ -11,7 +11,7 @@
       v-model="deleteDialogFlag"
       persistent
     >
-        <section class="Dialog">
+        <section class="global_css_Dialog">
             <h2>{{text}}</h2>
             <div class="control">
                 <button type="button" class="back" @click.stop="deleteDialogFlagSwitch()">
@@ -19,7 +19,7 @@
                 </button>
 
                 <button type="button" class="delete" @click.stop="deleteTrigger()">
-                    <p class="error">削除する</p>
+                    <p class="global_css_error">削除する</p>
                 </button>
             </div>
         </section>
@@ -71,7 +71,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-button{ i {margin-right: 10px;} }
 .control {
     p{
         text-align: center;

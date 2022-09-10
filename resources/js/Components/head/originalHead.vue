@@ -2,25 +2,21 @@
     <div>
         <div class="originalHead">
             <h2>{{pageTitle}}</h2>
-            <longButton
-                text="メニュー"
-                icon="mdi-view-headline"
-                backgroundColor='#d4d4d4'
-                textColor='#000000'
-                @clickTrigger= "$refs.NavMenu.show = true"
-            />
+            <v-btn @click.stop="$refs.NavMenu.show = true" class="global_css_haveIconButton_Margin">
+                <v-icon>mdi-view-headline</v-icon>
+                <p>メニュー</p>
+            </v-btn>
         </div>
+
         <NavMenu ref="NavMenu"/>
     </div>
 </template>
 
 <script>
 import NavMenu from '@/Components/NavMenu.vue';
-import longButton from '@/Components/atomic/longButton.vue';
 export default{
     components:{
         NavMenu,
-        longButton
     },
     props:['pageTitle']
 }
@@ -34,18 +30,21 @@ export default{
     margin-bottom :0.2rem;
     display       : grid;
     grid-template-columns:1fr 4fr 1fr 0.1fr;
-    width: 100%;
     h2{
         grid-column: 2/3;
         text-align :center;
         margin:auto;
     }
-    .longButton{
+    button{
         grid-column: 3/4;
-        margin:auto;
-        width: 100%;
-        // margin: 0.2rem 0;
+        margin-top:auto;
+        margin-bottom:auto;
+    }
+}
 
+@media (max-width: 600px){
+    .originalHead {
+        grid-template-columns: 1.5fr 2fr 1.5fr .1fr;
     }
 }
 </style>

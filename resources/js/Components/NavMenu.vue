@@ -147,6 +147,7 @@ nav {
             margin     : auto;
         }
         p{
+            font-weight: bold;
             text-align: center;
             grid-column: 3/4;
             margin: auto;
