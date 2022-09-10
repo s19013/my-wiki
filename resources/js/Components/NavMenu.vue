@@ -17,15 +17,12 @@
 
 
                     <menuButton
-                        backgroundColor='#d4d4d4'
-                        textColor='#000000'
                         text="新規作成"
                         icon="mdi-plus"
                         :path="route('CreateArticle')"
                     />
 
                     <menuButton
-                        backgroundColor='#d4d4d4'
                         text="検索"
                         icon="mdi-magnify"
                         :path="route('SearchArticle')"
@@ -41,14 +38,12 @@
                     />
 
                     <menuButton
-                        backgroundColor='#d4d4d4'
                         text="新規作成"
                         icon="mdi-plus"
                         :path="route('CreateBookMark')"
                     />
 
                     <menuButton
-                        backgroundColor='#d4d4d4'
                         text="検索"
                         icon="mdi-magnify"
                         :path="route('SearchBookMark')"
@@ -57,7 +52,7 @@
                     <menuButton
                         class="logout"
                         textColor="#f0f8ff"
-                        backgroundColor='#830606'
+                        backgroundColor="#a80000"
                         text="ログアウト"
                         icon="mdi-logout"
                         :path="route('logout')"
@@ -71,7 +66,6 @@
 </template>
 
 <script>
-import { Link } from '@inertiajs/inertia-vue3';
 import menuLabel from '@/Components/menuLabel.vue';
 import menuButton from '@/Components/button/menuButton.vue';
 
@@ -82,7 +76,6 @@ export default{
         }
     },
     components:{
-    Link,
     menuLabel,
     menuButton,
 },
@@ -101,9 +94,8 @@ nav {
     right   : 0;// 強制的に右端に置く
     top     :0;//ボタンと被らないように頭の位置を下げる
     .closeButton{
-        background-color: #d4d4d4;
+        background-color: hsl(0, 0%, 83%);
         padding:5px 0;
-        margin-bottom:1rem;
         width: 100%;
         display: grid;
         grid-template-columns:2fr 1fr 4fr 2fr;
@@ -116,9 +108,6 @@ nav {
             grid-column: 3/4;
             margin: auto;
         }
-        // .button{
-        //     width: 100%;
-        // }
     }
     .logout {
         position: absolute;
