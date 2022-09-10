@@ -41,11 +41,11 @@ export default{
         },
         shadowProperty:{
             type:Array,
-            default:["0","2px","3px","1px"]
+            default:["0","2px","3px","0px"]
         },
         shadowColor:{
             type:Array,
-            default:[0,0,0,0.6]
+            default:[0,0,0,0.3]
         },
         backgroundColor:{
             type:Array,
