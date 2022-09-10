@@ -81,8 +81,8 @@
 
                     <!-- 新規タグ作成 -->
                     <div class="areaCreateNewTag" v-show="createNewTagFlag">
-                        <p class="error" v-if="newTagErrorFlag">文字を入力してください</p>
-                        <p class="error" v-if="tagAlreadyExistsErrorFlag">そのタグはすでに登録されいます</p>
+                        <p class="global_css_error" v-if="newTagErrorFlag">文字を入力してください</p>
+                        <p class="global_css_error" v-if="tagAlreadyExistsErrorFlag">そのタグはすでに登録されいます</p>
 
                         <v-form v-on:submit.prevent ="createNewTagCheck">
                             <v-text-field v-model="newTag" label="新しいタグ" outlined hide-details="false"></v-text-field>

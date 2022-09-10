@@ -16,8 +16,8 @@
                 text = "つけたタグ"
                 :originalCheckedTagList=originalCheckedTagList
             />
-            <p class="error" v-if="bookMarkUrlErrorFlag">urlを入力してください</p>
-            <p class="error" v-if="alreadyExistErrorFlag">そのURLはすでに登録されています</p>
+            <p class="global_css_error" v-if="bookMarkUrlErrorFlag">urlを入力してください</p>
+            <p class="global_css_error" v-if="alreadyExistErrorFlag">そのURLはすでに登録されています</p>
             <v-form @submit.prevent>
                 <!-- タイトル入力欄とボタン2つ -->
                 <v-text-field

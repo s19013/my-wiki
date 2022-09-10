@@ -27,7 +27,7 @@
                     @keydown.meta.enter.exact="submitCheck"
                 />
 
-                <p class="error" v-if="articleBodyErrorFlag">本文を入力してください</p>
+                <p class="global_css_error" v-if="articleBodyErrorFlag">本文を入力してください</p>
                 <ArticleBody
                     ref="articleBody"
                     :originalArticleBody="originalArticleBody"
