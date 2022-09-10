@@ -2,76 +2,81 @@
     <div class="navMenu">
         <transition name="slide">
             <nav v-show="show">
+                <ol>
+                    <li>
+                        <button class="closeButton" @click.stop = "show = !show">
+                            <v-icon> mdi-close-box</v-icon>
+                            <p>閉じる</p>
+                        </button>
+                    </li>
 
-                <button class="closeButton" @click.stop = "show = !show">
-                    <v-icon> mdi-close-box</v-icon>
-                    <p>閉じる</p>
-                </button>
-                <div>
-                    <menuLabel
-                        backgroundColor='#1a81c1'
-                        textColor='#fafafa'
-                        text="記事"
-                        icon="mdi-note"
-                    />
+                    <li>
+                        <menuLabel
+                            backgroundColor='#1a81c1'
+                            textColor='#fafafa'
+                            text="記事"
+                            icon="mdi-note"
+                        />
+                    </li>
 
+                    <li>
+                        <menuButton
+                            text="新規作成"
+                            icon="mdi-plus"
+                            :path="route('CreateArticle')"
+                        />
+                    </li>
 
-                    <menuButton
-                        backgroundColor='#d4d4d4'
-                        textColor='#000000'
-                        text="新規作成"
-                        icon="mdi-plus"
-                        :path="route('CreateArticle')"
-                    />
+                    <li>
+                        <menuButton
+                            text="検索"
+                            icon="mdi-magnify"
+                            :path="route('SearchArticle')"
+                        />
+                    </li>
 
-                    <menuButton
-                        backgroundColor='#d4d4d4'
-                        text="検索"
-                        icon="mdi-magnify"
-                        :path="route('SearchArticle')"
-                    />
+                    <li>
+                        <menuLabel
+                            backgroundColor='#4015a6'
+                            textColor='#fafafa'
+                            text="ブックマーク"
+                            icon="mdi-bookmark"
+                        />
+                    </li>
 
-                    <h2></h2>
+                    <li>
+                        <menuButton
+                            text="新規作成"
+                            icon="mdi-plus"
+                            :path="route('CreateBookMark')"
+                        />
+                    </li>
 
-                    <menuLabel
-                        backgroundColor='#4015a6'
-                        textColor='#fafafa'
-                        text="ブックマーク"
-                        icon="mdi-bookmark"
-                    />
+                    <li>
+                        <menuButton
+                            text="検索"
+                            icon="mdi-magnify"
+                            :path="route('SearchBookMark')"
+                        />
+                    </li>
 
-                    <menuButton
-                        backgroundColor='#d4d4d4'
-                        text="新規作成"
-                        icon="mdi-plus"
-                        :path="route('CreateBookMark')"
-                    />
-
-                    <menuButton
-                        backgroundColor='#d4d4d4'
-                        text="検索"
-                        icon="mdi-magnify"
-                        :path="route('SearchBookMark')"
-                    />
-
-                    <menuButton
-                        class="logout"
-                        textColor="#f0f8ff"
-                        backgroundColor='#830606'
-                        text="ログアウト"
-                        icon="mdi-logout"
-                        :path="route('logout')"
-                        method="post"
-                    />
-
-                </div>
+                    <li>
+                        <menuButton
+                            textColor="#f0f8ff"
+                            backgroundColor="#a80000"
+                            text="ログアウト"
+                            icon="mdi-logout"
+                            :path="route('logout')"
+                            method="post"
+                        />
+                    </li>
+                </ol>
             </nav>
         </transition>
     </div>
 </template>
 
 <script>
-import { Link } from '@inertiajs/inertia-vue3';
 import menuLabel from '@/Components/menuLabel.vue';
 import menuButton from '@/Components/button/menuButton.vue';
 
@@ -82,10 +87,9 @@ export default{
         }
     },
     components:{
-    Link,
-    menuLabel,
-    menuButton,
-},
+        menuLabel,
+        menuButton,
+    },
 }
 </script>
 
@@ -100,10 +104,41 @@ nav {
     position: fixed; /* ウィンドウを基準に画面に固定 */
     right   : 0;// 強制的に右端に置く
     top     :0;//ボタンと被らないように頭の位置を下げる
+
+    ol{
+        height: 100%;
+        list-style-type:none;
+        display: grid;
+        grid-template-rows:
+        auto
+        2fr
+        auto
+        auto
+        1fr
+        auto
+        2fr
+        auto
+        auto
+        1fr
+        auto
+        20fr
+        auto
+        ;
+        li:nth-child(1){grid-row: 1/2; }
+
+        li:nth-child(2){grid-row: 3/4; }
+        li:nth-child(3){grid-row: 4/5; }
+        li:nth-child(4){grid-row: 6/7; }
+
+        li:nth-child(5){grid-row: 8/9; }
+        li:nth-child(6){grid-row: 9/10; }
+        li:nth-child(7){grid-row: 11/12; }
+
+        li:nth-child(8){grid-row: 13/14; }
+    }
     .closeButton{
-        background-color: #d4d4d4;
+        background-color: hsl(0, 0%, 83%);
         padding:5px 0;
-        margin-bottom:1rem;
         width: 100%;
         display: grid;
         grid-template-columns:2fr 1fr 4fr 2fr;
@@ -116,15 +151,6 @@ nav {
             grid-column: 3/4;
             margin: auto;
         }
-        // .button{
-        //     width: 100%;
-        // }
-    }
-    .logout {
-        position: absolute;
-        top     :90vh;
-        width   : 100%;
-        background-color:#830606;
     }
 }
 
