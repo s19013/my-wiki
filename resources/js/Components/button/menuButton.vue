@@ -1,10 +1,10 @@
 <template>
-    <div class="menuButton"
-    :style=[hBackgroundColorComp,sBackgroundColorComp,lBackgroundColorComp,lightBackgroundColorComp,textColorComp]>
+    <div class="menuButton" :style=[textColorComp,backgroundColorComp]>
         <Link :href="path" :method="method">
-            <!-- <v-icon>{{icon}}</v-icon>
-            <p> {{text}} </p> -->
-            {{backgroundColorLComp}}
+            <v-btn flat :rounded="0">
+                <v-icon v-if="icon !== null">{{icon}}</v-icon>
+                <p>{{text}}</p>
+            </v-btn>
         </Link>
     </div>
 </template>
@@ -17,73 +17,65 @@ export default{
             type   :String,
             default:null
         },
-        icon:{},
-        path:{},
-        backgroundColor:{default:[0,0,83]},//hsl型
-        textColor:{default:"#000000"},
+        icon:{
+            type   :String,
+            default:null
+        },
+        path:{
+            type   :String,
+            default:null
+        },
+        backgroundColor:{
+            type:String,
+            default:"#d9d9d9"//#16進数 型
+        },
+        textColor:{
+            type:String,
+            default:"#000000"//#16進数 型
+        },
         method:{
             type   :String,
             default:"get"
         }
     },
     components:{
-        Link
+        Link,
     },
     computed: {
         textColorComp() {
           return {'--color' : this.textColor,}
         },
-        hBackgroundColorComp(){
+        backgroundColorComp(){
             return {
-                '--background-color-h':this.backgroundColor[0]
+                '--background-color':this.backgroundColor,
             }
         },
-        sBackgroundColorComp(){
-            return {
-                '--background-color-s':this.backgroundColor[1] + "%"
-            }
-        },
-        lBackgroundColorComp(){
-            return {
-                '--background-color-l':this.backgroundColor[2] + "%"
-            }
-        },
-        lightBackgroundColorComp(){
-            if (Number(this.backgroundColor[2])-20 > 0) {
-                return { '--background-color-l':this.backgroundColor[2] + "%"}
-            } else {return { '--background-color-l': 0}}
-        }
     }
 }
 </script>
 
-<style lang="scss" scoped>
-    .menuButton{
-        background-color: hsl(var(--background-color-h),var(--background-color-s),var(--background-color-l));
-        margin-bottom:0.8rem;
+<style lang="scss">
+.menuButton{
+    a{text-decoration: none;}
+    button{
+        width: 100%;
         font-size :1.3rem;
+        background-color: var(--background-color);
         color:var(--color);
-        a{
-            display: grid;
-            grid-template-columns:2fr 1fr 4fr 2fr;
-            cursor: pointer;
-            color : var(--color);
-            text-decoration: none;
-        }
-        i{
-            grid-column: 2/3;
-            margin     : auto;
-        }
-        p{
-            font-weight: bold;
-            text-align :center;
-            grid-column: 3/4;
-            margin     : auto;
-        }
     }
-@media (max-width: 600px){
-    .menuButton{
-        padding: 0.5rem 0;
+    .v-btn{display: initial}
+    .v-btn__content{
+        display: grid;
+        grid-template-columns:2fr 1fr 4fr 2fr;
+    }
+    i{
+        grid-column: 2/3;
+        margin     : auto;
+    }
+    p{
+        text-align: center;
+        grid-column: 3/4;
+        margin: auto;
     }
 }
 </style>
