@@ -6,10 +6,10 @@
                     type="bookmark"
                     @deleteTrigger="deleteBookMark"
                 />
-                <SaveButton
-                    :disabled="bookMarkSending"
-                    @click="submitCheck()"
-                />
+                <v-btn color="#BBDEFB" class="global_css_haveIconButton_Margin" @click="submitCheck()" :disabled="bookMarkSending">
+                    <v-icon>mdi-content-save</v-icon>
+                    <p>保存</p>
+                </v-btn>
             </div>
             <TagDialog
                 ref="tagDialog"
@@ -128,7 +128,8 @@ export default {
 }
 .head{
     display: grid;
-    grid-template-columns:10fr auto auto;
+    grid-template-columns:9fr auto auto;
+    gap:2rem;
     margin-bottom: 1.5rem ;
     .deleteAlertDialog{
         grid-column: 2/3;

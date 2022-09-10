@@ -6,10 +6,10 @@
                     ref="deleteAlert"
                     @deleteTrigger="deleteArticle"
                 />
-                <SaveButton
-                    :disabled="articleSending"
-                    @click="submitCheck()"
-                />
+                <v-btn color="#BBDEFB" class="global_css_haveIconButton_Margin" @click="submitCheck()" :disabled="articleSending">
+                    <v-icon>mdi-content-save</v-icon>
+                    <p>保存</p>
+                </v-btn>
             </div>
             <TagDialog
                 ref="tagDialog"
@@ -144,9 +144,11 @@ export default {
     margin: 0 20px;
     margin-top: 2rem;
 }
+
 .head{
     display: grid;
-    grid-template-columns:10fr auto auto;
+    grid-template-columns:9fr auto auto;
+    gap:2rem;
     margin-bottom: 1.5rem ;
     .deleteAlertDialog{
         grid-column: 2/3;
@@ -155,6 +157,7 @@ export default {
         margin-left:1rem ;
         grid-column: 3/4;
     }
+
 }
 .v-input{margin-bottom: 1.5rem;}
 </style>

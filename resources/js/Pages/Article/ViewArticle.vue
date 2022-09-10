@@ -8,9 +8,9 @@
                         @deleteTrigger="deleteArticle"
                     />
                     <Link :href="'/Article/Edit/' + article.id">
-                        <v-btn class="longButton editButton" color="#BBDEFB">
+                        <v-btn class="editButton global_css_haveIconButton_Margin" color="#BBDEFB">
                             <v-icon>mdi-pencil-plus</v-icon>
-                            編集
+                            <p>編集</p>
                         </v-btn>
                     </Link>
                 </div>
@@ -72,7 +72,10 @@ export default{
 </script>
 
 <style lang="scss" scoped>
-.articleContainer {margin: 0 20px;}
+.articleContainer {
+    margin: 0 20px;
+    margin-top: 2rem;
+}
 .title{
     padding: 2px;
     border:black solid 1px;
@@ -82,15 +85,17 @@ export default{
     word-break   :break-word;
     overflow-wrap:normal;
 }
+
 .head{
     display: grid;
-    grid-template-columns:10fr auto auto;
-    margin: 10px;
+    grid-template-columns:9fr auto auto;
+    gap:2rem;
+    margin-bottom: 1.5rem ;
     .deleteAlertDialog{
         grid-column: 2/3;
     }
-    .editButton{
-        margin-left:10px ;
+    .saveButton{
+        margin-left:1rem ;
         grid-column: 3/4;
     }
 
