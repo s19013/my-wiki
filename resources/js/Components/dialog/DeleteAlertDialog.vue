@@ -1,7 +1,11 @@
 <template>
     <div class="deleteAlertDialog">
      <!-- ダイアログを呼び出すためのボタン -->
-    <DeleteButton @click="deleteDialogFlagSwitch"/>
+
+    <v-btn color="error" @click.stop="deleteDialogFlagSwitch()">
+        <v-icon>mdi-trash-can</v-icon>
+        <p>削除</p>
+    </v-btn>
 
     <v-dialog
       v-model="deleteDialogFlag"
@@ -10,8 +14,13 @@
         <section class="Dialog">
             <h2>{{text}}</h2>
             <div class="control">
-                <p class="back"  @click.stop="deleteDialogFlagSwitch()" >もどる</p>
-                <p class="error delete" @click.stop="deleteTrigger()" >削除する</p>
+                <button type="button" class="back" @click.stop="deleteDialogFlagSwitch()">
+                    <p>もどる</p>
+                </button>
+
+                <button type="button" class="delete" @click.stop="deleteTrigger()">
+                    <p class="error">削除する</p>
+                </button>
             </div>
         </section>
     </v-dialog>
@@ -19,7 +28,6 @@
 </template>
 
 <script>
-import DeleteButton from '@/Components/button/DeleteButton.vue';
 export default {
     data() {
         return {
@@ -32,9 +40,6 @@ export default {
             type   :String,
             default:"article"
         }
-    },
-    components:{
-        DeleteButton
     },
     methods: {
         //切り替え
@@ -66,10 +71,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.Dialog{
+button{ i {margin-right: 10px;} }
+.control {
     p{
-        width: 100%;
-        cursor: pointer;
+        text-align: center;
+        margin: auto;
     }
 }
 @media (min-width: 601px){
@@ -77,15 +83,15 @@ export default {
         display:grid;
         grid-template-columns:3fr 1.5fr 0.1fr 1.5fr;
         margin-top: 1rem;
-        .back{grid-column: 2/3;}
+        .back  {grid-column: 2/3;}
         .delete{grid-column: 4/5;}
-        p{
-            text-align: center;
-            margin: auto;
-        }
     }
 }
 @media (max-width: 600px){
-    p{margin-top: 1rem;}
+    .control{
+        display:grid;
+        grid-template-rows:1fr 1fr;
+        gap: 1rem;
+    }
 }
 </style>
