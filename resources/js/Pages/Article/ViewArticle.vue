@@ -100,9 +100,4 @@ export default{
     }
 
 }
-
-.head{margin-top: 10px;}
-@media (max-width: 600px){
-    .editButton{height: 3.5vh;}
-}
 </style>
