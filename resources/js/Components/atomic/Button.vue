@@ -1,9 +1,9 @@
 <template>
-    <div class="Button" :class=[sizeComp,shadowComp]>
+    <div class="Button" :class=[sizeComp,shadowComp] :style="textColorComp">
         <button
             type="button"
             @click.stop="clickTrigger"
-            :style=[backgroundColorComp,textColorComp,roundingCornersComp,shadowPropertyComp,shadowColorComp]>
+            :style=[backgroundColorComp,roundingCornersComp,shadowPropertyComp,shadowColorComp]>
             <v-icon v-if="icon !== null">{{icon}}</v-icon>
             <p>{{text}}</p>
         </button>
