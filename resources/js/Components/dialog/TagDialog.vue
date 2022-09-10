@@ -21,7 +21,7 @@
             scrollable
             persistent>
 
-            <section class="Dialog tagDialog">
+            <section class="global_css_Dialog tagDialog">
                 <div class="clooseButton">
                     <v-btn color="#E57373" size="small" elevation="2" @click.stop="closeTagDialog()">
                         <v-icon

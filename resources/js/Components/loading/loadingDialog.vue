@@ -4,7 +4,7 @@
             v-model="loadingFlag"
             persistent
         >
-            <loading class="Dialog"></loading>
+            <loading class="global_css_Dialog"></loading>
         </v-dialog>
     </div>
 </template>

@@ -11,7 +11,7 @@
       v-model="deleteDialogFlag"
       persistent
     >
-        <section class="Dialog">
+        <section class="global_css_Dialog">
             <h2>{{text}}</h2>
             <div class="control">
                 <button type="button" class="back" @click.stop="deleteDialogFlagSwitch()">
