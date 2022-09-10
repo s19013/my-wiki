@@ -1,10 +1,10 @@
 <template>
-    <div class="longButton" :class=haveIcon>
+    <div class="longButton" :class=[sizeComp,shadowComp]>
         <button
             type="button"
             @click.stop="clickTrigger"
-            :style=[backgroundColorComp,backgroundColorBrightnessComp,backgroundColorDarknessComp,textColorComp,textColorBrightnessComp,textColorDarknessComp]>
-            <v-icon>{{icon}}</v-icon>
+            :style=[backgroundColorComp,textColorComp,roundingCornersComp,shadowPropertyComp,shadowColorComp]>
+            <v-icon v-if="icon !== null">{{icon}}</v-icon>
             <p>{{text}}</p>
         </button>
     </div>
@@ -21,12 +21,38 @@ export default{
             type:String,
             default:null
         },
+        size:{
+            type:String,
+            default:"normal"
+        },
+        //角を丸めるか
+        haveRoundingCorners:{
+            type:Boolean,
+            default:false
+        },
+        cornerRadius:{
+            type:String,
+            default:"5px" // pxでも,remでも %でもok
+        },
+        //影をつけるか
+        haveShadow:{
+            type:Boolean,
+            default:false
+        },
+        shadowProperty:{
+            type:Array,
+            default:["0","2px","3px","1px"]
+        },
+        shadowColor:{
+            type:Array,
+            default:[0,0,0,0.6]
+        },
         backgroundColor:{
-            type:Object,
+            type:Array,
             default:[0,0,98,1]//hsla型
         },
         textColor:{
-            type:Object,
+            type:Array,
             default:[0,0,0,1]//hsla型
         },
     },
@@ -35,29 +61,71 @@ export default{
     },
     computed: {
         // アイコンがあるかどうか
-        haveIcon(){
-            if (this.icon !== null) {return "haveIconDisplay" }
-            // else {return "noIconDisplay" }
+        // haveIcon(){
+        //     if (this.icon !== null) {return "haveIconDisplay" }
+        // },
+        //大きさ
+        sizeComp(){
+            // アイコンがあるかどうか
+            if (this.icon !== null) {
+                switch(this.size){
+                    case "maximum" : return "haveIconMaximum"
+                    break
+                    case "large" : return  "haveIconLarge"
+                    break
+                    case "normal" : return "haveIconNormal"
+                    break
+                    case "small" : return  "haveIconSmall"
+                    break
+                }
+            } else {
+                switch(this.size){
+                    case "maximum" : return "maximum"
+                    break
+                    case "large" : return  "large"
+                    break
+                    case "normal" : return "normal"
+                    break
+                    case "small" : return  "small"
+                    break
+                }
+            }
+        },
+        //角を丸くするか
+        roundingCornersComp(){
+            if (this.haveRoundingCorners === true) {return {'--border-radius': this.cornerRadius}}
+            else{ return {'--border-radius':"0px"}}
+        },
+        //影をつけるか
+        shadowComp(){
+            if (this.haveShadow) { return "haveShadow" }
+        },
+        shadowPropertyComp(){
+            return {
+                '--shadow-offset-x':this.shadowProperty[0],
+                '--shadow-offset-y':this.shadowProperty[1],
+                '--shadow-blur-radius'  :this.shadowProperty[2],
+                '--shadow-spread-radius':this.shadowProperty[3],
+            }
+        },
+        shadowColorComp(){
+            return {
+                '--shadow-color-h':this.shadowColor[0],
+                '--shadow-color-s':this.shadowColor[1] + "%",
+                '--shadow-color-l':this.shadowColor[2] + "%",
+                '--shadow-color-a':this.shadowColor[3],
+            }
         },
         // 文字色
-        // 基礎
         textColorComp() {
             return {
-                'color-h':this.textColor[0],
-                'color-s':this.textColor[1] + "%",
-                'color-l':this.textColor[2] + "%",
-                'color-a':this.textColor[3],
-            }
-        },
-        textColorBrightnessComp(){
-            return {
-                'color-brightness-s':this.textColor[1] - 10 + "%",
-                'color-brightness-l':this.textColor[2] + 10 + "%"
-            }
-        },
-        textColorDarknessComp(){
-            return {
-                'color-darkness-l':this.textColor[2] - 20 + "%"
+                '--color-h':this.textColor[0],
+                '--color-s':this.textColor[1] + "%",
+                '--color-l':this.textColor[2] + "%",
+                '--color-a':this.textColor[3],
+                '--color-brightness-s':this.textColor[1] - 10 + "%",
+                '--color-brightness-l':this.textColor[2] + 10 + "%",
+                '--color-darkness-l'  :this.textColor[2] - 20 + "%"
             }
         },
         // 背景色
@@ -68,19 +136,11 @@ export default{
                 '--background-color-s':this.backgroundColor[1] + "%",
                 '--background-color-l':this.backgroundColor[2] + "%",
                 '--background-color-a':this.backgroundColor[3],
+                '--background-color-brightness-s':this.backgroundColor[1] - 15 + "%",
+                '--background-color-brightness-l':this.backgroundColor[2] + 15 + "%",
+                '--background-color-darkness-l'  :this.backgroundColor[2] - 20 + "%"
             }
         },
-        backgroundColorBrightnessComp(){
-            return {
-                '--background-color-brightness-s':this.backgroundColor[1] - 10 + "%",
-                '--background-color-brightness-l':this.backgroundColor[2] + 10 + "%"
-            }
-        },
-        backgroundColorDarknessComp(){
-            return {
-                '--background-color-darkness-l':this.backgroundColor[2] - 20 + "%"
-            }
-        }
     },
 }
 </script>
@@ -95,20 +155,20 @@ export default{
         var(--color-a),
     );
     button{
-        border-radius: 5px;
+        border-radius: var(--border-radius);
         background-color: hsla(
             var(--background-color-h),
             var(--background-color-s),
             var(--background-color-l),
             var(--background-color-a)
         );
-        width: 100%;
-        padding:0.4rem 0;
-        box-shadow:  0 2px 3px 0 rgb(0, 0, 0,0.6);
         transition: .1s;
-        p{font-weight: bold;}
+        p{
+            margin: auto;
+            font-weight: bold;
+        }
     }
-    :hover {
+    button:hover {
         background-color: hsla(
             var(--background-color-h),
             var(--background-color-brightness-s),
@@ -116,35 +176,60 @@ export default{
             var(--background-color-a)
         );
     }
-    :active {
+    button:active {
         background-color: hsla(
             var(--background-color-h),
             var(--background-color-brightness-s),
             var(--background-color-darkness-l),
             var(--background-color-a)
         );
-        box-shadow:  0 0 0 0 rgba(0, 0, 0, 0.2);
+        box-shadow:  none;
+    }
+
+}
+//影表示
+.haveShadow{
+    button{
+        box-shadow: var(--shadow-offset-x) var(--shadow-offset-y) var(--shadow-blur-radius) var(--shadow-spread-radius) hsla(var(--shadow-color-h),var(--shadow-color-s),var(--shadow-color-l),var(--shadow-color-a));
     }
 }
 
 //アイコンがある時ようの表示の仕方
-.haveIconDisplay{
+:is(.haveIconMaximum,.haveIconLarge,.haveIconNormal,.haveIconSmall) i{margin: auto;}
+
+.haveIconMaximum,.haveIconLarge{
     button{
         display: grid;
         grid-template-columns: 0.8fr 1fr  2fr 0.8fr;
-        i{
-            margin: auto;
-            grid-column: 2/3;
-        }
-        p{
-            margin: auto;
-            grid-column: 3/4;
-        }
+        i{ grid-column: 2/3; }
+        p{grid-column: 3/4;}
     }
 }
 
+
+:is(.haveIconMaximum,.maximum,.haveIconLarge,.large) button{padding-top: 0.4rem; padding-bottom: 0.4rem;}
+:is(.haveIconMaximum,.maximum) button{width: 100%;}
+:is(.haveIconLarge,.large) button{width: 15rem;}
+
+:is(.haveIconNormal,.normal) button{
+    gap: 10px;
+    padding-top   : 0.4rem;
+    padding-bottom: 0.4rem;
+    padding-left  : 1rem;
+    padding-right : 1rem;
+}
+:is(.haveIconSmall,.small) button{
+    gap: 2px;
+    padding-left: 0.1rem;
+    padding-right: 0.2rem;
+}
+
+.haveIconNormal,.haveIconSmall,.normal,.small{
+    button{ display: flex; }
+}
+
 @media (max-width: 600px){
-    .haveIconDisplay{
+    .haveIconMaximum,.haveIconLarge{
         button{
             display: grid;
             grid-template-columns: 1fr  2fr ;
@@ -161,3 +246,4 @@ export default{
 }
 
 </style>
+
