@@ -1,9 +1,10 @@
 <template>
     <div class="menuButton"
-    :style="backgroundColorComp">
+    :style=[hBackgroundColorComp,sBackgroundColorComp,lBackgroundColorComp,lightBackgroundColorComp,textColorComp]>
         <Link :href="path" :method="method">
-            <p :style="textColorComp"><v-icon>{{icon}}</v-icon></p>
-            <h3 :style="textColorComp"> {{text}} </h3>
+            <!-- <v-icon>{{icon}}</v-icon>
+            <p> {{text}} </p> -->
+            {{backgroundColorLComp}}
         </Link>
     </div>
 </template>
@@ -18,7 +19,7 @@ export default{
         },
         icon:{},
         path:{},
-        backgroundColor:{default:"#ffffff"},
+        backgroundColor:{default:[0,0,83]},//hsl型
         textColor:{default:"#000000"},
         method:{
             type   :String,
@@ -32,8 +33,25 @@ export default{
         textColorComp() {
           return {'--color' : this.textColor,}
         },
-        backgroundColorComp(){
-            return {'--background-color':this.backgroundColor}
+        hBackgroundColorComp(){
+            return {
+                '--background-color-h':this.backgroundColor[0]
+            }
+        },
+        sBackgroundColorComp(){
+            return {
+                '--background-color-s':this.backgroundColor[1] + "%"
+            }
+        },
+        lBackgroundColorComp(){
+            return {
+                '--background-color-l':this.backgroundColor[2] + "%"
+            }
+        },
+        lightBackgroundColorComp(){
+            if (Number(this.backgroundColor[2])-20 > 0) {
+                return { '--background-color-l':this.backgroundColor[2] + "%"}
+            } else {return { '--background-color-l': 0}}
         }
     }
 }
@@ -41,8 +59,10 @@ export default{
 
 <style lang="scss" scoped>
     .menuButton{
-        background-color: var(--background-color);
+        background-color: hsl(var(--background-color-h),var(--background-color-s),var(--background-color-l));
         margin-bottom:0.8rem;
+        font-size :1.3rem;
+        color:var(--color);
         a{
             display: grid;
             grid-template-columns:2fr 1fr 4fr 2fr;
@@ -50,15 +70,12 @@ export default{
             color : var(--color);
             text-decoration: none;
         }
-        p{
-            font-size :1.4rem;
-            color:var(--color);
+        i{
             grid-column: 2/3;
             margin     : auto;
         }
-
-        h3{
-            color:var(--color);
+        p{
+            font-weight: bold;
             text-align :center;
             grid-column: 3/4;
             margin     : auto;

@@ -1,10 +1,8 @@
 <template>
     <div class="menuLabel"
-    :style="backgroundColorComp">
-        <p :style="textColorComp"><v-icon>{{icon}}</v-icon></p>
-        <h2 :style="textColorComp">
-            {{text}}
-        </h2>
+    :style=[backgroundColorComp,textColorComp]>
+        <v-icon>{{icon}}</v-icon>
+        <p>{{text}}</p>
     </div>
 </template>
 
@@ -39,17 +37,16 @@ export default{
         background-color: var(--background-color);
         cursor : default;
         padding:0.5rem;
-    }
-    p{
-        font-size :1.4rem;
+        font-size :1.8rem;
         color:var(--color);
-        grid-column: 2/3;
-        margin     : auto;
-    }
-
-    h2{
-        color:var(--color);
-        text-align :center;
-        grid-column: 3/4;
+        i{
+            grid-column: 2/3;
+            margin     : auto;
+        }
+        p{
+            font-weight: bold;
+            text-align :center;
+            grid-column: 3/4;
+        }
     }
 </style>
