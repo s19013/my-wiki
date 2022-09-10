@@ -8,11 +8,12 @@
                 clearable
             ></v-text-field>
             <v-btn color="submit"
+                class="global_css_haveIconButton_Margin"
                 elevation="2"
                 :disabled = "loadingFlag"
                 @click.stop="triggerSearch()">
                 <v-icon>mdi-magnify</v-icon>
-                検索
+                <p>検索</p>
             </v-btn>
         </v-form>
     </div>
