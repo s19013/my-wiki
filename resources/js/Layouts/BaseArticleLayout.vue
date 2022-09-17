@@ -23,18 +23,12 @@
                     label="タイトル"
                     outlined hide-details="false"
                     @keydown.enter.exact="focusToBody()"
-                    @keydown.ctrl.enter.exact="submitCheck"
-                    @keydown.meta.enter.exact="submitCheck"
                 />
 
                 <p class="global_css_error" v-if="articleBodyErrorFlag">本文を入力してください</p>
                 <ArticleBody
                     ref="articleBody"
                     :originalArticleBody="originalArticleBody"
-                    @keydown.ctrl.enter.exact="submitCheck"
-                    @keydown.meta.enter.exact="submitCheck"
-                    @keydown.shift.meta.exact="changeTab()"
-                    @keydown.shift.ctrl.exact="changeTab()"
                 />
 
             </v-form>
@@ -124,12 +118,14 @@ export default {
         this.checkedTagList = this.originalCheckedTagList
         //キーボード受付
         document.addEventListener('keydown', (event)=>{
-            if (event.shiftKey) {
-                if(event.ctrlKey || event.key === "Meta"){this.changeTab()}
-                return
-            }
+            // 削除ダイアログ呼び出し
             if (event.key === "Delete") {
                 this.$refs.deleteAlert.deleteDialogFlagSwitch()
+                return
+            }
+            // 送信
+            if (event.ctrlKey || event.key === "Meta") {
+                if(event.code === "Enter"){this.submitCheck()}
                 return
             }
         })
