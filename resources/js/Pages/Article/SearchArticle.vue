@@ -4,7 +4,7 @@
 
             <SearchField
                 ref = "SearchField"
-                searchLabel   ="タグ検索"
+                searchLabel   ="記事検索"
                 :loadingFlag  ="loading"
                 @triggerSearch="searchArticle"
                 >

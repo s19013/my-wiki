@@ -3,7 +3,7 @@
         <v-container>
             <SearchField
                 ref        = "SearchField"
-                searchLabel="タグ検索"
+                searchLabel="ブックマーク検索"
                 :loadingFlag  ="loading"
                 @triggerSearch="search"
                 />
