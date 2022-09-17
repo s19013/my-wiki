@@ -57,6 +57,7 @@ export default {
     mounted() {
         //キーボード受付
         document.addEventListener('keydown', (event)=>{
+            // タブ切り替え(アプリ内)
             if (event.ctrlKey || event.key === "Meta") {
                 if(event.code === "Space"){this.changeTab()}
                 return
