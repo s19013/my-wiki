@@ -5,6 +5,7 @@
             <v-col>
                 <ul class="tabLabel">
                     <li @click="changeTab()" :class="{active: activeTab === 1,notActive: activeTab !== 1 }">
+                        <!-- ここボタンタグに治す -->
                         本文
                     </li>
                     <li @click="changeTab()" :class="{active: activeTab === -1,notActive: activeTab !== -1 }">
@@ -23,8 +24,6 @@
                 rows="20"
                 label="本文 [必須]"
                 v-model = "body"
-                @keydown.shift.meta.exact="changeTab()"
-                @keydown.shift.ctrl.exact="changeTab()"
             ></v-textarea>
         </div>
         <div v-show="activeTab === -1" class="markdown" v-html="compiledMarkdown()"></div>
@@ -54,7 +53,16 @@ export default {
         },
         serveBody(){return this.body},
         focusToBody(){ this.$nextTick(() => this.$refs.textarea.focus()) },
-
+    },
+    mounted() {
+        //キーボード受付
+        document.addEventListener('keydown', (event)=>{
+            // タブ切り替え(アプリ内)
+            if (event.ctrlKey || event.key === "Meta") {
+                if(event.code === "Space"){this.changeTab()}
+                return
+            }
+        })
     },
 }
 </script>

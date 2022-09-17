@@ -4,6 +4,7 @@
             <div class="head">
                 <DeleteAlertComponent
                     type="bookmark"
+                    ref ="deleteAlert"
                     @deleteTrigger="deleteBookMark"
                 />
                 <v-btn color="#BBDEFB" class="global_css_haveIconButton_Margin" @click="submitCheck()" :disabled="bookMarkSending">
@@ -25,15 +26,12 @@
                     label="タイトル"
                     outlined hide-details="false"
                     @keydown.enter.exact="this.$refs.url.focus()"
-                    @keydown.ctrl.enter.exact="submitCheck"
-                    @keydown.meta.enter.exact="submitCheck"
                 />
                 <v-text-field
                     ref="url"
                     label="url [必須]"
                     v-model = "bookMarkUrl"
-                    @keydown.ctrl.enter.exact="submitCheck"
-                    @keydown.meta.enter.exact="submitCheck"
+                    @keydown.enter.exact="this.submitCheck()"
                 ></v-text-field>
             </v-form>
         </div>
@@ -115,7 +113,22 @@ export default {
         },
         deleteBookMark() {this.$emit('triggerDeleteBookMark')},
     },
-    mounted() {this.checkedTagList = this.originalCheckedTagList},
+    mounted() {
+        this.checkedTagList = this.originalCheckedTagList
+        //キーボード受付
+        document.addEventListener('keydown', (event)=>{
+            // 削除ダイアログ呼び出し
+            if (event.key === "Delete") {
+                this.$refs.deleteAlert.deleteDialogFlagSwitch()
+                return
+            }
+            // 送信
+            if (event.ctrlKey || event.key === "Meta") {
+                if(event.code === "Enter"){this.submitCheck()}
+                return
+            }
+        })
+    },
 }
 </script>
 
