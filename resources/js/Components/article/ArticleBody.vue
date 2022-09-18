@@ -4,12 +4,16 @@
         <v-row>
             <v-col>
                 <ul class="tabLabel">
-                    <li @click="changeTab()" :class="{active: activeTab === 1,notActive: activeTab !== 1 }">
+                    <li>
                         <!-- ここボタンタグに治す -->
-                        本文
+                        <v-btn @click="changeTab()" flat :rounded="0" :disabled="activeTab === 1">
+                            <p>本文</p>
+                        </v-btn>
                     </li>
-                    <li @click="changeTab()" :class="{active: activeTab === -1,notActive: activeTab !== -1 }">
-                        変換後
+                    <li>
+                        <v-btn @click="changeTab()" flat :rounded="0" :disabled="activeTab === -1">
+                            <p>変換後</p>
+                        </v-btn>
                     </li>
                 </ul>
             </v-col>
@@ -85,17 +89,8 @@ textarea {
         display   : inline-block;
         list-style:none;
         border :black solid 1px;
-        padding:10px 20px;
-    }
-    .active{
-        font-weight: bold;
-        cursor     : default;
-    }
-
-    .notActive{
-        background: #919191;
-        color : black;
-        cursor: pointer;
+        button{width: 6rem;}
+        p {font-size: larger;}
     }
 }
 </style>
