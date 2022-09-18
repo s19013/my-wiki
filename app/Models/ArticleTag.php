@@ -99,9 +99,11 @@ class ArticleTag extends Model
             }
         }
 
+
         // 紐付けられていたタグすべて削除されたのならtag_id = nullのデータをついか
-        // もともと記事にタグがついていたか確認
-        if ($original[0]->getAttributes()["tag_id"] != null) {
+        // もともと記事にタグがついていたかと,
+        // 新しく紐付けられたタグが1つもないことを確認
+        if ($original[0]->getAttributes()["tag_id"] != null && empty($addedTagList)) {
             //もともとついていたタグがすべてはずされたか確認
             $isAllDeleted = array_diff($originalTagList,$deletedTagList);
             if (empty($isAllDeleted)) {
