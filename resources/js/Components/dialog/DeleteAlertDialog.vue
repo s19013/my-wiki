@@ -14,13 +14,17 @@
         <section class="global_css_Dialog">
             <h2>{{text}}</h2>
             <div class="control">
-                <button type="button" class="back" @click.stop="deleteDialogFlagSwitch()">
+                <v-btn flat :rounded="0" @click.stop="deleteDialogFlagSwitch()" class="back">
                     <p>もどる</p>
-                </button>
+                </v-btn>
+                <!-- <button type="button" class="back" >
+                </button> -->
+                <v-btn color="error" flat :rounded="0" @click.stop="deleteTrigger()" class="delete">
+                    <p>削除する</p>
+                </v-btn>
 
-                <button type="button" class="delete" @click.stop="deleteTrigger()">
-                    <p class="global_css_error">削除する</p>
-                </button>
+                <!-- <button type="button" class="delete">
+                </button> -->
             </div>
         </section>
     </v-dialog>
