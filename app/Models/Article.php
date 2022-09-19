@@ -162,7 +162,7 @@ class Article extends Model
         ->where('id','=',$articleId)
         ->first();
 
-        // 返り値がnull->削除されている
+        // $articleがnull->削除されている
         if ($article == null) {return true;}
         else {return false;}
     }
