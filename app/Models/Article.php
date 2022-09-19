@@ -85,27 +85,7 @@ class Article extends Model
 
         //タグも検索する場合
         if (!empty($tagList)) {
-            //articleテーブルとarticle_tags,tagsを結合
-            $subTable = DB::table('article_tags')
-            ->select('articles.id','articles.title','articles.body','articles.updated_at')
-            ->leftJoin('articles','articles.id','=','article_tags.article_id')
-            ->leftJoin('tags','tags.id','=','article_tags.tag_id')
-            ->where('articles.user_id','=',$userId)
-            ->where(function($subTable) {
-                //削除されてないものたちだけを取り出す
-                $subTable->WhereNull('articles.deleted_at')
-                         ->WhereNull('article_tags.deleted_at')
-                         ->WhereNull('tags.deleted_at');
-            })
-            ->where(function($subTable) use($tagList) {
-                foreach($tagList as $tag){
-                    $subTable->orWhere('article_tags.tag_id','=',$tag);
-                }
-            });
-
-            //ここの説明は別のドキュメントで
-            $subTable->groupBy('articles.id')
-            ->having(DB::raw('count(*)'), '=', count($tagList));
+            $subTable = self::createSubTableForSearch($userId,$tagList);
 
             //副問合せのテーブルから選択
             $query = DB::table($subTable,'sub')
@@ -151,6 +131,34 @@ class Article extends Model
             ],
             200
         );
+    }
+
+    //検索時のサブテーブル作成
+    public static function createSubTableForSearch($userId,$tagList)
+    {
+        //articleテーブルとarticle_tags,tagsを結合
+        $subTable = DB::table('article_tags')
+        ->select('articles.id','articles.title','articles.body','articles.updated_at')
+        ->leftJoin('articles','articles.id','=','article_tags.article_id')
+        ->leftJoin('tags','tags.id','=','article_tags.tag_id')
+        ->where('articles.user_id','=',$userId)
+        ->where(function($subTable) {
+            //削除されてないものたちだけを取り出す
+            $subTable->WhereNull('articles.deleted_at')
+                     ->WhereNull('article_tags.deleted_at')
+                     ->WhereNull('tags.deleted_at');
+        })
+        ->where(function($subTable) use($tagList) {
+            foreach($tagList as $tag){
+                $subTable->orWhere('article_tags.tag_id','=',$tag);
+            }
+        });
+
+        //ここの説明は別のドキュメントで
+        $subTable->groupBy('articles.id')
+        ->having(DB::raw('count(*)'), '=', count($tagList));
+
+        return $subTable;
     }
 
     // 削除済みかどうか確かめる
