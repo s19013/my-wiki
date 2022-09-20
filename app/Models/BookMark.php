@@ -82,25 +82,8 @@ class BookMark extends Model
 
         //タグも検索する場合
         if (!empty($tagList)) {
-            //articleテーブルとarticle_tags,tagsを結合
-            $subTable = DB::table('book_mark_tags')
-            ->select('book_marks.id','book_marks.title','book_marks.url','book_marks.updated_at')
-            ->leftJoin('book_marks','book_marks.id','=','book_mark_tags.book_mark_id')
-            ->leftJoin('tags','tags.id','=','book_mark_tags.tag_id')
-            ->where('book_marks.user_id','=',$userId)
-            ->where(function($subTable) {
-                $subTable->WhereNull('book_marks.deleted_at')
-                         ->WhereNull('book_mark_tags.deleted_at')
-                         ->WhereNull('tags.deleted_at');
-            })
-            ->where(function($subTable) use($tagList) {
-                foreach($tagList as $tag){
-                    $subTable->orWhere('book_mark_tags.tag_id','=',$tag);
-                }
-            });
 
-            $subTable->groupBy('book_marks.id')
-            ->having(DB::raw('count(*)'), '=', count($tagList));
+            $subTable = self::createSubTableForSearch($userId,$tagList);
 
             //副問合せのテーブルから選択
             $query = DB::table($subTable,'sub')
@@ -140,6 +123,32 @@ class BookMark extends Model
             ],
             200
         );
+    }
+
+    //検索時のサブテーブル作成
+    public static function createSubTableForSearch($userId,$tagList)
+    {
+        //articleテーブルとarticle_tags,tagsを結合
+        $subTable = DB::table('book_mark_tags')
+        ->select('book_marks.id','book_marks.title','book_marks.url','book_marks.updated_at')
+        ->join('book_marks','book_marks.id','=','book_mark_tags.book_mark_id')
+        ->join('tags','tags.id','=','book_mark_tags.tag_id')
+        ->where('book_marks.user_id','=',$userId)
+        ->where(function($subTable) {
+            $subTable->WhereNull('book_marks.deleted_at')
+                     ->WhereNull('book_mark_tags.deleted_at')
+                     ->WhereNull('tags.deleted_at');
+        })
+        ->where(function($subTable) use($tagList) {
+            foreach($tagList as $tag){
+                $subTable->orWhere('book_mark_tags.tag_id','=',$tag);
+            }
+        });
+
+        $subTable->groupBy('book_marks.id')
+        ->having(DB::raw('count(*)'), '=', count($tagList));
+
+        return $subTable;
     }
 
     // 削除済みか確かめる
