@@ -45,38 +45,20 @@ class ArticleTag extends Model
         $deletedTagList  = [];
 
         // 更新前の記事に紐付けられていたタグを取得
-        $original = ArticleTag::select('tag_id')
-        ->where('article_id','=',$articleId)
-        ->whereNull('deleted_at')
-        ->get();
-
-        if ($original[0]->getAttributes()["tag_id"] == null) {
-            //元の記事にタグはついてないし､新しくタグも設定されていない場合
-            // この関数の処理を終わらせる
-            if (empty($updatedTagList)) {return;}
-            else {
-                // 更新前は記事にタグが1つもついていなくて
-                // 更新後にはタグが紐付けられていたら
-                // 更新前の$articleIdのtag_idがnullのデータを論理削除
-                ArticleTag::deleteArticleTag(
-                    tagId:null,
-                    articleId:$articleId,
-                );
-            }
-        }
+        $originalTagList = self::getOrignalTag($articleId);
 
 
-        //元のデータに紐付けられているタグを配列に入れる
-        foreach ($original as $tag){array_push($originalTagList,$tag->original["tag_id"]);}
+        //元の記事にタグはついてないし､新しくタグも設定されていない場合
+        // この関数の処理を終わらせる
+        if(self::procesOriginalArticleDoesNotHaveAnyTags($originalTagList,$articleId,$updatedTagList) == true) {return;}
+
 
         // 追加されたタグ
         $addedTagList = array_diff($updatedTagList, $originalTagList);
 
         // 削除されたタグ
         // 元データがからではないときのみ動かす
-        if ($originalTagList[0] != null) {
-            $deletedTagList = array_diff($originalTagList, $updatedTagList);
-        }
+        if ($originalTagList[0] != null) {$deletedTagList = array_diff($originalTagList, $updatedTagList);}
 
 
         //追加
@@ -99,11 +81,58 @@ class ArticleTag extends Model
             }
         }
 
+        //記事のタグをすべて消した時の処理
+        self::procesOriginalArticleDeleteAllTags(
+            originalTagList:$originalTagList,
+            deletedTagList :$deletedTagList,
+            isAddedTagListEmpty:empty($addedTagList),
+            articleId:$articleId,
+            );
 
+    }
+
+    // 更新前の記事に紐付けられていたタグを取得
+    public static function getOrignalTag($articleId){
+        $temp = [];
+
+        $original = ArticleTag::select('tag_id')
+        ->where('article_id','=',$articleId)
+        ->whereNull('deleted_at')
+        ->get();
+
+        //元のデータに紐付けられているタグを配列に入れる
+        foreach ($original as $tag){array_push($temp,$tag->original["tag_id"]);}
+
+        return $temp;
+    }
+
+    //元の記事にタグがついてない場合の処理
+    public static function procesOriginalArticleDoesNotHaveAnyTags($originalTagList,$articleId,$updatedTagList)
+    {
+        if (is_null($originalTagList[0])) {
+            //元の記事にタグはついてないし､新しくタグも設定されていない場合
+            // この関数の処理を終わらせる
+            if (empty($updatedTagList)) {return true;}
+            else {
+                // 更新前は記事にタグが1つもついていなくて
+                // 更新後にはタグが紐付けられていたら
+                // 更新前の$articleIdのtag_idがnullのデータを論理削除
+                ArticleTag::deleteArticleTag(
+                    tagId:null,
+                    articleId:$articleId,
+                );
+                return false;
+            }
+        }
+    }
+
+    //記事のタグをすべて消した時の処理
+    public static function procesOriginalArticleDeleteAllTags($originalTagList,$articleId,$isAddedTagListEmpty,$deletedTagList)
+    {
         // 紐付けられていたタグすべて削除されたのならtag_id = nullのデータをついか
         // もともと記事にタグがついていたかと,
         // 新しく紐付けられたタグが1つもないことを確認
-        if ($original[0]->getAttributes()["tag_id"] != null && empty($addedTagList)) {
+        if ($originalTagList[0] != null && $isAddedTagListEmpty==true) {
             //もともとついていたタグがすべてはずされたか確認
             $isAllDeleted = array_diff($originalTagList,$deletedTagList);
             if (empty($isAllDeleted)) {
@@ -115,7 +144,8 @@ class ArticleTag extends Model
         }
     }
 
-    //記事に関連付けられたタグを取得
+
+    //記事に関連付けられたタグの名前とidを取得
     public static function serveTagsRelatedToAricle($articleId,$userId)
     {
         // tagsターブルとくっつける
@@ -140,4 +170,6 @@ class ArticleTag extends Model
         ])
         ->get();
     }
+
+
 }
