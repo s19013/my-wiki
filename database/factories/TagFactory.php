@@ -4,14 +4,14 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-use App\Models\Article;
+use App\Models\Tag;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Article>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Tag>
  */
-class ArticleFactory extends Factory
+class TagFactory extends Factory
 {
-    protected $model = Article::class;
+    protected $model = Tag::class;
     /**
      * Define the model's default state.
      *
@@ -20,8 +20,7 @@ class ArticleFactory extends Factory
     public function definition()
     {
         return [
-            'title'=>fake()->realText(15),
-            'body' =>fake()->realText(50),
+            'name' =>fake()->word(),
             'user_id' => rand (1, 2),
         ];
     }
