@@ -121,7 +121,6 @@ class ArticleTag extends Model
                     tagId:null,
                     articleId:$articleId,
                 );
-                return false;
             }
         }
     }
@@ -129,12 +128,12 @@ class ArticleTag extends Model
     //記事のタグをすべて消した時の処理
     public static function procesOriginalArticleDeleteAllTags($originalTagList,$articleId,$isAddedTagListEmpty,$deletedTagList)
     {
-        // 紐付けられていたタグすべて削除されたのならtag_id = nullのデータをついか
         // もともと記事にタグがついていたかと,
         // 新しく紐付けられたタグが1つもないことを確認
         if ($originalTagList[0] != null && $isAddedTagListEmpty==true) {
             //もともとついていたタグがすべてはずされたか確認
             $isAllDeleted = array_diff($originalTagList,$deletedTagList);
+            // 紐付けられていたタグすべて削除されたのならtag_id = nullのデータをついか
             if (empty($isAllDeleted)) {
                 ArticleTag::storeArticleTag(
                     tagId:null,
