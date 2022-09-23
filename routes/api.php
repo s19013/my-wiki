@@ -40,7 +40,7 @@ Route::middleware('auth:sanctum', 'throttle:60,1')->group(function () {
 
     Route::prefix('/article')->group(function () {
         Route::post('/store'  , [ArticleController::class,'articleStore']);
-        Route::post('/update' , [ArticleController::class,'aricleUpdate']);
+        Route::post('/update' , [ArticleController::class,'articleUpdate']);
         Route::delete('/{articleId}' , [ArticleController::class,'articleDelete']);
         Route::post('/search' , [ArticleController::class,'articleSearch']);
     });

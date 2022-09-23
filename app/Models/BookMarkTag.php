@@ -143,7 +143,7 @@ class BookMarkTag extends Model
     }
 
     //ブックマークに関連付けられたタグを取得
-    public static function serveTagsRelatedToAricle($bookMarkId,$userId)
+    public static function serveTagsRelatedToBookMark($bookMarkId,$userId)
     {
         // tagsターブルとくっつける
         // book_mark_tags.tag_id = tags.id

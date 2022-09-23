@@ -38,7 +38,7 @@ class ArticleTag extends Model
     }
 
     //記事に紐付けられているタグを更新
-    public static function updateAricleTag($articleId,$updatedTagList)
+    public static function updateArticleTag($articleId,$updatedTagList)
     {
         $originalTagList = []; //元データに紐付けられていたタグ
         $addedTagList    = [];
@@ -145,7 +145,7 @@ class ArticleTag extends Model
 
 
     //記事に関連付けられたタグの名前とidを取得
-    public static function serveTagsRelatedToAricle($articleId,$userId)
+    public static function serveTagsRelatedToArticle($articleId,$userId)
     {
         // tagsターブルとくっつける
         // article_tags.tag_id = tags.id

@@ -96,7 +96,7 @@ class BookMarkController extends Controller
     //     if ($request->bookmarkId == 0) { $this->bookmarkStore($request); }
     //     // 編集
     //     else {
-    //         $this->aricleUpdate($request);
+    //         $this->articleUpdate($request);
     //     }
     // }
 }

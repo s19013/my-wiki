@@ -177,7 +177,7 @@ class ArticleTagModelTest extends TestCase
         $this->assertNotNull($articleTag->deleted_at);
     }
 
-    public function test_serveTagsRelatedToAricle_登録時にタグを紐づけた場合()
+    public function test_serveTagsRelatedToArticle_登録時にタグを紐づけた場合()
     {
         $tag = Tag::create([
             'user_id' => $this->userId,
@@ -188,26 +188,26 @@ class ArticleTagModelTest extends TestCase
 
         $this->articleTagModel->storeArticleTag($tag->id,$this->articleId);
 
-        $articleTags = $this->articleTagModel->serveTagsRelatedToAricle($this->articleId,$this->userId);
+        $articleTags = $this->articleTagModel->serveTagsRelatedToArticle($this->articleId,$this->userId);
 
         //名前とidが一緒かどうか
         $this->assertSame($articleTags[0]->id,$tag->id);
         $this->assertSame($articleTags[0]->name,$tag->name);
     }
 
-    public function test_serveTagsRelatedToAricle_登録時にタグを紐づけなかった場合()
+    public function test_serveTagsRelatedToArticle_登録時にタグを紐づけなかった場合()
     {
 
 
         $this->articleTagModel->storeArticleTag(null,$this->articleId);
 
-        $articleTags = $this->articleTagModel->serveTagsRelatedToAricle($this->articleId,$this->userId);
+        $articleTags = $this->articleTagModel->serveTagsRelatedToArticle($this->articleId,$this->userId);
 
         //idがnull
         $this->assertSame($articleTags[0]->id,null);
     }
 
-    public function test_updateAricleTag_記事についていたタグと新規のタグを入れ替える()
+    public function test_updateArticleTag_記事についていたタグと新規のタグを入れ替える()
     {
         // carbonの時間固定
         Carbon::setTestNow(Carbon::now());
@@ -231,7 +231,7 @@ class ArticleTagModelTest extends TestCase
         ]);
 
         //更新
-        $this->articleTagModel->updateAricleTag($this->articleId,[$tag1->id,$tag2->id]);
+        $this->articleTagModel->updateArticleTag($this->articleId,[$tag1->id,$tag2->id]);
 
         // 更新前のデータ(ちゃんと消されたか確認する)
         $this->assertDatabaseHas('article_tags',[
@@ -258,7 +258,7 @@ class ArticleTagModelTest extends TestCase
         ]);
     }
 
-    public function test_updateAricleTag_タグがついていなかった記事にタグをつける()
+    public function test_updateArticleTag_タグがついていなかった記事にタグをつける()
     {
         // carbonの時間固定
         Carbon::setTestNow(Carbon::now());
@@ -280,7 +280,7 @@ class ArticleTagModelTest extends TestCase
         ]);
 
         //更新
-        $this->articleTagModel->updateAricleTag($this->articleId,[$tag1->id,$tag2->id]);
+        $this->articleTagModel->updateArticleTag($this->articleId,[$tag1->id,$tag2->id]);
 
         // 更新前のデータ(ちゃんと消されたか確認する)
         $this->assertDatabaseHas('article_tags',[
@@ -302,7 +302,7 @@ class ArticleTagModelTest extends TestCase
         ]);
     }
 
-    public function test_updateAricleTag_記事についていたタグはそのままに新規のタグを追加()
+    public function test_updateArticleTag_記事についていたタグはそのままに新規のタグを追加()
     {
         //更新前
         $tags = Tag::factory()->count(2)->create(['user_id' => $this->userId]);
@@ -325,7 +325,7 @@ class ArticleTagModelTest extends TestCase
         ]);
 
         //更新
-        $this->articleTagModel->updateAricleTag($this->articleId,[$tag1->id,$tag2->id,$tags[0]->id,$tags[1]->id]);
+        $this->articleTagModel->updateArticleTag($this->articleId,[$tag1->id,$tag2->id,$tags[0]->id,$tags[1]->id]);
 
         //取得したタグが新しく作ったタグになっているか確認
         // もともとつけていた部分
@@ -353,7 +353,7 @@ class ArticleTagModelTest extends TestCase
         ]);
     }
 
-    public function test_updateAricleTag_記事についていたタグの一部を外す()
+    public function test_updateArticleTag_記事についていたタグの一部を外す()
     {
         // carbonの時間固定
         Carbon::setTestNow(Carbon::now());
@@ -369,7 +369,7 @@ class ArticleTagModelTest extends TestCase
         //----
 
         //更新
-        $this->articleTagModel->updateAricleTag($this->articleId,[$tags[0]->id,$tags[1]->id]);
+        $this->articleTagModel->updateArticleTag($this->articleId,[$tags[0]->id,$tags[1]->id]);
 
         //残したやつ
         $this->assertDatabaseHas('article_tags',[
