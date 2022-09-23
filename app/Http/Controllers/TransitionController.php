@@ -92,7 +92,7 @@ class TransitionController extends Controller
 
         $bookMark = BookMark::serveBookMark(bookMarkId:$bookMarkId);
 
-        $bookMarkTagList = BookMarkTag::serveTagsRelatedToArticle(
+        $bookMarkTagList = BookMarkTag::serveTagsRelatedToBookMark(
             userId:Auth::id(),
             bookMarkId:$bookMarkId
         );
