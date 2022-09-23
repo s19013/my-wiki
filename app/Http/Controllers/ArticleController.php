@@ -42,7 +42,7 @@ class ArticleController extends Controller
     }
 
     //記事更新
-    public function aricleUpdate(Request $request)
+    public function articleUpdate(Request $request)
     {
         // CSRFトークンを再生成して、二重送信対策
         $request->session()->regenerateToken();
@@ -55,7 +55,7 @@ class ArticleController extends Controller
         );
 
         //タグ更新
-        ArticleTag::updateAricleTag(
+        ArticleTag::updateArticleTag(
             articleId     :$request->articleId,
             updatedTagList:$request->tagList,
         );

@@ -32,7 +32,7 @@ class TransitionController extends Controller
         $article = Article::serveArticle(articleId:$articleId);
 
         //記事に紐付けられたタグを取り出す
-        $articleTagList = ArticleTag::serveTagsRelatedToAricle(
+        $articleTagList = ArticleTag::serveTagsRelatedToArticle(
             userId:Auth::id(),
             articleId:$articleId
         );
@@ -92,7 +92,7 @@ class TransitionController extends Controller
 
         $bookMark = BookMark::serveBookMark(bookMarkId:$bookMarkId);
 
-        $bookMarkTagList = BookMarkTag::serveTagsRelatedToAricle(
+        $bookMarkTagList = BookMarkTag::serveTagsRelatedToArticle(
             userId:Auth::id(),
             bookMarkId:$bookMarkId
         );

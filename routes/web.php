@@ -41,9 +41,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             return Inertia::render('Article/CreateArticle');
         })->name('CreateArticle');
 
-        Route::get('/View/{articleId}', [TransitionController::class,'transitionToViewArticle'])->name('ViewAricle');
+        Route::get('/View/{articleId}', [TransitionController::class,'transitionToViewArticle'])->name('ViewArticle');
 
-        Route::get('/Edit/{articleId}', [TransitionController::class,'transitionToEditArticle'])->name('EditAricle');
+        Route::get('/Edit/{articleId}', [TransitionController::class,'transitionToEditArticle'])->name('EditArticle');
 
         Route::get('/Search', function () {
             return Inertia::render('Article/SearchArticle');
