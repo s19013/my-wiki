@@ -119,7 +119,6 @@ class BookMarkTag extends Model
                     tagId:null,
                     bookMarkId:$bookMarkId,
                 );
-                return false;
             }
         }
     }
