@@ -4,7 +4,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-use App\Http\Controllers\TransitionController;
+use App\Http\Controllers\ArticleTransitionController;
+use App\Http\Controllers\BookMarkTransitionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,9 +42,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             return Inertia::render('Article/CreateArticle');
         })->name('CreateArticle');
 
-        Route::get('/View/{articleId}', [TransitionController::class,'transitionToViewArticle'])->name('ViewArticle');
+        Route::get('/View/{articleId}', [ArticleTransitionController::class,'transitionToViewArticle'])->name('ViewArticle');
 
-        Route::get('/Edit/{articleId}', [TransitionController::class,'transitionToEditArticle'])->name('EditArticle');
+        Route::get('/Edit/{articleId}', [ArticleTransitionController::class,'transitionToEditArticle'])->name('EditArticle');
 
         Route::get('/Search', function () {
             return Inertia::render('Article/SearchArticle');
@@ -55,7 +56,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             return Inertia::render('BookMark/CreateBookMark');
         })->name('CreateBookMark');
 
-        Route::get('/Edit/{articleId}', [TransitionController::class,'transitionToEditBookMark'])->name('EditBookMark');
+        Route::get('/Edit/{articleId}', [BookMarkTransitionController::class,'transitionToEditBookMark'])->name('EditBookMark');
 
         Route::get('/Search', function () {
             return Inertia::render('BookMark/SearchBookMark');
