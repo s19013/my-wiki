@@ -32,7 +32,7 @@ Route::middleware('auth:sanctum', 'throttle:60,1')->group(function () {
     });
 
     Route::prefix('/tag')->group(function () {
-        Route::post('/delete' , [TagController::class,'']);
+        Route::delete('/delete' , [TagController::class,'']);
         Route::post('/store'  , [TagController::class,'tagStore']);
         Route::post('/edit'   , [TagController::class,'']);
         Route::post('/search' , [TagController::class,'tagSearch']);
