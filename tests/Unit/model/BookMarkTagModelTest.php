@@ -423,6 +423,18 @@ class BookMarkTagModelTest extends TestCase
         );
 
         $this->assertNull($returnValue);
+
+        // 登録されているタグに変化がない
+        $this->assertDatabaseHas('book_mark_tags',[
+            'book_mark_id' => $this->bookmarkId,
+            'tag_id'     => $tags[0]->id,
+            'deleted_at' => null
+        ]);
+        $this->assertDatabaseHas('book_mark_tags',[
+            'book_mark_id' => $this->bookmarkId,
+            'tag_id'     => $tags[1]->id,
+            'deleted_at' => null
+        ]);
         // procesOriginalBookMarkDoesNotHaveAnyTagsでは新規タグの登録はしないからここではテストしない
 
     }
@@ -468,6 +480,13 @@ class BookMarkTagModelTest extends TestCase
         );
 
         $this->assertTrue($returnValue);
+
+        //元データに変化なし
+        $this->assertDatabaseHas('book_mark_tags',[
+            'book_mark_id' => $this->bookmarkId,
+            'tag_id'     => null,
+            'deleted_at' => null
+        ]);
         // procesOriginalBookMarkDoesNotHaveAnyTagsでは新規タグの登録はしないからここではテストしない
     }
 

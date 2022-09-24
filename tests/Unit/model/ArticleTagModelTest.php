@@ -263,8 +263,6 @@ class ArticleTagModelTest extends TestCase
         // carbonの時間固定
         Carbon::setTestNow(Carbon::now());
 
-
-
         $this->articleTagModel->storeArticleTag(null,$this->articleId);
 
         //----
@@ -416,16 +414,29 @@ class ArticleTagModelTest extends TestCase
     {
         $tags = Tag::factory()->count(4)->create(['user_id' => $this->userId]);
 
-        $returnValue = $this->articleTagModel->storeArticleTag($tags[0]->id,$this->articleId);
+        $this->articleTagModel->storeArticleTag($tags[0]->id,$this->articleId);
         $this->articleTagModel->storeArticleTag($tags[1]->id,$this->articleId);
 
-        $this->articleTagModel->procesOriginalArticleDoesNotHaveAnyTags(
+        $returnValue = $this->articleTagModel->procesOriginalArticleDoesNotHaveAnyTags(
             originalTagList:$this->articleTagModel->getOrignalTag($this->articleId),
             articleId:$this->articleId,
             updatedTagList:[$tags[0]->id,$tags[1]->id,$tags[2]->id,$tags[3]->id]
         );
 
+        // 何もしないのでnullが返される
         $this->assertNull($returnValue);
+
+        // 登録されているタグに変化がない
+        $this->assertDatabaseHas('article_tags',[
+            'article_id' => $this->articleId,
+            'tag_id'     => $tags[0]->id,
+            'deleted_at' => null
+        ]);
+        $this->assertDatabaseHas('article_tags',[
+            'article_id' => $this->articleId,
+            'tag_id'     => $tags[1]->id,
+            'deleted_at' => null
+        ]);
         // procesOriginalArticleDoesNotHaveAnyTagsでは新規タグの登録はしないからここではテストしない
 
     }
@@ -447,7 +458,7 @@ class ArticleTagModelTest extends TestCase
 
         $this->assertNull($returnValue);
 
-        //nullの部分が論理削除されている
+        //nullのデータが論理削除されている
         $this->assertDatabaseHas('article_tags',[
             'article_id' => $this->articleId,
             'tag_id'     => null,
@@ -471,6 +482,13 @@ class ArticleTagModelTest extends TestCase
         );
 
         $this->assertTrue($returnValue);
+
+        //元データに変化なし
+        $this->assertDatabaseHas('article_tags',[
+            'article_id' => $this->articleId,
+            'tag_id'     => null,
+            'deleted_at' => null
+        ]);
         // procesOriginalArticleDoesNotHaveAnyTagsでは新規タグの登録はしないからここではテストしない
     }
 
