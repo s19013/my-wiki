@@ -56,7 +56,8 @@ class Article extends Model
         // 論理削除
         DB::transaction(function () use($articleId){
             Article::where('id','=',$articleId)
-            ->update(['deleted_at' => date(Carbon::now())]);
+            // ->update(['deleted_at' => date(Carbon::now())]);
+            ->update(['deleted_at' => Carbon::now()]);
         });
     }
 

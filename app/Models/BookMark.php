@@ -55,7 +55,8 @@ class BookMark extends Model
         // 論理削除
         DB::transaction(function () use($bookMarkId){
             BookMark::where('id','=',$bookMarkId)
-            ->update(['deleted_at' => date(Carbon::now())]);
+            // ->update(['deleted_at' => date(Carbon::now())]);
+            ->update(['deleted_at' => Carbon::now()]);
         });
     }
 
