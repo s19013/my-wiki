@@ -69,7 +69,7 @@ class BookMark extends Model
         ->first();
     }
 
-    public static function searchBookMark($userId,$bookMarkToSearch,$currentPage,$tagList)
+    public static function searchBookMark($userId,$bookMarkToSearch,$currentPage,$tagList,$searchTarget)
     {
         //ページネーションをする
 
@@ -95,9 +95,14 @@ class BookMark extends Model
             ->whereNull('deleted_at');
         }
 
-        // title名をlikeけんさく
-        foreach($wordListToSearch as $word){
-            $query->where('title','like',"%$word%");
+        // title名だけでlike検索する場合
+        if ($searchTarget == "title") {
+            foreach($wordListToSearch as $word){ $query->where('title','like',"%$word%"); }
+        }
+
+        // urlだけでlike検索する場合
+        if ($searchTarget == "url") {
+            foreach($wordListToSearch as $word){ $query->where('url','like',"%$word%"); }
         }
 
         //ヒット件数取得
