@@ -53,7 +53,7 @@ class Tag extends Model
         $wordListToSearch = searchToolKit::preparationToAndSearch($escaped);
 
         //ログインユーザーのタグを探す
-        $query = Tag::select('id','name')
+        $query = Tag::select('id','name','user_id')
         ->where('user_id','=',$userId);
 
         // tag名をlikeけんさく
