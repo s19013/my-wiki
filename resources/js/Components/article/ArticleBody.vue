@@ -26,7 +26,7 @@
                 filled
                 no-resize
                 rows="20"
-                label="本文 [必須]"
+                label="本文 [必須] ※マークダウン記法で書いてください"
                 v-model = "body"
             ></v-textarea>
         </div>
