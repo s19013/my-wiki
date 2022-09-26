@@ -88,9 +88,9 @@ class BookMark extends Model
 
             //副問合せのテーブルから選択
             $query = DB::table($subTable,'sub')
-            ->select('sub.id as id','sub.title as title','sub.url as url','sub.updated_at as updated_at');
+            ->select('*');
         } else {
-            $query = BookMark::select('id','title','url')
+            $query = BookMark::select('*')
             ->where('user_id','=',$userId)
             ->whereNull('deleted_at');
         }
@@ -131,9 +131,9 @@ class BookMark extends Model
     {
         //articleテーブルとarticle_tags,tagsを結合
         $subTable = DB::table('book_mark_tags')
-        ->select('book_marks.id','book_marks.title','book_marks.url','book_marks.updated_at')
-        ->join('book_marks','book_marks.id','=','book_mark_tags.book_mark_id')
-        ->join('tags','tags.id','=','book_mark_tags.tag_id')
+        ->select('book_marks.*')
+        ->leftjoin('book_marks','book_mark_tags.book_mark_id','=','book_marks.id')
+        ->leftjoin('tags','book_mark_tags.tag_id','=','tags.id')
         ->where('book_marks.user_id','=',$userId)
         ->where(function($subTable) {
             $subTable->WhereNull('book_marks.deleted_at')

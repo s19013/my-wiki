@@ -90,10 +90,10 @@ class Article extends Model
 
             //副問合せのテーブルから選択
             $query = DB::table($subTable,'sub')
-            ->select('sub.id as id','sub.title as title','sub.body as body','sub.updated_at as updated_at');
+            ->select('*');
         } else {
             //タグ検索が不要な場合
-            $query = Article::select('id','title','body')
+            $query = Article::select('*')
             ->where('user_id','=',$userId)
             ->whereNull('deleted_at');
         }
@@ -137,11 +137,12 @@ class Article extends Model
     //検索時のサブテーブル作成
     public static function createSubTableForSearch($userId,$tagList)
     {
-        //articleテーブルとarticle_tags,tagsを結合
+        //tags.idが
+        //articleテーブルとarticle_tags,tagsを結合->参照元が論理削除されていないか確認するため
         $subTable = DB::table('article_tags')
-        ->select('articles.id','articles.title','articles.body','articles.updated_at')
-        ->leftJoin('articles','articles.id','=','article_tags.article_id')
-        ->leftJoin('tags','tags.id','=','article_tags.tag_id')
+        ->select('articles.*')
+        ->leftJoin('articles','article_tags.article_id','=','articles.id')
+        ->leftJoin('tags','article_tags.tag_id','=','tags.id')
         ->where('articles.user_id','=',$userId)
         ->where(function($subTable) {
             //削除されてないものたちだけを取り出す
