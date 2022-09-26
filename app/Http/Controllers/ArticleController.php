@@ -65,6 +65,7 @@ class ArticleController extends Controller
     public function articleDelete($articleId)
     {
         // CSRFトークンを再生成して、二重送信対策
+        // deleteリクエストならここの部分が必要ない?
         // $request->session()->regenerateToken();
 
         Article::deleteArticle(articleId:$articleId);
