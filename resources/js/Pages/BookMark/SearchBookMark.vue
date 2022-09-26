@@ -14,6 +14,18 @@
                 text = "検索するタグ"
                 :searchOnly="true"/>
 
+            <details>
+                <summary >検索対象</summary>
+                <input type="radio" id="option1" value="title" v-model="searchTarget" />
+                <label for="option1" class="me-6">タイトルのみ</label>
+
+                <input type="radio" id="option2" value="url" v-model="searchTarget" />
+                <label for="option2" class="me-6">urlのみ</label>
+
+                <!-- <input type="radio" id="option3" value="titleAndBody" v-model="searchTarget" />
+                <label for="option3">タイトルまたは本文(低速)</label> -->
+            </details>
+
             <!-- loadingアニメ -->
             <loading v-show="loading"/>
 
@@ -48,6 +60,7 @@ export default{
             currentPage  : 1,
             pageCount    :1,
             loading      :false,
+            searchTarget:"title"
         }
     },
     components:{
@@ -66,7 +79,8 @@ export default{
             await axios.post('/api/bookmark/search',{
                 currentPage     :this.currentPage,
                 bookMarkToSearch:this.$refs.SearchField.serveKeywordToParent(),
-                tagList         : this.$refs.tagDialog.serveCheckedTagListToParent()
+                tagList         : this.$refs.tagDialog.serveCheckedTagListToParent(),
+                searchTarget:this.searchTarget
             })
             .then((res) =>{
                 this.pageCount    = res.data.pageCount
@@ -83,7 +97,8 @@ export default{
             await axios.post('/api/bookmark/search',{
                 currentPage     :this.currentPage,
                 bookMarkToSearch:this.bookMarkToSearch,
-                tagList         : this.$refs.tagDialog.serveCheckedTagListToParent()
+                tagList         : this.$refs.tagDialog.serveCheckedTagListToParent(),
+                searchTarget:this.searchTarget
             })
             .then((res) =>{
                 this.bookMarkList = res.data.bookMarkList
@@ -109,4 +124,8 @@ export default{
 
 <style lang="scss" scoped>
 .content{margin-bottom: 1.2rem;}
+details{
+    margin-bottom: 15px;
+    input,label,summary{ cursor: pointer; }
+}
 </style>

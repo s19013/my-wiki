@@ -77,13 +77,15 @@ class BookMarkController extends Controller
             userId:Auth::id(),
             bookMarkToSearch:$request->bookMarkToSearch,
             currentPage:$request->currentPage,
-            tagList    :$request->tagList
+            tagList    :$request->tagList,
+            searchTarget:$request->searchTarget
         );
     }
 
     public function bookMarkDelete($bookMarkId)
     {
         // CSRFトークンを再生成して、二重送信対策
+        // deleteリクエストならここの部分が必要ない?
         // $request->session()->regenerateToken();
 
         BookMark::deleteBookMark(bookMarkId:$bookMarkId);
