@@ -14,13 +14,14 @@
                         </v-btn>
                     </Link>
                 </div>
+
+                <!-- タグ -->
+                <TagList :tagList="articleTagList"/>
+
                 <h1 class="title">{{article.title}}</h1>
 
                 <!-- md表示 -->
-                <div class="markdown" v-html="compiledMarkdown()"></div>
-
-                <!-- タブ -->
-                <TagList :tagList="articleTagList"/>
+                <div class="global_css_markdown" v-html="compiledMarkdown()"></div>
         </div>
         <loadingDialog :loadingFlag="articleDeleting"></loadingDialog>
     </BaseLayout>
@@ -79,11 +80,6 @@ export default{
 .title{
     padding: 2px;
     border:black solid 1px;
-}
-.markdown{
-    margin:20px;
-    word-break   :break-word;
-    overflow-wrap:normal;
 }
 
 .head{
