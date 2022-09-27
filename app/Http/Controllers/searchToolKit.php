@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 class searchToolKit extends Controller
 {
     //sqlでlike検索する前にするエスケープ処理
-    public static function sqlEscape($arg)
+    public function sqlEscape($arg)
     {
         // %をエスケープ
         $escaped = preg_replace(
@@ -25,7 +25,7 @@ class searchToolKit extends Controller
     }
 
     //and検索できるように空白で区切って､配列にする
-    public static function preparationToAndSearch($arg)
+    public function preparationToAndSearch($arg)
     {
         // 全角スペースを半角に変換
         $spaceConversion = mb_convert_kana($arg, 's');
