@@ -64,7 +64,7 @@ class BookMark extends Model
     //編集画面で使う
     public static function serveBookMark($bookMarkId)
     {
-        return BookMark::select('id','title','url')
+        return BookMark::select('*')
         ->Where('id','=',$bookMarkId)
         ->first();
     }
