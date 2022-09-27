@@ -24,20 +24,6 @@ class ArticleTransitionController extends Controller
         // 他人の記事を覗こうとしているならExceptionを投げる
         $isSamePerson = Article::preventPeep(articleId:$articleId,userId:Auth::id());
         if ($isSamePerson == false) { throw new \Exception("illegal"); }
-
-        //記事を取り出す
-        $article = Article::serveArticle(articleId:$articleId);
-
-        //記事に紐付けられたタグを取り出す
-        $articleTagList = ArticleTag::serveTagsRelatedToArticle(
-            userId:Auth::id(),
-            articleId:$articleId
-        );
-
-        return [
-            'article'        => $article,
-            'articleTagList' => $articleTagList,
-        ];
     }
 
 
@@ -46,13 +32,19 @@ class ArticleTransitionController extends Controller
     public function transitionToViewArticle($articleId)
     {
         try {
-            $returnValue = $this->commonProcessing($articleId);
+            $this->commonProcessing($articleId);
         } catch (\Exception $e) {
             //違法行為をしていたら検索画面に強制リダイレクト
             return redirect()->route('SearchArticle');
         }
 
-        return Inertia::render('Article/ViewArticle',$returnValue);
+        return Inertia::render('Article/ViewArticle',[
+            'article'        => Article::serveArticle(articleId:$articleId),
+            'articleTagList' => ArticleTag::serveTagsRelatedToArticle(
+                userId:Auth::id(),
+                articleId:$articleId
+            ),
+        ]);
     }
 
     //記事編集画面に遷移する時の処理
@@ -66,8 +58,11 @@ class ArticleTransitionController extends Controller
         }
 
         return Inertia::render('Article/EditArticle',[
-            'originalArticle'        => $returnValue['article'],
-            'originalCheckedTagList' => $returnValue['articleTagList']
+            'originalArticle'        => Article::serveArticle(articleId:$articleId),
+            'originalCheckedTagList' => ArticleTag::serveTagsRelatedToArticle(
+                userId:Auth::id(),
+                articleId:$articleId
+            )
         ]);
     }
 
