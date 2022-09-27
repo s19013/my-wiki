@@ -1,6 +1,7 @@
 <template>
-    <div>
+    <div class="articleBody">
         <!-- タブ -->
+        <p>ctrl + spaceで変換前､変換後切り替え</p>
         <v-row>
             <v-col>
                 <ul class="tabLabel">
@@ -18,7 +19,6 @@
                 </ul>
             </v-col>
         </v-row>
-
         <!-- md入力欄  -->
         <div v-show="activeTab === 1">
             <v-textarea
@@ -26,11 +26,11 @@
                 filled
                 no-resize
                 rows="20"
-                label="本文 [必須] ※マークダウン記法で書いてください"
+                label="本文 [必須] ※マークダウン記法で書いてください '\' で改行"
                 v-model = "body"
             ></v-textarea>
         </div>
-        <div v-show="activeTab === -1" class="markdown" v-html="compiledMarkdown()"></div>
+        <div v-show="activeTab === -1" class="global_css_markdown" v-html="compiledMarkdown()"></div>
     </div>
 </template>
 
@@ -77,11 +77,6 @@ textarea {
         resize : none;
         // padding: 20px;
         background-color: #f6f6f6;
-}
-.markdown{
-    margin:20px;
-    word-break   :break-word;
-    overflow-wrap:normal;
 }
 
 .tabLabel{
