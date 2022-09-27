@@ -31,12 +31,6 @@ class BookMarkTransitionController extends Controller
             bookMarkId:$bookMarkId
         );
 
-        //ブックマークに何もタグが紐付けられなかったらnullを入れる こうしないと後の処理でバグが出る
-        if ($bookMarkTagList[0]->getAttributes()['id'] == null) {
-            $bookMarkTagList = null;
-        }
-
-
         return Inertia::render('BookMark/EditBookMark',[
             'originalBookMark'         => $bookMark,
             'originalCheckedTagList'   => $bookMarkTagList,
