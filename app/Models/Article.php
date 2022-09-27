@@ -73,16 +73,17 @@ class Article extends Model
     //検索する数
     public static function searchArticle($userId,$articleToSearch,$currentPage,$tagList,$searchTarget)
     {
-        //ページネーションをする
+        // ツールを実体化
+        $searchToolKit = new searchToolKit();
 
         //一度にとってくる数
         $parPage = (int)config('app.parPage');
 
         // %と_をエスケープ
-        $escaped = searchToolKit::sqlEscape($articleToSearch);
+        $escaped = $searchToolKit->sqlEscape($articleToSearch);
 
         //and検索のために空白区切りでつくった配列を用意
-        $wordListToSearch = searchToolKit::preparationToAndSearch($escaped);
+        $wordListToSearch = $searchToolKit->preparationToAndSearch($escaped);
 
         //タグも検索する場合
         if (!empty($tagList)) {
