@@ -2,7 +2,7 @@
     <div class="tagList">
         <p><v-icon>mdi-tag</v-icon>{{text}}</p>
             <ul >
-                    <li v-for="tag of tagList" :key="tag">{{tag.name}}</li>
+                    <li v-for="tag of filteredTagList()" :key="tag">{{tag.name}}</li>
             </ul>
     </div>
 </template>
@@ -22,6 +22,14 @@ export default{
             type:String,
             default:"つけたタグ"
         },
+    },
+    methods: {
+        // 記事やブックマークに何もタグがついてなかった場合{[id:null,name:null]}が帰ってくる
+        // しかしこれをこのまま放っておくとバグのもとになる｡見た目がわるくなるので
+        // filterをかけて消す
+        filteredTagList(){
+            return this.tagList.filter( function (tag) {return tag.id != null})
+        }
     },
 }
 </script>
