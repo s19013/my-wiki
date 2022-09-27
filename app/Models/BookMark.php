@@ -71,15 +71,16 @@ class BookMark extends Model
 
     public static function searchBookMark($userId,$bookMarkToSearch,$currentPage,$tagList,$searchTarget)
     {
-        //ページネーションをする
+        // ツールを実体化
+        $searchToolKit = new searchToolKit();
 
         //一度にとってくる数
         $parPage = (int)config('app.parPage');
 
         // %と_をエスケープ
-        $escaped = searchToolKit::sqlEscape($bookMarkToSearch);
+        $escaped = $searchToolKit->sqlEscape($bookMarkToSearch);
         //and検索のために空白区切りでつくった配列を用意
-        $wordListToSearch = searchToolKit::preparationToAndSearch($escaped);
+        $wordListToSearch = $searchToolKit->preparationToAndSearch($escaped);
 
         //タグも検索する場合
         if (!empty($tagList)) {

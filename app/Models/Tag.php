@@ -46,11 +46,14 @@ class Tag extends Model
     //タグを検索する
     public static function search($userId,$tag)
     {
+        // ツールを実体化
+        $searchToolKit = new searchToolKit();
+
         // %と_をエスケープ
-        $escaped = searchToolKit::sqlEscape($tag);
+        $escaped = $searchToolKit->sqlEscape($tag);
 
         //and検索のために空白区切りでつくった配列を用意
-        $wordListToSearch = searchToolKit::preparationToAndSearch($escaped);
+        $wordListToSearch = $searchToolKit->preparationToAndSearch($escaped);
 
         //ログインユーザーのタグを探す
         $query = Tag::select('id','name','user_id')
