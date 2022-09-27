@@ -13,6 +13,7 @@ use Auth;
 
 class ArticleTransitionController extends Controller
 {
+
     // 記事の共通処理をまとめる
     public function commonProcessing($articleId)
     {
@@ -32,11 +33,6 @@ class ArticleTransitionController extends Controller
             userId:Auth::id(),
             articleId:$articleId
         );
-
-        //記事に何もタグが紐付けられなかったらnullを入れる こうしないと後の処理でバグが出る
-        if ($articleTagList[0]->getAttributes()['id'] == null) {
-            $articleTagList = null;
-        }
 
         return [
             'article'        => $article,
