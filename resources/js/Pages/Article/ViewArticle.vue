@@ -90,7 +90,6 @@ export default{
     display: grid;
     grid-template-columns:9fr auto auto;
     gap:2rem;
-    margin-bottom: 1.5rem ;
     .deleteAlertDialog{
         grid-column: 2/3;
     }
@@ -103,4 +102,5 @@ export default{
     margin:1rem 0;
     @media (max-width: 600px){ margin:0.2rem; }
 }
+.DateLabel{margin: 0.5rem 0;}
 </style>
