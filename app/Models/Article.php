@@ -65,7 +65,7 @@ class Article extends Model
     //閲覧画面,編集画面で使う
     public static function serveArticle($articleId)
     {
-        return Article::select('id','title','body')
+        return Article::select('*')
         ->Where('id','=',$articleId)
         ->first();
     }
