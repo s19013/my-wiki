@@ -98,5 +98,8 @@ export default{
         grid-column: 3/4;
     }
 }
-.CompiledMarkDown{margin:1rem;}
+.CompiledMarkDown{
+    margin:1rem 0;
+    @media (max-width: 600px){ margin:0.2rem; }
+}
 </style>

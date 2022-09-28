@@ -104,6 +104,11 @@ nav {
     position: fixed; /* ウィンドウを基準に画面に固定 */
     right   : 0;// 強制的に右端に置く
     top     :0;//ボタンと被らないように頭の位置を下げる
+    @media (max-width: 960px){ width: 70%; }
+    @media (max-width: 600px){
+        width: 100%;
+        .originalHead{grid-template-columns:1.5fr 2fr 1.5fr 0.1fr;}
+    }
 
     ol{
         height: 100%;
@@ -164,11 +169,6 @@ nav {
 .slide-leave-active { transition: all .4s ease; }
 .slide-leave-to{ transform: translateX(100%); }
 
-@media (max-width: 960px){
-    nav{width: 70%;}
-}
-@media (max-width: 600px){
-    .originalHead{grid-template-columns:1.5fr 2fr 1.5fr 0.1fr;}
-    nav{width: 100%;}
-}
+
+
 </style>
