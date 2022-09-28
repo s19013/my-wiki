@@ -123,7 +123,7 @@ export default{
 <style lang="scss" scoped>
 .content{margin-bottom: 1.2rem;}
 details{
-    margin-bottom: 15px;
+    margin-bottom: 0.5rem;
     input,label,summary{ cursor: pointer; }
 }
 </style>
