@@ -102,5 +102,8 @@ export default{
     margin:1rem 0;
     @media (max-width: 600px){ margin:0.2rem; }
 }
-.DateLabel{margin: 0.5rem 0;}
+.DateLabel{
+    margin: 0.5rem 0;
+    justify-content: flex-end;
+}
 </style>
