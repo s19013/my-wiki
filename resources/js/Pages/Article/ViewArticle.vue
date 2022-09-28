@@ -77,8 +77,9 @@ export default{
 
 <style lang="scss" scoped>
 .articleContainer {
-    margin: 0 20px;
-    margin-top: 2rem;
+    margin: 0 1rem;
+    margin-top: 1rem;
+    @media (max-width: 900px){margin-top: 2rem;}
 }
 .title{
     padding: 2px;
