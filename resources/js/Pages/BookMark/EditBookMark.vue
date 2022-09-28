@@ -3,9 +3,9 @@
         ref="BaseBookMarkLayout"
         title="記事編集"
         pageTitle="記事編集"
-        :originalBookMarkTitle   ="originalBookMark.title"
-        :originalBookMarkUrl     ="originalBookMark.url"
+        :originalBookMark        ="originalBookMark"
         :originalCheckedTagList  ="originalCheckedTagList"
+        :edit="true"
         @triggerSubmit           = "submit"
         @triggerDeleteBookMark   = "deleteBookMark"
         >
@@ -52,36 +52,3 @@ export default {
     },
 }
 </script>
-
-<style lang="scss" scoped>
-.articleContainer {margin: 0 20px;}
-
-.tabLabel{
-    li{
-        display   : inline-block;
-        list-style:none;
-        border :black solid 1px;
-        padding:10px 20px;
-    }
-    .active{
-        font-weight: bold;
-        cursor     : default;
-    }
-
-    .notActive{
-        background: #919191;
-        color : black;
-        cursor: pointer;
-    }
-}
-
-.head{margin-top: 10px;}
-.bookMarkError{padding-top: 5px;}
-.v-input__details{
-    margin : 0;
-    padding: 0;
-    height : 0;
-    width  : 0;
-}
-
-</style>

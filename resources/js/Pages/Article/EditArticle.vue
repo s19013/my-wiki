@@ -3,9 +3,9 @@
         ref="BaseArticleLayout"
         title="記事編集"
         pageTitle="記事編集"
-        :originalArticleTitle   ="originalArticle.title"
-        :originalArticleBody    ="originalArticle.body"
+        :originalArticle        ="originalArticle"
         :originalCheckedTagList ="originalCheckedTagList"
+        :edit="true"
         @triggerSubmit          = "submit"
         @triggerDeleteArticle   = "deleteArticle"
         >

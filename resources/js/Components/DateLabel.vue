@@ -1,5 +1,5 @@
 <template>
-    <div class="DateLabel">
+    <div class="DateLabel" :style="textSizeComp">
         <pre><span>作成日:</span>{{format(createdAt)}}</pre>
         <pre><span>編集日:</span>{{format(updatedAt)}}</pre>
     </div>
@@ -8,23 +8,41 @@
 <script>
 
 export default{
-    props:['createdAt','updatedAt'],
+    props:{
+        createdAt:{
+            type   :String,
+            default:''
+        },
+        updatedAt:{
+            type   :String,
+            default:''
+        },
+        size:{
+            type   :String,
+            default:'0.8rem'
+        }
+    },
     methods: {
         format(arg){
             return arg.replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).*/,
             '$1/$2/$3   $4:$5')
         },
     },
+    computed:{
+        textSizeComp(){
+            return {'--size' : this.size,}
+        }
+    }
 }
 </script>
 
 <style lang="scss" scoped>
     .DateLabel{
         display: flex;
-        @media (max-width: 600px){display: block;}
+        @media (max-width: 300px){display: block;}
         pre {
             font-family:  Nunito, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-            font-size: 1.1rem;
+            font-size: var(--size);
             font-weight: 450;
         }
         span{font-weight: 500;}

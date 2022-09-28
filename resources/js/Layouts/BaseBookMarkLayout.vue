@@ -12,13 +12,18 @@
                     <p>保存</p>
                 </v-btn>
             </div>
+
+            <DateLabel v-if="edit" :createdAt="originalBookMark.created_at" :updatedAt="originalBookMark.updated_at"/>
+
             <TagDialog
                 ref="tagDialog"
                 text = "つけたタグ"
                 :originalCheckedTagList=originalCheckedTagList
             />
+
             <p class="global_css_error" v-if="bookMarkUrlErrorFlag">urlを入力してください</p>
             <p class="global_css_error" v-if="alreadyExistErrorFlag">そのURLはすでに登録されています</p>
+
             <v-form @submit.prevent>
                 <!-- タイトル入力欄とボタン2つ -->
                 <v-text-field
@@ -46,13 +51,14 @@ import TagDialog from '@/Components/dialog/TagDialog.vue';
 import TagList from '@/Components/TagList.vue';
 import DeleteAlertComponent from '@/Components/dialog/DeleteAlertDialog.vue';
 import loadingDialog from '@/Components/loading/loadingDialog.vue';
-import BaseLayout from '@/Layouts/BaseLayout.vue'
+import BaseLayout from '@/Layouts/BaseLayout.vue';
+import DateLabel from '@/Components/DateLabel.vue';
 
 export default {
     data() {
       return {
-        bookMarkTitle :this.originalBookMarkTitle,
-        bookMarkUrl   :this.originalBookMarkUrl,
+        bookMarkTitle :this.originalBookMark.title,
+        bookMarkUrl   :this.originalBookMark.url,
         checkedTagList:[],
 
         //loding
@@ -69,6 +75,7 @@ export default {
         TagList,
         loadingDialog,
         BaseLayout,
+        DateLabel,
     },
     emits: ['triggerSubmit','triggerDeleteBookMark'],
     props:{
@@ -80,17 +87,17 @@ export default {
             type   :String,
             default:''
         },
-        originalBookMarkTitle:{
-            type   :String,
-            default:''
-        },
-        originalBookMarkUrl:{
-            type   :String,
+        originalBookMark:{
+            type   :Object,
             default:''
         },
         originalCheckedTagList:{
             type   :Array,
             default:null
+        },
+        edit:{
+            type  :Boolean,
+            default:false
         },
     },
     methods: {
@@ -115,6 +122,10 @@ export default {
     },
     mounted() {
         this.checkedTagList = this.originalCheckedTagList
+        if (this.originalBookMark !== null) {
+            this.bookMarkTitle =this.originalBookMark.title
+            this.bookMarkUrl   =this.originalBookMark.url
+        }
         //キーボード受付
         document.addEventListener('keydown', (event)=>{
             // 削除ダイアログ呼び出し
@@ -134,14 +145,15 @@ export default {
 
 <style lang="scss" scoped>
 .articleContainer {
-    margin: 0 20px;
-    margin-top: 2rem;
+    margin: 0 1rem;
+    margin-top: 1rem;
+    @media (max-width: 900px){margin-top: 2rem;}
 }
 .head{
     display: grid;
     grid-template-columns:9fr auto auto;
     gap:2rem;
-    margin-bottom: 1.5rem ;
+    margin-bottom: 1rem ;
     .deleteAlertDialog{
         grid-column: 2/3;
     }

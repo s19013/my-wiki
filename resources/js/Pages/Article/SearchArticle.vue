@@ -33,9 +33,8 @@
 
             <template v-for="article of articleList" :key="article.id">
                 <ArticleContainer
-                    :title  ="article.title"
-                    :id     ="article.id"
-                    :loading="loading"
+                    v-if="!loading"
+                    :article="article"
                 />
             </template>
         <v-pagination
