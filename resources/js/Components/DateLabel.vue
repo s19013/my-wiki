@@ -21,6 +21,7 @@ export default{
 <style lang="scss" scoped>
     .DateLabel{
         display: flex;
+        @media (max-width: 600px){display: block;}
         pre {
             font-family:  Nunito, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
             font-size: 1.1rem;
