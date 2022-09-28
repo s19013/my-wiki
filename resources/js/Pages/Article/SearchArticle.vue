@@ -33,7 +33,7 @@
 
             <template v-for="article of articleList" :key="article.id">
                 <ArticleContainer
-                    v-show="!loading"
+                    v-if="!loading"
                     :article="article"
                 />
             </template>

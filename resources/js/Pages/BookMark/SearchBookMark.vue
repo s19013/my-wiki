@@ -31,10 +31,8 @@
 
             <template v-for="bookMark of bookMarkList" :key="bookMark.id">
                 <BookMarkContainer
-                    :title="bookMark.title"
-                    :url  ="bookMark.url"
-                    :id   ="bookMark.id"
-                    :loading="loading"
+                    v-if="!loading"
+                    :bookMark="bookMark"
                 />
             </template>
             <v-pagination
