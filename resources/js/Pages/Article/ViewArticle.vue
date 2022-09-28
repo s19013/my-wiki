@@ -15,23 +15,25 @@
                     </Link>
                 </div>
 
+                <DateLabel :createdAt="article.created_at" :updatedAt="article.updated_at"/>
                 <!-- タグ -->
                 <TagList :tagList="articleTagList"/>
 
                 <h1 class="title">{{article.title}}</h1>
 
                 <!-- md表示 -->
-                <div class="global_css_markdown" v-html="compiledMarkdown()"></div>
+                <CompiledMarkDown :originalMarkDown="article.body"/>
         </div>
         <loadingDialog :loadingFlag="articleDeleting"></loadingDialog>
     </BaseLayout>
 </template>
 
 <script>
-import {marked} from 'marked';
+import CompiledMarkDown from '@/Components/article/CompiledMarkDown.vue';
 import DeleteAlertComponent from '@/Components/dialog/DeleteAlertDialog.vue';
 import loadingDialog from '@/Components/loading/loadingDialog.vue';
 import TagList from '@/Components/TagList.vue';
+import DateLabel from '@/Components/DateLabel.vue';
 import BaseLayout from '@/Layouts/BaseLayout.vue'
 import { Link } from '@inertiajs/inertia-vue3';
 import axios from 'axios'
@@ -46,14 +48,15 @@ export default{
     },
     props:['article','articleTagList'],
     components:{
-    DeleteAlertComponent,
-    loadingDialog,
-    TagList,
-    BaseLayout,
-    Link,
-},
+        DeleteAlertComponent,
+        loadingDialog,
+        TagList,
+        BaseLayout,
+        Link,
+        DateLabel,
+        CompiledMarkDown,
+    },
     methods: {
-        compiledMarkdown() {return marked(this.article.body)},
         deleteArticle() {
             this.articleDeleting = true
             // 消す処理
@@ -94,6 +97,6 @@ export default{
         margin-left:1rem ;
         grid-column: 3/4;
     }
-
 }
+.CompiledMarkDown{margin:1rem;}
 </style>
