@@ -11,9 +11,7 @@ export default {
             default:''
         },
     },
-    methods: {
-        compileMarkDown(){return marked(this.originalMarkDown)}
-    },
+    methods: {compileMarkDown(){return marked(this.originalMarkDown)}},
 }
 </script>
 
@@ -34,7 +32,7 @@ export default {
         background-color: #364549;
         color: #e3e3e3;
         padding: 0.8rem;
-        overflow: scroll;
+        overflow: auto;
     }
     table {
         border-collapse:  collapse; /* セルの線を重ねる */
