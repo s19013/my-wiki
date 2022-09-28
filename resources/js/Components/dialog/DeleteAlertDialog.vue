@@ -80,21 +80,17 @@ export default {
         text-align: center;
         margin: auto;
     }
-}
-@media (min-width: 601px){
-    .control{
+    @media (min-width: 601px){
         display:grid;
         grid-template-columns:3fr 1.5fr 0.1fr 1.5fr;
         margin-top: 1rem;
         .back  {grid-column: 2/3;}
         .delete{grid-column: 4/5;}
     }
-}
-@media (max-width: 600px){
-    .control{
+    @media (max-width: 600px){
         display:grid;
-        grid-template-rows:1fr 1fr;
         gap: 1rem;
+        grid-template-rows:1fr 1fr;
     }
 }
 </style>

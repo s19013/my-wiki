@@ -30,6 +30,7 @@ export default{
     margin-bottom :0.2rem;
     display       : grid;
     grid-template-columns:1fr 4fr 1fr 0.1fr;
+    @media (max-width: 600px){ grid-template-columns: 1.5fr 2fr 1.5fr .1fr; }
     h2{
         grid-column: 2/3;
         text-align :center;
@@ -39,12 +40,6 @@ export default{
         grid-column: 3/4;
         margin-top:auto;
         margin-bottom:auto;
-    }
-}
-
-@media (max-width: 600px){
-    .originalHead {
-        grid-template-columns: 1.5fr 2fr 1.5fr .1fr;
     }
 }
 </style>
