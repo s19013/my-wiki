@@ -11,6 +11,9 @@
                     <p>保存</p>
                 </v-btn>
             </div>
+
+            <DateLabel v-if="edit" :createdAt="originalArticle.created_at" :updatedAt="originalArticle.updated_at" size="0.8rem"/>
+
             <TagDialog
                 ref="tagDialog"
                 text = "つけたタグ"
@@ -28,7 +31,7 @@
                 <p class="global_css_error" v-if="articleBodyErrorFlag">本文を入力してください</p>
                 <ArticleBody
                     ref="articleBody"
-                    :originalArticleBody="originalArticleBody"
+                    :originalArticleBody="articleBody"
                 />
 
             </v-form>
@@ -46,11 +49,13 @@ import DeleteAlertComponent from '@/Components/dialog/DeleteAlertDialog.vue';
 import loadingDialog from '@/Components/loading/loadingDialog.vue';
 import BaseLayout from '@/Layouts/BaseLayout.vue'
 import ArticleBody from '@/Components/article/ArticleBody.vue';
+import DateLabel from '@/Components/DateLabel.vue';
 
 export default {
     data() {
       return {
-        articleTitle  :this.originalArticleTitle,
+        articleTitle  :'',
+        articleBody   :'',
         checkedTagList:[],
 
         //loding
@@ -67,6 +72,7 @@ export default {
         loadingDialog,
         BaseLayout,
         ArticleBody,
+        DateLabel,
     },
     emits: ['triggerSubmit','triggerDeleteArticle'],
     props:{
@@ -78,17 +84,17 @@ export default {
             type   :String,
             default:''
         },
-        originalArticleTitle:{
-            type   :String,
-            default:''
-        },
-        originalArticleBody:{
-            type   :String,
-            default:''
+        originalArticle:{
+            type   :Object,
+            default:null
         },
         originalCheckedTagList:{
             type  :Array,
             default:null
+        },
+        edit:{
+            type  :Boolean,
+            default:false
         },
     },
     methods: {
@@ -115,7 +121,13 @@ export default {
         changeTab(){this.$refs.articleBody.changeTab()},
     },
     mounted() {
+        //props受け渡し
         this.checkedTagList = this.originalCheckedTagList
+        if (this.originalArticle !== null ) {
+            this.articleTitle = this.originalArticle.title
+            this.articleBody  = this.originalArticle.body
+        }
+
         //キーボード受付
         document.addEventListener('keydown', (event)=>{
             // 削除ダイアログ呼び出し
@@ -144,7 +156,7 @@ export default {
     display: grid;
     grid-template-columns:9fr auto auto;
     gap:2rem;
-    margin-bottom: 1.5rem ;
+    margin-bottom: 1rem ;
     .deleteAlertDialog{
         grid-column: 2/3;
     }
