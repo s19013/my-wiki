@@ -2,10 +2,10 @@
 /* @import "tailwindcss/components"; */
 @import "tailwindcss/utilities";
 /* tailwindcss邪魔 */
-html {
- overflow-y: scroll;
-}
+html {overflow-y: auto;}
 body{
+    /* これをつければスクロールバーが出てこないバグはなくなるが､代わりにスクロールバーが2本表示される */
+    /* overflow-y: auto; */
     background-color: #f5f5f5;
 }
 
