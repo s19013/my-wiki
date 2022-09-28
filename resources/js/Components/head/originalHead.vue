@@ -29,8 +29,12 @@ export default{
     height        : 3rem;
     margin-bottom :0.2rem;
     display       : grid;
+    gap:1rem;
     grid-template-columns:1fr 4fr 1fr 0.1fr;
-    @media (max-width: 600px){ grid-template-columns: 1.5fr 2fr 1.5fr .1fr; }
+    @media (max-width: 600px){
+        grid-template-columns: auto 10rem;
+        padding-right:0.5rem;
+    }
     h2{
         grid-column: 2/3;
         text-align :center;
