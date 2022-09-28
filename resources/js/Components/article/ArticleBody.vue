@@ -30,12 +30,14 @@
                 v-model = "body"
             ></v-textarea>
         </div>
-        <div v-show="activeTab === -1" class="global_css_markdown" v-html="compiledMarkdown()"></div>
+
+        <CompiledMarkDown v-show="activeTab === -1" :originalMarkDown="body"/>
     </div>
 </template>
 
 <script>
 import {marked} from 'marked';
+import CompiledMarkDown from '@/Components/article/CompiledMarkDown.vue';
 export default {
     data() {
         return {
@@ -43,6 +45,7 @@ export default {
             body      :this.originalArticleBody,
         }
     },
+    components:{CompiledMarkDown},
     props:{
         originalArticleBody:{
             type   :String,
@@ -50,7 +53,6 @@ export default {
         },
     },
     methods: {
-        compiledMarkdown() {return marked(this.body)},
         changeTab(){
             this.activeTab *= -1
             if (this.activeTab === 1) {this.focusToBody()}
@@ -73,10 +75,10 @@ export default {
 
 <style scoped lang="scss">
 textarea {
-        width  : 100%;
-        resize : none;
-        // padding: 20px;
-        background-color: #f6f6f6;
+    width  : 100%;
+    resize : none;
+    // padding: 20px;
+    background-color: #f6f6f6;
 }
 
 .tabLabel{
@@ -88,4 +90,5 @@ textarea {
         p {font-size: larger;}
     }
 }
+.CompiledMarkDown{margin:1rem;}
 </style>
