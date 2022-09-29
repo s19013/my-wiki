@@ -157,7 +157,7 @@ class ArticleModelTest extends TestCase
 
         // 論理削除されているか
         $this->assertDatabaseHas('articles',[
-            'id' => $returnedId,
+            'id' => $article->id,
             'deleted_at'  => Carbon::now()
         ]);
     }
