@@ -166,17 +166,17 @@ class ArticleModelTest extends TestCase
     public function test_serveArticle_指定した記事をとってこれているか()
     {
         // 記事を登録する
-        $returnedId = $this->articleModel->storeArticle("serveTitle","serveBody",$this->userId);
+        $newArticle = Article::factory()->create(['user_id' => $this->userId]);
 
         // 記事を取ってくる
-        $article = $this->articleModel->serveArticle($returnedId);
+        $receivedArticle = $this->articleModel->serveArticle($newArticle->id);
 
         //id
-        $this->assertSame($returnedId,$article->id);
+        $this->assertSame($newArticle->id,$receivedArticle->id);
         //title
-        $this->assertSame("serveTitle",$article->title);
+        $this->assertSame($newArticle->title,$receivedArticle->title);
         //body
-        $this->assertSame("serveBody" ,$article->body);
+        $this->assertSame($newArticle->body,$receivedArticle->body);
     }
 
     // 期待
@@ -185,12 +185,12 @@ class ArticleModelTest extends TestCase
     // 指定した記事が論理削除されていた
     public function test_checkArticleDeleted_削除済み()
     {
-        $returnedId = $this->articleModel->storeArticle("testTitle","testBody",$this->userId);
+        $article = Article::factory()->create(['user_id' => $this->userId]);
 
         // 削除する
-        $this->articleModel->deleteArticle($returnedId);
+        $this->articleModel->deleteArticle($article->id);
 
-        $this->assertTrue($this->articleModel->checkArticleDeleted($returnedId));
+        $this->assertTrue($this->articleModel->checkArticleDeleted($article->id));
     }
 
     // 期待
@@ -199,9 +199,9 @@ class ArticleModelTest extends TestCase
     // 指定した記事が論理削除されていない
     public function test_checkArticleDeleted_削除してない()
     {
-        $returnedId = $this->articleModel->storeArticle("testTitle","testBody",$this->userId);
+        $article = Article::factory()->create(['user_id' => $this->userId]);
 
-        $this->assertFalse($this->articleModel->checkArticleDeleted($returnedId));
+        $this->assertFalse($this->articleModel->checkArticleDeleted($article->id));
     }
 
     // 期待
@@ -210,8 +210,9 @@ class ArticleModelTest extends TestCase
     // 指定した記事が指定したユーザーが作った記事であった場合
     public function test_preventPeep_同一人物()
     {
-        $returnedId = $this->articleModel->storeArticle("testTitle","testBody",$this->userId);
-        $this->assertTrue($this->articleModel->preventPeep($returnedId,$this->userId));
+        $article = Article::factory()->create(['user_id' => $this->userId]);
+
+        $this->assertTrue($this->articleModel->preventPeep($article->id,$this->userId));
     }
 
     // 期待
@@ -220,8 +221,9 @@ class ArticleModelTest extends TestCase
     // 指定した記事が指定したユーザー以外が作った記事だった場合
     public function test_preventPeep_不正()
     {
-        $returnedId = $this->articleModel->storeArticle("testTitle","testBody",$this->userId);
-        $this->assertFalse($this->articleModel->preventPeep($returnedId,$this->userId + 100));
+        $article = Article::factory()->create(['user_id' => $this->userId]);
+
+        $this->assertFalse($this->articleModel->preventPeep($article->id,$this->userId + 100));
     }
 
 }
