@@ -36,13 +36,12 @@
 </template>
 
 <script>
-import {marked} from 'marked';
 import CompiledMarkDown from '@/Components/article/CompiledMarkDown.vue';
 export default {
     data() {
         return {
             activeTab :1,
-            body      :this.originalArticleBody,
+            body      :'',
         }
     },
     components:{CompiledMarkDown},
@@ -69,6 +68,12 @@ export default {
                 return
             }
         })
+        // とにかくこれを使って最後に処理することができる?
+        this.$nextTick(() => {
+            // レンダリング後の処理
+            // props受け渡し mounted使わなくてもできたはずなんだけどな?
+            this.body = this.originalArticleBody
+        });
     },
 }
 </script>

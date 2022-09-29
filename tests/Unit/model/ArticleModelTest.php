@@ -55,105 +55,175 @@ class ArticleModelTest extends TestCase
     //     $this->assertTrue(true);
     // }
 
-    public function test_storeArticle(): void
+    // このテストはこの場所から動かしては行けない
+    // 期待
+    // 記事データを登録した時にその記事のIDを取ってこれるか
+    public function test_storeArticle_記事データを登録した時にその記事のidを取ってこれるか(): void
+    {
+        // 正しく動けば､記事を保存したと同時に記事のIdが帰ってくる
+        $returnedId = $this->articleModel->storeArticle("testTitle","testBody",$this->userId);
+
+        // このテスト関数は一番最初に動く(この記事は一番最初に登録されるので) idは必ず[1]が帰ってくるはず
+        // なんでって言われてもそれがdbの連番の仕様だからとしか答え切れない
+
+        $this->assertEquals($returnedId,1);
+    }
+
+    // 期待
+    // データがdbに登録されている
+    // * 入力したタイトル
+    // * 入力した本文
+    //
+    // 条件
+    // タイトル入力済み
+    public function test_storeArticle_タイトルを入力(): void
     {
         // データを登録
-        $this->articleModel->storeArticle("testTitle","testBody",$this->userId);
+        $this->articleModel->storeArticle(
+            "testTitle_test_storeArticle_タイトルを入力",
+            "testBody_test_storeArticle_タイトルを入力" ,
+            $this->userId
+        );
 
         // 登録したデータがあるか確認
         $this->assertDatabaseHas('articles',[
-            'title' => 'testTitle',
-            'body'  => 'testBody'
+            'title' => "testTitle_test_storeArticle_タイトルを入力",
+            'body'  => "testBody_test_storeArticle_タイトルを入力",
         ]);
     }
 
-    // このテストはCarbon::now()をつかうので時間帯によってはエラーがでるかもしれない
-    public function test_storeArticle_タイトルを入力しなかった場合()
+    // 期待
+    // データがdbに登録されている
+    // * タイトルには今の日時が登録されてる
+    // * 入力したタイトル
+    //
+    // 条件
+    // タイトルを入力しなかった
+    public function test_storeArticle_タイトルを入力しなかった()
     {
         //これで､Carbon::now()で呼び出される時間を固定化できるらしい
         Carbon::setTestNow(Carbon::now());
 
-        $this->articleModel->storeArticle('',"testBody",$this->userId);
+        // データを登録
+        $this->articleModel->storeArticle(
+            '',
+            "testBody_test_storeArticle_タイトルを入力しなかった",
+            $this->userId
+        );
+
         $this->assertDatabaseHas('articles',[
             'title' => Carbon::now(),
-            'body'  => 'testBody'
+            'body'  => 'testBody_test_storeArticle_タイトルを入力しなかった'
         ]);
     }
 
-    public function test_記事データを登録した時のidを取ってこれるか(): void
+    // public function test_storeArticle_記事データを登録した時のidを取ってこれるか(): void
+    // {
+    //     $returnedId = $this->articleModel->storeArticle("testTitle","testBody",$this->userId);
+
+    //     $this->assertDatabaseHas('articles',[
+    //         'id'    => $returnedId,
+    //         'title' => 'testTitle',
+    //         'body'  => 'testBody'
+    //     ]);
+    // }
+
+    // 期待
+    // 指定したIDの記事が更新されている
+    public function test_updateArticle_指定したIDの記事が更新されている()
     {
-        $returnedId = $this->articleModel->storeArticle("testTitle","testBody",$this->userId);
+        $article = Article::factory()->create(['user_id' => $this->userId]);
+
+        // データを更新
+        $this->articleModel->updateArticle($article->id,"updatedTitle","updatedBody");
 
         $this->assertDatabaseHas('articles',[
-            'id'    => $returnedId,
-            'title' => 'testTitle',
-            'body'  => 'testBody'
-        ]);
-    }
-
-    public function test_updateArticle()
-    {
-        $returnedId = $this->articleModel->storeArticle("testTitle","testBody",$this->userId);
-        $this->articleModel->updateArticle($returnedId,"updatedTitle","updatedBody");
-
-        $this->assertDatabaseHas('articles',[
+            'id'    => $article->id,
             'title' => 'updatedTitle',
             'body'  => 'updatedBody'
         ]);
     }
 
-    public function test_記事論理削除()
+    // 期待
+    // 指定した記事が論理削除されている
+    public function test_deleteArticle_指定した記事が論理削除されている()
     {
         Carbon::setTestNow(Carbon::now());
 
-        $returnedId = $this->articleModel->storeArticle("testTitle","testBody",$this->userId);
-        $this->articleModel->deleteArticle($returnedId);
+        $article = Article::factory()->create(['user_id' => $this->userId]);
 
+        // 更新を削除
+        $this->articleModel->deleteArticle($article->id);
+
+        // 論理削除されているか
         $this->assertDatabaseHas('articles',[
-            'id' => $returnedId,
+            'id' => $article->id,
             'deleted_at'  => Carbon::now()
         ]);
     }
 
-    public function test_serveArticle(Type $var = null)
+    // 指定した記事をとってこれているか
+    public function test_serveArticle_指定した記事をとってこれているか()
     {
-        $returnedId = $this->articleModel->storeArticle("serveTitle","serveBody",$this->userId);
-        $article = $this->articleModel->serveArticle($returnedId);
+        // 記事を登録する
+        $newArticle = Article::factory()->create(['user_id' => $this->userId]);
+
+        // 記事を取ってくる
+        $receivedArticle = $this->articleModel->serveArticle($newArticle->id);
 
         //id
-        $this->assertSame($returnedId,$article->id);
+        $this->assertSame($newArticle->id,$receivedArticle->id);
         //title
-        $this->assertSame("serveTitle",$article->title);
+        $this->assertSame($newArticle->title,$receivedArticle->title);
         //body
-        $this->assertSame("serveBody" ,$article->body);
+        $this->assertSame($newArticle->body,$receivedArticle->body);
     }
 
+    // 期待
+    // 関数checkArticleDeletedの帰り値がTrueである
+    // 条件
+    // 指定した記事が論理削除されていた
     public function test_checkArticleDeleted_削除済み()
     {
-        $returnedId = $this->articleModel->storeArticle("testTitle","testBody",$this->userId);
-        // 削除する
-        $this->articleModel->deleteArticle($returnedId);
+        $article = Article::factory()->create(['user_id' => $this->userId]);
 
-        $this->assertTrue($this->articleModel->checkArticleDeleted($returnedId));
+        // 削除する
+        $this->articleModel->deleteArticle($article->id);
+
+        $this->assertTrue($this->articleModel->checkArticleDeleted($article->id));
     }
 
+    // 期待
+    // 関数checkArticleDeletedの帰り値がFalseである
+    // 条件
+    // 指定した記事が論理削除されていない
     public function test_checkArticleDeleted_削除してない()
     {
-        $returnedId = $this->articleModel->storeArticle("testTitle","testBody",$this->userId);
+        $article = Article::factory()->create(['user_id' => $this->userId]);
 
-        $this->assertFalse($this->articleModel->checkArticleDeleted($returnedId));
+        $this->assertFalse($this->articleModel->checkArticleDeleted($article->id));
     }
 
+    // 期待
+    // 関数preventPeepの帰り値がTrueである
+    // 条件
+    // 指定した記事が指定したユーザーが作った記事であった場合
     public function test_preventPeep_同一人物()
     {
-        $returnedId = $this->articleModel->storeArticle("testTitle","testBody",$this->userId);
-        $this->assertTrue($this->articleModel->preventPeep($returnedId,$this->userId));
+        $article = Article::factory()->create(['user_id' => $this->userId]);
+
+        $this->assertTrue($this->articleModel->preventPeep($article->id,$this->userId));
     }
 
+    // 期待
+    // 関数preventPeepの帰り値がFalseである
+    // 条件
+    // 指定した記事が指定したユーザー以外が作った記事だった場合
     public function test_preventPeep_不正()
     {
-        $returnedId = $this->articleModel->storeArticle("testTitle","testBody",$this->userId);
-        $this->assertFalse($this->articleModel->preventPeep($returnedId,$this->userId + 100));
+        $article = Article::factory()->create(['user_id' => $this->userId]);
+
+        $this->assertFalse($this->articleModel->preventPeep($article->id,$this->userId + 100));
     }
 
 }

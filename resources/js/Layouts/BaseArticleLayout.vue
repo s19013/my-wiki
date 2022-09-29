@@ -156,7 +156,6 @@ export default {
     display: grid;
     grid-template-columns:9fr auto auto;
     gap:2rem;
-    margin-bottom: 1rem ;
     .deleteAlertDialog{
         grid-column: 2/3;
     }
@@ -167,4 +166,8 @@ export default {
 
 }
 .v-input{margin-bottom: 1.5rem;}
+.DateLabel{
+    margin: 0.5rem 0;
+    justify-content: flex-end;
+}
 </style>
