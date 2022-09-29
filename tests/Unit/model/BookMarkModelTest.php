@@ -135,14 +135,14 @@ class BookMarkModelTest extends TestCase
         $newBookMark = BookMark::factory()->create(['user_id' => $this->userId]);
 
         // ブックマーク取得
-        $receivedBookMark = $this->bookMarkModel->serveBookMark($returnedId);
+        $receivedBookMark = $this->bookMarkModel->serveBookMark($newBookMark->id);
 
         //id
         $this->assertSame($newBookMark->id,$receivedBookMark->id);
         //title
-        $this->assertSame("serveTitle",$receivedBookMark->title);
+        $this->assertSame($newBookMark->title,$receivedBookMark->title);
         //url
-        $this->assertSame("serveUrl" ,$receivedBookMark->url);
+        $this->assertSame($newBookMark->url,$receivedBookMark->url);
     }
 
     // 期待
