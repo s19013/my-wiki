@@ -109,12 +109,6 @@ class Article extends Model
             foreach($wordListToSearch as $word){ $query->where('body','like',"%$word%"); }
         }
 
-        //ヒット件数取得
-        $resultCount = $query->count();
-
-        //ページ数計算
-        $pageCount = (int)ceil($resultCount / $parPage);
-
         //何件目から取得するか
         $offset = $parPage*($currentPage-1);
 
@@ -125,6 +119,12 @@ class Article extends Model
         $searchResults = $query->offset($offset)
         ->limit($parPage)
         ->get();
+
+        //ヒット件数取得
+        $resultCount = $query->count();
+
+        //ページ数計算
+        $pageCount = (int)ceil($resultCount / $parPage);
 
         return [
             "articleList"  => $searchResults,
