@@ -126,13 +126,10 @@ class Article extends Model
         ->limit($parPage)
         ->get();
 
-        return response()->json(
-            [
-                "articleList"  => $searchResults,
-                "pageCount"    => $pageCount
-            ],
-            200
-        );
+        return [
+            "articleList"  => $searchResults,
+            "pageCount"    => $pageCount,
+        ];
     }
 
     //検索時のサブテーブル作成

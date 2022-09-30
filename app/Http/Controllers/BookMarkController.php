@@ -73,13 +73,15 @@ class BookMarkController extends Controller
     //ブックマーク検索
     public function bookMarkSearch(Request $request)
     {
-        return BookMark::searchBookMark(
+        $result = BookMark::searchBookMark(
             userId:Auth::id(),
             bookMarkToSearch:$request->bookMarkToSearch,
             currentPage:$request->currentPage,
             tagList    :$request->tagList,
             searchTarget:$request->searchTarget
         );
+
+        return response()->json($result,200);
     }
 
     public function bookMarkDelete($bookMarkId)

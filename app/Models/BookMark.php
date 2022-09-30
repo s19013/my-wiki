@@ -123,13 +123,10 @@ class BookMark extends Model
         ->limit($parPage)
         ->get();
 
-        return response()->json(
-            [
-                "bookMarkList" => $searchResults,
-                "pageCount"    => $pageCount
-            ],
-            200
-        );
+        return [
+            "bookMarkList" => $searchResults,
+            "pageCount"    => $pageCount
+        ];
     }
 
     //検索時のサブテーブル作成
