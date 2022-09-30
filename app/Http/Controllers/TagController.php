@@ -21,7 +21,7 @@ class TagController extends Controller
         );
 
         // すでに登録していた
-        if ($result = false) {
+        if ($result == false) {
             return response()->json(
                 ["message" => "already exists"],
                 400
