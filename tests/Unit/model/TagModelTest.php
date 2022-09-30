@@ -36,16 +36,29 @@ class TagModelTest extends TestCase
     }
 
     // 期待
+    // 関数がTrueを返す
     // 引数2の文字列がデータベースに保存される
     public function test_store_一意のタグ()
     {
-        $this->tagModel->store($this->userId,"testTag");
+        $this->assertTrue($this->tagModel->store($this->userId,"testTag"));
 
         $this->assertDatabaseHas('tags',[
             'name' => 'testTag',
             'user_id'  => $this->userId
         ]);
 
+    }
+
+    // 期待
+    // 関数がfalseを返す
+    public function test_store_同じタグを登録する()
+    {
+        Tag::create([
+            'name'    => 'testTag',
+            'user_id' => $this->userId
+        ]);
+
+        $this->assertFalse($this->tagModel->store($this->userId,"testTag"));
     }
 
     // 期待
