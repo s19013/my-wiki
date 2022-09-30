@@ -279,6 +279,45 @@ class BookMarkModelTest extends TestCase
     }
 
     // 期待
+    // 11件目から20件目のデータを取得する
+    //
+    public function test_bookMarkSearch_11件目から20件目のデータを取得する()
+    {
+        //
+        Carbon::setTestNow(Carbon::now());
+
+        //ダミーユーザー追加
+        $anotherUsers = User::factory()->count(2)->create();
+
+        for ($i=0; $i <=30 ; $i++) {
+            BookMark::create([
+                'title'   => "title ${i}",
+                'url'    => "url ${i}",
+                'user_id' => $this->userId
+            ]);
+        }
+
+        BookMark::factory()->count(5)->create(['user_id' => $anotherUsers[0]->id]);
+        BookMark::factory()->count(5)->create(['user_id' => $anotherUsers[1]->id]);
+
+        $response = $this->bookmarkModel->searchBookMark(
+            userId:$this->userId,
+            bookMarkToSearch:'',
+            currentPage:2,
+            tagList:null,
+            searchTarget:'title'
+        );
+
+        $bookMarkList = $response['bookMarkList'];
+        $pageCount   = $response['pageCount'];
+
+        //帰ってきたbookMarkListの数を数える(10個以上あっても一度に10個までしか返さない)
+        for ($i=10; $i <20 ; $i++) {
+            $this->assertSame($bookMarkList[$i - 10]->title,"title ${i}");
+        }
+    }
+
+    // 期待
     // * 指定したユーザーの記事だけを取ってくる
     // * 削除した記事は取ってこない
     // 条件

@@ -292,6 +292,45 @@ class ArticleModelTest extends TestCase
     }
 
     // 期待
+    // 11件目から20件目のデータを取得する
+    //
+    public function test_articleSearch_11件目から20件目のデータを取得する()
+    {
+        //
+        Carbon::setTestNow(Carbon::now());
+
+        //ダミーユーザー追加
+        $anotherUsers = User::factory()->count(2)->create();
+
+        for ($i=0; $i <=30 ; $i++) {
+            Article::create([
+                'title'   => "title ${i}",
+                'body'    => "body ${i}",
+                'user_id' => $this->userId
+            ]);
+        }
+
+        Article::factory()->count(5)->create(['user_id' => $anotherUsers[0]->id]);
+        Article::factory()->count(5)->create(['user_id' => $anotherUsers[1]->id]);
+
+        $response = $this->articleModel->searchArticle(
+            userId:$this->userId,
+            articleToSearch:'',
+            currentPage:2,
+            tagList:null,
+            searchTarget:'title'
+        );
+
+        $articleList = $response['articleList'];
+        $pageCount   = $response['pageCount'];
+
+        //帰ってきたarticleListの数を数える(10個以上あっても一度に10個までしか返さない)
+        for ($i=10; $i <20 ; $i++) {
+            $this->assertSame($articleList[$i - 10]->title,"title ${i}");
+        }
+    }
+
+    // 期待
     // * 指定したユーザーの記事だけを取ってくる
     // * 削除した記事は取ってこない
     // 条件
