@@ -23,7 +23,7 @@ class TagControllerTest extends TestCase
     // テストしたらリセットする
     use RefreshDatabase;
     // ミドルウェアの無効化
-    use WithoutMiddleware;
+    // use WithoutMiddleware;
 
     private $user;
 
