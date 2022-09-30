@@ -52,10 +52,14 @@ class TagModelTest extends TestCase
     // dbの中から 引数2の文字列をnameカラムに含むタグのデータをとってくる
     public function test_search()
     {
-        $hitTag = Tag::factory()->create( ["user_id" => $this->userId] );
+        // 検索にかかるタグ
+        Tag::factory()->create( [
+            "name"    => "TestTag",
+            "user_id" => $this->userId
+        ] );
         Tag::factory()->count(5)->create( ["user_id" => $this->userId] );
 
-        $receivedTags = $this->tagModel->search($this->userId,"searchTestTag");
+        $receivedTags = $this->tagModel->search($this->userId,"TestTag");
 
         //名前とidが一緒かどうか
         $IdList = [];
@@ -64,7 +68,7 @@ class TagModelTest extends TestCase
         $nameList = [];
         foreach ($receivedTags as $tag){ array_push($nameList,$tag->name);}
 
-        $this->assertSame($tag[0]->name,"searchTestTag");
+        $this->assertContains("TestTag",$nameList);
     }
 
     // 期待

@@ -23,7 +23,7 @@ class TagControllerTest extends TestCase
     // テストしたらリセットする
     use RefreshDatabase;
     // ミドルウェアの無効化
-    use WithoutMiddleware;
+    // use WithoutMiddleware;
 
     private $user;
 
@@ -34,6 +34,8 @@ class TagControllerTest extends TestCase
         $this->user = User::factory()->create();
     }
 
+    // 期待
+    // 引数にしていした文字列をtagsテーブルに保存されるか
     public function test_tagStore()
     {
         $response = $this
@@ -55,7 +57,13 @@ class TagControllerTest extends TestCase
         ]);
     }
 
-    public function test_tagSearch_キーワードあり_指定したユーザーのタグを取ってくる_けしたタグは取ってこない()
+    // 期待
+    // * nameカラムに指定したキーワードを含むデータをとってくる
+    // * 指定したユーザーのタグを取ってくる
+    // * けしたタグは取ってこない
+    // 条件
+    // キーワードあり
+    public function test_tagSearch_キーワードあり()
     {
         //ダミーユーザー追加
         $anotherUsers = User::factory()->count(2)->create();
@@ -110,7 +118,12 @@ class TagControllerTest extends TestCase
         $this->assertContains($hitTag2->id, $temp);
     }
 
-    public function test_tagSearch_キーワードなし_指定したユーザーのタグを取ってくる_けしたタグは取ってこない()
+    // 期待
+    // * 指定したユーザーのタグをすべて取ってくる
+    // * けしたタグは取ってこない
+    // 条件
+    // キーワードあり
+    public function test_tagSearch_キーワードなし()
     {
         //ダミーユーザー追加
         $anotherUsers = User::factory()->count(2)->create();
