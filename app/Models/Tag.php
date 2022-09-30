@@ -20,14 +20,8 @@ class Tag extends Model
     //新規タグ登録
     public static function store($userId,$tag)
     {
-
         // すでにあったらエラーを返す
-        if (self::isAllreadyExists($userId,$tag) == true) {
-            return response()->json(
-                ["message" => "already exists"],
-                400
-            );
-        }
+        if (self::isAllreadyExists($userId,$tag) == true) {return false;}
 
         // かぶってなかったら保存する
         DB::transaction(function () use($userId,$tag){
@@ -37,10 +31,13 @@ class Tag extends Model
             ]);
         });
 
-        return response()->json(
-            ["message" => "stored"],
-            200
-        );
+        return true;
+    }
+
+    // タグ編集
+    public static function update($userId,$tagId,$name)
+    {
+
     }
 
     //タグを検索する
