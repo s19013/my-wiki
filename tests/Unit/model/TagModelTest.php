@@ -35,6 +35,8 @@ class TagModelTest extends TestCase
         $this->userId = $user->id;
     }
 
+    // 期待
+    // 引数2の文字列がデータベースに保存される
     public function test_store_一意のタグ()
     {
         $this->tagModel->store($this->userId,"testTag");
@@ -46,14 +48,29 @@ class TagModelTest extends TestCase
 
     }
 
+    // 期待
+    // dbの中から 引数2の文字列をnameカラムに含むタグのデータをとってくる
     public function test_search()
     {
-        $this->tagModel->store($this->userId,"searchTestTag");
+        $hitTag = Tag::factory()->create( ["user_id" => $this->userId] );
+        Tag::factory()->count(5)->create( ["user_id" => $this->userId] );
 
-        $tag = $this->tagModel->search($this->userId,"searchTestTag");
+        $receivedTags = $this->tagModel->search($this->userId,"searchTestTag");
+
+        //名前とidが一緒かどうか
+        $IdList = [];
+        foreach ($$receivedTags as $tag){array_push($IdList,$tag->id);}
+
+        $nameList = [];
+        foreach ($$receivedTags as $tag){ array_push($nameList,$tag->name);}
+
         $this->assertSame($tag[0]->name,"searchTestTag");
     }
 
+    // 期待
+    // isAllreadyExistsがTrueを返す
+    // 条件
+    // 指定したユーザーが引数に渡された文字列"url"をすでに登録している
     public function test_isAllreadyExists_登録済み()
     {
         $this->tagModel->store($this->userId,"isAllreadyExistsTestTag");
@@ -61,6 +78,10 @@ class TagModelTest extends TestCase
         $this->assertTrue($this->tagModel->isAllreadyExists($this->userId,"isAllreadyExistsTestTag"));
     }
 
+    // 期待
+    // isAllreadyExistsがFalseを返す
+    // 条件
+    // 指定したユーザーが引数に渡された文字列"url"をまだ登録していない
     public function test_isAllreadyExists_未登録()
     {
         $this->assertFalse($this->tagModel->isAllreadyExists($this->userId,"isAllreadyExistsTestTag"));
