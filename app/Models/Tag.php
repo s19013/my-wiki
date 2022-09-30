@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 use DB;
+use Carbon\Carbon;
 use App\Http\Controllers\searchToolKit;
 
 class Tag extends Model
@@ -35,9 +36,24 @@ class Tag extends Model
     }
 
     // タグ編集
-    public static function update($userId,$tagId,$name)
+    public static function updateTag($userId,$tagId,$name)
     {
+        // 失敗 -> false
+        if (self::isAllreadyExists($userId,$name) == true) {return false;}
 
+        // 成功 -> true
+        DB::transaction(function () use($tagId,$name){
+            Tag::where('id','=',$tagId) -> update(['name' => $name]);
+        });
+        return true;
+    }
+
+    // delete
+    public static function deleteTag($tagId)
+    {
+        DB::transaction(function () use($tagId){
+            Tag::where('id','=',$tagId)->update(['deleted_at' => Carbon::now()]);
+        });
     }
 
     //タグを検索する
