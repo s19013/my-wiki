@@ -59,10 +59,10 @@ class TagModelTest extends TestCase
 
         //名前とidが一緒かどうか
         $IdList = [];
-        foreach ($$receivedTags as $tag){array_push($IdList,$tag->id);}
+        foreach ($receivedTags as $tag){array_push($IdList,$tag->id);}
 
         $nameList = [];
-        foreach ($$receivedTags as $tag){ array_push($nameList,$tag->name);}
+        foreach ($receivedTags as $tag){ array_push($nameList,$tag->name);}
 
         $this->assertSame($tag[0]->name,"searchTestTag");
     }
