@@ -51,6 +51,12 @@ class BookMarkControllerTest extends TestCase
     //     $response->assertStatus(200);
     // }
 
+    // 期待
+    // * タイトル､urlがbook_marksテーブルに保存される
+    // * 配列で渡したタグのidがbook_mark_tagsテーブルに保存される
+    // 条件
+    // * タグあり
+    // * タイトルあり
     public function test_bookMarkStore_タグあり_タイトルあり()
     {
         $tags = Tag::factory()->count(2)->create(['user_id' => $this->user->id]);
@@ -60,7 +66,7 @@ class BookMarkControllerTest extends TestCase
         ->withSession(['test' => 'test'])
         ->post('/api/bookmark/store/',[
             'bookMarkTitle' => "testTitletest_bookMarkStore_タグあり_タイトルあり",
-            'bookMarkUrl'  => "testUrltest_bookMarkStore_タグあり_タイトルあり" ,
+            'bookMarkUrl'  => "testBodytest_bookMarkStore_タグあり_タイトルあり" ,
             'tagList'      => [$tags[0]->id,$tags[1]->id],
         ]);
 
@@ -72,14 +78,14 @@ class BookMarkControllerTest extends TestCase
         $this->assertDatabaseHas('book_marks',[
             'user_id'=> $this->user->id,
             'title' => "testTitletest_bookMarkStore_タグあり_タイトルあり",
-            'url'  => "testUrltest_bookMarkStore_タグあり_タイトルあり",
+            'url'  => "testBodytest_bookMarkStore_タグあり_タイトルあり",
             'deleted_at' => null,
         ]);
 
         $bookMark = BookMark::select('id')
         ->where('user_id', '=' ,$this->user->id)
         ->where('title','=',"testTitletest_bookMarkStore_タグあり_タイトルあり")
-        ->where('url' ,'=',"testUrltest_bookMarkStore_タグあり_タイトルあり" )
+        ->where('url' ,'=',"testBodytest_bookMarkStore_タグあり_タイトルあり" )
         ->first();
 
         $bookMarkId = $bookMark->id;
@@ -99,6 +105,13 @@ class BookMarkControllerTest extends TestCase
 
     }
 
+    // 期待
+    // * urlがbook_marksテーブルに保存される
+    // * タイトルのカラムには今日の日付がbook_marksテーブルに保存される
+    // * 配列で渡したタグのidがbook_mark_tagsテーブルに保存される
+    // 条件
+    // * タグあり
+    // * タイトルなし
     public function test_bookMarkStore_タグあり_タイトルなし()
     {
         // carbonの時間固定
@@ -111,7 +124,7 @@ class BookMarkControllerTest extends TestCase
         ->withSession(['test' => 'test'])
         ->post('/api/bookmark/store/',[
             'bookMarkTitle' => "",
-            'bookMarkUrl'  => "testUrltest_bookMarkStore_タグあり_タイトルなし" ,
+            'bookMarkUrl'  => "testBodytest_bookMarkStore_タグあり_タイトルなし" ,
             'tagList'      => [$tags[0]->id,$tags[1]->id],
         ]);
 
@@ -123,33 +136,35 @@ class BookMarkControllerTest extends TestCase
         $this->assertDatabaseHas('book_marks',[
             'user_id'=> $this->user->id,
             'title'  => Carbon::now(),
-            'url'   => "testUrltest_bookMarkStore_タグあり_タイトルなし",
+            'url'   => "testBodytest_bookMarkStore_タグあり_タイトルなし",
             'deleted_at' => null,
         ]);
 
         $bookMark = BookMark::select('id')
         ->where('user_id', '=' ,$this->user->id)
         ->where('title','=',Carbon::now())
-        ->where('url' ,'=',"testUrltest_bookMarkStore_タグあり_タイトルなし" )
+        ->where('url' ,'=',"testBodytest_bookMarkStore_タグあり_タイトルなし" )
         ->first();
 
         $bookMarkId = $bookMark->id;
 
         //タグ
-        $this->assertDatabaseHas('book_mark_tags',[
-            'book_mark_id' => $bookMarkId,
-            'tag_id'     => $tags[0]->id,
-            'deleted_at' => null,
-        ]);
-
-        $this->assertDatabaseHas('book_mark_tags',[
-            'book_mark_id' => $bookMarkId,
-            'tag_id'     => $tags[1]->id,
-            'deleted_at' => null,
-        ]);
-
+        foreach ($tags as $tag){
+            $this->assertDatabaseHas('book_mark_tags',[
+                'book_mark_id' => $bookMarkId,
+                'tag_id'     => $tag->id,
+                'deleted_at' => null,
+            ]);
+        }
     }
 
+    // 期待
+    // * urlがbook_marksテーブルに保存される
+    // * titleのカラムには今日の日付がbook_marksテーブルに保存される
+    // * 配列で渡したタグのidがbook_mark_tagsテーブルに保存される
+    // 条件
+    // * タグあり
+    // * タイトルなし
     public function test_bookMarkStore_タグなし_タイトルあり()
     {
         $response = $this
@@ -157,7 +172,7 @@ class BookMarkControllerTest extends TestCase
         ->withSession(['test' => 'test'])
         ->post('/api/bookmark/store/',[
             'bookMarkTitle' => "testTitletest_bookMarkStore_タグなし_タイトルあり",
-            'bookMarkUrl'  => "testUrltest_bookMarkStore_タグなし_タイトルあり" ,
+            'bookMarkUrl'  => "testBodytest_bookMarkStore_タグなし_タイトルあり" ,
             'tagList'      => null,
         ]);
 
@@ -169,14 +184,14 @@ class BookMarkControllerTest extends TestCase
         $this->assertDatabaseHas('book_marks',[
             'user_id'=> $this->user->id,
             'title'  => "testTitletest_bookMarkStore_タグなし_タイトルあり",
-            'url'   => "testUrltest_bookMarkStore_タグなし_タイトルあり",
+            'url'   => "testBodytest_bookMarkStore_タグなし_タイトルあり",
             'deleted_at' => null,
         ]);
 
         $bookMark = BookMark::select('id')
         ->where('user_id', '=' ,$this->user->id)
         ->where('title','=',"testTitletest_bookMarkStore_タグなし_タイトルあり")
-        ->where('url' ,'=',"testUrltest_bookMarkStore_タグなし_タイトルあり" )
+        ->where('url' ,'=',"testBodytest_bookMarkStore_タグなし_タイトルあり" )
         ->first();
 
         $bookMarkId = $bookMark->id;
@@ -189,6 +204,13 @@ class BookMarkControllerTest extends TestCase
         ]);
     }
 
+    // 期待
+    // * urlがbook_marksテーブルに保存される
+    // * titleのカラムには今日の日付がbook_marksテーブルに保存される
+    // * tag_idのカラムにnullがbook_mark_tagsテーブルに保存される
+    // 条件
+    // * タグなし
+    // * タイトルなし
     public function test_bookMarkStore_タグなし_タイトルなし()
     {
         // carbonの時間固定
@@ -199,7 +221,7 @@ class BookMarkControllerTest extends TestCase
         ->withSession(['test' => 'test'])
         ->post('/api/bookmark/store/',[
             'bookMarkTitle' => "",
-            'bookMarkUrl'  => "testUrltest_bookMarkStore_タグなし_タイトルなし" ,
+            'bookMarkUrl'  => "testBodytest_bookMarkStore_タグなし_タイトルなし" ,
             'tagList'      => null,
         ]);
 
@@ -211,14 +233,14 @@ class BookMarkControllerTest extends TestCase
         $this->assertDatabaseHas('book_marks',[
             'user_id'=> $this->user->id,
             'title'  => Carbon::now(),
-            'url'   => "testUrltest_bookMarkStore_タグなし_タイトルなし",
+            'url'   => "testBodytest_bookMarkStore_タグなし_タイトルなし",
             'deleted_at' => null,
         ]);
 
         $bookMark = BookMark::select('id')
         ->where('user_id', '=' ,$this->user->id)
         ->where('title','=',Carbon::now())
-        ->where('url' ,'=',"testUrltest_bookMarkStore_タグなし_タイトルなし" )
+        ->where('url' ,'=',"testBodytest_bookMarkStore_タグなし_タイトルなし" )
         ->first();
 
         $bookMarkId = $bookMark->id;
@@ -231,6 +253,13 @@ class BookMarkControllerTest extends TestCase
         ]);
     }
 
+    // 期待
+    // * タイトル､urlが更新されている
+    // * もとのブックマークについていたタグのidがすべて論理削除されている
+    // * 新しく紐づけたタグのidがbook_mark_tagsテーブルに保存される
+    // 条件
+    // * もとのブックマークについていたタグをすべて外す
+    // * ブックマークに別のタグを紐づける
     public function test_bookMarkUpdate_タグ総入れ替え()
     {
         // carbonの時間固定
@@ -243,15 +272,12 @@ class BookMarkControllerTest extends TestCase
         $tags    = Tag::factory()->count(2)->create(['user_id' => $this->user->id]);
         $newTags = Tag::factory()->count(2)->create(['user_id' => $this->user->id]);
 
-        BookMarkTag::create([
-            "book_mark_id" => $bookMark->id,
-            "tag_id"     => $tags[0]->id
-        ]);
-
-        BookMarkTag::create([
-            "book_mark_id" => $bookMark->id,
-            "tag_id"     => $tags[1]->id
-        ]);
+        foreach ($tags as $tag){
+            BookMarkTag::create([
+                "book_mark_id" => $bookMark->id,
+                "tag_id"     => $tag->id
+            ]);
+        }
 
         $response = $this
         ->actingAs($this->user)
@@ -277,32 +303,30 @@ class BookMarkControllerTest extends TestCase
 
         //タグ
         //新しく追加
-        $this->assertDatabaseHas('book_mark_tags',[
-            'book_mark_id' => $bookMark->id,
-            'tag_id'     => $newTags[0]->id,
-            'deleted_at' => null,
-        ]);
-
-        $this->assertDatabaseHas('book_mark_tags',[
-            'book_mark_id' => $bookMark->id,
-            'tag_id'     => $newTags[1]->id,
-            'deleted_at' => null,
-        ]);
+        foreach ($newTags as $newTag){
+            $this->assertDatabaseHas('book_mark_tags',[
+                'book_mark_id' => $bookMark->id,
+                'tag_id'     => $newTag->id,
+                'deleted_at' => null,
+            ]);
+        }
 
         //削除したタグ
-        $this->assertDatabaseHas('book_mark_tags',[
-            'book_mark_id' => $bookMark->id,
-            'tag_id'     => $tags[0]->id,
-            'deleted_at' => Carbon::now(),
-        ]);
-
-        $this->assertDatabaseHas('book_mark_tags',[
-            'book_mark_id' => $bookMark->id,
-            'tag_id'     => $tags[1]->id,
-            'deleted_at' => Carbon::now(),
-        ]);
+        foreach ($tags as $tag){
+            $this->assertDatabaseHas('book_mark_tags',[
+                'book_mark_id' => $bookMark->id,
+                'tag_id'     => $tag->id,
+                'deleted_at' => Carbon::now(),
+            ]);
+        }
     }
 
+    // 期待
+    // * タイトル､urlが更新されている
+    // * もとのブックマークについていたタグのidになにも変化がない
+    // * 新しく紐づけたタグのidがbook_mark_tagsテーブルに保存される
+    // 条件
+    // * ブックマークに別のタグを追加で紐づける
     public function test_bookMarkUpdate_元のタグをそのままに新しく追加()
     {
         // ブックマークなどを作成
@@ -312,15 +336,12 @@ class BookMarkControllerTest extends TestCase
         $tags    = Tag::factory()->count(2)->create(['user_id' => $this->user->id]);
         $newTags = Tag::factory()->count(2)->create(['user_id' => $this->user->id]);
 
-        BookMarkTag::create([
-            "book_mark_id" => $bookMark->id,
-            "tag_id"     => $tags[0]->id
-        ]);
-
-        BookMarkTag::create([
-            "book_mark_id" => $bookMark->id,
-            "tag_id"     => $tags[1]->id
-        ]);
+        foreach ($tags as $tag){
+            BookMarkTag::create([
+                "book_mark_id" => $bookMark->id,
+                "tag_id"     => $tag->id
+            ]);
+        }
 
         $response = $this
         ->actingAs($this->user)
@@ -345,30 +366,31 @@ class BookMarkControllerTest extends TestCase
         ]);
 
         //タグ
-        $this->assertDatabaseHas('book_mark_tags',[
-            'book_mark_id' => $bookMark->id,
-            'tag_id'     => $newTags[0]->id,
-            'deleted_at' => null,
-        ]);
+        // 新しくつけたタグ
+        foreach ($newTags as $newTag){
+            $this->assertDatabaseHas('book_mark_tags',[
+                'book_mark_id' => $bookMark->id,
+                'tag_id'     => $newTag->id,
+                'deleted_at' => null,
+            ]);
+        }
 
-        $this->assertDatabaseHas('book_mark_tags',[
-            'book_mark_id' => $bookMark->id,
-            'tag_id'     => $newTags[1]->id,
-            'deleted_at' => null,
-        ]);
-        $this->assertDatabaseHas('book_mark_tags',[
-            'book_mark_id' => $bookMark->id,
-            'tag_id'     => $tags[0]->id,
-            'deleted_at' => null,
-        ]);
-
-        $this->assertDatabaseHas('book_mark_tags',[
-            'book_mark_id' => $bookMark->id,
-            'tag_id'     => $tags[1]->id,
-            'deleted_at' => null,
-        ]);
+        // もともとつけていたタグ
+        foreach ($tags as $tag){
+            $this->assertDatabaseHas('book_mark_tags',[
+                'book_mark_id' => $bookMark->id,
+                'tag_id'     => $tag->id,
+                'deleted_at' => null,
+            ]);
+        }
     }
 
+    // 期待
+    // * タイトル､urlが更新されている
+    // * もとのブックマークについていたタグのidになにも変化がない
+    // * 新しく紐づけたタグのidがbook_mark_tagsテーブルに保存される
+    // 条件
+    // * つけているタグの一部を消す
     public function test_bookMarkUpdate_タグの一部を消す()
     {
         // carbonの時間固定
@@ -380,25 +402,12 @@ class BookMarkControllerTest extends TestCase
         // タグ
         $tags    = Tag::factory()->count(4)->create(['user_id' => $this->user->id]);
 
-        BookMarkTag::create([
-            "book_mark_id" => $bookMark->id,
-            "tag_id"     => $tags[0]->id
-        ]);
-
-        BookMarkTag::create([
-            "book_mark_id" => $bookMark->id,
-            "tag_id"     => $tags[1]->id
-        ]);
-
-        BookMarkTag::create([
-            "book_mark_id" => $bookMark->id,
-            "tag_id"     => $tags[2]->id
-        ]);
-
-        BookMarkTag::create([
-            "book_mark_id" => $bookMark->id,
-            "tag_id"     => $tags[3]->id
-        ]);
+        foreach ($tags as $tag){
+            BookMarkTag::create([
+                "book_mark_id" => $bookMark->id,
+                "tag_id"     => $tag->id
+            ]);
+        }
 
         $response = $this
         ->actingAs($this->user)
@@ -450,6 +459,12 @@ class BookMarkControllerTest extends TestCase
         ]);
     }
 
+    // 期待
+    // * タイトル､urlが更新されている
+    // * もとのブックマークのtag_id = null のデータを論理削除
+    // * 新しく紐づけたタグのidがbook_mark_tagsテーブルに保存される
+    // 条件
+    // * タグがついてなかったブックマークにタグを付ける
     public function test_bookMarkUpdate_タグがついてなかったブックマークにタグを付ける()
     {
         // carbonの時間固定
@@ -490,17 +505,13 @@ class BookMarkControllerTest extends TestCase
 
         //タグ
         //追加したタグ
-        $this->assertDatabaseHas('book_mark_tags',[
-            'book_mark_id' => $bookMark->id,
-            'tag_id'     => $tags[0]->id,
-            'deleted_at' => null,
-        ]);
-
-        $this->assertDatabaseHas('book_mark_tags',[
-            'book_mark_id' => $bookMark->id,
-            'tag_id'     => $tags[1]->id,
-            'deleted_at' => null,
-        ]);
+        foreach ($tags as $tag){
+            $this->assertDatabaseHas('book_mark_tags',[
+                'book_mark_id' => $bookMark->id,
+                'tag_id'     => $tag->id,
+                'deleted_at' => null,
+            ]);
+        }
 
         //削除したタグ
         $this->assertDatabaseHas('book_mark_tags',[
@@ -509,4 +520,5 @@ class BookMarkControllerTest extends TestCase
             'deleted_at' => Carbon::now(),
         ]);
     }
+
 }

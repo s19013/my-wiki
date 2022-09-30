@@ -51,6 +51,12 @@ class ArticleControllerTest extends TestCase
     //     $response->assertStatus(200);
     // }
 
+    // 期待
+    // * タイトル､本文がarticlesテーブルに保存される
+    // * 配列で渡したタグのidがarticle_tagsテーブルに保存される
+    // 条件
+    // * タグあり
+    // * タイトルあり
     public function test_articleStore_タグあり_タイトルあり()
     {
         $tags = Tag::factory()->count(2)->create(['user_id' => $this->user->id]);
@@ -99,6 +105,13 @@ class ArticleControllerTest extends TestCase
 
     }
 
+    // 期待
+    // * 本文がarticlesテーブルに保存される
+    // * タイトルのカラムには今日の日付がarticlesテーブルに保存される
+    // * 配列で渡したタグのidがarticle_tagsテーブルに保存される
+    // 条件
+    // * タグあり
+    // * タイトルなし
     public function test_articleStore_タグあり_タイトルなし()
     {
         // carbonの時間固定
@@ -136,20 +149,22 @@ class ArticleControllerTest extends TestCase
         $articleId = $article->id;
 
         //タグ
-        $this->assertDatabaseHas('article_tags',[
-            'article_id' => $articleId,
-            'tag_id'     => $tags[0]->id,
-            'deleted_at' => null,
-        ]);
-
-        $this->assertDatabaseHas('article_tags',[
-            'article_id' => $articleId,
-            'tag_id'     => $tags[1]->id,
-            'deleted_at' => null,
-        ]);
-
+        foreach ($tags as $tag){
+            $this->assertDatabaseHas('article_tags',[
+                'article_id' => $articleId,
+                'tag_id'     => $tag->id,
+                'deleted_at' => null,
+            ]);
+        }
     }
 
+    // 期待
+    // * 本文がarticlesテーブルに保存される
+    // * titleのカラムには今日の日付がarticlesテーブルに保存される
+    // * 配列で渡したタグのidがarticle_tagsテーブルに保存される
+    // 条件
+    // * タグあり
+    // * タイトルなし
     public function test_articleStore_タグなし_タイトルあり()
     {
         $response = $this
@@ -189,6 +204,13 @@ class ArticleControllerTest extends TestCase
         ]);
     }
 
+    // 期待
+    // * 本文がarticlesテーブルに保存される
+    // * titleのカラムには今日の日付がarticlesテーブルに保存される
+    // * tag_idのカラムにnullがarticle_tagsテーブルに保存される
+    // 条件
+    // * タグなし
+    // * タイトルなし
     public function test_articleStore_タグなし_タイトルなし()
     {
         // carbonの時間固定
@@ -231,6 +253,13 @@ class ArticleControllerTest extends TestCase
         ]);
     }
 
+    // 期待
+    // * タイトル､本文が更新されている
+    // * もとの記事についていたタグのidがすべて論理削除されている
+    // * 新しく紐づけたタグのidがarticle_tagsテーブルに保存される
+    // 条件
+    // * もとの記事についていたタグをすべて外す
+    // * 記事に別のタグを紐づける
     public function test_articleUpdate_タグ総入れ替え()
     {
         // carbonの時間固定
@@ -243,15 +272,12 @@ class ArticleControllerTest extends TestCase
         $tags    = Tag::factory()->count(2)->create(['user_id' => $this->user->id]);
         $newTags = Tag::factory()->count(2)->create(['user_id' => $this->user->id]);
 
-        ArticleTag::create([
-            "article_id" => $article->id,
-            "tag_id"     => $tags[0]->id
-        ]);
-
-        ArticleTag::create([
-            "article_id" => $article->id,
-            "tag_id"     => $tags[1]->id
-        ]);
+        foreach ($tags as $tag){
+            ArticleTag::create([
+                "article_id" => $article->id,
+                "tag_id"     => $tag->id
+            ]);
+        }
 
         $response = $this
         ->actingAs($this->user)
@@ -277,32 +303,30 @@ class ArticleControllerTest extends TestCase
 
         //タグ
         //新しく追加
-        $this->assertDatabaseHas('article_tags',[
-            'article_id' => $article->id,
-            'tag_id'     => $newTags[0]->id,
-            'deleted_at' => null,
-        ]);
-
-        $this->assertDatabaseHas('article_tags',[
-            'article_id' => $article->id,
-            'tag_id'     => $newTags[1]->id,
-            'deleted_at' => null,
-        ]);
+        foreach ($newTags as $newTag){
+            $this->assertDatabaseHas('article_tags',[
+                'article_id' => $article->id,
+                'tag_id'     => $newTag->id,
+                'deleted_at' => null,
+            ]);
+        }
 
         //削除したタグ
-        $this->assertDatabaseHas('article_tags',[
-            'article_id' => $article->id,
-            'tag_id'     => $tags[0]->id,
-            'deleted_at' => Carbon::now(),
-        ]);
-
-        $this->assertDatabaseHas('article_tags',[
-            'article_id' => $article->id,
-            'tag_id'     => $tags[1]->id,
-            'deleted_at' => Carbon::now(),
-        ]);
+        foreach ($tags as $tag){
+            $this->assertDatabaseHas('article_tags',[
+                'article_id' => $article->id,
+                'tag_id'     => $tag->id,
+                'deleted_at' => Carbon::now(),
+            ]);
+        }
     }
 
+    // 期待
+    // * タイトル､本文が更新されている
+    // * もとの記事についていたタグのidになにも変化がない
+    // * 新しく紐づけたタグのidがarticle_tagsテーブルに保存される
+    // 条件
+    // * 記事に別のタグを追加で紐づける
     public function test_articleUpdate_元のタグをそのままに新しく追加()
     {
         // 記事などを作成
@@ -312,15 +336,12 @@ class ArticleControllerTest extends TestCase
         $tags    = Tag::factory()->count(2)->create(['user_id' => $this->user->id]);
         $newTags = Tag::factory()->count(2)->create(['user_id' => $this->user->id]);
 
-        ArticleTag::create([
-            "article_id" => $article->id,
-            "tag_id"     => $tags[0]->id
-        ]);
-
-        ArticleTag::create([
-            "article_id" => $article->id,
-            "tag_id"     => $tags[1]->id
-        ]);
+        foreach ($tags as $tag){
+            ArticleTag::create([
+                "article_id" => $article->id,
+                "tag_id"     => $tag->id
+            ]);
+        }
 
         $response = $this
         ->actingAs($this->user)
@@ -345,30 +366,31 @@ class ArticleControllerTest extends TestCase
         ]);
 
         //タグ
-        $this->assertDatabaseHas('article_tags',[
-            'article_id' => $article->id,
-            'tag_id'     => $newTags[0]->id,
-            'deleted_at' => null,
-        ]);
+        // 新しくつけたタグ
+        foreach ($newTags as $newTag){
+            $this->assertDatabaseHas('article_tags',[
+                'article_id' => $article->id,
+                'tag_id'     => $newTag->id,
+                'deleted_at' => null,
+            ]);
+        }
 
-        $this->assertDatabaseHas('article_tags',[
-            'article_id' => $article->id,
-            'tag_id'     => $newTags[1]->id,
-            'deleted_at' => null,
-        ]);
-        $this->assertDatabaseHas('article_tags',[
-            'article_id' => $article->id,
-            'tag_id'     => $tags[0]->id,
-            'deleted_at' => null,
-        ]);
-
-        $this->assertDatabaseHas('article_tags',[
-            'article_id' => $article->id,
-            'tag_id'     => $tags[1]->id,
-            'deleted_at' => null,
-        ]);
+        // もともとつけていたタグ
+        foreach ($tags as $tag){
+            $this->assertDatabaseHas('article_tags',[
+                'article_id' => $article->id,
+                'tag_id'     => $tag->id,
+                'deleted_at' => null,
+            ]);
+        }
     }
 
+    // 期待
+    // * タイトル､本文が更新されている
+    // * もとの記事についていたタグのidになにも変化がない
+    // * 新しく紐づけたタグのidがarticle_tagsテーブルに保存される
+    // 条件
+    // * つけているタグの一部を消す
     public function test_articleUpdate_タグの一部を消す()
     {
         // carbonの時間固定
@@ -380,25 +402,12 @@ class ArticleControllerTest extends TestCase
         // タグ
         $tags    = Tag::factory()->count(4)->create(['user_id' => $this->user->id]);
 
-        ArticleTag::create([
-            "article_id" => $article->id,
-            "tag_id"     => $tags[0]->id
-        ]);
-
-        ArticleTag::create([
-            "article_id" => $article->id,
-            "tag_id"     => $tags[1]->id
-        ]);
-
-        ArticleTag::create([
-            "article_id" => $article->id,
-            "tag_id"     => $tags[2]->id
-        ]);
-
-        ArticleTag::create([
-            "article_id" => $article->id,
-            "tag_id"     => $tags[3]->id
-        ]);
+        foreach ($tags as $tag){
+            ArticleTag::create([
+                "article_id" => $article->id,
+                "tag_id"     => $tag->id
+            ]);
+        }
 
         $response = $this
         ->actingAs($this->user)
@@ -450,6 +459,12 @@ class ArticleControllerTest extends TestCase
         ]);
     }
 
+    // 期待
+    // * タイトル､本文が更新されている
+    // * もとの記事のtag_id = null のデータを論理削除
+    // * 新しく紐づけたタグのidがarticle_tagsテーブルに保存される
+    // 条件
+    // * タグがついてなかった記事にタグを付ける
     public function test_articleUpdate_タグがついてなかった記事にタグを付ける()
     {
         // carbonの時間固定
@@ -490,17 +505,13 @@ class ArticleControllerTest extends TestCase
 
         //タグ
         //追加したタグ
-        $this->assertDatabaseHas('article_tags',[
-            'article_id' => $article->id,
-            'tag_id'     => $tags[0]->id,
-            'deleted_at' => null,
-        ]);
-
-        $this->assertDatabaseHas('article_tags',[
-            'article_id' => $article->id,
-            'tag_id'     => $tags[1]->id,
-            'deleted_at' => null,
-        ]);
+        foreach ($tags as $tag){
+            $this->assertDatabaseHas('article_tags',[
+                'article_id' => $article->id,
+                'tag_id'     => $tag->id,
+                'deleted_at' => null,
+            ]);
+        }
 
         //削除したタグ
         $this->assertDatabaseHas('article_tags',[
