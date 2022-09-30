@@ -85,6 +85,69 @@ class TagControllerTest extends TestCase
     }
 
     // 期待
+    // 指定したタグが更新できた
+    // 条件
+    // 変更したタグ名が他のタグとかぶらなかった
+    public function test_update_変更したタグ名が他のタグとかぶらなかった()
+    {
+        $tag = Tag::create([
+            'name'    => 'test',
+            'user_id' => $this->user->id,
+        ]);
+
+        $response = $this
+        ->actingAs($this->user)
+        ->withSession(['test' => 'test'])
+        ->post('/api/tag/update/',[
+            'id'   => $tag->id,
+            'name' => 'update'
+        ]);
+
+        // ステータス
+        $response->assertStatus(200);
+
+        // データベース
+        // ブックマーク
+        $this->assertDatabaseHas('tags',[
+            'id'     => $tag->id,
+            'user_id'=> $this->user->id,
+            'name'   => "update",
+            'deleted_at' => null,
+        ]);
+    }
+
+    // 期待
+    // 400番エラーが返された
+    // 条件
+    // 変更したタグ名が他のタグとかぶった
+    public function test_update_変更したタグ名が他のタグとかぶった()
+    {
+        Tag::create([
+            'name'    => 'allready',
+            'user_id' => $this->user->id,
+        ]);
+
+        $tag = Tag::create([
+            'name'    => 'test',
+            'user_id' => $this->user->id,
+        ]);
+
+        $response = $this
+        ->actingAs($this->user)
+        ->withSession(['test' => 'test'])
+        ->post('/api/tag/update/',[
+            'id'   => $tag->id,
+            'name' => 'allready'
+        ]);
+
+        // ステータス
+        $response->assertStatus(400);
+        $response->assertJson([
+            'message' => "already exists"
+        ]);
+    }
+
+    // 期待
     // * nameカラムに指定したキーワードを含むデータをとってくる
     // * 指定したユーザーのタグを取ってくる
     // * けしたタグは取ってこない
