@@ -74,13 +74,14 @@ class ArticleController extends Controller
     //記事検索
     public function articleSearch(Request $request)
     {
-        return Article::searchArticle(
+        $result = Article::searchArticle(
             userId:Auth::id(),
             articleToSearch:$request->articleToSearch,
             currentPage:$request->currentPage,
             tagList:$request->tagList,
             searchTarget:$request->searchTarget
         );
+        return response()->json($result,200);
     }
     // 編集か新規かを分ける
     // public function DetermineProcessing(Request $request)

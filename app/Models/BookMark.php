@@ -106,12 +106,6 @@ class BookMark extends Model
             foreach($wordListToSearch as $word){ $query->where('url','like',"%$word%"); }
         }
 
-        //ヒット件数取得
-        $resultCount = $query->count();
-
-        //ページ数計算
-        $pageCount = (int)ceil($resultCount / $parPage);
-
         //何件目から取得するか
         $offset = $parPage*($currentPage-1);
 
@@ -123,13 +117,16 @@ class BookMark extends Model
         ->limit($parPage)
         ->get();
 
-        return response()->json(
-            [
-                "bookMarkList" => $searchResults,
-                "pageCount"    => $pageCount
-            ],
-            200
-        );
+        //ヒット件数取得
+        $resultCount = $query->count();
+
+        //ページ数計算
+        $pageCount = (int)ceil($resultCount / $parPage);
+
+        return [
+            "bookMarkList" => $searchResults,
+            "pageCount"    => $pageCount
+        ];
     }
 
     //検索時のサブテーブル作成
