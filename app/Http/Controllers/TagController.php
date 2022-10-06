@@ -14,11 +14,60 @@ class TagController extends Controller
     {
         // CSRFトークンを再生成して、二重送信対策
         $request->session()->regenerateToken();
-        return Tag::store(
+
+        $result = Tag::store(
             userId:Auth::id(),
             tag   :$request->tag,
         );
+
+        // 登録できた
+        if ($result) {
+            return response()->json(
+                ["message" => "stored"],
+                200
+            );
+        }
+
+        // すでに登録していた
+        return response()->json(
+            ["message" => "already exists"],
+            400
+        );
     }
+
+    public function tagUpdate(Request $request)
+    {
+        // CSRFトークンを再生成して、二重送信対策
+        $request->session()->regenerateToken();
+
+        $result = Tag::updateTag(
+            userId:Auth::id(),
+            tagId :$request->id,
+            name  :$request->name
+        );
+
+
+        // 更新できた
+        if ($result) {
+            return response()->json(
+                ["message" => "updated"],
+                200
+            );
+        }
+
+        // 既に登録している名前と被った
+        return response()->json(
+            ["message" => "already exists"],
+            400
+        );
+    }
+
+    public function tagDelete()
+    {
+        Tag::delete(tagId :$request->id);
+    }
+
+
 
     //タグ検索
     public function tagSearch(Request $request)

@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 
+use Carbon\Carbon;
+
 class TagModelTest extends TestCase
 {
     // テストしたらリセットする
@@ -36,16 +38,30 @@ class TagModelTest extends TestCase
     }
 
     // 期待
+    // 関数がTrueを返す
     // 引数2の文字列がデータベースに保存される
     public function test_store_一意のタグ()
     {
-        $this->tagModel->store($this->userId,"testTag");
+        $this->assertTrue($this->tagModel->store($this->userId,"testTag"));
 
         $this->assertDatabaseHas('tags',[
-            'name' => 'testTag',
-            'user_id'  => $this->userId
+            'name'       => 'testTag',
+            'user_id'    => $this->userId,
+            'deleted_at' => null
         ]);
 
+    }
+
+    // 期待
+    // 関数がfalseを返す
+    public function test_store_同じタグを登録する()
+    {
+        Tag::create([
+            'name'    => 'testTag',
+            'user_id' => $this->userId
+        ]);
+
+        $this->assertFalse($this->tagModel->store($this->userId,"testTag"));
     }
 
     // 期待
@@ -69,6 +85,66 @@ class TagModelTest extends TestCase
         foreach ($receivedTags as $tag){ array_push($nameList,$tag->name);}
 
         $this->assertContains("TestTag",$nameList);
+    }
+
+
+    // 期待
+    // 指定したidのタグ名が更新されている
+    // 関数がTrueを返す
+    // 条件
+    // 変更後のタグ名がtagテーブルで一意だった場合
+    public function test_updateTag_変更後のタグ名がtagテーブルで一意だった()
+    {
+        $tag = Tag::create([
+            'name'    => 'beforeUpdate',
+            'user_id' => $this->userId
+        ]);
+
+        $this->assertTrue($this->tagModel->updateTag($this->userId,$tag->id,'afterUpdate'));
+
+        $this->assertDatabaseHas('tags',[
+            'name'       => 'afterUpdate',
+            'user_id'    => $this->userId,
+            'deleted_at' => null
+        ]);
+
+    }
+
+    // 期待
+    // 関数がfalseを返す
+    // 条件
+    // 変更後のタグ名がtagテーブルに既に登録されていた場合
+    public function test_updateTag_変更後のタグ名がtagテーブルに既に存在していた()
+    {
+        $allreadyExist = Tag::create([
+            'name'    => 'allready',
+            'user_id' => $this->userId
+        ]);
+
+        $tag = Tag::create([
+            'name'    => 'beforeUpdate',
+            'user_id' => $this->userId
+        ]);
+
+        $this->assertFalse($this->tagModel->updateTag($this->userId,$tag->id,'allready'));
+    }
+
+    // 期待
+    // 指定したidのタグが論理削除される
+    public function test_deleteTag()
+    {
+        Carbon::setTestNow(Carbon::now());
+
+        $tag = Tag::factory()->create([
+            'user_id' => $this->userId
+        ]);
+
+        $this->tagModel->deleteTag($tag->id);
+
+        $this->assertDatabaseHas('tags',[
+            'id'    => $tag->id,
+            'deleted_at' =>Carbon::now()
+        ]);
     }
 
     // 期待
