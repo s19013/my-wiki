@@ -3,7 +3,7 @@
         <!-- 別タブで開くようにする -->
         <DateLabel :createdAt="bookMark.created_at" :updatedAt="bookMark.updated_at" size="0.1rem"/>
         <div class="elements">
-            <a :href="boolmark.url" target="_blank" rel="noopener noreferrer">
+            <a :href="boolMark.url" target="_blank" rel="noopener noreferrer">
                 <h2>
                     <v-icon>mdi-arrow-top-left-bold-box-outline</v-icon>
                     {{bookMark.title}}
