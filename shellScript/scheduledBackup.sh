@@ -17,13 +17,7 @@ date=`date +%Y-%m-%d-%H-%M`
 
 #31日前の古いファイル
 # 31日立ってから実験して見ようと思う
-# oldfile=`date --date "31 days ago" +%Y-%m-%d-%H-%M`
-
-# echo $filename$date > result.txt
-# echo $oldfile >> result.txt
-
-# mysqldump --opt --all-databases --events --default-character-set=binary -u root --password=パスワード | gzip > $dirpath/$filename.sql.gz;
-# mysqldump --single-transaction -u root -p sample > ./sample.dump
+oldfile=`date --date "31 days ago" +%Y-%m-%d-%H-%M`
 
 # バックアップ実行
 mysqldump --single-transaction -u $DBUSER -p$DBPASSWORD $DBNAME | gzip > $exportDirectryPath/$DBNAME-$date.dump.gz
