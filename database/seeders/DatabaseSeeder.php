@@ -4,6 +4,13 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\User;
+use App\Models\Article;
+use App\Models\ArticleTag;
+use App\Models\BookMark;
+use App\Models\BookMarkTag;
+use App\Models\Tag;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,11 +21,43 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        $mainUser  = User::factory()->create();
+        $otherUser = User::factory()->create();
+        // $mainTags      = Tag::factory()->create();
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        $mainArticles = Article::factory()->count(10)->create(['user_id' => $mainUser->id]);
+        $otherArticles = Article::factory()->count(10)->create(['user_id' => $otherUser->id]);
+
+        foreach ($mainArticles as $article){
+            ArticleTag::factory()->create([
+                "article_id" => $article->id,
+                Tag::factory()->create()->id
+            ]);
+        }
+
+        foreach ($otherArticles as $article){
+            ArticleTag::factory()->create([
+                "article_id" => $article->id,
+                Tag::factory()->create()->id
+            ]);
+        }
+
+        $mainBookMarks = BookMark::factory()->count(10)->create(['user_id' => $mainUser->id]);
+        $otherBookMarks = BookMark::factory()->count(10)->create(['user_id' => $otherUser->id]);
+
+        foreach ($mainBookMarks as $bookMark){
+            BookMarkTag::factory()->create([
+                "book_mark_id" => $bookMark->id,
+                Tag::factory()->create()->id
+            ]);
+        }
+
+        foreach ($otherBookMarks as $bookMark){
+            BookMarkTag::factory()->create([
+                "book_mark_id" => $bookMark->id,
+                Tag::factory()->create()->id
+            ]);
+        }
+
     }
 }

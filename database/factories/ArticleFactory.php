@@ -22,7 +22,6 @@ class ArticleFactory extends Factory
         return [
             'title'=>fake()->realText(15),
             'body' =>fake()->realText(50),
-            'user_id' => rand (1, 2),
         ];
     }
 }

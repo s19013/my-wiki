@@ -22,7 +22,6 @@ class BookMarkFactory extends Factory
         return [
             'title'=>fake()->realText(15),
             'url' =>fake()->realText(30),
-            'user_id' => rand (1, 2),
         ];
     }
 }
