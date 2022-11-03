@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 use DB;
 use Carbon\Carbon;
-use App\Http\Controllers\searchToolKit;
+use App\Tools\searchToolKit;
 
 class Article extends Model
 {

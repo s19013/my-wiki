@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 use DB;
 use Carbon\Carbon;
-use App\Http\Controllers\searchToolKit;
+use App\Tools\searchToolKit;
 
 class Tag extends Model
 {
