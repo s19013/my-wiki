@@ -16,16 +16,13 @@ return new class extends Migration
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            // $table->tinyInteger('category')->comment('リンク:1 記事:2');
             $table->string('title');
             $table->longText('body');
-            // $table->unsignedBigInteger('article_tag_id');
             $table->softDeletes();
             $table->timestamps();
 
             //インデックス
             $table->index('user_id');
-            // $table->index('category');
         });
     }
 
