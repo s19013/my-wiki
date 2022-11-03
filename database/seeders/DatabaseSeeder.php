@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Article;
 use App\Models\ArticleTag;
@@ -21,7 +22,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $mainUser  = User::factory()->create();
+        $mainUser  = User::factory()->create([
+            'email'    => 'hideya670@gmail.com',
+            'password' => Hash::make("gemini0522"),
+        ]);
         $otherUser = User::factory()->create();
         // $mainTags      = Tag::factory()->create();
 
