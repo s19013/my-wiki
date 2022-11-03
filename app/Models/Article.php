@@ -12,10 +12,10 @@ use App\Http\Controllers\searchToolKit;
 class Article extends Model
 {
     use HasFactory;
-    protected $fillable = [
-        'user_id',
-        'title',
-        'body',
+    protected $guarded = [
+        'id',
+        'created_at',
+        'updated_at',
     ];
 
     //新規記事登録

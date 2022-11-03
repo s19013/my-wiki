@@ -11,9 +11,10 @@ use Carbon\Carbon;
 class BookMarkTag extends Model
 {
     use HasFactory;
-    protected $fillable = [
-        'book_mark_id',
-        'tag_id',
+    protected $guarded = [
+        'id',
+        'created_at',
+        'updated_at',
     ];
 
     //ブックマークに紐付けらたタグを登録

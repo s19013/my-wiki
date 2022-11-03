@@ -11,9 +11,10 @@ use Carbon\Carbon;
 class ArticleTag extends Model
 {
     use HasFactory;
-    protected $fillable = [
-        'article_id',
-        'tag_id',
+    protected $guarded = [
+        'id',
+        'created_at',
+        'updated_at',
     ];
 
     //記事に紐付けらたタグを登録

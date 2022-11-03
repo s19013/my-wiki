@@ -12,10 +12,10 @@ use App\Http\Controllers\searchToolKit;
 class BookMark extends Model
 {
     use HasFactory;
-    protected $fillable = [
-        'user_id',
-        'title',
-        'url',
+    protected $guarded = [
+        'id',
+        'created_at',
+        'updated_at',
     ];
 
     //新規ブックマーク作成

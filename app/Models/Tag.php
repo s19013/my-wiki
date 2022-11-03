@@ -13,9 +13,10 @@ use App\Http\Controllers\searchToolKit;
 class Tag extends Model
 {
     use HasFactory;
-    protected $fillable = [
-        'name',
-        'user_id',
+    protected $guarded = [
+        'id',
+        'created_at',
+        'updated_at',
     ];
 
     //新規タグ登録
