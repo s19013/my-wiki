@@ -6,10 +6,20 @@ use Illuminate\Http\Request;
 
 use App\Models\ArticleTag;
 use App\Models\Article;
+
+use App\Repository\ArticleRepository;
+
 use Auth;
 
 class ArticleController extends Controller
 {
+
+    public $articleRepository;
+
+    public function __construct(ArticleRepository $articleRepository)
+    {
+        $this->articleRepository = $articleRepository;
+    }
     //新規記事作成
     public function articleStore(Request $request)
     {
@@ -17,7 +27,7 @@ class ArticleController extends Controller
         $request->session()->regenerateToken();
 
         // 記事を保存して記事のidを取得
-        $articleId = Article::storeArticle(
+        $articleId = $this->articleRepository->store(
                 userId   : Auth::id(),
                 title    : $request->articleTitle,
                 body     : $request->articleBody,
@@ -48,7 +58,7 @@ class ArticleController extends Controller
         $request->session()->regenerateToken();
 
         // 記事更新
-        Article::updateArticle(
+        $this->articleRepository->update(
             articleId:$request->articleId,
             title:$request->articleTitle,
             body :$request->articleBody
@@ -68,13 +78,13 @@ class ArticleController extends Controller
         // deleteリクエストならここの部分が必要ない?
         // $request->session()->regenerateToken();
 
-        Article::deleteArticle(articleId:$articleId);
+        $this->articleRepository->delete(articleId:$articleId);
     }
 
     //記事検索
     public function articleSearch(Request $request)
     {
-        $result = Article::searchArticle(
+        $result = $this->articleRepository->search(
             userId:Auth::id(),
             articleToSearch:$request->articleToSearch,
             currentPage:$request->currentPage,
