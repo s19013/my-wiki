@@ -24,7 +24,7 @@ class ArticleController extends Controller
         $this->articleTagRepository = $articleTagRepository;
     }
     //新規記事作成
-    public function articleStore(Request $request)
+    public function store(Request $request)
     {
         // CSRFトークンを再生成して、二重送信対策
         $request->session()->regenerateToken();
@@ -55,7 +55,7 @@ class ArticleController extends Controller
     }
 
     //記事更新
-    public function articleUpdate(Request $request)
+    public function update(Request $request)
     {
         // CSRFトークンを再生成して、二重送信対策
         $request->session()->regenerateToken();
@@ -75,17 +75,17 @@ class ArticleController extends Controller
     }
 
     //記事削除
-    public function articleDelete($articleId)
+    public function delete($articleId)
     {
         // CSRFトークンを再生成して、二重送信対策
         // deleteリクエストならここの部分が必要ない?
-        // $request->session()->regenerateToken();
+        // //$request->session()->regenerateToken();
 
         $this->articleRepository->delete(articleId:$articleId);
     }
 
     //記事検索
-    public function articleSearch(Request $request)
+    public function search(Request $request)
     {
         $result = $this->articleRepository->search(
             userId:Auth::id(),
@@ -96,14 +96,5 @@ class ArticleController extends Controller
         );
         return response()->json($result,200);
     }
-    // 編集か新規かを分ける
-    // public function DetermineProcessing(Request $request)
-    // {
-    //     //新規
-    //     if ($request->articleId == 0) { $this->articleStore($request); }
-    //     // 編集
-    //     else {
-    //         $this->aricleUpdate($request);
-    //     }
-    // }
+
 }
