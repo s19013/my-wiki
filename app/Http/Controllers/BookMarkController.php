@@ -8,16 +8,25 @@ use App\Models\BookMarkTag;
 use App\Models\BookMark;
 use Auth;
 
+use App\Repository\BookMarkRepository;
+
 class BookMarkController extends Controller
 {
+    private $bookMarkRepository;
+
+    public function __construct(BookMarkRepository $bookMarkRepository)
+    {
+        $this->bookMarkRepository = $bookMarkRepository;
+    }
+
     //新規ブックマーク作成
     public function bookMarkStore(Request $request)
     {
         // CSRFトークンを再生成して、二重送信対策
-        $request->session()->regenerateToken();
+        //$request->session()->regenerateToken();
 
         //urlがすでに登録されているか確かめる
-        $isAllreadyExists =BookMark::isAllreadyExists(Auth::id(),$request->bookMarkUrl);
+        $isAllreadyExists =$this->bookMarkRepository->isAllreadyExists(Auth::id(),$request->bookMarkUrl);
         if ($isAllreadyExists == true) {
             return response()->json(
                 ["message" => "already exists"],
@@ -26,7 +35,7 @@ class BookMarkController extends Controller
         }
 
         // 記事を保存して記事のidを取得
-        $bookMarkId = BookMark::storeBookMark(
+        $bookMarkId = $this->bookMarkRepository->store(
                 userId   : Auth::id(),
                 title    : $request->bookMarkTitle,
                 url      : $request->bookMarkUrl,
@@ -54,10 +63,10 @@ class BookMarkController extends Controller
     public function bookMarkUpdate(Request $request)
     {
         // CSRFトークンを再生成して、二重送信対策
-        $request->session()->regenerateToken();
+        //$request->session()->regenerateToken();
 
         //ブックマークの更新
-        BookMark::updateBookMark(
+        $this->bookMarkRepository->update(
             bookMarkId:$request->bookMarkId,
             title:$request->bookMarkTitle,
             url  :$request->bookMarkUrl
@@ -73,7 +82,7 @@ class BookMarkController extends Controller
     //ブックマーク検索
     public function bookMarkSearch(Request $request)
     {
-        $result = BookMark::searchBookMark(
+        $result = $this->bookMarkRepository->search(
             userId:Auth::id(),
             bookMarkToSearch:$request->bookMarkToSearch,
             currentPage:$request->currentPage,
@@ -88,9 +97,9 @@ class BookMarkController extends Controller
     {
         // CSRFトークンを再生成して、二重送信対策
         // deleteリクエストならここの部分が必要ない?
-        // $request->session()->regenerateToken();
+        // //$request->session()->regenerateToken();
 
-        BookMark::deleteBookMark(bookMarkId:$bookMarkId);
+        $this->bookMarkRepository->delete(bookMarkId:$bookMarkId);
     }
 
     // 編集か新規かを分ける
