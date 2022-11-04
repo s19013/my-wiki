@@ -522,17 +522,51 @@ class BookMarkControllerTest extends TestCase
     }
 
     // 期待
-    // * 指定ユーザーのブックマークを削除できる
+    // * 指定ユーザーの記事を削除できる
     // 条件
-    public function test_delete_自分のブックマークを消す(){
+    public function test_delete_自分の記事を消す(){
+        $bookMark = BookMark::factory()->create(['user_id' => $this->user->id]);
+        $response = $this
+        ->actingAs($this->user)
+        ->withSession([
+            'my_wiki_session' => 'test',
+            'XSRF-TOKEN' => 'test'
+        ])
+        ->delete('/api/bookmark/'.$bookMark->id);
 
+        $response->assertStatus(200);
+
+        //
+        $this->assertDatabaseHas('book_marks',[
+            'id' => $bookMark->id,
+            'deleted_at' => Carbon::now(),
+        ]);
     }
 
     // 期待
-    // * 指定ユーザーのブックマークを削除しようとしたがシステムに防がれる
+    // * 指定ユーザーの記事を削除しようとしたがシステムに防がれる
     // 条件
-    public function test_delete_他人のブックマークを消そうとするがシステムに防がれる(){
+    public function test_delete_他人の記事を消そうとするがシステムに防がれる(){
 
+        $otherUser = User::factory()->create();
+
+        $bookMark = BookMark::factory()->create(['user_id' => $this->user->id]);
+
+        $response = $this
+        ->actingAs($otherUser)
+        ->withSession([
+            'my_wiki_session' => 'test',
+            'XSRF-TOKEN' => 'test'
+        ])
+        ->delete('/api/bookmark/'.$bookMark->id);
+
+        $response->assertStatus(200);
+
+        //
+        $this->assertDatabaseHas('book_marks',[
+            'id' => $bookMark->id,
+            'deleted_at' => null,
+        ]);
     }
 
 }
