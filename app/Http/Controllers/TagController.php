@@ -5,17 +5,26 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Tag;
+use App\Repository\TagRepository;
 use Auth;
 
 class TagController extends Controller
 {
+
+    private $TagRepository;
+
+    public function __construct(TagRepository $tagRepository)
+    {
+        $this->tagRepository = $tagRepository;
+    }
+
     //新規タグ登録
     public function tagStore(Request $request)
     {
         // CSRFトークンを再生成して、二重送信対策
-        $request->session()->regenerateToken();
+        //$request->session()->regenerateToken();
 
-        $result = Tag::store(
+        $result = $this->tagRepository->store(
             userId:Auth::id(),
             tag   :$request->tag,
         );
@@ -38,9 +47,9 @@ class TagController extends Controller
     public function tagUpdate(Request $request)
     {
         // CSRFトークンを再生成して、二重送信対策
-        $request->session()->regenerateToken();
+        //$request->session()->regenerateToken();
 
-        $result = Tag::updateTag(
+        $result = $this->tagRepository->update(
             userId:Auth::id(),
             tagId :$request->id,
             name  :$request->name
@@ -64,7 +73,7 @@ class TagController extends Controller
 
     public function tagDelete()
     {
-        Tag::delete(tagId :$request->id);
+        $this->tagRepository->delete(tagId :$request->id);
     }
 
 
@@ -72,7 +81,7 @@ class TagController extends Controller
     //タグ検索
     public function tagSearch(Request $request)
     {
-        return Tag::search(
+        return $this->tagRepository->search(
             userId:Auth::id(),
             tag   :$request->tag
         );
