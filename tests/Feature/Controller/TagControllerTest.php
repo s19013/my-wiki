@@ -258,9 +258,9 @@ class TagControllerTest extends TestCase
     }
 
     // 期待
-    // * 指定ユーザーの記事を削除できる
+    // * タグを削除できる
     // 条件
-    public function test_delete_自分の記事を消す(){
+    public function test_delete_自分のタグを消す(){
         $tag = Tag::factory()->create(['user_id' => $this->user->id]);
         $response = $this
         ->actingAs($this->user)
@@ -280,9 +280,9 @@ class TagControllerTest extends TestCase
     }
 
     // 期待
-    // * 指定ユーザーの記事を削除しようとしたがシステムに防がれる
+    // * 他人のタグを消そうとするがシステムに防がれる
     // 条件
-    public function test_delete_他人の記事を消そうとするがシステムに防がれる(){
+    public function test_delete_他人のタグを消そうとするがシステムに防がれる(){
 
         $otherUser = User::factory()->create();
 

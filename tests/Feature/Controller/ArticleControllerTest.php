@@ -538,7 +538,7 @@ class ArticleControllerTest extends TestCase
     }
 
     // 期待
-    // * 指定ユーザーの記事を削除できる
+    // * 記事を削除できる
     // 条件
     public function test_delete_自分の記事を消す(){
         $article = Article::factory()->create(['user_id' => $this->user->id]);
@@ -560,7 +560,7 @@ class ArticleControllerTest extends TestCase
     }
 
     // 期待
-    // * 指定ユーザーの記事を削除しようとしたがシステムに防がれる
+    // * 他人の記事を消そうとするがシステムに防がれる
     // 条件
     public function test_delete_他人の記事を消そうとするがシステムに防がれる(){
 
