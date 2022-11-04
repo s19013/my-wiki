@@ -165,8 +165,8 @@ class ArticleRepository
         else {return false;}
     }
 
-    //他人の覗こうとしてないか確かめる
-    public function preventPeep($articleId,$userId)
+    //ログインユーザーの記事かどうか確認する
+    public function isSameUser($articleId,$userId)
     {
         $article = Article::select('user_id')
         ->whereNull('deleted_at')

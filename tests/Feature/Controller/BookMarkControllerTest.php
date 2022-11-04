@@ -521,4 +521,18 @@ class BookMarkControllerTest extends TestCase
         ]);
     }
 
+    // 期待
+    // * 指定ユーザーのブックマークを削除できる
+    // 条件
+    public function test_delete_自分のブックマークを消す(){
+
+    }
+
+    // 期待
+    // * 指定ユーザーのブックマークを削除しようとしたがシステムに防がれる
+    // 条件
+    public function test_delete_他人のブックマークを消そうとするがシステムに防がれる(){
+
+    }
+
 }

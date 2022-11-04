@@ -82,4 +82,18 @@ class TagRepository
         ->whereNull('deleted_at')
         ->exists();//existsでダブっていればtrue
     }
+
+    //ログインユーザーのタグかどうか確認する
+    public  function isSameUser($tagId,$userId)
+    {
+        $tag = Tag::select('user_id')
+        ->whereNull('deleted_at')
+        ->where('id','=',$tagId)
+        ->first();
+
+        //タグに紐づけられているuserIdとログイン中のユーザーのidを比較する
+        // true :自分のを覗こうとしている
+        // false:他人のを覗こうとしている
+        return ($tag->user_id) == $userId ;
+    }
 }

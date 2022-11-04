@@ -161,16 +161,17 @@ class BookMarkRepository
         else {return false;}
     }
 
-    //他人の覗こうとしてないか確かめる
-    public  function preventPeep($bookMarkId,$userId)
+    //ログインユーザーのブックマークかどうか確認する
+    public  function isSameUser($bookMarkId,$userId)
     {
         $bookMark = BookMark::select('user_id')
         ->whereNull('deleted_at')
         ->where('id','=',$bookMarkId)
         ->first();
 
-        //記事に紐づけられているuserIdとログイン中のユーザーのidを比較する
-        // falseなら他人のを覗こうとしている
+        //ブックマークに紐づけられているuserIdとログイン中のユーザーのidを比較する
+        // true :自分のを覗こうとしている
+        // false:他人のを覗こうとしている
         return ($bookMark->user_id) == $userId ;
     }
 

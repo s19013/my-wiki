@@ -546,15 +546,15 @@ class ArticleControllerTest extends TestCase
     }
 
     // 期待
-    // * タイトル､本文が更新されている
-    // * もとの記事のtag_id = null のデータを論理削除
-    // * 新しく紐づけたタグのidがarticle_tagsテーブルに保存される
+    // * 指定ユーザーの記事を削除できる
     // 条件
-    // * タグがついてなかった記事にタグを付ける
     public function test_delete_自分の記事を消す(){
 
     }
 
+    // 期待
+    // * 指定ユーザーの記事を削除しようとしたがシステムに防がれる
+    // 条件
     public function test_delete_他人の記事を消そうとするがシステムに防がれる(){
 
     }
