@@ -38,6 +38,9 @@ class ArticleControllerTest extends TestCase
         parent::setUp();
         // ユーザーを用意
         $this->user = User::factory()->create();
+
+        // carbonの時間固定
+        Carbon::setTestNow(Carbon::now());
     }
     /**
      * A basic feature test example.
@@ -117,9 +120,6 @@ class ArticleControllerTest extends TestCase
     // * タイトルなし
     public function test_store_タグあり_タイトルなし()
     {
-        // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
-
         $tags = Tag::factory()->count(2)->create(['user_id' => $this->user->id]);
 
         $response = $this
@@ -222,8 +222,6 @@ class ArticleControllerTest extends TestCase
     // * タイトルなし
     public function test_store_タグなし_タイトルなし()
     {
-        // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
 
         $response = $this
         ->actingAs($this->user)
@@ -274,8 +272,6 @@ class ArticleControllerTest extends TestCase
     // * 記事に別のタグを紐づける
     public function test_Update_タグ総入れ替え()
     {
-        // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
 
         // 記事などを作成
         $article = Article::factory()->create(['user_id' => $this->user->id]);
@@ -411,8 +407,6 @@ class ArticleControllerTest extends TestCase
     // * つけているタグの一部を消す
     public function test_Update_タグの一部を消す()
     {
-        // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
 
         // 記事などを作成
         $article = Article::factory()->create(['user_id' => $this->user->id]);
@@ -488,8 +482,6 @@ class ArticleControllerTest extends TestCase
     // * タグがついてなかった記事にタグを付ける
     public function test_Update_タグがついてなかった記事にタグを付ける()
     {
-        // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
 
         // 記事などを作成
         $article = Article::factory()->create(['user_id' => $this->user->id]);
@@ -549,7 +541,22 @@ class ArticleControllerTest extends TestCase
     // * 指定ユーザーの記事を削除できる
     // 条件
     public function test_delete_自分の記事を消す(){
+        $article = Article::factory()->create(['user_id' => $this->user->id]);
+        $response = $this
+        ->actingAs($this->user)
+        ->withSession([
+            'my_wiki_session' => 'test',
+            'XSRF-TOKEN' => 'test'
+        ])
+        ->delete('/api/article/'.$article->id);
 
+        $response->assertStatus(200);
+
+        //
+        $this->assertDatabaseHas('articles',[
+            'id' => $article->id,
+            'deleted_at' => Carbon::now(),
+        ]);
     }
 
     // 期待
@@ -557,6 +564,25 @@ class ArticleControllerTest extends TestCase
     // 条件
     public function test_delete_他人の記事を消そうとするがシステムに防がれる(){
 
+        $otherUser = User::factory()->create();
+
+        $article = Article::factory()->create(['user_id' => $this->user->id]);
+
+        $response = $this
+        ->actingAs($otherUser)
+        ->withSession([
+            'my_wiki_session' => 'test',
+            'XSRF-TOKEN' => 'test'
+        ])
+        ->delete('/api/article/'.$article->id);
+
+        $response->assertStatus(200);
+
+        //
+        $this->assertDatabaseHas('articles',[
+            'id' => $article->id,
+            'deleted_at' => null,
+        ]);
     }
 
 }
