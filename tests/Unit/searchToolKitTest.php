@@ -3,7 +3,7 @@
 namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use App\Http\Controllers\searchToolKit;
+use App\Tools\searchToolKit;
 
 class searchToolKitTest extends TestCase
 {

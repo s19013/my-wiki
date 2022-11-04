@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\model;
+namespace Tests\Unit\Repository;
 
 use Tests\TestCase;
 use App\Models\BookMark;
@@ -12,21 +12,23 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 
+use App\Repository\BookMarkRepository;
 
 use Carbon\Carbon;
 
-class BookMarkModelTest extends TestCase
+class BookMarkRepositoryTest extends TestCase
 {
     // テストしたらリセットする
     use RefreshDatabase;
 
     private $bookmarkModel;
+    private $bookmarkRepository;
     private $userId;
 
     public function setup():void
     {
         parent::setUp();
-        $this->bookmarkModel = new BookMark();
+        $this->bookmarkRepository = new BookMarkRepository();
 
         // ユーザーを用意
         $user = User::create([
@@ -52,9 +54,9 @@ class BookMarkModelTest extends TestCase
     //     $this->assertTrue(true);
     // }
 
-    public function test_storeBookMark_ブックマークデータを登録した時のidを取ってこれるか(): void
+    public function test_store_ブックマークデータを登録した時のidを取ってこれるか(): void
     {
-        $returnedId = $this->bookmarkModel->storeBookMark("testTitle","testUrl",$this->userId);
+        $returnedId = $this->bookmarkRepository->store("testTitle","testUrl",$this->userId);
 
         // このテスト関数は一番最初に動く(このブックマークは一番最初に登録されるので) idは必ず[1]が帰ってくるはず
         // なんでって言われてもそれがdbの連番の仕様だからとしか答え切れない
@@ -70,10 +72,10 @@ class BookMarkModelTest extends TestCase
     // 条件
     // タイトル入力済み
 
-    public function test_storeBookMark_タイトルを入力(): void
+    public function test_store_タイトルを入力(): void
     {
         // データを登録
-        $this->bookmarkModel->storeBookMark("testTitle","testUrl",$this->userId);
+        $this->bookmarkRepository->store("testTitle","testUrl",$this->userId);
 
         // 登録したデータがあるか確認
         $this->assertDatabaseHas('book_marks',[
@@ -89,12 +91,12 @@ class BookMarkModelTest extends TestCase
     //
     // 条件
     // タイトルを入力しなかった
-    public function test_storeBookMark_タイトルを入力しなかった()
+    public function test_store_タイトルを入力しなかった()
     {
         //これで､Carbon::now()で呼び出される時間を固定化できるらしい
         Carbon::setTestNow(Carbon::now());
 
-        $this->bookmarkModel->storeBookMark('',"testUrl",$this->userId);
+        $this->bookmarkRepository->store('',"testUrl",$this->userId);
         $this->assertDatabaseHas('book_marks',[
             'title' => Carbon::now(),
             'url'  => 'testUrl'
@@ -103,10 +105,10 @@ class BookMarkModelTest extends TestCase
 
     // 期待
     // 指定したIDのブックマークが更新されている
-    public function test_updateBookMark_指定したIDのブックマークが更新されている()
+    public function test_update_指定したIDのブックマークが更新されている()
     {
         $bookMark = BookMark::factory()->create(['user_id' => $this->userId]);
-        $this->bookmarkModel->updateBookMark($bookMark->id,"updatedTitle","updatedUrl");
+        $this->bookmarkRepository->update($bookMark->id,"updatedTitle","updatedUrl");
 
         $this->assertDatabaseHas('book_marks',[
             'id'    => $bookMark->id,
@@ -117,12 +119,12 @@ class BookMarkModelTest extends TestCase
 
     // 期待
     // 指定したブックマークが論理削除されている
-    public function test_deleteBookMark_指定したブックマークが論理削除されている()
+    public function test_delete_指定したブックマークが論理削除されている()
     {
         Carbon::setTestNow(Carbon::now());
 
         $bookMark = BookMark::factory()->create(['user_id' => $this->userId]);
-        $this->bookmarkModel->deleteBookMark($bookMark->id);
+        $this->bookmarkRepository->delete($bookMark->id);
 
         $this->assertDatabaseHas('book_marks',[
             'id'          => $bookMark->id,
@@ -131,13 +133,13 @@ class BookMarkModelTest extends TestCase
     }
 
     // 指定したブックマークを取って来れるか
-    public function test_serveBookMark_指定したブックマークを取って来れるか()
+    public function test_serve_指定したブックマークを取って来れるか()
     {
         // ブックマーク登録
         $newBookMark = BookMark::factory()->create(['user_id' => $this->userId]);
 
         // ブックマーク取得
-        $receivedBookMark = $this->bookmarkModel->serveBookMark($newBookMark->id);
+        $receivedBookMark = $this->bookmarkRepository->serve($newBookMark->id);
 
         //id
         $this->assertSame($newBookMark->id,$receivedBookMark->id);
@@ -148,49 +150,49 @@ class BookMarkModelTest extends TestCase
     }
 
     // 期待
-    // 関数checkBookMarkDeletedの帰り値がTrueである
+    // 関数isDeletedの帰り値がTrueである
     // 条件
     // 指定したブックマークが論理削除されていた
-    public function test_checkBookMarkDeleted_削除済み()
+    public function test_isDeleted_削除済み()
     {
         $bookMark = BookMark::factory()->create(['user_id' => $this->userId]);
         // 削除する
-        $this->bookmarkModel->deleteBookMark($bookMark->id);
+        $this->bookmarkRepository->delete($bookMark->id);
 
-        $this->assertTrue($this->bookmarkModel->checkBookMarkDeleted($bookMark->id));
+        $this->assertTrue($this->bookmarkRepository->isDeleted($bookMark->id));
     }
 
     // 期待
-    // 関数checkBookMarkDeletedの帰り値がFalseである
+    // 関数isDeletedの帰り値がFalseである
     // 条件
     // 指定したブックマークが論理削除されていない
-    public function test_checkBookMarkDeleted_削除してない()
+    public function test_isDeleted_削除してない()
     {
         $bookMark = BookMark::factory()->create(['user_id' => $this->userId]);
 
-        $this->assertFalse($this->bookmarkModel->checkBookMarkDeleted($bookMark->id));
+        $this->assertFalse($this->bookmarkRepository->isDeleted($bookMark->id));
     }
 
     // 期待
-    // 関数preventPeepの帰り値がTrueである
+    // 関数isSameUserの帰り値がTrueである
     // 条件
     // 指定したブックマークが指定したユーザーが作ったブックマークであった場合
-    public function test_preventPeep_同一人物()
+    public function test_isSameUser_同一人物()
     {
         $bookMark = BookMark::factory()->create(['user_id' => $this->userId]);
 
-        $this->assertTrue($this->bookmarkModel->preventPeep($bookMark->id,$this->userId));
+        $this->assertTrue($this->bookmarkRepository->isSameUser($bookMark->id,$this->userId));
     }
 
     // 期待
-    // 関数preventPeepの帰り値がFalseである
+    // 関数isSameUserの帰り値がFalseである
     // 条件
     // 指定したブックマークが指定したユーザー以外が作ったブックマークだった場合
-    public function test_preventPeep_不正()
+    public function test_isSameUser_不正()
     {
         $bookMark = BookMark::factory()->create(['user_id' => $this->userId]);
 
-        $this->assertFalse($this->bookmarkModel->preventPeep($bookMark->id,$this->userId + 100));
+        $this->assertFalse($this->bookmarkRepository->isSameUser($bookMark->id,$this->userId + 100));
     }
 
     // 期待
@@ -203,7 +205,7 @@ class BookMarkModelTest extends TestCase
             'url'     => "testUrl",
             'user_id' => $this->userId
         ]);
-        $this->assertTrue($this->bookmarkModel->isAllreadyExists($this->userId,"testUrl"));
+        $this->assertTrue($this->bookmarkRepository->isAllreadyExists($this->userId,"testUrl"));
     }
 
     // 期待
@@ -212,7 +214,7 @@ class BookMarkModelTest extends TestCase
     // 引数のurlがまだデータベースに登録されていない
     public function test_isAllreadyExists_データベースに登録されていない()
     {
-        $this->assertFalse($this->bookmarkModel->isAllreadyExists($this->userId,"testUrl"));
+        $this->assertFalse($this->bookmarkRepository->isAllreadyExists($this->userId,"testUrl"));
     }
 
         // 期待
@@ -228,7 +230,7 @@ class BookMarkModelTest extends TestCase
         //テストユーザーの記事
         BookMark::factory()->count(25)->create(['user_id' => $this->userId]);
 
-        $response = $this->bookmarkModel->searchBookMark(
+        $response = $this->bookmarkRepository->search(
             userId:$this->userId,
             bookMarkToSearch:'',
             currentPage:1,
@@ -260,7 +262,7 @@ class BookMarkModelTest extends TestCase
         //テストユーザーの記事
         BookMark::factory()->count(5)->create(['user_id' => $this->userId]);
 
-        $response = $this->bookmarkModel->searchBookMark(
+        $response = $this->bookmarkRepository->search(
             userId:$this->userId,
             bookMarkToSearch:'',
             currentPage:1,
@@ -300,7 +302,7 @@ class BookMarkModelTest extends TestCase
         BookMark::factory()->count(5)->create(['user_id' => $anotherUsers[0]->id]);
         BookMark::factory()->count(5)->create(['user_id' => $anotherUsers[1]->id]);
 
-        $response = $this->bookmarkModel->searchBookMark(
+        $response = $this->bookmarkRepository->search(
             userId:$this->userId,
             bookMarkToSearch:'',
             currentPage:2,
@@ -345,7 +347,7 @@ class BookMarkModelTest extends TestCase
         BookMark::factory()->count(5)->create(['user_id' => $anotherUsers[0]->id]);
         BookMark::factory()->count(5)->create(['user_id' => $anotherUsers[1]->id]);
 
-        $response = $this->bookmarkModel->searchBookMark(
+        $response = $this->bookmarkRepository->search(
             userId:$this->userId,
             bookMarkToSearch:'',
             currentPage:1,
@@ -410,7 +412,7 @@ class BookMarkModelTest extends TestCase
         BookMark::factory()->count(5)->create(['user_id' => $anotherUsers[0]->id]);
         BookMark::factory()->count(5)->create(['user_id' => $anotherUsers[1]->id]);
 
-        $response = $this->bookmarkModel->searchBookMark(
+        $response = $this->bookmarkRepository->search(
             userId:$this->userId,
             bookMarkToSearch:"apple make",
             currentPage:1,
@@ -512,7 +514,7 @@ class BookMarkModelTest extends TestCase
         BookMark::where('id','=',$deleteBookMark->id)
         ->update(['deleted_at' => Carbon::now()]);
 
-        $response = $this->bookmarkModel->searchBookMark(
+        $response = $this->bookmarkRepository->search(
             userId:$this->userId,
             bookMarkToSearch:"",
             currentPage:1,
@@ -638,7 +640,7 @@ class BookMarkModelTest extends TestCase
         BookMark::where('id','=',$deleteBookMark->id)
         ->update(['deleted_at' => Carbon::now()]);
 
-        $response = $this->bookmarkModel->searchBookMark(
+        $response = $this->bookmarkRepository->search(
             userId:$this->userId,
             bookMarkToSearch:"make",
             currentPage:1,
@@ -689,7 +691,7 @@ class BookMarkModelTest extends TestCase
         BookMark::factory()->count(5)->create(['user_id' => $anotherUsers[0]->id]);
         BookMark::factory()->count(5)->create(['user_id' => $anotherUsers[1]->id]);
 
-        $response = $this->bookmarkModel->searchBookMark(
+        $response = $this->bookmarkRepository->search(
             userId:$this->userId,
             bookMarkToSearch:'',
             currentPage:1,
@@ -754,7 +756,7 @@ class BookMarkModelTest extends TestCase
         BookMark::factory()->count(5)->create(['user_id' => $anotherUsers[0]->id]);
         BookMark::factory()->count(5)->create(['user_id' => $anotherUsers[1]->id]);
 
-        $response = $this->bookmarkModel->searchBookMark(
+        $response = $this->bookmarkRepository->search(
             userId:$this->userId,
             bookMarkToSearch:"apple make",
             currentPage:1,
@@ -856,7 +858,7 @@ class BookMarkModelTest extends TestCase
         BookMark::where('id','=',$deleteBookMark->id)
         ->update(['deleted_at' => Carbon::now()]);
 
-        $response = $this->bookmarkModel->searchBookMark(
+        $response = $this->bookmarkRepository->search(
             userId:$this->userId,
             bookMarkToSearch:"",
             currentPage:1,
@@ -982,7 +984,7 @@ class BookMarkModelTest extends TestCase
         BookMark::where('id','=',$deleteBookMark->id)
         ->update(['deleted_at' => Carbon::now()]);
 
-        $response = $this->bookmarkModel->searchBookMark(
+        $response = $this->bookmarkRepository->search(
             userId:$this->userId,
             bookMarkToSearch:"make",
             currentPage:1,

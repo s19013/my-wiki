@@ -9,21 +9,35 @@ use Inertia\Inertia;
 use App\Models\ArticleTag;
 use App\Models\Article;
 
+use App\Repository\ArticleRepository;
+use App\Repository\ArticleTagRepository;
+
 use Auth;
 
 class ArticleTransitionController extends Controller
 {
 
+    public $articleRepository;
+    public $articleTagRepository;
+
+    public function __construct()
+    {
+        // ここではなぜか引数で実体化できなかった
+        // ArticleRepository $articleRepository,ArticleTagRepository $articleTagRepository
+        $this->articleRepository = new ArticleRepository();
+        $this->articleTagRepository = new ArticleTagRepository();
+    }
+
     // 記事の共通処理をまとめる
     public function commonProcessing($articleId)
     {
         //削除された記事ならExceptionを投げる
-        $isDeleted = Article::checkArticleDeleted(articleId:$articleId);
-        if ($isDeleted == true ) { throw new \Exception("illegal"); }
+        $isDeleted = $this->articleRepository->isDeleted(articleId:$articleId);
+        if ($isDeleted == true ) {throw new \Exception("illegal");}
 
         // 他人の記事を覗こうとしているならExceptionを投げる
-        $isSamePerson = Article::preventPeep(articleId:$articleId,userId:Auth::id());
-        if ($isSamePerson == false) { throw new \Exception("illegal"); }
+        $isSamePerson = $this->articleRepository->isSameUser(articleId:$articleId,userId:Auth::id());
+        if ($isSamePerson == false) {throw new \Exception("illegal");}
     }
 
 
@@ -31,6 +45,7 @@ class ArticleTransitionController extends Controller
     //記事閲覧画面に遷移する時の処理
     public function transitionToViewArticle($articleId)
     {
+
         try {
             $this->commonProcessing($articleId);
         } catch (\Exception $e) {
@@ -39,8 +54,8 @@ class ArticleTransitionController extends Controller
         }
 
         return Inertia::render('Article/ViewArticle',[
-            'article'        => Article::serveArticle(articleId:$articleId),
-            'articleTagList' => ArticleTag::serveTagsRelatedToArticle(
+            'article'        => $this->articleRepository->serve(articleId:$articleId),
+            'articleTagList' => $this->articleTagRepository->serveTagsRelatedToArticle(
                 userId:Auth::id(),
                 articleId:$articleId
             ),
@@ -58,8 +73,8 @@ class ArticleTransitionController extends Controller
         }
 
         return Inertia::render('Article/EditArticle',[
-            'originalArticle'        => Article::serveArticle(articleId:$articleId),
-            'originalCheckedTagList' => ArticleTag::serveTagsRelatedToArticle(
+            'originalArticle'        => $this->articleRepository->serve(articleId:$articleId),
+            'originalCheckedTagList' => $this->articleTagRepository->serveTagsRelatedToArticle(
                 userId:Auth::id(),
                 articleId:$articleId
             )

@@ -38,6 +38,9 @@ class ArticleControllerTest extends TestCase
         parent::setUp();
         // ユーザーを用意
         $this->user = User::factory()->create();
+
+        // carbonの時間固定
+        Carbon::setTestNow(Carbon::now());
     }
     /**
      * A basic feature test example.
@@ -57,16 +60,19 @@ class ArticleControllerTest extends TestCase
     // 条件
     // * タグあり
     // * タイトルあり
-    public function test_articleStore_タグあり_タイトルあり()
+    public function test_store_タグあり_タイトルあり()
     {
         $tags = Tag::factory()->count(2)->create(['user_id' => $this->user->id]);
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession([
+            'my_wiki_session' => 'test',
+            'XSRF-TOKEN' => 'test'
+        ])
         ->post('/api/article/store/',[
-            'articleTitle' => "testTitletest_articleStore_タグあり_タイトルあり",
-            'articleBody'  => "testBodytest_articleStore_タグあり_タイトルあり" ,
+            'articleTitle' => "testTitletest_store_タグあり_タイトルあり",
+            'articleBody'  => "testBodytest_store_タグあり_タイトルあり" ,
             'tagList'      => [$tags[0]->id,$tags[1]->id],
         ]);
 
@@ -77,15 +83,15 @@ class ArticleControllerTest extends TestCase
         // 記事
         $this->assertDatabaseHas('articles',[
             'user_id'=> $this->user->id,
-            'title' => "testTitletest_articleStore_タグあり_タイトルあり",
-            'body'  => "testBodytest_articleStore_タグあり_タイトルあり",
+            'title' => "testTitletest_store_タグあり_タイトルあり",
+            'body'  => "testBodytest_store_タグあり_タイトルあり",
             'deleted_at' => null,
         ]);
 
         $article = Article::select('id')
         ->where('user_id', '=' ,$this->user->id)
-        ->where('title','=',"testTitletest_articleStore_タグあり_タイトルあり")
-        ->where('body' ,'=',"testBodytest_articleStore_タグあり_タイトルあり" )
+        ->where('title','=',"testTitletest_store_タグあり_タイトルあり")
+        ->where('body' ,'=',"testBodytest_store_タグあり_タイトルあり" )
         ->first();
 
         $articleId = $article->id;
@@ -112,19 +118,19 @@ class ArticleControllerTest extends TestCase
     // 条件
     // * タグあり
     // * タイトルなし
-    public function test_articleStore_タグあり_タイトルなし()
+    public function test_store_タグあり_タイトルなし()
     {
-        // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
-
         $tags = Tag::factory()->count(2)->create(['user_id' => $this->user->id]);
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession([
+            'my_wiki_session' => 'test',
+            'XSRF-TOKEN' => 'test'
+        ])
         ->post('/api/article/store/',[
             'articleTitle' => "",
-            'articleBody'  => "testBodytest_articleStore_タグあり_タイトルなし" ,
+            'articleBody'  => "testBodytest_store_タグあり_タイトルなし" ,
             'tagList'      => [$tags[0]->id,$tags[1]->id],
         ]);
 
@@ -136,14 +142,14 @@ class ArticleControllerTest extends TestCase
         $this->assertDatabaseHas('articles',[
             'user_id'=> $this->user->id,
             'title'  => Carbon::now(),
-            'body'   => "testBodytest_articleStore_タグあり_タイトルなし",
+            'body'   => "testBodytest_store_タグあり_タイトルなし",
             'deleted_at' => null,
         ]);
 
         $article = Article::select('id')
         ->where('user_id', '=' ,$this->user->id)
         ->where('title','=',Carbon::now())
-        ->where('body' ,'=',"testBodytest_articleStore_タグあり_タイトルなし" )
+        ->where('body' ,'=',"testBodytest_store_タグあり_タイトルなし" )
         ->first();
 
         $articleId = $article->id;
@@ -165,14 +171,17 @@ class ArticleControllerTest extends TestCase
     // 条件
     // * タグあり
     // * タイトルなし
-    public function test_articleStore_タグなし_タイトルあり()
+    public function test_store_タグなし_タイトルあり()
     {
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession([
+            'my_wiki_session' => 'test',
+            'XSRF-TOKEN' => 'test'
+        ])
         ->post('/api/article/store/',[
-            'articleTitle' => "testTitletest_articleStore_タグなし_タイトルあり",
-            'articleBody'  => "testBodytest_articleStore_タグなし_タイトルあり" ,
+            'articleTitle' => "testTitletest_store_タグなし_タイトルあり",
+            'articleBody'  => "testBodytest_store_タグなし_タイトルあり" ,
             'tagList'      => null,
         ]);
 
@@ -183,15 +192,15 @@ class ArticleControllerTest extends TestCase
         // 記事
         $this->assertDatabaseHas('articles',[
             'user_id'=> $this->user->id,
-            'title'  => "testTitletest_articleStore_タグなし_タイトルあり",
-            'body'   => "testBodytest_articleStore_タグなし_タイトルあり",
+            'title'  => "testTitletest_store_タグなし_タイトルあり",
+            'body'   => "testBodytest_store_タグなし_タイトルあり",
             'deleted_at' => null,
         ]);
 
         $article = Article::select('id')
         ->where('user_id', '=' ,$this->user->id)
-        ->where('title','=',"testTitletest_articleStore_タグなし_タイトルあり")
-        ->where('body' ,'=',"testBodytest_articleStore_タグなし_タイトルあり" )
+        ->where('title','=',"testTitletest_store_タグなし_タイトルあり")
+        ->where('body' ,'=',"testBodytest_store_タグなし_タイトルあり" )
         ->first();
 
         $articleId = $article->id;
@@ -211,17 +220,18 @@ class ArticleControllerTest extends TestCase
     // 条件
     // * タグなし
     // * タイトルなし
-    public function test_articleStore_タグなし_タイトルなし()
+    public function test_store_タグなし_タイトルなし()
     {
-        // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession([
+            'my_wiki_session' => 'test',
+            'XSRF-TOKEN' => 'test'
+        ])
         ->post('/api/article/store/',[
             'articleTitle' => "",
-            'articleBody'  => "testBodytest_articleStore_タグなし_タイトルなし" ,
+            'articleBody'  => "testBodytest_store_タグなし_タイトルなし" ,
             'tagList'      => null,
         ]);
 
@@ -233,14 +243,14 @@ class ArticleControllerTest extends TestCase
         $this->assertDatabaseHas('articles',[
             'user_id'=> $this->user->id,
             'title'  => Carbon::now(),
-            'body'   => "testBodytest_articleStore_タグなし_タイトルなし",
+            'body'   => "testBodytest_store_タグなし_タイトルなし",
             'deleted_at' => null,
         ]);
 
         $article = Article::select('id')
         ->where('user_id', '=' ,$this->user->id)
         ->where('title','=',Carbon::now())
-        ->where('body' ,'=',"testBodytest_articleStore_タグなし_タイトルなし" )
+        ->where('body' ,'=',"testBodytest_store_タグなし_タイトルなし" )
         ->first();
 
         $articleId = $article->id;
@@ -260,10 +270,8 @@ class ArticleControllerTest extends TestCase
     // 条件
     // * もとの記事についていたタグをすべて外す
     // * 記事に別のタグを紐づける
-    public function test_articleUpdate_タグ総入れ替え()
+    public function test_Update_タグ総入れ替え()
     {
-        // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
 
         // 記事などを作成
         $article = Article::factory()->create(['user_id' => $this->user->id]);
@@ -281,7 +289,10 @@ class ArticleControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession([
+            'my_wiki_session' => 'test',
+            'XSRF-TOKEN' => 'test'
+        ])
         ->post('/api/article/update/',[
             'articleId'     => $article->id,
             'articleTitle'  => "更新titleタグ総入れ替え",
@@ -327,7 +338,7 @@ class ArticleControllerTest extends TestCase
     // * 新しく紐づけたタグのidがarticle_tagsテーブルに保存される
     // 条件
     // * 記事に別のタグを追加で紐づける
-    public function test_articleUpdate_元のタグをそのままに新しく追加()
+    public function test_Update_元のタグをそのままに新しく追加()
     {
         // 記事などを作成
         $article = Article::factory()->create(['user_id' => $this->user->id]);
@@ -345,7 +356,10 @@ class ArticleControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession([
+            'my_wiki_session' => 'test',
+            'XSRF-TOKEN' => 'test'
+        ])
         ->post('/api/article/update/',[
             'articleId'     => $article->id,
             'articleTitle'  => "更新title元のタグをそのままに新しく追加",
@@ -391,10 +405,8 @@ class ArticleControllerTest extends TestCase
     // * 新しく紐づけたタグのidがarticle_tagsテーブルに保存される
     // 条件
     // * つけているタグの一部を消す
-    public function test_articleUpdate_タグの一部を消す()
+    public function test_Update_タグの一部を消す()
     {
-        // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
 
         // 記事などを作成
         $article = Article::factory()->create(['user_id' => $this->user->id]);
@@ -411,7 +423,10 @@ class ArticleControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession([
+            'my_wiki_session' => 'test',
+            'XSRF-TOKEN' => 'test'
+        ])
         ->post('/api/article/update/',[
             'articleId'     => $article->id,
             'articleTitle'  => "更新titleタグ総入れ替え",
@@ -465,10 +480,8 @@ class ArticleControllerTest extends TestCase
     // * 新しく紐づけたタグのidがarticle_tagsテーブルに保存される
     // 条件
     // * タグがついてなかった記事にタグを付ける
-    public function test_articleUpdate_タグがついてなかった記事にタグを付ける()
+    public function test_Update_タグがついてなかった記事にタグを付ける()
     {
-        // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
 
         // 記事などを作成
         $article = Article::factory()->create(['user_id' => $this->user->id]);
@@ -483,7 +496,10 @@ class ArticleControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession([
+            'my_wiki_session' => 'test',
+            'XSRF-TOKEN' => 'test'
+        ])
         ->post('/api/article/update/',[
             'articleId'     => $article->id,
             'articleTitle'  => "更新titleタグがついてなかった記事にタグを付ける",
@@ -518,6 +534,54 @@ class ArticleControllerTest extends TestCase
             'article_id' => $article->id,
             'tag_id'     => null,
             'deleted_at' => Carbon::now(),
+        ]);
+    }
+
+    // 期待
+    // * 記事を削除できる
+    // 条件
+    public function test_delete_自分の記事を消す(){
+        $article = Article::factory()->create(['user_id' => $this->user->id]);
+        $response = $this
+        ->actingAs($this->user)
+        ->withSession([
+            'my_wiki_session' => 'test',
+            'XSRF-TOKEN' => 'test'
+        ])
+        ->delete('/api/article/'.$article->id);
+
+        $response->assertStatus(200);
+
+        //
+        $this->assertDatabaseHas('articles',[
+            'id' => $article->id,
+            'deleted_at' => Carbon::now(),
+        ]);
+    }
+
+    // 期待
+    // * 他人の記事を消そうとするがシステムに防がれる
+    // 条件
+    public function test_delete_他人の記事を消そうとするがシステムに防がれる(){
+
+        $otherUser = User::factory()->create();
+
+        $article = Article::factory()->create(['user_id' => $this->user->id]);
+
+        $response = $this
+        ->actingAs($otherUser)
+        ->withSession([
+            'my_wiki_session' => 'test',
+            'XSRF-TOKEN' => 'test'
+        ])
+        ->delete('/api/article/'.$article->id);
+
+        $response->assertStatus(200);
+
+        //
+        $this->assertDatabaseHas('articles',[
+            'id' => $article->id,
+            'deleted_at' => null,
         ]);
     }
 

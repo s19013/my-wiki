@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\model;
+namespace Tests\Unit\Repository;
 
 use Tests\TestCase;
 
@@ -9,6 +9,8 @@ use App\Models\Article;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+
+use App\Repository\ArticleTagRepository;
 
 //ファクトリーで使う
 use Illuminate\Database\Eloquent\Factories\Sequence;
@@ -19,12 +21,13 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 
 use Carbon\Carbon;
 
-class ArticleTagModelTest extends TestCase
+class ArticleTagRepositoryTest extends TestCase
 {
     // テストしたらリセットする
     use RefreshDatabase;
 
     private $articleTagModel;
+    private $articleTagRepository;
     private $userId;
     private $articleId;
 
@@ -34,7 +37,9 @@ class ArticleTagModelTest extends TestCase
     public function setup():void
     {
         parent::setUp();
-        $this->articleTagModel = new ArticleTag();
+        $this->articleTagRepository = new ArticleTag();
+        $this->articleTagRepository = new ArticleTagRepository();
+
 
         // ユーザーを用意
         $user = User::create([
@@ -71,14 +76,14 @@ class ArticleTagModelTest extends TestCase
     // 引数2に指定した記事に､引数1に指定したタグのIdをデータベースに保管する
     // 条件
     // 引数1には数字が渡される
-    public function test_storeArticleTag_タグをつけた場合()
+    public function test_store_タグをつけた場合()
     {
         $tag = Tag::create([
             'user_id' => $this->userId,
             'name'    => 'articleTagModelStoreTest',
         ]);
 
-        $this->articleTagModel->storeArticleTag($tag->id,$this->articleId);
+        $this->articleTagRepository->store($tag->id,$this->articleId);
 
         $this->assertDatabaseHas('article_tags',[
             'article_id' => $this->articleId,
@@ -90,9 +95,9 @@ class ArticleTagModelTest extends TestCase
     // 引数2に指定した記事に､引数1に指定したnullをデータベースに保管する
     // 条件
     // 引数1にはnullが渡される
-    public function test_storeArticleTag_タグをつけなかった場合()
+    public function test_store_タグをつけなかった場合()
     {
-        $this->articleTagModel->storeArticleTag(null,$this->articleId);
+        $this->articleTagRepository->store(null,$this->articleId);
 
         $this->assertDatabaseHas('article_tags',[
             'article_id' => $this->articleId,
@@ -102,7 +107,7 @@ class ArticleTagModelTest extends TestCase
 
     // 期待
     // 引数2に指定した記事から引数1に指定されたタグを論理削除する
-    public function test_deleteArticleTag_紐づけたタグを論理削除する()
+    public function test_delete_紐づけたタグを論理削除する()
     {
         Carbon::setTestNow(Carbon::now());
 
@@ -111,9 +116,9 @@ class ArticleTagModelTest extends TestCase
             'name'    => 'articleTagModelStoreTest',
         ]);
 
-        $this->articleTagModel->storeArticleTag($tag->id,$this->articleId);
+        $this->articleTagRepository->store($tag->id,$this->articleId);
 
-        $this->articleTagModel->deleteArticleTag($tag->id,$this->articleId);
+        $this->articleTagRepository->delete($tag->id,$this->articleId);
 
         $this->assertDatabaseHas('article_tags',[
             'article_id' => $this->articleId,
@@ -132,10 +137,10 @@ class ArticleTagModelTest extends TestCase
             'user_id' => $this->userId,
         ]);
 
-        foreach ($tags as $tag) { $this->articleTagModel->storeArticleTag($tag->id,$this->articleId); }
+        foreach ($tags as $tag) { $this->articleTagRepository->store($tag->id,$this->articleId); }
 
         // タグを取得
-        $articleTags = $this->articleTagModel->serveTagsRelatedToArticle($this->articleId,$this->userId);
+        $articleTags = $this->articleTagRepository->serveTagsRelatedToArticle($this->articleId,$this->userId);
 
         //名前とidが一緒かどうか
 
@@ -157,9 +162,9 @@ class ArticleTagModelTest extends TestCase
     // 登録時に何もタグをつけなかった
     public function test_serveTagsRelatedToArticle_登録時にタグを紐づけなかった場合()
     {
-        $this->articleTagModel->storeArticleTag(null,$this->articleId);
+        $this->articleTagRepository->store(null,$this->articleId);
 
-        $articleTags = $this->articleTagModel->serveTagsRelatedToArticle($this->articleId,$this->userId);
+        $articleTags = $this->articleTagRepository->serveTagsRelatedToArticle($this->articleId,$this->userId);
 
         //idがnull
         $this->assertSame($articleTags[0]->id,null);
@@ -168,7 +173,7 @@ class ArticleTagModelTest extends TestCase
     // 期待
     // 指定した記事についていたタグをすべて外して､新しく指定したタグを記事に紐づける
     // 古いタグは論理削除されている
-    public function test_updateArticleTag_記事についていたタグと新規のタグを入れ替える()
+    public function test_update_記事についていたタグと新規のタグを入れ替える()
     {
         // carbonの時間固定
         Carbon::setTestNow(Carbon::now());
@@ -177,7 +182,7 @@ class ArticleTagModelTest extends TestCase
         $tags = Tag::factory()->count(2)->create(['user_id' => $this->userId]);
 
         // 記事に紐づける
-        foreach($tags as $tag){ $this->articleTagModel->storeArticleTag($tag->id,$this->articleId); }
+        foreach($tags as $tag){ $this->articleTagRepository->store($tag->id,$this->articleId); }
 
         //----
 
@@ -185,7 +190,7 @@ class ArticleTagModelTest extends TestCase
         $newTags = Tag::factory()->count(2)->create(['user_id' => $this->userId]);
 
         //更新
-        $this->articleTagModel->updateArticleTag($this->articleId,[$newTags[0]->id,$newTags[1]->id]);
+        $this->articleTagRepository->update($this->articleId,[$newTags[0]->id,$newTags[1]->id]);
 
         // 更新前のデータ(ちゃんと消されたか確認する)
         foreach($tags as $tag){
@@ -209,12 +214,12 @@ class ArticleTagModelTest extends TestCase
     // 期待
     // 指定したタグが何もついてなかった記事に､新しく指定したタグを記事に紐づける
     // nullは論理削除されている
-    public function test_updateArticleTag_タグがついていなかった記事にタグをつける()
+    public function test_update_タグがついていなかった記事にタグをつける()
     {
         // carbonの時間固定
         Carbon::setTestNow(Carbon::now());
 
-        $this->articleTagModel->storeArticleTag(null,$this->articleId);
+        $this->articleTagRepository->store(null,$this->articleId);
 
         //----
 
@@ -222,7 +227,7 @@ class ArticleTagModelTest extends TestCase
         $newTags = Tag::factory()->count(2)->create(['user_id' => $this->userId]);
 
         //更新
-        $this->articleTagModel->updateArticleTag($this->articleId,[$newTags[0]->id,$newTags[1]->id]);
+        $this->articleTagRepository->update($this->articleId,[$newTags[0]->id,$newTags[1]->id]);
 
         // 更新前のデータ(ちゃんと消されたか確認する)
         $this->assertDatabaseHas('article_tags',[
@@ -243,12 +248,12 @@ class ArticleTagModelTest extends TestCase
 
     // 期待
     // 指定した記事についていたタグはそのままに新規のタグを追加
-    public function test_updateArticleTag_記事についていたタグはそのままに新規のタグを追加()
+    public function test_update_記事についていたタグはそのままに新規のタグを追加()
     {
         //更新前
         $tags = Tag::factory()->count(2)->create(['user_id' => $this->userId]);
 
-        foreach($tags as $tag){ $this->articleTagModel->storeArticleTag($tag->id,$this->articleId); }
+        foreach($tags as $tag){ $this->articleTagRepository->store($tag->id,$this->articleId); }
 
         //----
 
@@ -256,7 +261,7 @@ class ArticleTagModelTest extends TestCase
         $newTags = Tag::factory()->count(2)->create(['user_id' => $this->userId]);
 
         //更新
-        $this->articleTagModel->updateArticleTag($this->articleId,[$newTags[0]->id,$newTags[1]->id,$tags[0]->id,$tags[1]->id]);
+        $this->articleTagRepository->update($this->articleId,[$newTags[0]->id,$newTags[1]->id,$tags[0]->id,$tags[1]->id]);
 
         //取得したタグが新しく作ったタグになっているか確認
         // もともとつけていた部分
@@ -282,7 +287,7 @@ class ArticleTagModelTest extends TestCase
     // 期待
     // 指定した記事についていたタグを一部外して､新しく指定したタグを記事に紐づける
     // 古いタグは論理削除されている
-    public function test_updateArticleTag_記事についていたタグの一部を外す()
+    public function test_update_記事についていたタグの一部を外す()
     {
         // carbonの時間固定
         Carbon::setTestNow(Carbon::now());
@@ -290,14 +295,14 @@ class ArticleTagModelTest extends TestCase
         //更新前
         $tags = Tag::factory()->count(2)->create(['user_id' => $this->userId]);
 
-        foreach($tags as $tag){$this->articleTagModel->storeArticleTag($tag->id,$this->articleId);}
+        foreach($tags as $tag){$this->articleTagRepository->store($tag->id,$this->articleId);}
 
         //----
 
         $newTags = Tag::factory()->count(2)->create(['user_id' => $this->userId]);
 
         //更新
-        $this->articleTagModel->updateArticleTag($this->articleId,[$tags[1]->id,$newTags[0]->id,$newTags[1]->id]);
+        $this->articleTagRepository->update($this->articleId,[$tags[1]->id,$newTags[0]->id,$newTags[1]->id]);
 
         // けしたやつ
         $this->assertDatabaseHas('article_tags',[
@@ -328,10 +333,10 @@ class ArticleTagModelTest extends TestCase
         $tags = Tag::factory()->count(4)->create(['user_id' => $this->userId]);
 
         // 登録
-        foreach($tags as $tag){ $this->articleTagModel->storeArticleTag($tag->id,$this->articleId); }
+        foreach($tags as $tag){ $this->articleTagRepository->store($tag->id,$this->articleId); }
 
         // 取得
-        $articleTags = $this->articleTagModel->getOrignalTag($this->articleId);
+        $articleTags = $this->articleTagRepository->getOrignalTag($this->articleId);
 
         // print_r($articleTags);
 
@@ -350,10 +355,10 @@ class ArticleTagModelTest extends TestCase
     {
         $tags = Tag::factory()->count(4)->create(['user_id' => $this->userId]);
 
-        foreach ($tags as $tag){ $this->articleTagModel->storeArticleTag($tag->id,$this->articleId); }
+        foreach ($tags as $tag){ $this->articleTagRepository->store($tag->id,$this->articleId); }
 
-        $returnValue = $this->articleTagModel->procesOriginalArticleDoesNotHaveAnyTags(
-            originalTagList:$this->articleTagModel->getOrignalTag($this->articleId),
+        $returnValue = $this->articleTagRepository->procesOriginalArticleDoesNotHaveAnyTags(
+            originalTagList:$this->articleTagRepository->getOrignalTag($this->articleId),
             articleId:$this->articleId,
             updatedTagList:[$tags[0]->id,$tags[1]->id,$tags[2]->id,$tags[3]->id]
         );
@@ -383,12 +388,12 @@ class ArticleTagModelTest extends TestCase
         // carbonの時間固定
         Carbon::setTestNow(Carbon::now());
 
-        $this->articleTagModel->storeArticleTag(null,$this->articleId);
+        $this->articleTagRepository->store(null,$this->articleId);
 
         $tags = Tag::factory()->count(2)->create(['user_id' => $this->userId]);
 
-        $returnValue = $this->articleTagModel->procesOriginalArticleDoesNotHaveAnyTags(
-            originalTagList:$this->articleTagModel->getOrignalTag($this->articleId),
+        $returnValue = $this->articleTagRepository->procesOriginalArticleDoesNotHaveAnyTags(
+            originalTagList:$this->articleTagRepository->getOrignalTag($this->articleId),
             articleId:$this->articleId,
             updatedTagList:[$tags[0]->id,$tags[1]->id]
         );
@@ -416,10 +421,10 @@ class ArticleTagModelTest extends TestCase
         // carbonの時間固定
         Carbon::setTestNow(Carbon::now());
 
-        $this->articleTagModel->storeArticleTag(null,$this->articleId);
+        $this->articleTagRepository->store(null,$this->articleId);
 
-        $returnValue = $this->articleTagModel->procesOriginalArticleDoesNotHaveAnyTags(
-            originalTagList:$this->articleTagModel->getOrignalTag($this->articleId),
+        $returnValue = $this->articleTagRepository->procesOriginalArticleDoesNotHaveAnyTags(
+            originalTagList:$this->articleTagRepository->getOrignalTag($this->articleId),
             articleId:$this->articleId,
             updatedTagList:[]
         );
@@ -447,11 +452,11 @@ class ArticleTagModelTest extends TestCase
 
         $tags = Tag::factory()->count(4)->create(['user_id' => $this->userId]);
 
-        $this->articleTagModel->storeArticleTag($tags[0]->id,$this->articleId);
-        $this->articleTagModel->storeArticleTag($tags[1]->id,$this->articleId);
+        $this->articleTagRepository->store($tags[0]->id,$this->articleId);
+        $this->articleTagRepository->store($tags[1]->id,$this->articleId);
 
-        $returnValue = $this->articleTagModel->procesOriginalArticleDeleteAllTags(
-                originalTagList:$this->articleTagModel->getOrignalTag($this->articleId),
+        $returnValue = $this->articleTagRepository->procesOriginalArticleDeleteAllTags(
+                originalTagList:$this->articleTagRepository->getOrignalTag($this->articleId),
                 articleId:$this->articleId,
                 isAddedTagListEmpty:True,
                 deletedTagList:[$tags[0]->id,$tags[1]->id]
@@ -479,11 +484,11 @@ class ArticleTagModelTest extends TestCase
 
         $tags = Tag::factory()->count(4)->create(['user_id' => $this->userId]);
 
-        $this->articleTagModel->storeArticleTag($tags[0]->id,$this->articleId);
-        $this->articleTagModel->storeArticleTag($tags[1]->id,$this->articleId);
+        $this->articleTagRepository->store($tags[0]->id,$this->articleId);
+        $this->articleTagRepository->store($tags[1]->id,$this->articleId);
 
-        $returnValue = $this->articleTagModel->procesOriginalArticleDeleteAllTags(
-                originalTagList:$this->articleTagModel->getOrignalTag($this->articleId),
+        $returnValue = $this->articleTagRepository->procesOriginalArticleDeleteAllTags(
+                originalTagList:$this->articleTagRepository->getOrignalTag($this->articleId),
                 articleId:$this->articleId,
                 isAddedTagListEmpty:false,
                 deletedTagList:[$tags[0]->id,$tags[1]->id]
@@ -501,10 +506,10 @@ class ArticleTagModelTest extends TestCase
     // 元の記事にタグがついてない,追加タグなし
     public function test_procesOriginalArticleDeleteAllTags_追加タグなし_タグついてない()
     {
-        $this->articleTagModel->storeArticleTag(null,$this->articleId);
+        $this->articleTagRepository->store(null,$this->articleId);
 
-        $returnValue = $this->articleTagModel->procesOriginalArticleDeleteAllTags(
-                originalTagList:$this->articleTagModel->getOrignalTag($this->articleId),
+        $returnValue = $this->articleTagRepository->procesOriginalArticleDeleteAllTags(
+                originalTagList:$this->articleTagRepository->getOrignalTag($this->articleId),
                 articleId:$this->articleId,
                 isAddedTagListEmpty:true,
                 deletedTagList:[]
@@ -527,10 +532,10 @@ class ArticleTagModelTest extends TestCase
     // 元の記事にタグがついてない,追加タグなし
     public function test_procesOriginalArticleDeleteAllTags_追加タグあり_タグついてない()
     {
-        $this->articleTagModel->storeArticleTag(null,$this->articleId);
+        $this->articleTagRepository->store(null,$this->articleId);
 
-        $returnValue = $this->articleTagModel->procesOriginalArticleDeleteAllTags(
-                originalTagList:$this->articleTagModel->getOrignalTag($this->articleId),
+        $returnValue = $this->articleTagRepository->procesOriginalArticleDeleteAllTags(
+                originalTagList:$this->articleTagRepository->getOrignalTag($this->articleId),
                 articleId:$this->articleId,
                 isAddedTagListEmpty:false,
                 deletedTagList:[]

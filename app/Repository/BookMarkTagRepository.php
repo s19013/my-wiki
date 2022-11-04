@@ -1,24 +1,15 @@
 <?php
-
-namespace App\Models;
-
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+namespace App\Repository;
 
 use DB;
 use Carbon\Carbon;
 
-class BookMarkTag extends Model
-{
-    use HasFactory;
-    protected $guarded = [
-        'id',
-        'created_at',
-        'updated_at',
-    ];
+use App\Models\BookMarkTag;
 
+class BookMarkTagRepository
+{
     //ブックマークに紐付けらたタグを登録
-    public static function storeBookMarkTag($tagId,$bookMarkId)
+    public  function store($tagId,$bookMarkId)
     {
         DB::transaction(function () use($tagId,$bookMarkId){
             BookMarkTag::create([
@@ -29,7 +20,7 @@ class BookMarkTag extends Model
     }
 
     //ブックマークからはずされたタグを削除
-    public static function deleteBookMarkTag($tagId,$bookMarkId)
+    public  function delete($tagId,$bookMarkId)
     {
         DB::transaction(function () use($tagId,$bookMarkId){
             BookMarkTag::where('book_mark_id','=',$bookMarkId)
@@ -39,7 +30,7 @@ class BookMarkTag extends Model
     }
 
     //ブックマークに紐付けられているタグを更新
-    public static function updateBookMarkTag($bookMarkId,$updatedTagList)
+    public  function update($bookMarkId,$updatedTagList)
     {
         $originalTagList = []; //元データに紐付けられていたタグを入れるリスト
         $addedTagList    = [];
@@ -64,7 +55,7 @@ class BookMarkTag extends Model
         //追加
         if (!empty($addedTagList)) {
             foreach($addedTagList as $tag) {
-                BookMarkTag::storeBookMarkTag(
+                $this->store(
                     tagId:$tag,
                     bookMarkId:$bookMarkId,
                 );
@@ -74,7 +65,7 @@ class BookMarkTag extends Model
         //削除
         if (!empty($deletedTagList)) {
             foreach($deletedTagList as $tag) {
-                BookMarkTag::deleteBookMarkTag(
+                $this->delete(
                     tagId:$tag,
                     bookMarkId:$bookMarkId,
                 );
@@ -91,7 +82,7 @@ class BookMarkTag extends Model
     }
 
     // 更新前のブックマークに紐付けられていたタグを取得
-    public static function getOrignalTag($bookMarkId){
+    public  function getOrignalTag($bookMarkId){
         $temp = [];
 
         $original = BookMarkTag::select('tag_id')
@@ -100,13 +91,13 @@ class BookMarkTag extends Model
         ->get();
 
         //元のデータに紐付けられているタグを配列に入れる
-        foreach ($original as $tag){array_push($temp,$tag->original["tag_id"]);}
+        foreach ($original as $tag){array_push($temp,$tag->tag_id);}
 
         return $temp;
     }
 
     //元のブックマークにタグがついてない場合の処理
-    public static function procesOriginalBookMarkDoesNotHaveAnyTags($originalTagList,$bookMarkId,$updatedTagList)
+    public  function procesOriginalBookMarkDoesNotHaveAnyTags($originalTagList,$bookMarkId,$updatedTagList)
     {
         if (is_null($originalTagList[0])) {
             //元のブックマークにタグはついてないし､新しくタグも設定されていない場合
@@ -116,7 +107,7 @@ class BookMarkTag extends Model
                 // 更新前はブックマークにタグが1つもついていなくて
                 // 更新後にはタグが紐付けられていたら
                 // 更新前の$bookMarkIdのtag_idがnullのデータを論理削除
-                BookMarkTag::deleteBookMarkTag(
+                $this->delete(
                     tagId:null,
                     bookMarkId:$bookMarkId,
                 );
@@ -125,7 +116,7 @@ class BookMarkTag extends Model
     }
 
     //ブックマークのタグをすべて消した時の処理
-    public static function procesOriginalBookMarkDeleteAllTags($originalTagList,$bookMarkId,$isAddedTagListEmpty,$deletedTagList)
+    public  function procesOriginalBookMarkDeleteAllTags($originalTagList,$bookMarkId,$isAddedTagListEmpty,$deletedTagList)
     {
         // 紐付けられていたタグすべて削除されたのならtag_id = nullのデータをついか
         // もともとブックマークにタグがついていたかと,
@@ -134,7 +125,7 @@ class BookMarkTag extends Model
             //もともとついていたタグがすべてはずされたか確認
             $isAllDeleted = array_diff($originalTagList,$deletedTagList);
             if (empty($isAllDeleted)) {
-                BookMarkTag::storeBookMarkTag(
+                $this->store(
                     tagId:null,
                     bookMarkId:$bookMarkId,
                 );
@@ -143,7 +134,7 @@ class BookMarkTag extends Model
     }
 
     //ブックマークに関連付けられたタグを取得
-    public static function serveTagsRelatedToBookMark($bookMarkId,$userId)
+    public  function serveTagsRelatedToBookMark($bookMarkId,$userId)
     {
         // tagsターブルとくっつける
         // book_mark_tags.tag_id = tags.id

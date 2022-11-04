@@ -38,13 +38,13 @@ class TagControllerTest extends TestCase
     // 引数にしていした文字列をtagsテーブルに保存されるか
     // 条件
     // 指定したユーザーのタグ名がまだ登録されていない
-    public function test_tagStore_タグがまだ登録されていない()
+    public function test_store_タグがまだ登録されていない()
     {
         $response = $this
         ->actingAs($this->user)
         ->withSession(['test' => 'test'])
         ->post('/api/tag/store/',[
-            'tag' => "test_tagStore",
+            'tag' => "test_store",
         ]);
 
         // ステータス
@@ -54,7 +54,7 @@ class TagControllerTest extends TestCase
         // ブックマーク
         $this->assertDatabaseHas('tags',[
             'user_id'=> $this->user->id,
-            'name' => "test_tagStore",
+            'name' => "test_store",
             'deleted_at' => null,
         ]);
     }
@@ -63,7 +63,7 @@ class TagControllerTest extends TestCase
     // 400番エラーがかえされるか
     // 条件
     // 指定したユーザーが同じタグ名を登録しようとしている
-    public function test_tagStore_同じタグ名を登録しようとしている()
+    public function test_store_同じタグ名を登録しようとしている()
     {
         Tag::create([
             'name'    => 'test',
@@ -153,7 +153,7 @@ class TagControllerTest extends TestCase
     // * けしたタグは取ってこない
     // 条件
     // キーワードあり
-    public function test_tagSearch_キーワードあり()
+    public function test_search_キーワードあり()
     {
         //ダミーユーザー追加
         $anotherUsers = User::factory()->count(2)->create();
@@ -213,7 +213,7 @@ class TagControllerTest extends TestCase
     // * けしたタグは取ってこない
     // 条件
     // キーワードあり
-    public function test_tagSearch_キーワードなし()
+    public function test_search_キーワードなし()
     {
         //ダミーユーザー追加
         $anotherUsers = User::factory()->count(2)->create();
@@ -255,5 +255,53 @@ class TagControllerTest extends TestCase
 
         // 個数はあっているか
         $this->assertEquals(10, count($temp));
+    }
+
+    // 期待
+    // * タグを削除できる
+    // 条件
+    public function test_delete_自分のタグを消す(){
+        $tag = Tag::factory()->create(['user_id' => $this->user->id]);
+        $response = $this
+        ->actingAs($this->user)
+        ->withSession([
+            'my_wiki_session' => 'test',
+            'XSRF-TOKEN' => 'test'
+        ])
+        ->delete('/api/tag/'.$tag->id);
+
+        $response->assertStatus(200);
+
+        //
+        $this->assertDatabaseHas('tags',[
+            'id' => $tag->id,
+            'deleted_at' => Carbon::now(),
+        ]);
+    }
+
+    // 期待
+    // * 他人のタグを消そうとするがシステムに防がれる
+    // 条件
+    public function test_delete_他人のタグを消そうとするがシステムに防がれる(){
+
+        $otherUser = User::factory()->create();
+
+        $tag = Tag::factory()->create(['user_id' => $this->user->id]);
+
+        $response = $this
+        ->actingAs($otherUser)
+        ->withSession([
+            'my_wiki_session' => 'test',
+            'XSRF-TOKEN' => 'test'
+        ])
+        ->delete('/api/tag/'.$tag->id);
+
+        $response->assertStatus(200);
+
+        //
+        $this->assertDatabaseHas('tags',[
+            'id' => $tag->id,
+            'deleted_at' => null,
+        ]);
     }
 }

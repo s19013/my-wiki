@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::table('article_tags', function (Blueprint $table) {
             // 外部キー成約
             $table->foreign('article_id')->references('id')->on('articles');
-            // $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('tag_id')->references('id')->on('tags');
         });
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\model;
+namespace Tests\Unit\Repository;
 
 use Tests\TestCase;
 
@@ -12,20 +12,22 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 
+use App\Repository\TagRepository;
+
 use Carbon\Carbon;
 
-class TagModelTest extends TestCase
+class TagRepositoryTest extends TestCase
 {
     // テストしたらリセットする
     use RefreshDatabase;
 
-    private $tagModel;
+    private $TagRepository;
     private $userId;
 
     public function setup():void
     {
         parent::setUp();
-        $this->tagModel = new Tag();
+        $this->tagRepository = new TagRepository();
 
         // ユーザーを用意
         $user = User::create([
@@ -42,7 +44,7 @@ class TagModelTest extends TestCase
     // 引数2の文字列がデータベースに保存される
     public function test_store_一意のタグ()
     {
-        $this->assertTrue($this->tagModel->store($this->userId,"testTag"));
+        $this->assertTrue($this->tagRepository->store($this->userId,"testTag"));
 
         $this->assertDatabaseHas('tags',[
             'name'       => 'testTag',
@@ -61,7 +63,7 @@ class TagModelTest extends TestCase
             'user_id' => $this->userId
         ]);
 
-        $this->assertFalse($this->tagModel->store($this->userId,"testTag"));
+        $this->assertFalse($this->tagRepository->store($this->userId,"testTag"));
     }
 
     // 期待
@@ -75,7 +77,7 @@ class TagModelTest extends TestCase
         ] );
         Tag::factory()->count(5)->create( ["user_id" => $this->userId] );
 
-        $receivedTags = $this->tagModel->search($this->userId,"TestTag");
+        $receivedTags = $this->tagRepository->search($this->userId,"TestTag");
 
         //名前とidが一緒かどうか
         $IdList = [];
@@ -100,7 +102,7 @@ class TagModelTest extends TestCase
             'user_id' => $this->userId
         ]);
 
-        $this->assertTrue($this->tagModel->updateTag($this->userId,$tag->id,'afterUpdate'));
+        $this->assertTrue($this->tagRepository->update($this->userId,$tag->id,'afterUpdate'));
 
         $this->assertDatabaseHas('tags',[
             'name'       => 'afterUpdate',
@@ -126,12 +128,12 @@ class TagModelTest extends TestCase
             'user_id' => $this->userId
         ]);
 
-        $this->assertFalse($this->tagModel->updateTag($this->userId,$tag->id,'allready'));
+        $this->assertFalse($this->tagRepository->update($this->userId,$tag->id,'allready'));
     }
 
     // 期待
     // 指定したidのタグが論理削除される
-    public function test_deleteTag()
+    public function test_delete()
     {
         Carbon::setTestNow(Carbon::now());
 
@@ -139,7 +141,7 @@ class TagModelTest extends TestCase
             'user_id' => $this->userId
         ]);
 
-        $this->tagModel->deleteTag($tag->id);
+        $this->tagRepository->delete($tag->id);
 
         $this->assertDatabaseHas('tags',[
             'id'    => $tag->id,
@@ -153,9 +155,9 @@ class TagModelTest extends TestCase
     // 指定したユーザーが引数に渡された文字列"url"をすでに登録している
     public function test_isAllreadyExists_登録済み()
     {
-        $this->tagModel->store($this->userId,"isAllreadyExistsTestTag");
+        $this->tagRepository->store($this->userId,"isAllreadyExistsTestTag");
 
-        $this->assertTrue($this->tagModel->isAllreadyExists($this->userId,"isAllreadyExistsTestTag"));
+        $this->assertTrue($this->tagRepository->isAllreadyExists($this->userId,"isAllreadyExistsTestTag"));
     }
 
     // 期待
@@ -164,6 +166,6 @@ class TagModelTest extends TestCase
     // 指定したユーザーが引数に渡された文字列"url"をまだ登録していない
     public function test_isAllreadyExists_未登録()
     {
-        $this->assertFalse($this->tagModel->isAllreadyExists($this->userId,"isAllreadyExistsTestTag"));
+        $this->assertFalse($this->tagRepository->isAllreadyExists($this->userId,"isAllreadyExistsTestTag"));
     }
 }

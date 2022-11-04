@@ -32,24 +32,24 @@ Route::middleware('auth:sanctum', 'throttle:60,1')->group(function () {
     });
 
     Route::prefix('/tag')->group(function () {
-        Route::delete('/{tagId}' , [TagController::class,'tagDelete'])->name('api.tag.delete');
-        Route::post('/store'  , [TagController::class,'tagStore']);
-        Route::post('/update' , [TagController::class,'tagUpdate']);
-        Route::post('/search' , [TagController::class,'tagSearch']);
+        Route::delete('/{tagId}' , [TagController::class,'delete'])->name('api.tag.delete');
+        Route::post('/store'  , [TagController::class,'store']);
+        Route::post('/update' , [TagController::class,'update']);
+        Route::post('/search' , [TagController::class,'search']);
     });
 
     Route::prefix('/article')->group(function () {
-        Route::post('/store'  , [ArticleController::class,'articleStore']);
-        Route::post('/update' , [ArticleController::class,'articleUpdate']);
-        Route::delete('/{articleId}' , [ArticleController::class,'articleDelete'])->name('api.article.delete');
-        Route::post('/search' , [ArticleController::class,'articleSearch']);
+        Route::post('/store'  , [ArticleController::class,'store']);
+        Route::post('/update' , [ArticleController::class,'update']);
+        Route::delete('/{articleId}' , [ArticleController::class,'delete'])->name('api.article.delete');
+        Route::post('/search' , [ArticleController::class,'search']);
     });
 
     Route::prefix('/bookmark')->group(function () {
-        Route::post('/store'  , [BookMarkController::class,'bookMarkStore']);
-        Route::post('/update' , [BookMarkController::class,'bookMarkUpdate']);
-        Route::delete('/{bookMarkId}' , [BookMarkController::class,'bookMarkDelete'])->name('api.bookMark.delete');
-        Route::post('/search' , [BookMarkController::class,'bookMarkSearch']);
+        Route::post('/store'  , [BookMarkController::class,'store']);
+        Route::post('/update' , [BookMarkController::class,'update']);
+        Route::delete('/{bookMarkId}' , [BookMarkController::class,'delete'])->name('api.bookMark.delete');
+        Route::post('/search' , [BookMarkController::class,'search']);
     });
 });
 

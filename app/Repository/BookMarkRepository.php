@@ -1,25 +1,16 @@
 <?php
-
-namespace App\Models;
-
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+namespace App\Repository;
 
 use DB;
 use Carbon\Carbon;
 use App\Tools\searchToolKit;
 
-class BookMark extends Model
-{
-    use HasFactory;
-    protected $guarded = [
-        'id',
-        'created_at',
-        'updated_at',
-    ];
+use App\Models\BookMark;
 
+class BookMarkRepository
+{
     //新規ブックマーク作成
-    public static function storeBookMark($title,$url,$userId)
+    public  function store($title,$url,$userId)
     {
         // タイトルが産められてなかったら日時で埋める
         if ($title == '') { $title = Carbon::now() ;}
@@ -35,7 +26,7 @@ class BookMark extends Model
     }
 
     //ブックマーク更新
-    public static function updateBookMark($bookMarkId,$title,$url)
+    public  function update($bookMarkId,$title,$url)
     {
         // タイトルが産められてなかったら日時で埋める
         if ($title == '') { $title = Carbon::now() ;}
@@ -50,7 +41,7 @@ class BookMark extends Model
     }
 
     //ブックマーク削除
-    public static function deleteBookMark($bookMarkId)
+    public  function delete($bookMarkId)
     {
         // 論理削除
         DB::transaction(function () use($bookMarkId){
@@ -62,14 +53,14 @@ class BookMark extends Model
 
     //指定された記事だけを取ってくる
     //編集画面で使う
-    public static function serveBookMark($bookMarkId)
+    public  function serve($bookMarkId)
     {
         return BookMark::select('*')
         ->Where('id','=',$bookMarkId)
         ->first();
     }
 
-    public static function searchBookMark($userId,$bookMarkToSearch,$currentPage,$tagList,$searchTarget)
+    public  function search($userId,$bookMarkToSearch,$currentPage,$tagList,$searchTarget)
     {
         // ツールを実体化
         $searchToolKit = new searchToolKit();
@@ -130,7 +121,7 @@ class BookMark extends Model
     }
 
     //検索時のサブテーブル作成
-    public static function createSubTableForSearch($userId,$tagList)
+    public  function createSubTableForSearch($userId,$tagList)
     {
         //articleテーブルとarticle_tags,tagsを結合
         $subTable = DB::table('book_mark_tags')
@@ -156,7 +147,7 @@ class BookMark extends Model
     }
 
     // 削除済みか確かめる
-    public static function checkBookMarkDeleted($bookMarkId)
+    public  function isDeleted($bookMarkId)
     {
         //削除されていないなら 記事のデータが帰ってくるはず
         //つまり帰り値がnullなら削除済みということ
@@ -170,21 +161,22 @@ class BookMark extends Model
         else {return false;}
     }
 
-    //他人の覗こうとしてないか確かめる
-    public static function preventPeep($bookMarkId,$userId)
+    //ログインユーザーのブックマークかどうか確認する
+    public  function isSameUser($bookMarkId,$userId)
     {
         $bookMark = BookMark::select('user_id')
         ->whereNull('deleted_at')
         ->where('id','=',$bookMarkId)
         ->first();
 
-        //記事に紐づけられているuserIdとログイン中のユーザーのidを比較する
-        // falseなら他人のを覗こうとしている
-        return ($bookMark->original['user_id']) == $userId ;
+        //ブックマークに紐づけられているuserIdとログイン中のユーザーのidを比較する
+        // true :自分のを覗こうとしている
+        // false:他人のを覗こうとしている
+        return ($bookMark->user_id) == $userId ;
     }
 
     // ログインユーザーが既に登録していないか確かめる
-    public static function  isAllreadyExists($userId,$url)
+    public  function  isAllreadyExists($userId,$url)
     {
         return $url_exists = BookMark::where('user_id','=',$userId)
         ->where('url','=',$url)
