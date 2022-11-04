@@ -63,7 +63,10 @@ class ArticleControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession([
+            'my_wiki_session' => 'test',
+            'XSRF-TOKEN' => 'test'
+        ])
         ->post('/api/article/store/',[
             'articleTitle' => "testTitletest_articleStore_タグあり_タイトルあり",
             'articleBody'  => "testBodytest_articleStore_タグあり_タイトルあり" ,
@@ -121,7 +124,10 @@ class ArticleControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession([
+            'my_wiki_session' => 'test',
+            'XSRF-TOKEN' => 'test'
+        ])
         ->post('/api/article/store/',[
             'articleTitle' => "",
             'articleBody'  => "testBodytest_articleStore_タグあり_タイトルなし" ,
@@ -169,7 +175,10 @@ class ArticleControllerTest extends TestCase
     {
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession([
+            'my_wiki_session' => 'test',
+            'XSRF-TOKEN' => 'test'
+        ])
         ->post('/api/article/store/',[
             'articleTitle' => "testTitletest_articleStore_タグなし_タイトルあり",
             'articleBody'  => "testBodytest_articleStore_タグなし_タイトルあり" ,
@@ -218,7 +227,10 @@ class ArticleControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession([
+            'my_wiki_session' => 'test',
+            'XSRF-TOKEN' => 'test'
+        ])
         ->post('/api/article/store/',[
             'articleTitle' => "",
             'articleBody'  => "testBodytest_articleStore_タグなし_タイトルなし" ,
@@ -281,7 +293,10 @@ class ArticleControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession([
+            'my_wiki_session' => 'test',
+            'XSRF-TOKEN' => 'test'
+        ])
         ->post('/api/article/update/',[
             'articleId'     => $article->id,
             'articleTitle'  => "更新titleタグ総入れ替え",
@@ -345,7 +360,10 @@ class ArticleControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession([
+            'my_wiki_session' => 'test',
+            'XSRF-TOKEN' => 'test'
+        ])
         ->post('/api/article/update/',[
             'articleId'     => $article->id,
             'articleTitle'  => "更新title元のタグをそのままに新しく追加",
@@ -411,7 +429,10 @@ class ArticleControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession([
+            'my_wiki_session' => 'test',
+            'XSRF-TOKEN' => 'test'
+        ])
         ->post('/api/article/update/',[
             'articleId'     => $article->id,
             'articleTitle'  => "更新titleタグ総入れ替え",
@@ -483,7 +504,10 @@ class ArticleControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession([
+            'my_wiki_session' => 'test',
+            'XSRF-TOKEN' => 'test'
+        ])
         ->post('/api/article/update/',[
             'articleId'     => $article->id,
             'articleTitle'  => "更新titleタグがついてなかった記事にタグを付ける",
