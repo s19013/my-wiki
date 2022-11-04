@@ -22,7 +22,7 @@ class TagController extends Controller
     public function store(Request $request)
     {
         // CSRFトークンを再生成して、二重送信対策
-        //$request->session()->regenerateToken();
+        $request->session()->regenerateToken();
 
         $result = $this->tagRepository->store(
             userId:Auth::id(),
@@ -47,7 +47,7 @@ class TagController extends Controller
     public function update(Request $request)
     {
         // CSRFトークンを再生成して、二重送信対策
-        //$request->session()->regenerateToken();
+        $request->session()->regenerateToken();
 
         $result = $this->tagRepository->update(
             userId:Auth::id(),
@@ -71,9 +71,14 @@ class TagController extends Controller
         );
     }
 
-    public function delete()
+    public function delete($tagId)
     {
-        $this->tagRepository->delete(tagId :$request->id);
+        if ($this->tagRepository->isSameUser(
+            tagId:$tagId,
+            userId:Auth::id()))
+        {
+            $this->tagRepository->delete($tagId);
+        }
     }
 
 
