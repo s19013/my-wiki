@@ -23,10 +23,10 @@ class BookMarkController extends Controller
     }
 
     //新規ブックマーク作成
-    public function bookMarkStore(Request $request)
+    public function store(Request $request)
     {
         // CSRFトークンを再生成して、二重送信対策
-        //$request->session()->regenerateToken();
+        $request->session()->regenerateToken();
 
         //urlがすでに登録されているか確かめる
         $isAllreadyExists =$this->bookMarkRepository->isAllreadyExists(Auth::id(),$request->bookMarkUrl);
@@ -63,10 +63,10 @@ class BookMarkController extends Controller
     }
 
     //ブックマークの更新
-    public function bookMarkUpdate(Request $request)
+    public function update(Request $request)
     {
         // CSRFトークンを再生成して、二重送信対策
-        //$request->session()->regenerateToken();
+        $request->session()->regenerateToken();
 
         //ブックマークの更新
         $this->bookMarkRepository->update(
@@ -83,7 +83,7 @@ class BookMarkController extends Controller
     }
 
     //ブックマーク検索
-    public function bookMarkSearch(Request $request)
+    public function search(Request $request)
     {
         $result = $this->bookMarkRepository->search(
             userId:Auth::id(),
@@ -96,7 +96,7 @@ class BookMarkController extends Controller
         return response()->json($result,200);
     }
 
-    public function bookMarkDelete($bookMarkId)
+    public function delete($bookMarkId)
     {
         // CSRFトークンを再生成して、二重送信対策
         // deleteリクエストならここの部分が必要ない?
@@ -104,15 +104,4 @@ class BookMarkController extends Controller
 
         $this->bookMarkRepository->delete(bookMarkId:$bookMarkId);
     }
-
-    // 編集か新規かを分ける
-    // public function DetermineProcessing(Request $request)
-    // {
-    //     //新規
-    //     if ($request->bookmarkId == 0) { $this->bookmarkStore($request); }
-    //     // 編集
-    //     else {
-    //         $this->articleUpdate($request);
-    //     }
-    // }
 }

@@ -272,7 +272,7 @@ class ArticleControllerTest extends TestCase
     // 条件
     // * もとの記事についていたタグをすべて外す
     // * 記事に別のタグを紐づける
-    public function test_articleUpdate_タグ総入れ替え()
+    public function test_Update_タグ総入れ替え()
     {
         // carbonの時間固定
         Carbon::setTestNow(Carbon::now());
@@ -342,7 +342,7 @@ class ArticleControllerTest extends TestCase
     // * 新しく紐づけたタグのidがarticle_tagsテーブルに保存される
     // 条件
     // * 記事に別のタグを追加で紐づける
-    public function test_articleUpdate_元のタグをそのままに新しく追加()
+    public function test_Update_元のタグをそのままに新しく追加()
     {
         // 記事などを作成
         $article = Article::factory()->create(['user_id' => $this->user->id]);
@@ -409,7 +409,7 @@ class ArticleControllerTest extends TestCase
     // * 新しく紐づけたタグのidがarticle_tagsテーブルに保存される
     // 条件
     // * つけているタグの一部を消す
-    public function test_articleUpdate_タグの一部を消す()
+    public function test_Update_タグの一部を消す()
     {
         // carbonの時間固定
         Carbon::setTestNow(Carbon::now());
@@ -486,7 +486,7 @@ class ArticleControllerTest extends TestCase
     // * 新しく紐づけたタグのidがarticle_tagsテーブルに保存される
     // 条件
     // * タグがついてなかった記事にタグを付ける
-    public function test_articleUpdate_タグがついてなかった記事にタグを付ける()
+    public function test_Update_タグがついてなかった記事にタグを付ける()
     {
         // carbonの時間固定
         Carbon::setTestNow(Carbon::now());
@@ -543,6 +543,20 @@ class ArticleControllerTest extends TestCase
             'tag_id'     => null,
             'deleted_at' => Carbon::now(),
         ]);
+    }
+
+    // 期待
+    // * タイトル､本文が更新されている
+    // * もとの記事のtag_id = null のデータを論理削除
+    // * 新しく紐づけたタグのidがarticle_tagsテーブルに保存される
+    // 条件
+    // * タグがついてなかった記事にタグを付ける
+    public function test_delete_自分の記事を消す(){
+
+    }
+
+    public function test_delete_他人の記事を消そうとするがシステムに防がれる(){
+
     }
 
 }
