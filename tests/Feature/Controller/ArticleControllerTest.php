@@ -57,7 +57,7 @@ class ArticleControllerTest extends TestCase
     // 条件
     // * タグあり
     // * タイトルあり
-    public function test_articleStore_タグあり_タイトルあり()
+    public function test_store_タグあり_タイトルあり()
     {
         $tags = Tag::factory()->count(2)->create(['user_id' => $this->user->id]);
 
@@ -68,8 +68,8 @@ class ArticleControllerTest extends TestCase
             'XSRF-TOKEN' => 'test'
         ])
         ->post('/api/article/store/',[
-            'articleTitle' => "testTitletest_articleStore_タグあり_タイトルあり",
-            'articleBody'  => "testBodytest_articleStore_タグあり_タイトルあり" ,
+            'articleTitle' => "testTitletest_store_タグあり_タイトルあり",
+            'articleBody'  => "testBodytest_store_タグあり_タイトルあり" ,
             'tagList'      => [$tags[0]->id,$tags[1]->id],
         ]);
 
@@ -80,15 +80,15 @@ class ArticleControllerTest extends TestCase
         // 記事
         $this->assertDatabaseHas('articles',[
             'user_id'=> $this->user->id,
-            'title' => "testTitletest_articleStore_タグあり_タイトルあり",
-            'body'  => "testBodytest_articleStore_タグあり_タイトルあり",
+            'title' => "testTitletest_store_タグあり_タイトルあり",
+            'body'  => "testBodytest_store_タグあり_タイトルあり",
             'deleted_at' => null,
         ]);
 
         $article = Article::select('id')
         ->where('user_id', '=' ,$this->user->id)
-        ->where('title','=',"testTitletest_articleStore_タグあり_タイトルあり")
-        ->where('body' ,'=',"testBodytest_articleStore_タグあり_タイトルあり" )
+        ->where('title','=',"testTitletest_store_タグあり_タイトルあり")
+        ->where('body' ,'=',"testBodytest_store_タグあり_タイトルあり" )
         ->first();
 
         $articleId = $article->id;
@@ -115,7 +115,7 @@ class ArticleControllerTest extends TestCase
     // 条件
     // * タグあり
     // * タイトルなし
-    public function test_articleStore_タグあり_タイトルなし()
+    public function test_store_タグあり_タイトルなし()
     {
         // carbonの時間固定
         Carbon::setTestNow(Carbon::now());
@@ -130,7 +130,7 @@ class ArticleControllerTest extends TestCase
         ])
         ->post('/api/article/store/',[
             'articleTitle' => "",
-            'articleBody'  => "testBodytest_articleStore_タグあり_タイトルなし" ,
+            'articleBody'  => "testBodytest_store_タグあり_タイトルなし" ,
             'tagList'      => [$tags[0]->id,$tags[1]->id],
         ]);
 
@@ -142,14 +142,14 @@ class ArticleControllerTest extends TestCase
         $this->assertDatabaseHas('articles',[
             'user_id'=> $this->user->id,
             'title'  => Carbon::now(),
-            'body'   => "testBodytest_articleStore_タグあり_タイトルなし",
+            'body'   => "testBodytest_store_タグあり_タイトルなし",
             'deleted_at' => null,
         ]);
 
         $article = Article::select('id')
         ->where('user_id', '=' ,$this->user->id)
         ->where('title','=',Carbon::now())
-        ->where('body' ,'=',"testBodytest_articleStore_タグあり_タイトルなし" )
+        ->where('body' ,'=',"testBodytest_store_タグあり_タイトルなし" )
         ->first();
 
         $articleId = $article->id;
@@ -171,7 +171,7 @@ class ArticleControllerTest extends TestCase
     // 条件
     // * タグあり
     // * タイトルなし
-    public function test_articleStore_タグなし_タイトルあり()
+    public function test_store_タグなし_タイトルあり()
     {
         $response = $this
         ->actingAs($this->user)
@@ -180,8 +180,8 @@ class ArticleControllerTest extends TestCase
             'XSRF-TOKEN' => 'test'
         ])
         ->post('/api/article/store/',[
-            'articleTitle' => "testTitletest_articleStore_タグなし_タイトルあり",
-            'articleBody'  => "testBodytest_articleStore_タグなし_タイトルあり" ,
+            'articleTitle' => "testTitletest_store_タグなし_タイトルあり",
+            'articleBody'  => "testBodytest_store_タグなし_タイトルあり" ,
             'tagList'      => null,
         ]);
 
@@ -192,15 +192,15 @@ class ArticleControllerTest extends TestCase
         // 記事
         $this->assertDatabaseHas('articles',[
             'user_id'=> $this->user->id,
-            'title'  => "testTitletest_articleStore_タグなし_タイトルあり",
-            'body'   => "testBodytest_articleStore_タグなし_タイトルあり",
+            'title'  => "testTitletest_store_タグなし_タイトルあり",
+            'body'   => "testBodytest_store_タグなし_タイトルあり",
             'deleted_at' => null,
         ]);
 
         $article = Article::select('id')
         ->where('user_id', '=' ,$this->user->id)
-        ->where('title','=',"testTitletest_articleStore_タグなし_タイトルあり")
-        ->where('body' ,'=',"testBodytest_articleStore_タグなし_タイトルあり" )
+        ->where('title','=',"testTitletest_store_タグなし_タイトルあり")
+        ->where('body' ,'=',"testBodytest_store_タグなし_タイトルあり" )
         ->first();
 
         $articleId = $article->id;
@@ -220,7 +220,7 @@ class ArticleControllerTest extends TestCase
     // 条件
     // * タグなし
     // * タイトルなし
-    public function test_articleStore_タグなし_タイトルなし()
+    public function test_store_タグなし_タイトルなし()
     {
         // carbonの時間固定
         Carbon::setTestNow(Carbon::now());
@@ -233,7 +233,7 @@ class ArticleControllerTest extends TestCase
         ])
         ->post('/api/article/store/',[
             'articleTitle' => "",
-            'articleBody'  => "testBodytest_articleStore_タグなし_タイトルなし" ,
+            'articleBody'  => "testBodytest_store_タグなし_タイトルなし" ,
             'tagList'      => null,
         ]);
 
@@ -245,14 +245,14 @@ class ArticleControllerTest extends TestCase
         $this->assertDatabaseHas('articles',[
             'user_id'=> $this->user->id,
             'title'  => Carbon::now(),
-            'body'   => "testBodytest_articleStore_タグなし_タイトルなし",
+            'body'   => "testBodytest_store_タグなし_タイトルなし",
             'deleted_at' => null,
         ]);
 
         $article = Article::select('id')
         ->where('user_id', '=' ,$this->user->id)
         ->where('title','=',Carbon::now())
-        ->where('body' ,'=',"testBodytest_articleStore_タグなし_タイトルなし" )
+        ->where('body' ,'=',"testBodytest_store_タグなし_タイトルなし" )
         ->first();
 
         $articleId = $article->id;

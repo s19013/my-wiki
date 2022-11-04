@@ -39,10 +39,10 @@ Route::middleware('auth:sanctum', 'throttle:60,1')->group(function () {
     });
 
     Route::prefix('/article')->group(function () {
-        Route::post('/store'  , [ArticleController::class,'articleStore']);
-        Route::post('/update' , [ArticleController::class,'articleUpdate']);
-        Route::delete('/{articleId}' , [ArticleController::class,'articleDelete'])->name('api.article.delete');
-        Route::post('/search' , [ArticleController::class,'articleSearch']);
+        Route::post('/store'  , [ArticleController::class,'store']);
+        Route::post('/update' , [ArticleController::class,'update']);
+        Route::delete('/{articleId}' , [ArticleController::class,'delete'])->name('api.article.delete');
+        Route::post('/search' , [ArticleController::class,'search']);
     });
 
     Route::prefix('/bookmark')->group(function () {
