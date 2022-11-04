@@ -10,6 +10,7 @@ use App\Models\ArticleTag;
 use App\Models\Article;
 
 use App\Repository\ArticleRepository;
+use App\Repository\ArticleTagRepository;
 
 use Auth;
 
@@ -17,10 +18,12 @@ class ArticleTransitionController extends Controller
 {
 
     public $articleRepository;
+    public $articleTagRepository;
 
-    public function __construct(ArticleRepository $articleRepository)
+    public function __construct(ArticleRepository $articleRepository,ArticleTagRepository $articleTagRepository)
     {
         $this->articleRepository = $articleRepository;
+        $this->articleTagRepository = $articleTagRepository;
     }
 
     // 記事の共通処理をまとめる
@@ -50,7 +53,7 @@ class ArticleTransitionController extends Controller
 
         return Inertia::render('Article/ViewArticle',[
             'article'        => $this->articleRepository->serve(articleId:$articleId),
-            'articleTagList' => ArticleTag::serveTagsRelatedToArticle(
+            'articleTagList' => $this->articleTagRepository->serveTagsRelatedToArticle(
                 userId:Auth::id(),
                 articleId:$articleId
             ),
@@ -69,7 +72,7 @@ class ArticleTransitionController extends Controller
 
         return Inertia::render('Article/EditArticle',[
             'originalArticle'        => $this->articleRepository->serve(articleId:$articleId),
-            'originalCheckedTagList' => ArticleTag::serveTagsRelatedToArticle(
+            'originalCheckedTagList' => $this->articleTagRepository->serveTagsRelatedToArticle(
                 userId:Auth::id(),
                 articleId:$articleId
             )
