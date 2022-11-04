@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
+use Inertia\Inertia;
 
 use App\Models\ArticleTag;
 use App\Models\Article;
@@ -81,7 +82,12 @@ class ArticleController extends Controller
         // deleteリクエストならここの部分が必要ない?
         // //$request->session()->regenerateToken();
 
-        $this->articleRepository->delete(articleId:$articleId);
+        if ($this->articleRepository->isSameUser(
+                articleId:$articleId,
+                userId:Auth::id()))
+        {
+            $this->articleRepository->delete(articleId:$articleId);
+        }
     }
 
     //記事検索
