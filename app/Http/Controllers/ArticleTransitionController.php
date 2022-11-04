@@ -20,10 +20,12 @@ class ArticleTransitionController extends Controller
     public $articleRepository;
     public $articleTagRepository;
 
-    public function __construct(ArticleRepository $articleRepository,ArticleTagRepository $articleTagRepository)
+    public function __construct()
     {
-        $this->articleRepository = $articleRepository;
-        $this->articleTagRepository = $articleTagRepository;
+        // ここではなぜか引数で実体化できなかった
+        // ArticleRepository $articleRepository,ArticleTagRepository $articleTagRepository
+        $this->articleRepository = new ArticleRepository();
+        $this->articleTagRepository = new ArticleTagRepository();
     }
 
     // 記事の共通処理をまとめる
