@@ -46,10 +46,10 @@ Route::middleware('auth:sanctum', 'throttle:60,1')->group(function () {
     });
 
     Route::prefix('/bookmark')->group(function () {
-        Route::post('/store'  , [BookMarkController::class,'bookMarkStore']);
-        Route::post('/update' , [BookMarkController::class,'bookMarkUpdate']);
-        Route::delete('/{bookMarkId}' , [BookMarkController::class,'bookMarkDelete'])->name('api.bookMark.delete');
-        Route::post('/search' , [BookMarkController::class,'bookMarkSearch']);
+        Route::post('/store'  , [BookMarkController::class,'store']);
+        Route::post('/update' , [BookMarkController::class,'update']);
+        Route::delete('/{bookMarkId}' , [BookMarkController::class,'delete'])->name('api.bookMark.delete');
+        Route::post('/search' , [BookMarkController::class,'search']);
     });
 });
 
