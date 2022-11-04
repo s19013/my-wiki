@@ -180,25 +180,25 @@ class ArticleRepositoryTest extends TestCase
     }
 
     // 期待
-    // 関数preventPeepの帰り値がTrueである
+    // 関数isSameUserの帰り値がTrueである
     // 条件
     // 指定した記事が指定したユーザーが作った記事であった場合
-    public function test_preventPeep_同一人物()
+    public function test_isSameUser_同一人物()
     {
         $article = Article::factory()->create(['user_id' => $this->userId]);
 
-        $this->assertTrue($this->articleRepository->preventPeep($article->id,$this->userId));
+        $this->assertTrue($this->articleRepository->isSameUser($article->id,$this->userId));
     }
 
     // 期待
-    // 関数preventPeepの帰り値がFalseである
+    // 関数isSameUserの帰り値がFalseである
     // 条件
     // 指定した記事が指定したユーザー以外が作った記事だった場合
-    public function test_preventPeep_不正()
+    public function test_isSameUser_不正()
     {
         $article = Article::factory()->create(['user_id' => $this->userId]);
 
-        $this->assertFalse($this->articleRepository->preventPeep($article->id,$this->userId + 100));
+        $this->assertFalse($this->articleRepository->isSameUser($article->id,$this->userId + 100));
     }
 
     // 期待
