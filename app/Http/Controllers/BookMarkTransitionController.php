@@ -9,22 +9,31 @@ use Inertia\Inertia;
 use App\Models\BookMark;
 use App\Models\BookMarkTag;
 
+use App\Repository\BookMarkRepository;
+
 use Auth;
 
 class BookMarkTransitionController extends Controller
 {
+    private $bookMarkRepository;
+
+    public function __construct()
+    {
+        $this->bookMarkRepository = new BookMarkRepository();
+    }
+
     //ブックマーク編集画面に遷移する時の処理
     public function transitionToEditBookMark($bookMarkId)
     {
         //削除された記事ならindexに戻す
-        $isDeleted = BookMark::checkBookMarkDeleted(bookMarkId:$bookMarkId);
+        $isDeleted = $this->bookMarkRepository->isDeleted(bookMarkId:$bookMarkId);
         if ($isDeleted == true ) { return redirect()->route('SearchBookMark'); }
 
         // 他人の記事を覗こうとしているならindexに戻す
-        $isSamePerson = BookMark::preventPeep(bookMarkId:$bookMarkId,userId:Auth::id());
+        $isSamePerson = $this->bookMarkRepository->preventPeep(bookMarkId:$bookMarkId,userId:Auth::id());
         if ($isSamePerson == false) { return redirect()->route('SearchBookMark'); }
 
-        $bookMark = BookMark::serveBookMark(bookMarkId:$bookMarkId);
+        $bookMark = $this->bookMarkRepository->serve(bookMarkId:$bookMarkId);
 
         $bookMarkTagList = BookMarkTag::serveTagsRelatedToBookMark(
             userId:Auth::id(),
