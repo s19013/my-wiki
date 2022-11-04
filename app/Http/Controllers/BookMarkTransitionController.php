@@ -10,16 +10,19 @@ use App\Models\BookMark;
 use App\Models\BookMarkTag;
 
 use App\Repository\BookMarkRepository;
+use App\Repository\BookMarkTagRepository;
 
 use Auth;
 
 class BookMarkTransitionController extends Controller
 {
     private $bookMarkRepository;
+    private $bookMarkTagRepository;
 
     public function __construct()
     {
-        $this->bookMarkRepository = new BookMarkRepository();
+        $this->bookMarkRepository    = new BookMarkRepository();
+        $this->bookMarkTagRepository = new BookMarkTagRepository();
     }
 
     //ブックマーク編集画面に遷移する時の処理
@@ -35,7 +38,7 @@ class BookMarkTransitionController extends Controller
 
         $bookMark = $this->bookMarkRepository->serve(bookMarkId:$bookMarkId);
 
-        $bookMarkTagList = BookMarkTag::serveTagsRelatedToBookMark(
+        $bookMarkTagList = $this->bookMarkTagRepository->serveTagsRelatedToBookMark(
             userId:Auth::id(),
             bookMarkId:$bookMarkId
         );

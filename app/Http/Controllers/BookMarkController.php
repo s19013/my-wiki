@@ -9,14 +9,17 @@ use App\Models\BookMark;
 use Auth;
 
 use App\Repository\BookMarkRepository;
+use App\Repository\BookMarkTagRepository;
 
 class BookMarkController extends Controller
 {
     private $bookMarkRepository;
+    private $bookMarkTagRepository;
 
-    public function __construct(BookMarkRepository $bookMarkRepository)
+    public function __construct(BookMarkRepository $bookMarkRepository,BookMarkTagRepository $bookMarkTagRepository)
     {
-        $this->bookMarkRepository = $bookMarkRepository;
+        $this->bookMarkRepository    = $bookMarkRepository;
+        $this->bookMarkTagRepository = $bookMarkTagRepository;
     }
 
     //新規ブックマーク作成
@@ -43,7 +46,7 @@ class BookMarkController extends Controller
 
         // なんのタグも設定されていない時
         if (empty($request->tagList) == true) {
-            BookMarkTag::storeBookMarkTag(
+            $this->bookMarkTagRepository->store(
                 tagId      : null,
                 bookMarkId : $bookMarkId,
             );
@@ -51,7 +54,7 @@ class BookMarkController extends Controller
         //タグが設定されている時
         else {
             foreach($request->tagList as $tagId){
-                BookMarkTag::storeBookMarkTag(
+                $this->bookMarkTagRepository->store(
                     tagId      : $tagId,
                     bookMarkId : $bookMarkId,
                 );
@@ -73,7 +76,7 @@ class BookMarkController extends Controller
         );
 
         //タグの更新
-        BookMarkTag::updateBookMarkTag(
+        $this->bookMarkTagRepository->update(
             bookMarkId     :$request->bookMarkId,
             updatedTagList :$request->tagList,
         );
