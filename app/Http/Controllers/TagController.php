@@ -19,7 +19,7 @@ class TagController extends Controller
     }
 
     //新規タグ登録
-    public function tagStore(Request $request)
+    public function store(Request $request)
     {
         // CSRFトークンを再生成して、二重送信対策
         //$request->session()->regenerateToken();
@@ -44,7 +44,7 @@ class TagController extends Controller
         );
     }
 
-    public function tagUpdate(Request $request)
+    public function update(Request $request)
     {
         // CSRFトークンを再生成して、二重送信対策
         //$request->session()->regenerateToken();
@@ -71,7 +71,7 @@ class TagController extends Controller
         );
     }
 
-    public function tagDelete()
+    public function delete()
     {
         $this->tagRepository->delete(tagId :$request->id);
     }
@@ -79,7 +79,7 @@ class TagController extends Controller
 
 
     //タグ検索
-    public function tagSearch(Request $request)
+    public function search(Request $request)
     {
         return $this->tagRepository->search(
             userId:Auth::id(),
