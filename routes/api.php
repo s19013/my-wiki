@@ -32,10 +32,10 @@ Route::middleware('auth:sanctum', 'throttle:60,1')->group(function () {
     });
 
     Route::prefix('/tag')->group(function () {
-        Route::delete('/{tagId}' , [TagController::class,'tagDelete'])->name('api.tag.delete');
-        Route::post('/store'  , [TagController::class,'tagStore']);
-        Route::post('/update' , [TagController::class,'tagUpdate']);
-        Route::post('/search' , [TagController::class,'tagSearch']);
+        Route::delete('/{tagId}' , [TagController::class,'delete'])->name('api.tag.delete');
+        Route::post('/store'  , [TagController::class,'store']);
+        Route::post('/update' , [TagController::class,'update']);
+        Route::post('/search' , [TagController::class,'search']);
     });
 
     Route::prefix('/article')->group(function () {
