@@ -8,6 +8,8 @@ use App\Models\BookMarkTag;
 use App\Models\BookMark;
 use Auth;
 
+use Inertia\Inertia;
+
 use App\Repository\BookMarkRepository;
 use App\Repository\BookMarkTagRepository;
 
@@ -102,6 +104,11 @@ class BookMarkController extends Controller
         // deleteリクエストならここの部分が必要ない?
         // //$request->session()->regenerateToken();
 
-        $this->bookMarkRepository->delete(bookMarkId:$bookMarkId);
+        if ($this->bookMarkRepository->isSameUser(
+            bookMarkId:$bookMarkId,
+            userId:Auth::id()))
+        {
+            $this->bookMarkRepository->delete(bookMarkId:$bookMarkId);
+        }
     }
 }
