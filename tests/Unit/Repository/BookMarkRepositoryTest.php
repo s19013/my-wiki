@@ -174,25 +174,25 @@ class BookMarkRepositoryTest extends TestCase
     }
 
     // 期待
-    // 関数preventPeepの帰り値がTrueである
+    // 関数isSameUserの帰り値がTrueである
     // 条件
     // 指定したブックマークが指定したユーザーが作ったブックマークであった場合
-    public function test_preventPeep_同一人物()
+    public function test_isSameUser_同一人物()
     {
         $bookMark = BookMark::factory()->create(['user_id' => $this->userId]);
 
-        $this->assertTrue($this->bookmarkRepository->preventPeep($bookMark->id,$this->userId));
+        $this->assertTrue($this->bookmarkRepository->isSameUser($bookMark->id,$this->userId));
     }
 
     // 期待
-    // 関数preventPeepの帰り値がFalseである
+    // 関数isSameUserの帰り値がFalseである
     // 条件
     // 指定したブックマークが指定したユーザー以外が作ったブックマークだった場合
-    public function test_preventPeep_不正()
+    public function test_isSameUser_不正()
     {
         $bookMark = BookMark::factory()->create(['user_id' => $this->userId]);
 
-        $this->assertFalse($this->bookmarkRepository->preventPeep($bookMark->id,$this->userId + 100));
+        $this->assertFalse($this->bookmarkRepository->isSameUser($bookMark->id,$this->userId + 100));
     }
 
     // 期待
