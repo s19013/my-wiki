@@ -36,7 +36,7 @@ class ArticleTransitionController extends Controller
         if ($isDeleted == true ) {throw new \Exception("illegal");}
 
         // 他人の記事を覗こうとしているならExceptionを投げる
-        $isSamePerson = $this->articleRepository->preventPeep(articleId:$articleId,userId:Auth::id());
+        $isSamePerson = $this->articleRepository->isSameUser(articleId:$articleId,userId:Auth::id());
         if ($isSamePerson == false) {throw new \Exception("illegal");}
     }
 

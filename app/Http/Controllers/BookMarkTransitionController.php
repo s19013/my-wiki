@@ -33,7 +33,7 @@ class BookMarkTransitionController extends Controller
         if ($isDeleted == true ) { return redirect()->route('SearchBookMark'); }
 
         // 他人の記事を覗こうとしているならindexに戻す
-        $isSamePerson = $this->bookMarkRepository->preventPeep(bookMarkId:$bookMarkId,userId:Auth::id());
+        $isSamePerson = $this->bookMarkRepository->isSameUser(bookMarkId:$bookMarkId,userId:Auth::id());
         if ($isSamePerson == false) { return redirect()->route('SearchBookMark'); }
 
         $bookMark = $this->bookMarkRepository->serve(bookMarkId:$bookMarkId);
