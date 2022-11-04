@@ -8,17 +8,20 @@ use App\Models\ArticleTag;
 use App\Models\Article;
 
 use App\Repository\ArticleRepository;
+use App\Repository\ArticleTagRepository;
 
 use Auth;
 
 class ArticleController extends Controller
 {
 
-    public $articleRepository;
+    private $articleRepository;
+    private $articleTagRepository;
 
-    public function __construct(ArticleRepository $articleRepository)
+    public function __construct(ArticleRepository $articleRepository,ArticleTagRepository $articleTagRepository)
     {
         $this->articleRepository = $articleRepository;
+        $this->articleTagRepository = $articleTagRepository;
     }
     //新規記事作成
     public function articleStore(Request $request)
@@ -35,7 +38,7 @@ class ArticleController extends Controller
 
         // なんのタグも設定されていない時
         if (empty($request->tagList) == true) {
-            ArticleTag::storeArticleTag(
+            $this->articleTagRepository->store(
                 tagId     : null,
                 articleId : $articleId,
             );
@@ -43,7 +46,7 @@ class ArticleController extends Controller
         //タグが設定されている時
         else {
             foreach($request->tagList as $tagId){
-                ArticleTag::storeArticleTag(
+                $this->articleTagRepository->store(
                     tagId     : $tagId,
                     articleId : $articleId,
                 );
@@ -65,7 +68,7 @@ class ArticleController extends Controller
         );
 
         //タグ更新
-        ArticleTag::updateArticleTag(
+        $this->articleTagRepository->update(
             articleId     :$request->articleId,
             updatedTagList:$request->tagList,
         );
