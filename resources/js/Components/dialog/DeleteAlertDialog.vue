@@ -2,32 +2,34 @@
     <div class="deleteAlertDialog">
      <!-- ダイアログを呼び出すためのボタン -->
 
-    <v-btn color="error" class="global_css_haveIconButton_Margin"  @click.stop="deleteDialogFlagSwitch()">
+    <!-- <v-btn color="error" class="global_css_haveIconButton_Margin"  @click.stop="deleteDialogFlagSwitch()">
         <v-icon>mdi-trash-can</v-icon>
         <p>削除</p>
-    </v-btn>
+    </v-btn> -->
 
-    <v-dialog
-      v-model="deleteDialogFlag"
-      persistent
-    >
-        <section class="global_css_Dialog">
-            <h2>{{text}}</h2>
-            <div class="control">
-                <v-btn flat :rounded="0" @click.stop="deleteDialogFlagSwitch()" class="back">
-                    <p>もどる</p>
+        <v-dialog
+          v-model="deleteDialogFlag"
+          persistent
+        >
+            <template v-slot:activator="{ props }">
+                <v-btn color="error" class="global_css_haveIconButton_Margin"  v-bind="props">
+                    <v-icon>mdi-trash-can</v-icon>
+                    <p>削除</p>
                 </v-btn>
-                <!-- <button type="button" class="back" >
-                </button> -->
-                <v-btn color="error" flat :rounded="0" @click.stop="deleteTrigger()" class="delete">
-                    <p>削除する</p>
-                </v-btn>
+            </template>
+            <section class="global_css_Dialog">
+                <h2>{{text}}</h2>
+                <div class="control">
+                    <v-btn flat :rounded="0" @click.stop="deleteDialogFlagSwitch()" class="back">
+                        <p>もどる</p>
+                    </v-btn>
 
-                <!-- <button type="button" class="delete">
-                </button> -->
-            </div>
-        </section>
-    </v-dialog>
+                    <v-btn color="error" flat :rounded="0" @click.stop="deleteTrigger()" class="delete">
+                        <p>削除する</p>
+                    </v-btn>
+                </div>
+            </section>
+        </v-dialog>
     </div>
 </template>
 
