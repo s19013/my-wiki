@@ -24,7 +24,7 @@ class ArticleSeeder extends Seeder
         foreach ($mainArticles as $article){
             ArticleTag::factory()->create([
                     "article_id" => $article->id,
-                    Tag::factory()->create()->id
+                    "tag_id"     => Tag::factory()->create(['user_id' => 13])->id
             ]);
         }
     }
