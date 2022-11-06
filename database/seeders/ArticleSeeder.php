@@ -11,7 +11,7 @@ use App\Models\ArticleTag;
 use App\Models\Tag;
 
 
-class DatabaseSeeder extends Seeder
+class ArticleSeeder extends Seeder
 {
     /**
      * Seed the application's database.
