@@ -4,9 +4,12 @@
             <div class="head">
                 <DeleteAlertComponent
                     ref="deleteAlert"
+                    :disabledFlag="disabledFlag"
                     @deleteTrigger="deleteArticle"
                 />
-                <v-btn color="#BBDEFB" class="global_css_haveIconButton_Margin" @click="submitCheck()" :disabled="articleSending">
+                <v-btn
+                    color="#BBDEFB" class="global_css_haveIconButton_Margin"
+                    @click="submitCheck()" :disabled="disabledFlag" :loading="disabledFlag">
                     <v-icon>mdi-content-save</v-icon>
                     <p>保存</p>
                 </v-btn>
@@ -18,6 +21,7 @@
                 ref="tagDialog"
                 text = "つけたタグ"
                 :originalCheckedTagList=originalCheckedTagList
+                :disabledFlag="disabledFlag"
             />
             <v-form v-on:submit.prevent>
                 <!-- タイトル入力欄とボタン2つ -->
@@ -25,6 +29,8 @@
                     v-model="articleTitle"
                     label="タイトル"
                     outlined hide-details="false"
+                    :disabled="disabledFlag"
+                    :loading="disabledFlag"
                     @keydown.enter.exact="focusToBody()"
                 />
 
@@ -32,12 +38,11 @@
                 <ArticleBody
                     ref="articleBody"
                     :originalArticleBody="articleBody"
+                    :disabledFlag="disabledFlag"
                 />
 
             </v-form>
         </div>
-        <!-- 送信中に表示 -->
-        <loadingDialog :loadingFlag="articleSending"></loadingDialog>
 
     </BaseLayout>
 </template>
@@ -59,7 +64,7 @@ export default {
         checkedTagList:[],
 
         //loding
-        articleSending:false,
+        disabledFlag:false,
 
         // errorFlag
         articleBodyErrorFlag:false,
@@ -98,7 +103,7 @@ export default {
         },
     },
     methods: {
-        switchArticleSending(){this.articleSending = !this.articleSending},
+        switchDisabledFlag(){this.disabledFlag = !this.disabledFlag},
         // 本文送信前のチェック
         submitCheck:_.debounce(_.throttle(async function(){
             //本文が空だったらエラーだして送信しない

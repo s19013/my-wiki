@@ -7,12 +7,9 @@
         <p>削除</p>
     </v-btn> -->
 
-        <v-dialog
-          v-model="deleteDialogFlag"
-          persistent
-        >
+        <v-dialog v-model="deleteDialogFlag">
             <template v-slot:activator="{ props }">
-                <v-btn color="error" class="global_css_haveIconButton_Margin"  v-bind="props">
+                <v-btn color="error" class="global_css_haveIconButton_Margin"  v-bind="props" :disabled="disabledFlag" :loading="disabledFlag">
                     <v-icon>mdi-trash-can</v-icon>
                     <p>削除</p>
                 </v-btn>
@@ -20,11 +17,11 @@
             <section class="global_css_Dialog">
                 <h2>{{text}}</h2>
                 <div class="control">
-                    <v-btn flat :rounded="0" @click.stop="deleteDialogFlagSwitch()" class="back">
+                    <v-btn class="back" :disabled="disabledFlag" :loading="disabledFlag" @click.stop="deleteDialogFlagSwitch()">
                         <p>もどる</p>
                     </v-btn>
 
-                    <v-btn color="error" flat :rounded="0" @click.stop="deleteTrigger()" class="delete">
+                    <v-btn class="delete" color="error" :disabled="disabledFlag" :loading="disabledFlag" @click.stop="deleteTrigger()">
                         <p>削除する</p>
                     </v-btn>
                 </div>
@@ -45,6 +42,10 @@ export default {
         type:{
             type   :String,
             default:"article"
+        },
+        disabledFlag:{
+            type   :Boolean,
+            default:false
         }
     },
     methods: {
@@ -66,8 +67,8 @@ export default {
                     this.deleteTrigger()
                     return
                 }
-                if (event.key === "Escape") {
-                    this.deleteDialogFlag = false
+                if (event.key === "Escape" || event.key === "Backspace") {
+                    this.deleteDialogFlagSwitch()
                     return
                 }
             }
