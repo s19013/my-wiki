@@ -52,7 +52,10 @@ export default {
         //切り替え
         deleteDialogFlagSwitch(){this.deleteDialogFlag = !this.deleteDialogFlag},
         //ダイアログ内の削除するボタンを押したことを親に伝える
-        deleteTrigger(){this.$emit("deleteTrigger");}
+        deleteTrigger(){
+            this.deleteDialogFlagSwitch()
+            this.$emit("deleteTrigger");
+        }
     },
     mounted() {
         //textの切り替え
