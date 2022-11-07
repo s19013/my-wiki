@@ -26,7 +26,7 @@ export default {
             articleBody,
             tagList,
         }){
-            this.$refs.BaseArticleLayout.articleSending = true
+            this.$refs.BaseArticleLayout.switchDisabledFlag()
             axios.post('/api/article/store',{
                 articleTitle:articleTitle,
                 articleBody :articleBody,
@@ -38,10 +38,11 @@ export default {
             .catch((error) => {
                 console.log(error);
             })
-            this.$refs.BaseArticleLayout.articleSending = false
+            this.$refs.BaseArticleLayout.switchDisabledFlag()
         },
         deleteArticle() {
             //遷移
+            this.$refs.BaseArticleLayout.switchDisabledFlag()
             this.$inertia.get('/Article/Search')
         },
     },
