@@ -5,6 +5,7 @@
             <v-btn color="submit"
                 size="small"
                 class="global_css_haveIconButton_Margin"
+                :disabled="disabledFlag" :loading="disabledFlag"
                 @click.stop="openTagDialog()">
                 <v-icon>mdi-tag</v-icon>
                 <p>タグ</p>
@@ -16,10 +17,7 @@
         </div>
 
         <!-- v-modelがv-ifとかの代わりになっている -->
-        <v-dialog
-            v-model="tagDialogFlag"
-            scrollable
-            persistent>
+        <v-dialog v-model="tagDialogFlag" scrollable>
 
             <section class="global_css_Dialog tagDialog">
                 <div class="clooseButton">
@@ -153,6 +151,10 @@ export default{
             type:String,
             default:"つけたタグ"
         },
+        disabledFlag:{
+            type   :Boolean,
+            default:false
+        }
     },
     components:{
         loading,

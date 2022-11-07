@@ -8,12 +8,10 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Article;
 use App\Models\ArticleTag;
-use App\Models\BookMark;
-use App\Models\BookMarkTag;
 use App\Models\Tag;
 
 
-class DatabaseSeeder extends Seeder
+class ArticleSeeder extends Seeder
 {
     /**
      * Seed the application's database.
@@ -22,6 +20,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(ArticleSeeder::class);
+        $mainArticles = Article::factory()->count(10)->create(['user_id' => 13]);
+        foreach ($mainArticles as $article){
+            ArticleTag::factory()->create([
+                    "article_id" => $article->id,
+                    "tag_id"     => Tag::factory()->create(['user_id' => 13])->id
+            ]);
+        }
     }
 }

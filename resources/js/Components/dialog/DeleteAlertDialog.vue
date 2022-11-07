@@ -2,32 +2,31 @@
     <div class="deleteAlertDialog">
      <!-- ダイアログを呼び出すためのボタン -->
 
-    <v-btn color="error" class="global_css_haveIconButton_Margin"  @click.stop="deleteDialogFlagSwitch()">
+    <!-- <v-btn color="error" class="global_css_haveIconButton_Margin"  @click.stop="deleteDialogFlagSwitch()">
         <v-icon>mdi-trash-can</v-icon>
         <p>削除</p>
-    </v-btn>
+    </v-btn> -->
 
-    <v-dialog
-      v-model="deleteDialogFlag"
-      persistent
-    >
-        <section class="global_css_Dialog">
-            <h2>{{text}}</h2>
-            <div class="control">
-                <v-btn flat :rounded="0" @click.stop="deleteDialogFlagSwitch()" class="back">
-                    <p>もどる</p>
+        <v-dialog v-model="deleteDialogFlag">
+            <template v-slot:activator="{ props }">
+                <v-btn color="error" class="global_css_haveIconButton_Margin"  v-bind="props" :disabled="disabledFlag" :loading="disabledFlag">
+                    <v-icon>mdi-trash-can</v-icon>
+                    <p>削除</p>
                 </v-btn>
-                <!-- <button type="button" class="back" >
-                </button> -->
-                <v-btn color="error" flat :rounded="0" @click.stop="deleteTrigger()" class="delete">
-                    <p>削除する</p>
-                </v-btn>
+            </template>
+            <section class="global_css_Dialog">
+                <h2>{{text}}</h2>
+                <div class="control">
+                    <v-btn class="back" :disabled="disabledFlag" :loading="disabledFlag" @click.stop="deleteDialogFlagSwitch()">
+                        <p>もどる</p>
+                    </v-btn>
 
-                <!-- <button type="button" class="delete">
-                </button> -->
-            </div>
-        </section>
-    </v-dialog>
+                    <v-btn class="delete" color="error" :disabled="disabledFlag" :loading="disabledFlag" @click.stop="deleteTrigger()">
+                        <p>削除する</p>
+                    </v-btn>
+                </div>
+            </section>
+        </v-dialog>
     </div>
 </template>
 
@@ -43,13 +42,20 @@ export default {
         type:{
             type   :String,
             default:"article"
+        },
+        disabledFlag:{
+            type   :Boolean,
+            default:false
         }
     },
     methods: {
         //切り替え
         deleteDialogFlagSwitch(){this.deleteDialogFlag = !this.deleteDialogFlag},
         //ダイアログ内の削除するボタンを押したことを親に伝える
-        deleteTrigger(){this.$emit("deleteTrigger");}
+        deleteTrigger(){
+            this.deleteDialogFlagSwitch()
+            this.$emit("deleteTrigger");
+        }
     },
     mounted() {
         //textの切り替え
@@ -64,8 +70,8 @@ export default {
                     this.deleteTrigger()
                     return
                 }
-                if (event.key === "Escape") {
-                    this.deleteDialogFlag = false
+                if (event.key === "Escape" || event.key === "Backspace") {
+                    this.deleteDialogFlagSwitch()
                     return
                 }
             }

@@ -21,9 +21,9 @@
         @inertiaHead
     </head>
     <style>
-        #app {
+        /* #app {
             height: 100vh;
-        }
+        } */
     </style>
     <body class="font-sans antialiased">
         @inertia
