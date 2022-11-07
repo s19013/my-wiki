@@ -5,6 +5,7 @@
                 <div class="head">
                     <DeleteAlertComponent
                         type="bookmark"
+                        :disabledFlag="disabledFlag"
                         @deleteTrigger="deleteArticle"
                     />
                     <Link :href="'/Article/Edit/' + article.id">
@@ -24,13 +25,11 @@
                 <!-- md表示 -->
                 <CompiledMarkDown :originalMarkDown="article.body"/>
         </div>
-        <loadingDialog :loadingFlag="articleDeleting"></loadingDialog>
     </BaseLayout>
 </template>
 
 <script>
 import CompiledMarkDown from '@/Components/article/CompiledMarkDown.vue';
-import DeleteAlertComponent from '@/Components/dialog/DeleteAlertDialog.vue';
 import loadingDialog from '@/Components/loading/loadingDialog.vue';
 import TagList from '@/Components/TagList.vue';
 import DateLabel from '@/Components/DateLabel.vue';
@@ -43,7 +42,7 @@ export default{
     data() {
       return {
         //loding
-        articleDeleting:false,
+        disabledFlag:false,
       }
     },
     props:['article','articleTagList'],
@@ -58,18 +57,24 @@ export default{
     },
     methods: {
         deleteArticle() {
-            this.articleDeleting = true
+            this.disabledFlag = true
             // 消す処理
-            axios.delete('/api/article/'+this.article.id)
-            .then((res) => {
-                //遷移
-                this.$inertia.get('/Article/Search')
-                this.articleDeleting = false
+            // axios.delete('/api/article/'+this.article.id)
+            // axios.delete('/Article/'+this.article.id)
+            // .then((res) => {
+            //     //遷移
+            //     this.$inertia.get('/Article/Search')
+            //     this.disabledFlag = false
+            // })
+            // .catch((error) => {
+            //     console.log(error);
+            //     this.articleSending = false
+            // })
+            this.$inertia.delete('/Article/' + this.article.id,{
+                onSuccess: () => { },
+                onError: (errors) => {console.log( errors )},
             })
-            .catch((error) => {
-                console.log(error);
-                this.articleSending = false
-            })
+
         },
     },
 }
