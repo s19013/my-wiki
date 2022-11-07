@@ -29,8 +29,8 @@
 </template>
 
 <script>
+import DeleteAlertComponent from '@/Components/dialog/DeleteAlertDialog.vue';
 import CompiledMarkDown from '@/Components/article/CompiledMarkDown.vue';
-import loadingDialog from '@/Components/loading/loadingDialog.vue';
 import TagList from '@/Components/TagList.vue';
 import DateLabel from '@/Components/DateLabel.vue';
 import BaseLayout from '@/Layouts/BaseLayout.vue'
@@ -48,7 +48,6 @@ export default{
     props:['article','articleTagList'],
     components:{
         DeleteAlertComponent,
-        loadingDialog,
         TagList,
         BaseLayout,
         Link,

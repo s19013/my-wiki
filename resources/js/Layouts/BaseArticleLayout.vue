@@ -51,7 +51,6 @@
 import TagDialog from '@/Components/dialog/TagDialog.vue';
 import TagList from '@/Components/TagList.vue';
 import DeleteAlertComponent from '@/Components/dialog/DeleteAlertDialog.vue';
-import loadingDialog from '@/Components/loading/loadingDialog.vue';
 import BaseLayout from '@/Layouts/BaseLayout.vue'
 import ArticleBody from '@/Components/article/ArticleBody.vue';
 import DateLabel from '@/Components/DateLabel.vue';
@@ -74,7 +73,6 @@ export default {
         DeleteAlertComponent,
         TagDialog,
         TagList,
-        loadingDialog,
         BaseLayout,
         ArticleBody,
         DateLabel,
