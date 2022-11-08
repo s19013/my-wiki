@@ -160,6 +160,6 @@ class ArticleTagRepository
 
         if (is_null($result->toArray()[0]['id'])) {return null;}
 
-        return $result->toArray();
+        return $result;
     }
 }

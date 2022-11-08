@@ -162,10 +162,11 @@ class BookMarkTagRepositoryTest extends TestCase
     {
         $this->bookMarkRepository->store(null,$this->bookMarkId);
 
-        $bookMarkTags = $this->bookMarkRepository->serveTagsRelatedToBookMark($this->bookMarkId,$this->userId);
-
-        //idがnull
-        $this->assertSame($bookMarkTags[0]->id,null);
+        $this->assertDatabaseHas('book_mark_tags',[
+            'book_mark_id' => $this->bookMarkId,
+            'tag_id'     => null,
+            'deleted_at' => null
+        ]);
     }
 
     // 期待
