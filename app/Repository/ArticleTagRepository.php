@@ -38,11 +38,9 @@ class ArticleTagRepository
         // 更新前の記事に紐付けられていたタグを取得
         $originalTagList = $this->getOrignalTag($articleId);
 
-
         //元の記事にタグはついてないし､新しくタグも設定されていない場合
         // この関数の処理を終わらせる
         if($this->procesOriginalArticleDoesNotHaveAnyTags($originalTagList,$articleId,$updatedTagList) == true) {return;}
-
 
         // 追加されたタグ
         $addedTagList = array_diff($updatedTagList, $originalTagList);
@@ -50,7 +48,6 @@ class ArticleTagRepository
         // 削除されたタグ
         // 元データがからではないときのみ動かす
         if ($originalTagList[0] != null) {$deletedTagList = array_diff($originalTagList, $updatedTagList);}
-
 
         //追加
         if (!empty($addedTagList)) {
@@ -72,7 +69,7 @@ class ArticleTagRepository
             }
         }
 
-        //記事のタグをすべて消した時の処理
+        // 記事のタグをすべて消した時の処理
         $this->procesOriginalArticleDeleteAllTags(
             originalTagList:$originalTagList,
             deletedTagList :$deletedTagList,
@@ -103,7 +100,7 @@ class ArticleTagRepository
         if (is_null($originalTagList[0])) {
             //元の記事にタグはついてないし､新しくタグも設定されていない場合
             // この関数の処理を終わらせる
-            if (is_null($updatedTagList[0])) {return true;}
+            if (empty($updatedTagList)) {return true;}
             else {
                 // 更新前は記事にタグが1つもついていなくて
                 // 更新後にはタグが紐付けられていたら
@@ -149,7 +146,7 @@ class ArticleTagRepository
         ->toSql();
 
         // 記事からはずされていないタグを取得
-        return ArticleTag::select('sub_tags.id as id','sub_tags.name as name')
+        $result = ArticleTag::select('sub_tags.id as id','sub_tags.name as name')
         ->leftJoin(DB::raw('('.$subTagTable.') AS sub_tags'),'article_tags.tag_id','=','sub_tags.id')
         ->WhereNull('article_tags.deleted_at') // 記事からはずされていないタグのみを取得
         ->Where('article_tags.article_id','=',':$articleId')
@@ -159,5 +156,10 @@ class ArticleTagRepository
             ':$articleId'=> $articleId
         ])
         ->get();
+
+
+        if (is_null($result->toArray()[0]['id'])) {return null;}
+
+        return $result->toArray();
     }
 }
