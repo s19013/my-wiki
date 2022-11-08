@@ -23,7 +23,7 @@ export default {
             bookMarkUrl,
             tagList,
         }){
-            this.$refs.BaseBookMarkLayout.switchBookMarkSending()
+            this.$refs.BaseBookMarkLayout.switchDisabledFlag()
             axios.post('/api/bookmark/store',{
                 bookMarkTitle:bookMarkTitle,
                 bookMarkUrl  :bookMarkUrl,
@@ -34,10 +34,11 @@ export default {
                 if (error.response.status == 400){this.$refs.BaseBookMarkLayout.alreadyExistErrorFlag = true}
                 console.log(error);
             })
-            this.$refs.BaseBookMarkLayout.switchBookMarkSending()
+            this.$refs.BaseBookMarkLayout.switchDisabledFlag()
         },
         deleteBookMark() {
             //遷移
+            this.$refs.BaseBookMarkLayout.switchDisabledFlag()
             this.$inertia.get('/BookMark/Search')
         },
     },
