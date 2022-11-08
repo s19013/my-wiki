@@ -43,17 +43,12 @@ export default {
             })
         },
         deleteArticle() {
-            this.$refs.BaseArticleLayout.switchDisabledFlag()
+            this.disabledFlag = true
             // 消す処理
-            axios.delete('/api/article/' + this.originalArticle.id)
-            .then((res) => {
-                //遷移
-                this.$inertia.get('/Article/Search')
+            this.$inertia.delete('/Article/' + this.originalArticle.id,{
+                onError: (errors) => {console.log( errors )},
             })
-            .catch((error) => {
-                console.log(error);
-                this.$refs.BaseArticleLayout.switchDisabledFlag()
-            })
+
         },
     },
     mounted() {
