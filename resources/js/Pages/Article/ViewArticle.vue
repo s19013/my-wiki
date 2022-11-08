@@ -59,7 +59,6 @@ export default{
             this.disabledFlag = true
             // 消す処理
             this.$inertia.delete('/Article/' + this.article.id,{
-                onSuccess: () => { },
                 onError: (errors) => {console.log( errors )},
             })
 
