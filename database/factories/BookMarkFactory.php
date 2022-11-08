@@ -21,7 +21,7 @@ class BookMarkFactory extends Factory
     {
         return [
             'title'=>fake()->realText(15),
-            'url' =>fake()->realText(30),
+            'url' =>fake()->url,
         ];
     }
 }

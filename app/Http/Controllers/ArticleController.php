@@ -12,6 +12,7 @@ use App\Repository\ArticleRepository;
 use App\Repository\ArticleTagRepository;
 
 use Auth;
+use DB;
 
 class ArticleController extends Controller
 {
@@ -88,6 +89,8 @@ class ArticleController extends Controller
         {
             $this->articleRepository->delete(articleId:$articleId);
         }
+
+        return redirect()->route('SearchArticle');
     }
 
     //記事検索
