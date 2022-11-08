@@ -1,8 +1,8 @@
 <template>
     <BaseBookMarkLayout
         ref="BaseBookMarkLayout"
-        title="記事編集"
-        pageTitle="記事編集"
+        title="ブックマーク編集"
+        pageTitle="ブックマーク編集"
         :originalBookMark        ="originalBookMark"
         :originalCheckedTagList  ="originalCheckedTagList"
         :edit="true"
@@ -29,7 +29,7 @@ export default {
             bookMarkUrl,
             tagList,
         }){
-            this.$refs.BaseBookMarkLayout.switchBookMarkSending()
+            this.$refs.BaseBookMarkLayout.switchDisabledFlag()
             axios.post('/api/bookmark/update',{
                 bookMarkId   :this.originalBookMark.id,
                 bookMarkTitle:bookMarkTitle,
@@ -38,10 +38,11 @@ export default {
             })
             .then((res)=>{this.$inertia.get('/BookMark/Search')})
             .catch((err)=>{console.log(err);})
-            this.$refs.BaseBookMarkLayout.switchBookMarkSending()
+            this.$refs.BaseBookMarkLayout.switchDisabledFlag()
         },
         deleteBookMark() {
             // 消す処理
+            this.$refs.BaseBookMarkLayout.switchDisabledFlag()
             axios.delete('/api/bookmark/'+ this.originalBookMark.id)
             .then((res)=>{this.$inertia.get('/BookMark/Search')})
             .catch((error) => {console.log(error);})
