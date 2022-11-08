@@ -103,7 +103,7 @@ class BookMarkTagRepository
         if (is_null($originalTagList[0])) {
             //元のブックマークにタグはついてないし､新しくタグも設定されていない場合
             // この関数の処理を終わらせる
-            if (is_null($updatedTagList[0])) {return true;}
+            if (empty($updatedTagList)) {return true;}
             else {
                 // 更新前はブックマークにタグが1つもついていなくて
                 // 更新後にはタグが紐付けられていたら
@@ -148,7 +148,7 @@ class BookMarkTagRepository
         ->toSql();
 
         // ブックマークからはずされていないタグを取得
-        return BookMarkTag::select('sub_tags.id as id','sub_tags.name as name')
+        $result = BookMarkTag::select('sub_tags.id as id','sub_tags.name as name')
         ->leftJoin(DB::raw('('.$subTagTable.') AS sub_tags'),'book_mark_tags.tag_id','=','sub_tags.id')
         ->WhereNull('book_mark_tags.deleted_at') // ブックマークからはずされていないタグのみを取得
         ->Where('book_mark_tags.book_mark_id','=',':$bookMarkId')
@@ -158,5 +158,9 @@ class BookMarkTagRepository
             ':$bookMarkId'=> $bookMarkId
         ])
         ->get();
+
+        if (is_null($result->toArray()[0]['id'])) {return null;}
+
+        return $result->toArray();
     }
 }
