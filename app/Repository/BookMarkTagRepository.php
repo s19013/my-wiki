@@ -99,10 +99,11 @@ class BookMarkTagRepository
     //元のブックマークにタグがついてない場合の処理
     public  function procesOriginalBookMarkDoesNotHaveAnyTags($originalTagList,$bookMarkId,$updatedTagList)
     {
+        // 仕様としてタグをつけてない場合はtag_idにnullが入る<-超大事
         if (is_null($originalTagList[0])) {
             //元のブックマークにタグはついてないし､新しくタグも設定されていない場合
             // この関数の処理を終わらせる
-            if (empty($updatedTagList)) {return true;}
+            if (is_null($updatedTagList[0])) {return true;}
             else {
                 // 更新前はブックマークにタグが1つもついていなくて
                 // 更新後にはタグが紐付けられていたら
