@@ -5,9 +5,10 @@
                 <DeleteAlertComponent
                     type="bookmark"
                     ref ="deleteAlert"
+                    :disabledFlag="disabledFlag"
                     @deleteTrigger="deleteBookMark"
                 />
-                <v-btn color="#BBDEFB" class="global_css_haveIconButton_Margin" @click="submitCheck()" :disabled="bookMarkSending">
+                <v-btn color="#BBDEFB" class="global_css_haveIconButton_Margin" @click="submitCheck()" :disabled="disabledFlag" :loading="disabledFlag">
                     <v-icon>mdi-content-save</v-icon>
                     <p>保存</p>
                 </v-btn>
@@ -19,6 +20,7 @@
                 ref="tagDialog"
                 text = "つけたタグ"
                 :originalCheckedTagList=originalCheckedTagList
+                :disabledFlag="disabledFlag"
             />
 
             <p class="global_css_error" v-if="bookMarkUrlErrorFlag">urlを入力してください</p>
@@ -30,18 +32,20 @@
                     v-model="bookMarkTitle"
                     label="タイトル"
                     outlined hide-details="false"
+                    :disabled="disabledFlag"
+                    :loading="disabledFlag"
                     @keydown.enter.exact="this.$refs.url.focus()"
                 />
                 <v-text-field
                     ref="url"
                     label="url [必須]"
-                    v-model = "bookMarkUrl"
+                    v-model   = "bookMarkUrl"
+                    :disabled ="disabledFlag"
+                    :loading  ="disabledFlag"
                     @keydown.enter.exact="this.submitCheck()"
                 ></v-text-field>
             </v-form>
         </div>
-        <!-- 送信中に表示 -->
-        <loadingDialog :loadingFlag="bookMarkSending"></loadingDialog>
 
     </BaseLayout>
 </template>
@@ -50,7 +54,6 @@
 import TagDialog from '@/Components/dialog/TagDialog.vue';
 import TagList from '@/Components/TagList.vue';
 import DeleteAlertComponent from '@/Components/dialog/DeleteAlertDialog.vue';
-import loadingDialog from '@/Components/loading/loadingDialog.vue';
 import BaseLayout from '@/Layouts/BaseLayout.vue';
 import DateLabel from '@/Components/DateLabel.vue';
 
@@ -62,7 +65,7 @@ export default {
         checkedTagList:[],
 
         //loding
-        bookMarkSending:false,
+        disabledFlag:false,
 
         // errorFlag
         bookMarkUrlErrorFlag :false,
@@ -73,7 +76,6 @@ export default {
         DeleteAlertComponent,
         TagDialog,
         TagList,
-        loadingDialog,
         BaseLayout,
         DateLabel,
     },
@@ -89,7 +91,10 @@ export default {
         },
         originalBookMark:{
             type   :Object,
-            default:''
+            default:{
+                title:null,
+                url  :null
+            }
         },
         originalCheckedTagList:{
             type   :Array,
@@ -102,10 +107,10 @@ export default {
     },
     methods: {
         switchAlreadyExistErrorFlag(){this.alreadyExistErrorFlag = !this.alreadyExistErrorFlag},
-        switchBookMarkSending(){this.bookMarkSending = !this.bookMarkSending},
+        switchDisabledFlag(){this.disabledFlag = !this.disabledFlag},
         // 本文送信
         submitCheck:_.debounce(_.throttle(async function(){
-            if (this.bookMarkUrl =='') {
+            if (this.bookMarkUrl == null) {
                 this.bookMarkUrlErrorFlag = true
                 return
             }
