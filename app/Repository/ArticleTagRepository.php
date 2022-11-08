@@ -103,7 +103,7 @@ class ArticleTagRepository
         if (is_null($originalTagList[0])) {
             //元の記事にタグはついてないし､新しくタグも設定されていない場合
             // この関数の処理を終わらせる
-            if (empty($updatedTagList)) {return true;}
+            if (is_null($updatedTagList[0])) {return true;}
             else {
                 // 更新前は記事にタグが1つもついていなくて
                 // 更新後にはタグが紐付けられていたら
