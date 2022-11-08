@@ -146,7 +146,9 @@ class ArticleTagRepositoryTest extends TestCase
 
         $IdList = [];
 
-        foreach ($articleTags as $articleTag){array_push($IdList,$articleTag->id);}
+        foreach ($articleTags as $articleTag){
+            array_push($IdList,$articleTag->id);
+        }
 
         $nameList = [];
         foreach ($articleTags as $articleTag){ array_push($nameList,$articleTag->name);}
@@ -164,10 +166,11 @@ class ArticleTagRepositoryTest extends TestCase
     {
         $this->articleTagRepository->store(null,$this->articleId);
 
-        $articleTags = $this->articleTagRepository->serveTagsRelatedToArticle($this->articleId,$this->userId);
-
-        //idがnull
-        $this->assertSame($articleTags[0]->id,null);
+        $this->assertDatabaseHas('article_tags',[
+            'article_id' => $this->articleId,
+            'tag_id'     => null,
+            'deleted_at' => null
+        ]);
     }
 
     // 期待
