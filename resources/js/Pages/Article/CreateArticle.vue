@@ -36,9 +36,9 @@ export default {
                 this.$inertia.get('/Article/Search')
             })
             .catch((error) => {
+                this.$refs.BaseArticleLayout.switchDisabledFlag()
                 console.log(error);
             })
-            this.$refs.BaseArticleLayout.switchDisabledFlag()
         },
         deleteArticle() {
             //遷移

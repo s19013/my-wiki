@@ -33,8 +33,8 @@ export default {
             .catch((error) => {
                 if (error.response.status == 400){this.$refs.BaseBookMarkLayout.alreadyExistErrorFlag = true}
                 console.log(error);
+                this.$refs.BaseBookMarkLayout.switchDisabledFlag()
             })
-            this.$refs.BaseBookMarkLayout.switchDisabledFlag()
         },
         deleteBookMark() {
             //遷移

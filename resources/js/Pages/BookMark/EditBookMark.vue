@@ -37,8 +37,10 @@ export default {
                 tagList      :tagList
             })
             .then((res)=>{this.$inertia.get('/BookMark/Search')})
-            .catch((err)=>{console.log(err);})
-            this.$refs.BaseBookMarkLayout.switchDisabledFlag()
+            .catch((err)=>{
+                this.$refs.BaseBookMarkLayout.switchDisabledFlag()
+                console.log(err);
+            })
         },
         deleteBookMark() {
             // 消す処理
