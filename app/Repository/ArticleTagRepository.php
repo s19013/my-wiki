@@ -10,22 +10,18 @@ class ArticleTagRepository
     //記事に紐付けらたタグを登録
     public  function store($tagId,$articleId)
     {
-        DB::transaction(function () use($tagId,$articleId){
-            ArticleTag::create([
-                'article_id' => $articleId,
-                'tag_id'     => $tagId,
-            ]);
-        });
+        ArticleTag::create([
+            'article_id' => $articleId,
+            'tag_id'     => $tagId,
+        ]);
     }
 
     //記事からはずされたタグを削除
     public  function delete($tagId,$articleId)
     {
-        DB::transaction(function () use($tagId,$articleId){
-            ArticleTag::where('article_id','=',$articleId)
+        ArticleTag::where('article_id','=',$articleId)
             ->where('tag_id','=',$tagId)
-            ->update(['deleted_at' => date(Carbon::now())]);
-        });
+            ->update(['deleted_at' => Carbon::now()]);
     }
 
     //記事に紐付けられているタグを更新

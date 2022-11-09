@@ -9,20 +9,18 @@ use App\Models\BookMark;
 
 class BookMarkRepository
 {
-    //新規ブックマーク作成
+    //新規ブックマーク作成 登録したブックマークのIDを返す
     public  function store($title,$url,$userId)
     {
         // タイトルが産められてなかったら日時で埋める
         if ($title == '') { $title = Carbon::now() ;}
 
-        return DB::transaction(function () use($title,$url,$userId){
-            $bookMark = BookMark::create([
-                'user_id'  => $userId,
-                'title'    => $title,
-                'url'     => $url,
-            ]);
-            return $bookMark->id;
-        });
+        $bookMark = BookMark::create([
+            'user_id'  => $userId,
+            'title'    => $title,
+            'url'     => $url,
+        ]);
+        return $bookMark->id;
     }
 
     //ブックマーク更新
@@ -31,24 +29,19 @@ class BookMarkRepository
         // タイトルが産められてなかったら日時で埋める
         if ($title == '') { $title = Carbon::now() ;}
 
-        DB::transaction(function () use($bookMarkId,$title,$url){
-            BookMark::where('id','=',$bookMarkId)
+        BookMark::where('id','=',$bookMarkId)
             ->update([
                 'title' => $title,
                 'url'  => $url,
             ]);
-        });
     }
 
     //ブックマーク削除
     public  function delete($bookMarkId)
     {
         // 論理削除
-        DB::transaction(function () use($bookMarkId){
-            BookMark::where('id','=',$bookMarkId)
-            // ->update(['deleted_at' => date(Carbon::now())]);
-            ->update(['deleted_at' => Carbon::now()]);
-        });
+        BookMark::where('id','=',$bookMarkId)
+        ->update(['deleted_at' => Carbon::now()]);
     }
 
     //指定された記事だけを取ってくる

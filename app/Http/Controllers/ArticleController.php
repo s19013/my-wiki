@@ -31,29 +31,32 @@ class ArticleController extends Controller
         // CSRFトークンを再生成して、二重送信対策
         $request->session()->regenerateToken();
 
-        // 記事を保存して記事のidを取得
-        $articleId = $this->articleRepository->store(
+
+        DB::transaction(function () use($request){
+            // 記事を保存して記事のidを取得
+            $articleId  = $this->articleRepository->store(
                 userId   : Auth::id(),
                 title    : $request->articleTitle,
                 body     : $request->articleBody,
-        );
-
-        // なんのタグも設定されていない時
-        if (empty($request->tagList) == true) {
-            $this->articleTagRepository->store(
-                tagId     : null,
-                articleId : $articleId,
             );
-        }
-        //タグが設定されている時
-        else {
-            foreach($request->tagList as $tagId){
+
+            // なんのタグも設定されていない時
+            if (empty($request->tagList) == true) {
                 $this->articleTagRepository->store(
-                    tagId     : $tagId,
+                    tagId     : null,
                     articleId : $articleId,
                 );
             }
-        }
+            //タグが設定されている時
+            else {
+                foreach($request->tagList as $tagId){
+                    $this->articleTagRepository->store(
+                        tagId     : $tagId,
+                        articleId : $articleId,
+                    );
+                }
+            }
+        });
     }
 
     //記事更新
@@ -62,18 +65,20 @@ class ArticleController extends Controller
         // CSRFトークンを再生成して、二重送信対策
         $request->session()->regenerateToken();
 
-        // 記事更新
-        $this->articleRepository->update(
-            articleId:$request->articleId,
-            title:$request->articleTitle,
-            body :$request->articleBody
-        );
+        DB::transaction(function () use($request){
+           // 記事更新
+            $this->articleRepository->update(
+                articleId:$request->articleId,
+                title:$request->articleTitle,
+                body :$request->articleBody
+            );
 
-        //タグ更新
-        $this->articleTagRepository->update(
-            articleId     :$request->articleId,
-            updatedTagList:$request->tagList,
-        );
+            //タグ更新
+            $this->articleTagRepository->update(
+                articleId     :$request->articleId,
+                updatedTagList:$request->tagList,
+            );
+        });
     }
 
     //記事削除
@@ -81,14 +86,14 @@ class ArticleController extends Controller
     {
         // CSRFトークンを再生成して、二重送信対策
         // deleteリクエストならここの部分が必要ない?
-        // //$request->session()->regenerateToken();
+        //$request->session()->regenerateToken();
 
-        if ($this->articleRepository->isSameUser(
+        DB::transaction(function () use($articleId){
+            if ($this->articleRepository->isSameUser(
                 articleId:$articleId,
                 userId:Auth::id()))
-        {
-            $this->articleRepository->delete(articleId:$articleId);
-        }
+            {$this->articleRepository->delete(articleId:$articleId);}
+        });
 
         return redirect()->route('SearchArticle');
     }

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Tag;
 use App\Repository\TagRepository;
 use Auth;
+use DB;
 
 class TagController extends Controller
 {
@@ -24,10 +25,12 @@ class TagController extends Controller
         // CSRFトークンを再生成して、二重送信対策
         $request->session()->regenerateToken();
 
-        $result = $this->tagRepository->store(
-            userId:Auth::id(),
-            tag   :$request->tag,
-        );
+        $result = DB::transaction(function () use($request){
+            return $this->tagRepository->store(
+                userId:Auth::id(),
+                tag   :$request->tag,
+            );
+        });
 
         // 登録できた
         if ($result) {
@@ -49,11 +52,13 @@ class TagController extends Controller
         // CSRFトークンを再生成して、二重送信対策
         $request->session()->regenerateToken();
 
-        $result = $this->tagRepository->update(
-            userId:Auth::id(),
-            tagId :$request->id,
-            name  :$request->name
-        );
+        $result = DB::transaction(function () use($request){
+            return $this->tagRepository->update(
+                userId:Auth::id(),
+                tagId :$request->id,
+                name  :$request->name
+            );
+        });
 
 
         // 更新できた
@@ -73,12 +78,12 @@ class TagController extends Controller
 
     public function delete($tagId)
     {
-        if ($this->tagRepository->isSameUser(
-            tagId:$tagId,
-            userId:Auth::id()))
-        {
-            $this->tagRepository->delete($tagId);
-        }
+        DB::transaction(function () use($request){
+            if ($this->tagRepository->isSameUser(
+                tagId:$tagId,
+                userId:Auth::id()))
+            {$this->tagRepository->delete($tagId);}
+        });
     }
 
 

@@ -9,21 +9,20 @@ use App\Models\Article;
 
 class ArticleRepository
 {
-    //新規記事登録
+    //新規記事登録 登録した記事のIdを返す
     public function store($title,$body,$userId)
     {
         // タイトルが産められてなかったら日時で埋める
         if ($title == '') { $title = Carbon::now() ;}
 
-        return DB::transaction(function () use($title,$body,$userId){
-            $article = Article::create([
-                'user_id'  => $userId,
-                'title'    => $title,
-                'body'     => $body,
-            ]);
-            //紐付けられたタグをデータベースに登録するのに記事のidが必要なのでidだけを返す
-            return $article->id;
-        });
+        $article = Article::create([
+            'user_id'  => $userId,
+            'title'    => $title,
+            'body'     => $body,
+        ]);
+
+        //紐付けられたタグをデータベースに登録するのに記事のidが必要なのでidだけを返す
+        return $article->id;
     }
 
     //記事更新
@@ -32,23 +31,19 @@ class ArticleRepository
         // タイトルが産められてなかったら日時で埋める
         if ($title == '') { $title = Carbon::now() ;}
 
-        DB::transaction(function () use($articleId,$title,$body){
-            Article::where('id','=',$articleId)
+        Article::where('id','=',$articleId)
             ->update([
                 'title' => $title,
                 'body'  => $body,
             ]);
-        });
     }
 
     //記事削除
     public function delete($articleId)
     {
         // 論理削除
-        DB::transaction(function () use($articleId){
-            Article::where('id','=',$articleId)
-            ->update(['deleted_at' => date(Carbon::now())]);
-        });
+        Article::where('id','=',$articleId)
+        ->update(['deleted_at' => Carbon::now()]);
     }
 
     //指定された記事だけを取ってくる

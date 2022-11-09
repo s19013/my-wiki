@@ -11,22 +11,18 @@ class BookMarkTagRepository
     //ブックマークに紐付けらたタグを登録
     public  function store($tagId,$bookMarkId)
     {
-        DB::transaction(function () use($tagId,$bookMarkId){
-            BookMarkTag::create([
-                'book_mark_id' => $bookMarkId,
-                'tag_id'     => $tagId,
-            ]);
-        });
+        BookMarkTag::create([
+            'book_mark_id' => $bookMarkId,
+            'tag_id'     => $tagId,
+        ]);
     }
 
     //ブックマークからはずされたタグを削除
     public  function delete($tagId,$bookMarkId)
     {
-        DB::transaction(function () use($tagId,$bookMarkId){
-            BookMarkTag::where('book_mark_id','=',$bookMarkId)
+        BookMarkTag::where('book_mark_id','=',$bookMarkId)
             ->where('tag_id','=',$tagId)
             ->update(['deleted_at' => date(Carbon::now())]);
-        });
     }
 
     //ブックマークに紐付けられているタグを更新
