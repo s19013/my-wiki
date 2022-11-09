@@ -17,12 +17,10 @@ class TagRepository
         if (self::isAllreadyExists($userId,$tag) == true) {return false;}
 
         // かぶってなかったら保存する
-        DB::transaction(function () use($userId,$tag){
-            Tag::create([
-                'user_id' => $userId,
-                'name'    => $tag
-            ]);
-        });
+        Tag::create([
+            'user_id' => $userId,
+            'name'    => $tag
+        ]);
 
         return true;
     }
@@ -34,18 +32,14 @@ class TagRepository
         if (self::isAllreadyExists($userId,$name) == true) {return false;}
 
         // 成功 -> true
-        DB::transaction(function () use($tagId,$name){
-            Tag::where('id','=',$tagId) -> update(['name' => $name]);
-        });
+        Tag::where('id','=',$tagId) -> update(['name' => $name]);
         return true;
     }
 
     // delete
     public function delete($tagId)
     {
-        DB::transaction(function () use($tagId){
-            Tag::where('id','=',$tagId)->update(['deleted_at' => Carbon::now()]);
-        });
+        Tag::where('id','=',$tagId)->update(['deleted_at' => Carbon::now()]);
     }
 
     //タグを検索する

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\BookMarkTag;
 use App\Models\BookMark;
 use Auth;
+use DB;
 
 use Inertia\Inertia;
 
@@ -39,29 +40,31 @@ class BookMarkController extends Controller
             );
         }
 
-        // 記事を保存して記事のidを取得
-        $bookMarkId = $this->bookMarkRepository->store(
+        DB::transaction(function () use($request){
+            // 記事を保存して記事のidを取得
+            $bookMarkId = $this->bookMarkRepository->store(
                 userId   : Auth::id(),
                 title    : $request->bookMarkTitle,
                 url      : $request->bookMarkUrl,
-        );
-
-        // なんのタグも設定されていない時
-        if (empty($request->tagList) == true) {
-            $this->bookMarkTagRepository->store(
-                tagId      : null,
-                bookMarkId : $bookMarkId,
             );
-        }
-        //タグが設定されている時
-        else {
-            foreach($request->tagList as $tagId){
+
+            // なんのタグも設定されていない時
+            if (empty($request->tagList) == true) {
                 $this->bookMarkTagRepository->store(
-                    tagId      : $tagId,
+                    tagId      : null,
                     bookMarkId : $bookMarkId,
                 );
             }
-        }
+            //タグが設定されている時
+            else {
+                foreach($request->tagList as $tagId){
+                    $this->bookMarkTagRepository->store(
+                        tagId      : $tagId,
+                        bookMarkId : $bookMarkId,
+                    );
+                }
+            }
+        });
     }
 
     //ブックマークの更新
@@ -70,18 +73,20 @@ class BookMarkController extends Controller
         // CSRFトークンを再生成して、二重送信対策
         $request->session()->regenerateToken();
 
-        //ブックマークの更新
-        $this->bookMarkRepository->update(
-            bookMarkId:$request->bookMarkId,
-            title:$request->bookMarkTitle,
-            url  :$request->bookMarkUrl
-        );
+        DB::transaction(function () use($request){
+            //ブックマークの更新
+            $this->bookMarkRepository->update(
+                bookMarkId:$request->bookMarkId,
+                title:$request->bookMarkTitle,
+                url  :$request->bookMarkUrl
+            );
 
-        //タグの更新
-        $this->bookMarkTagRepository->update(
-            bookMarkId     :$request->bookMarkId,
-            updatedTagList :$request->tagList,
-        );
+            //タグの更新
+            $this->bookMarkTagRepository->update(
+                bookMarkId     :$request->bookMarkId,
+                updatedTagList :$request->tagList,
+            );
+        });
     }
 
     //ブックマーク検索
@@ -104,11 +109,11 @@ class BookMarkController extends Controller
         // deleteリクエストならここの部分が必要ない?
         // //$request->session()->regenerateToken();
 
-        if ($this->bookMarkRepository->isSameUser(
-            bookMarkId:$bookMarkId,
-            userId:Auth::id()))
-        {
-            $this->bookMarkRepository->delete(bookMarkId:$bookMarkId);
-        }
+        DB::transaction(function () use($request){
+            if ($this->bookMarkRepository->isSameUser(
+                bookMarkId:$bookMarkId,
+                userId:Auth::id()))
+            {$this->bookMarkRepository->delete(bookMarkId:$bookMarkId);}
+        });
     }
 }
