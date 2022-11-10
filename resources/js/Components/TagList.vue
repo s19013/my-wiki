@@ -16,7 +16,7 @@ export default{
     props:{
         tagList:{
             type:Array,
-            default:null
+            default:[]
         },
         text:{
             type:String,
