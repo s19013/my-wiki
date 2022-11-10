@@ -4,7 +4,7 @@ namespace App\Tools;
 
 use Illuminate\Http\Request;
 
-class nullAtoolKit
+class NullAvoidanceToolKit
 {
     // 引数1がnullだったら引数2を返す
     public function ifnull($arg1,$arg2)
