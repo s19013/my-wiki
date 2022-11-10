@@ -11,6 +11,7 @@ use App\Models\Article;
 use App\Repository\ArticleRepository;
 use App\Repository\ArticleTagRepository;
 
+use App\Tools\NullAvoidanceToolKit;
 use Auth;
 use DB;
 
@@ -101,14 +102,27 @@ class ArticleController extends Controller
     //記事検索
     public function search(Request $request)
     {
+        $tool = new NullAvoidanceToolKit();
+
         $result = $this->articleRepository->search(
             userId:Auth::id(),
-            articleToSearch:$request->articleToSearch,
-            currentPage:$request->currentPage,
+            keyword:$request->keyword,
+            page:$request->page,
             tagList:$request->tagList,
             searchTarget:$request->searchTarget
         );
-        return response()->json($result,200);
-    }
 
+        // これだとdataに入るもよう
+
+        $old = [
+            "keyword" => $request->keyword,
+            "tagList" => $request->tagList,
+            "searchTarget" => $tool->ifnull($request->searchTarget,"title")
+        ];
+
+        return Inertia::render('Article/SearchArticle',[
+            'result' => $result,
+            'old' => $old
+        ]);
+    }
 }
