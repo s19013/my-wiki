@@ -56,7 +56,7 @@ class ArticleRepository
     }
 
     //検索する数
-    public function search($userId,$articleToSearch,$currentPage,$tagList,$searchTarget)
+    public function search($userId,$keyword,$page,$tagList,$searchTarget)
     {
         // ツールを実体化
         $searchToolKit = new searchToolKit();
@@ -65,10 +65,13 @@ class ArticleRepository
         $parPage = (int)config('app.parPage');
 
         // %と_をエスケープ
-        $escaped = $searchToolKit->sqlEscape($articleToSearch);
+        $escaped = $searchToolKit->sqlEscape($keyword);
 
         //and検索のために空白区切りでつくった配列を用意
         $wordListToSearch = $searchToolKit->preparationToAndSearch($escaped);
+
+
+        // このwhere句をわける部分別の関数にしようかな?
 
         //タグも検索する場合
         if (!empty($tagList)) {
@@ -94,26 +97,26 @@ class ArticleRepository
             foreach($wordListToSearch as $word){ $query->where('body','like',"%$word%"); }
         }
 
+        //ヒット件数取得
+        $total = (int)$query->count();
+
+        //ページ数計算(最後は何ページ目か)
+        $lastPage = (int)ceil($total / $parPage);
+
+        // 一度にいくつ取ってくるか
+        $query->limit($parPage);
+
         //何件目から取得するか
-        $offset = $parPage*($currentPage-1);
+        $query->offset($parPage*($page-1));
 
         //ソート
         $sort = $query->orderBy('updated_at','desc');
 
         //検索
-        $searchResults = $query->offset($offset)
-        ->limit($parPage)
-        ->get();
-
-        //ヒット件数取得
-        $resultCount = $query->count();
-
-        //ページ数計算
-        $pageCount = (int)ceil($resultCount / $parPage);
-
         return [
-            "articleList"  => $searchResults,
-            "pageCount"    => $pageCount,
+            'data' => $query->get()->toArray(),
+            'current_page'=> (int)$page,
+            'last_page'   => $lastPage
         ];
     }
 
@@ -176,3 +179,5 @@ class ArticleRepository
         return ($article->user_id) == $userId;
     }
 }
+
+
