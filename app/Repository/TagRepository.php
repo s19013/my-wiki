@@ -81,7 +81,15 @@ class TagRepository
         // 削除されてないタグを探す
         $query->WhereNull('deleted_at');
 
-        return $query->find($tagId);
+        $result = $query->find($tagId);
+        // null(他人のタグ)の場合空を返す
+        if (is_null($result)) {
+            return [
+                'id'   => null,
+                'name' => null
+            ];
+        };
+        return $result;
     }
 
     // ログインユーザーが既に登録していないか確かめる
