@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Tools\searchToolKit;
 
 use App\Models\Article;
+use App\Models\ArticleTag;
 
 class ArticleRepository
 {
@@ -78,8 +79,7 @@ class ArticleRepository
             $subTable = self::createSubTableForSearch($userId,$tagList);
 
             //副問合せのテーブルから選択
-            $query = DB::table($subTable,'sub')
-            ->select('*');
+            $query = $this->createSubTableForSearch($userId,$tagList);
         } else {
             //タグ検索が不要な場合
             $query = Article::select('*')
@@ -113,6 +113,7 @@ class ArticleRepository
         $sort = $query->orderBy('updated_at','desc');
 
         //検索
+        // dd($query->get());
         return [
             'data' => $query->get()->toArray(),
             'current_page'=> (int)$page,
@@ -125,8 +126,10 @@ class ArticleRepository
     {
         //tags.idが
         //articleテーブルとarticle_tags,tagsを結合->参照元が論理削除されていないか確認するため
-        $subTable = DB::table('article_tags')
-        ->select('articles.*')
+
+        // なぜarticle_tagsをメインにしているのか
+        // -> article_tagsが2つを外部参照しているから
+        $subTable = ArticleTag::select('articles.*')
         ->leftJoin('articles','article_tags.article_id','=','articles.id')
         ->leftJoin('tags','article_tags.tag_id','=','tags.id')
         ->where('articles.user_id','=',$userId)
