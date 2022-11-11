@@ -58,6 +58,9 @@ class TagRepository
         $query = Tag::select('id','name','user_id')
         ->where('user_id','=',$userId);
 
+        // 削除されてないタグを探す
+        $query->WhereNull('deleted_at');
+
         // tag名をlikeけんさく
         foreach($wordListToSearch as $word){
             $query->where('name','like',"%$word%");
@@ -66,6 +69,19 @@ class TagRepository
         $query->orderBy('name');
 
         return $query->get();
+    }
+
+    // idからタグの名前などを取得する
+    public function findFromId($userId,$tagId)
+    {
+        //ログインユーザーのタグを探す
+        $query = Tag::select('id','name')
+        ->where('user_id','=',$userId);
+
+        // 削除されてないタグを探す
+        $query->WhereNull('deleted_at');
+
+        return $query->find($tagId);
     }
 
     // ログインユーザーが既に登録していないか確かめる

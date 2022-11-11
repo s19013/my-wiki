@@ -56,21 +56,18 @@ class ArticleRepository_SearchTest extends TestCase
 
         $response = $this->articleRepository->search(
             userId:$this->userId,
-            articleToSearch:'',
-            currentPage:1,
+            keyword:'',
+            page:1,
             tagList:null,
             searchTarget:'title'
         );
 
-        $articleList = $response['articleList'];
-        $pageCount   = $response['pageCount'];
-
         //帰ってきたarticleListの数を数える(10個以上あっても一度に10個までしか返さない)
-        $this->assertCount(10,$articleList);
+        $this->assertCount(10,$response['data']);
 
         // 何ページ分あるか確認
         // 今回は全部で20件ある,1ページ10件までなので,10件 + 10件 + 5件の3ページに分かれる
-        $this->assertEquals(3, $pageCount);
+        $this->assertEquals(3, $response['last_page']);
     }
 
     // 期待
@@ -88,20 +85,17 @@ class ArticleRepository_SearchTest extends TestCase
 
         $response = $this->articleRepository->search(
             userId:$this->userId,
-            articleToSearch:'',
-            currentPage:1,
+            keyword:'',
+            page:1,
             tagList:null,
             searchTarget:'title'
         );
 
-        $articleList = $response['articleList'];
-        $pageCount   = $response['pageCount'];
-
         //帰ってきたarticleListの数を数える
-        $this->assertCount(5,$articleList);
+        $this->assertCount(5,$response['data']);
 
         // 何ページ分あるか確認
-        $this->assertEquals(1, $pageCount);
+        $this->assertEquals(1, $response['last_page']);
     }
 
     // 期待
@@ -128,18 +122,17 @@ class ArticleRepository_SearchTest extends TestCase
 
         $response = $this->articleRepository->search(
             userId:$this->userId,
-            articleToSearch:'',
-            currentPage:2,
+            keyword:'',
+            page:2,
             tagList:null,
             searchTarget:'title'
         );
 
-        $articleList = $response['articleList'];
-        $pageCount   = $response['pageCount'];
+        $articleList = $response['data'];
 
         //帰ってきたarticleListの数を数える(10個以上あっても一度に10個までしか返さない)
         for ($i=10; $i <20 ; $i++) {
-            $this->assertSame($articleList[$i - 10]->title,"title ${i}");
+            $this->assertSame($articleList[$i - 10]['title'],"title ${i}");
         }
     }
 
@@ -173,23 +166,25 @@ class ArticleRepository_SearchTest extends TestCase
 
         $response = $this->articleRepository->search(
             userId:$this->userId,
-            articleToSearch:'',
-            currentPage:1,
+            keyword:'',
+            page:1,
             tagList:null,
             searchTarget:'title'
         );
 
-        $articleList = $response['articleList'];
+        $articleList = $response['data'];
+
+        // dd($articleList);
 
         $idList = [];
-        foreach ($articleList as $data){ array_push($idList,$data->id); }
+        foreach ($articleList as $data){ array_push($idList,$data['id']); }
 
         // 全部指定したユーザーの記事か
-        foreach ($articleList as $data){ $this->assertEquals($data->user_id,$this->userId); }
+        foreach ($articleList as $data){ $this->assertEquals($data['user_id'],$this->userId); }
 
         // 削除した記事は含んでないか
-        $this->assertNotContains($articles[0]->id,$idList);
-        $this->assertNotContains($articles[1]->id,$idList);
+        $this->assertNotContains($articles[0]['id'],$idList);
+        $this->assertNotContains($articles[1]['id'],$idList);
     }
 
     // 期待
@@ -238,27 +233,27 @@ class ArticleRepository_SearchTest extends TestCase
 
         $response = $this->articleRepository->search(
             userId:$this->userId,
-            articleToSearch:"apple make",
-            currentPage:1,
+            keyword:"apple make",
+            page:1,
             tagList:null,
             searchTarget:'title'
         );
 
-        $articleList = $response['articleList'];
+        $articleList = $response['data'];
 
         $idList = [];
-        foreach ($articleList as $data){ array_push($idList,$data->id); }
+        foreach ($articleList as $data){ array_push($idList,$data['id']); }
 
 
         // 全部指定したユーザーの記事か
-        foreach ($articleList as $data){ $this->assertEquals($data->user_id,$this->userId); }
+        foreach ($articleList as $data){ $this->assertEquals($data['user_id'],$this->userId); }
 
         // 削除した記事は含んでないか
-        $this->assertNotContains($deleteArticle->id,$idList);
+        $this->assertNotContains($deleteArticle['id'],$idList);
 
         // ヒットするはずの記事を取ってきているか
-        $this->assertContains($hitArticle1->id, $idList);
-        $this->assertContains($hitArticle2->id, $idList);
+        $this->assertContains($hitArticle1['id'], $idList);
+        $this->assertContains($hitArticle2['id'], $idList);
 
     }
 
@@ -340,25 +335,27 @@ class ArticleRepository_SearchTest extends TestCase
 
         $response = $this->articleRepository->search(
             userId:$this->userId,
-            articleToSearch:"",
-            currentPage:1,
+            keyword:"",
+            page:1,
             tagList:[$hitTag->id],
             searchTarget:'title'
         );
 
-        $articleList = $response['articleList'];
+        $articleList = $response['data'];
+
+        // dd($articleList[0]->id);
 
         $idList = [];
-        foreach ($articleList as $data){ array_push($idList,$data->id); }
+        foreach ($articleList as $data){ array_push($idList,$data['id']); }
 
         // 全部指定したユーザーの記事か
-        foreach ($articleList as $data){ $this->assertEquals($data->user_id,$this->userId); }
+        foreach ($articleList as $data){ $this->assertEquals($data['user_id'],$this->userId); }
 
         // 削除した記事は含んでないか
-        $this->assertNotContains($deleteArticle->id,$idList);
+        $this->assertNotContains($deleteArticle['id'],$idList);
 
         // ヒットするはずの記事を取ってきているか
-        $this->assertContains($hitArticle1->id, $idList);
+        $this->assertContains($hitArticle1['id'], $idList);
     }
 
     // 期待
@@ -466,19 +463,19 @@ class ArticleRepository_SearchTest extends TestCase
 
         $response = $this->articleRepository->search(
             userId:$this->userId,
-            articleToSearch:"make",
-            currentPage:1,
+            keyword:"make",
+            page:1,
             tagList:[$hitTag->id],
             searchTarget:'title'
         );
 
-        $articleList = $response['articleList'];
+        $articleList = $response['data'];
 
         $idList = [];
-        foreach ($articleList as $data){ array_push($idList,$data->id); }
+        foreach ($articleList as $data){ array_push($idList,$data['id']); }
 
         // 全部指定したユーザーの記事か
-        foreach ($articleList as $data){ $this->assertEquals($data->user_id,$this->userId); }
+        foreach ($articleList as $data){ $this->assertEquals($data['user_id'],$this->userId); }
 
         // 削除した記事は含んでないか
         $this->assertNotContains($deleteArticle->id,$idList);
@@ -517,23 +514,23 @@ class ArticleRepository_SearchTest extends TestCase
 
         $response = $this->articleRepository->search(
             userId:$this->userId,
-            articleToSearch:'',
-            currentPage:1,
+            keyword:'',
+            page:1,
             tagList:null,
             searchTarget:'body'
         );
 
-        $articleList = $response['articleList'];
+        $articleList = $response['data'];
 
         $idList = [];
-        foreach ($articleList as $data){ array_push($idList,$data->id); }
+        foreach ($articleList as $data){ array_push($idList,$data['id']); }
 
         // 全部指定したユーザーの記事か
-        foreach ($articleList as $data){ $this->assertEquals($data->user_id,$this->userId); }
+        foreach ($articleList as $data){ $this->assertEquals($data['user_id'],$this->userId); }
 
         // 削除した記事は含んでないか
-        $this->assertNotContains($articles[0]->id,$idList);
-        $this->assertNotContains($articles[1]->id,$idList);
+        $this->assertNotContains($articles[0]['id'],$idList);
+        $this->assertNotContains($articles[1]['id'],$idList);
     }
 
     // 期待
@@ -582,27 +579,27 @@ class ArticleRepository_SearchTest extends TestCase
 
         $response = $this->articleRepository->search(
             userId:$this->userId,
-            articleToSearch:"apple make",
-            currentPage:1,
+            keyword:"apple make",
+            page:1,
             tagList:null,
             searchTarget:'body'
         );
 
-        $articleList = $response['articleList'];
+        $articleList = $response['data'];
 
         $idList = [];
-        foreach ($articleList as $data){ array_push($idList,$data->id); }
+        foreach ($articleList as $data){ array_push($idList,$data['id']); }
 
 
         // 全部指定したユーザーの記事か
-        foreach ($articleList as $data){ $this->assertEquals($data->user_id,$this->userId); }
+        foreach ($articleList as $data){ $this->assertEquals($data['user_id'],$this->userId); }
 
         // 削除した記事は含んでないか
-        $this->assertNotContains($deleteArticle->id,$idList);
+        $this->assertNotContains($deleteArticle['id'],$idList);
 
         // ヒットするはずの記事を取ってきているか
-        $this->assertContains($hitArticle1->id, $idList);
-        $this->assertContains($hitArticle2->id, $idList);
+        $this->assertContains($hitArticle1['id'], $idList);
+        $this->assertContains($hitArticle2['id'], $idList);
 
     }
 
@@ -684,19 +681,19 @@ class ArticleRepository_SearchTest extends TestCase
 
         $response = $this->articleRepository->search(
             userId:$this->userId,
-            articleToSearch:"",
-            currentPage:1,
+            keyword:"",
+            page:1,
             tagList:[$hitTag->id],
             searchTarget:'body'
         );
 
-        $articleList = $response['articleList'];
+        $articleList = $response['data'];
 
         $idList = [];
-        foreach ($articleList as $data){ array_push($idList,$data->id); }
+        foreach ($articleList as $data){ array_push($idList,$data['id']); }
 
         // 全部指定したユーザーの記事か
-        foreach ($articleList as $data){ $this->assertEquals($data->user_id,$this->userId); }
+        foreach ($articleList as $data){ $this->assertEquals($data['user_id'],$this->userId); }
 
         // 削除した記事は含んでないか
         $this->assertNotContains($deleteArticle->id,$idList);
@@ -810,24 +807,24 @@ class ArticleRepository_SearchTest extends TestCase
 
         $response = $this->articleRepository->search(
             userId:$this->userId,
-            articleToSearch:"make",
-            currentPage:1,
+            keyword:"make",
+            page:1,
             tagList:[$hitTag->id],
             searchTarget:'body'
         );
 
-        $articleList = $response['articleList'];
+        $articleList = $response['data'];
 
         $idList = [];
-        foreach ($articleList as $data){ array_push($idList,$data->id); }
+        foreach ($articleList as $data){ array_push($idList,$data['id']); }
 
         // 全部指定したユーザーの記事か
-        foreach ($articleList as $data){ $this->assertEquals($data->user_id,$this->userId); }
+        foreach ($articleList as $data){ $this->assertEquals($data['user_id'],$this->userId); }
 
         // 削除した記事は含んでないか
         $this->assertNotContains($deleteArticle->id,$idList);
 
         // ヒットするはずの記事を取ってきているか
-        $this->assertContains($hitArticle->id, $idList);
+        $this->assertContains($hitArticle->id , $idList);
     }
 }

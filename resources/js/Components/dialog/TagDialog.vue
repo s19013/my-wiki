@@ -140,7 +140,7 @@ export default{
         originalCheckedTagList:{
             //更新や閲覧画面で既にチェックがついているタグを受け取るため
             type   :Array,
-            default:null,
+            default:[],
         },
         searchOnly:{
             //記事検索などでは新規作成を表示させないようにするため
@@ -340,7 +340,7 @@ export default{
     },
     mounted() {
         //originalCheckedTagListの中が完全に空ではなかったら代入
-        if (this.originalCheckedTagList != null) {
+        if (this.originalCheckedTagList.length != 0 ) {
             this.checkedTagList = this.originalCheckedTagList
         }
 
