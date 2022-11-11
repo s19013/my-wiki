@@ -124,7 +124,8 @@ class ArticleController extends Controller
 
         $tagList = [];
 
-        // 最初の検索だけ$request->tagListにnullが入るのでそれを避けるため
+        // 最初の検索だけ$request->tagListにnullが入る
+        // nullの状態でforeachをするとtagなんて項目は無いよとエラーを吐かれる｡それを避けるため
         if (!is_null($request->tagList)) {
             foreach ($request->tagList as $tag){
                 $temp = $this->tagRepository->findFromId(
