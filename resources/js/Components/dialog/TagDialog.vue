@@ -341,6 +341,12 @@ export default{
     mounted() {
         //originalCheckedTagListの中が完全に空ではなかったら代入
         if (this.originalCheckedTagList.length != 0 ) {
+            // idがnullのデータ(ユーザーがget通信でurlを変にいじったら起きる)の時の処理
+            for (let index = 0; index < this.originalCheckedTagList.length; index++) {
+                if(this.originalCheckedTagList[index].id == null){this.originalCheckedTagList.splice(index) }
+            }
+
+
             this.checkedTagList = this.originalCheckedTagList
         }
 
