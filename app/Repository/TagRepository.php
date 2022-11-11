@@ -82,9 +82,9 @@ class TagRepository
         $query->WhereNull('deleted_at');
 
         $result = $query->find($tagId);
-        // null(他人のタグ)の場合空を返す
+        // null(削除されたタグ)の場合
         if (is_null($result)) {
-            return [
+            return (object)[
                 'id'   => null,
                 'name' => null
             ];
