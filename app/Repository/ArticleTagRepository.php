@@ -154,7 +154,7 @@ class ArticleTagRepository
         ->get();
 
 
-        if (is_null($result->toArray()[0]['id'])) {return null;}
+        if (is_null($result->toArray()[0]['id'])) {return [];}
 
         return $result;
     }

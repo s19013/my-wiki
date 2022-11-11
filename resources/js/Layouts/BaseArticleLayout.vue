@@ -93,7 +93,7 @@ export default {
         },
         originalCheckedTagList:{
             type  :Array,
-            default:null
+            default:[]
         },
         edit:{
             type  :Boolean,
