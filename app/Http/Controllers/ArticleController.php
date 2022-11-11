@@ -119,7 +119,7 @@ class ArticleController extends Controller
             keyword:$request->keyword,
             page   :$this->nullAvoidanceToolKit->ifnull($request->page,1),
             tagList:$request->tagList,
-            searchTarget:$request->searchTarget
+            searchTarget:$this->nullAvoidanceToolKit->ifnull($request->searchTarget,"title")
         );
 
         $tagList = [];
@@ -137,7 +137,8 @@ class ArticleController extends Controller
         }
 
         $old = [
-            "keyword" => $request->keyword,
+
+            "keyword" => $this->nullAvoidanceToolKit->ifnull($request->keyword,""),
             "tagList" => $tagList,
             "searchTarget" => $this->nullAvoidanceToolKit->ifnull($request->searchTarget,"title")
         ];
