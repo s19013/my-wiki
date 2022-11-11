@@ -10,6 +10,7 @@ use App\Models\Article;
 
 use App\Repository\ArticleRepository;
 use App\Repository\ArticleTagRepository;
+use App\Repository\TagRepository;
 
 use App\Tools\NullAvoidanceToolKit;
 use Auth;
@@ -20,11 +21,20 @@ class ArticleController extends Controller
 
     private $articleRepository;
     private $articleTagRepository;
+    private $tagRepository;
+    private $nullAvoidanceToolKit;
 
-    public function __construct(ArticleRepository $articleRepository,ArticleTagRepository $articleTagRepository)
+    public function __construct(
+        ArticleRepository    $articleRepository,
+        ArticleTagRepository $articleTagRepository,
+        TagRepository        $tagRepository,
+        NullAvoidanceToolKit $nullAvoidanceToolKit
+    )
     {
-        $this->articleRepository = $articleRepository;
+        $this->articleRepository    = $articleRepository;
         $this->articleTagRepository = $articleTagRepository;
+        $this->tagRepository        = $tagRepository;
+        $this->nullAvoidanceToolKit = $nullAvoidanceToolKit;
     }
     //新規記事作成
     public function store(Request $request)
@@ -105,19 +115,30 @@ class ArticleController extends Controller
         $tool = new NullAvoidanceToolKit();
 
         $result = $this->articleRepository->search(
-            userId:Auth::id(),
+            userId :Auth::id(),
             keyword:$request->keyword,
-            page:$request->page,
+            page   :$this->nullAvoidanceToolKit->ifnull($request->page,1),
             tagList:$request->tagList,
             searchTarget:$request->searchTarget
         );
 
-        // これだとdataに入るもよう
+        $tagList = [];
+
+        // 最初の検索だけ$request->tagListにnullが入るのでそれを避けるため
+        if (!is_null($request->tagList)) {
+            foreach ($request->tagList as $tag){
+                $temp = $this->tagRepository->findFromId(
+                        userId:Auth::id(),
+                        tagId :$tag
+                );
+                array_push($tagList,$temp);
+            }
+        }
 
         $old = [
             "keyword" => $request->keyword,
-            "tagList" => $request->tagList,
-            "searchTarget" => $tool->ifnull($request->searchTarget,"title")
+            "tagList" => $tagList,
+            "searchTarget" => $this->nullAvoidanceToolKit->ifnull($request->searchTarget,"title")
         ];
 
         return Inertia::render('Article/SearchArticle',[

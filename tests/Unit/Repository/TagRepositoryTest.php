@@ -37,6 +37,9 @@ class TagRepositoryTest extends TestCase
         ]);
 
         $this->userId = $user->id;
+
+        // テストで使う時間を固定
+        Carbon::setTestNow(Carbon::now());
     }
 
     // 期待
@@ -56,7 +59,7 @@ class TagRepositoryTest extends TestCase
 
     // 期待
     // 関数がfalseを返す
-    public function test_store_同じタグを登録する()
+    public function test_store_同一ユーザーが同じ名前のタグを登録するとエラーを吐くか()
     {
         Tag::create([
             'name'    => 'testTag',
@@ -67,8 +70,47 @@ class TagRepositoryTest extends TestCase
     }
 
     // 期待
+    // 削除されていないすべてのデータをとってくる
+    public function test_search_削除されていないすべてのタグをとって来る()
+    {
+        Tag::factory()->count(5)->create( ["user_id" => $this->userId] );
+
+        $deletedTag = Tag::factory()->create( [
+            "user_id"    => $this->userId,
+            "deleted_at" => Carbon::now()
+        ] );
+
+        $receivedTags = $this->tagRepository->search($this->userId,"");
+
+        //名前とidが一緒かどうか
+        $IdList = [];
+        foreach ($receivedTags as $tag){array_push($IdList,$tag->id);}
+
+        $nameList = [];
+        foreach ($receivedTags as $tag){ array_push($nameList,$tag->name);}
+
+        // 数を数える
+        $this->assertCount(5, $IdList);
+
+        // 削除したタグが含まれてないか
+        $this->assertNotContains($deletedTag->id, $IdList);
+    }
+
+    // 期待
+    // 他のユーザーが作ったタグをとって来ない
+    public function test_search_他のユーザーが作ったタグをとって来ない()
+    {
+        Tag::factory()->count(5)->create(["user_id" => User::factory()->create()->id]);
+
+        $receivedTags = $this->tagRepository->search($this->userId,"");
+
+        // 数を数える
+        $this->assertEmpty($receivedTags->toArray());
+    }
+
+    // 期待
     // dbの中から 引数2の文字列をnameカラムに含むタグのデータをとってくる
-    public function test_search()
+    public function test_search_キーワード指定()
     {
         // 検索にかかるタグ
         Tag::factory()->create( [
@@ -88,6 +130,47 @@ class TagRepositoryTest extends TestCase
 
         $this->assertContains("TestTag",$nameList);
     }
+
+    // 期待
+    // 指定したidのタグの名前をとって来れるか
+    public function test_findFromId_指定したidのタグの名前をとって来れるか()
+    {
+        $tag = Tag::factory()->create( ["user_id" => $this->userId] );
+
+        $receivedTag = $this->tagRepository->findFromId($this->userId,$tag->id);
+
+        $this->assertSame($tag->id,$receivedTag->id);
+        $this->assertSame($tag->name,$receivedTag->name);
+    }
+
+    // 期待
+    // 削除したタグはとってこない
+    public function test_findFromId_削除したタグはとってこない()
+    {
+        $tag = Tag::factory()->create( [
+            "user_id" => $this->userId,
+            "deleted_at" => Carbon::now()
+        ] );
+
+        $receivedTag = $this->tagRepository->findFromId($this->userId,$tag->id);
+
+        // 全部nullのハズ
+        $this->assertNull($receivedTag->id);
+        $this->assertNull($receivedTag->name);
+    }
+
+    // 期待
+    // 他のユーザーが作ったタグはとってこない
+    public function test_findFromId_他のユーザーが作ったタグはとってこない()
+    {
+        $tag = Tag::factory()->create(["user_id" => User::factory()->create()->id]);
+
+        $receivedTag = $this->tagRepository->search($this->userId,$tag->id);
+
+        // 空の配列が帰ってくるはず
+        $this->assertEmpty($receivedTag);
+    }
+
 
 
     // 期待
