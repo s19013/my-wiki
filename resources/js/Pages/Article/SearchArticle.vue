@@ -6,6 +6,7 @@
                 ref = "SearchField"
                 searchLabel   ="記事検索"
                 :loadingFlag  ="loading"
+                :orignalKeyWord="old.keyword"
                 @triggerSearch="searchArticle"
                 >
             </SearchField>
@@ -14,6 +15,7 @@
                 ref="tagDialog"
                 class="mb-10"
                 text = "検索するタグ"
+                :originalCheckedTagList="old.tagList"
                 :searchOnly="true"/>
 
             <details>
@@ -31,15 +33,15 @@
             <!-- loadingアニメ -->
             <loading v-show="loading"></loading>
 
-            <template v-for="article of articleList" :key="article.id">
+            <template v-for="article of result.data" :key="article.id">
                 <ArticleContainer
                     v-if="!loading"
                     :article="article"
                 />
             </template>
         <v-pagination
-            v-model="currentPage"
-            :length="pageCount"
+            v-model="page"
+            :length="result.last_page"
         ></v-pagination>
         </v-container>
     </BaseLayout>
@@ -55,12 +57,14 @@ import ArticleContainer from '@/Components/contents/ArticleContainer.vue';
 export default{
     data() {
         return {
-            articleList:null,
-            currentPage: 1,
-            pageCount:1,
+            page: this.result.current_page,
             loading:false,
-            searchTarget:"title"
+            searchTarget:this.old.searchTarget
         }
+    },
+    props:{
+        result:{},
+        old:{}
     },
     components:{
         BaseLayout,
@@ -71,50 +75,46 @@ export default{
     },
     methods: {
         // 検索用
-        async searchArticle(){
+        searchArticle(){
             this.loading = true
-            this.currentPage = 1 //検索するのでリセットする
-            await axios.post('/api/article/search',{
-                currentPage    :this.currentPage,
-                articleToSearch:this.$refs.SearchField.serveKeywordToParent(),
-                tagList     : this.$refs.tagDialog.serveCheckedTagListToParent(),
-                searchTarget:this.searchTarget
+            this.$inertia.get('/Article/Search' ,{
+                page :1,
+                keyword : this.$refs.SearchField.serveKeywordToParent(),
+                tagList : this.$refs.tagDialog.serveCheckedTagListToParent(),
+                searchTarget:this.searchTarget,
+                onError:(error) => {
+                    console.log(error)
+                    this.loading = false
+                }
             })
-            .then((res) =>{
-                this.pageCount= res.data.pageCount
-                this.articleList = res.data.articleList
-            })
-            .catch((error) => {console.log(error);})
-            this.loading = false
         },
         // ページめくり
-        async pagination(){
+        pagination(){
             this.loading = true
-            await axios.post('/api/article/search',{
-                currentPage:this.currentPage,
-                articleToSearch:this.articleToSearch,
-                tagList : this.$refs.tagDialog.serveCheckedTagListToParent(),
-                searchTarget:this.searchTarget
-            })
-            .then((res) =>{
-                this.articleList = res.data.articleList
-                this.loading = false
-            })
-            .catch((error) => {
-                console.log(error);
-                this.loading = false
+            this.$inertia.get('/Article/Search' ,{
+                page : this.page,
+                keyword : this.old.keyword,
+                tagList : this.old.tagList,
+                searchTarget:this.old.searchTarget,
+                onError:(error) => {
+                    console.log(error)
+                    this.loading = false
+                }
             })
         },
     },
     watch: {
-    // 厳密にはページネーションのボタン類を押すとpagination.current_pageが変化するのでそれをwatch
+    // @input="pagination"でできるはずなのにできないのでwatchで対応
     // ページネーションのボタン類を押した場合の処理
-        currentPage:function(newValue,oldValue){
+    // 厳密にはページネーションのボタン類を押すとpageの値が変化するのでそれをwatchしてページネーションを起動
+        page:function(newValue,oldValue){
             this.pagination();
         }
     },
     mounted() {
-        this.searchArticle();
+        console.log(this.result);
+        console.log(this.old);
+        console.log(this.page);
     },
 }
 </script>
