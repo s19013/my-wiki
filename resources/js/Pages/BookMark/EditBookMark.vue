@@ -39,7 +39,7 @@ export default {
             tagList,
         }){
             this.$refs.BaseBookMarkLayout.switchDisabledFlag()
-            axios.post('/BookMark/Store',{
+            axios.put('/BookMark/Update',{
                 bookMarkId   :this.originalBookMark.id,
                 bookMarkTitle:bookMarkTitle,
                 bookMarkUrl  :bookMarkUrl,
