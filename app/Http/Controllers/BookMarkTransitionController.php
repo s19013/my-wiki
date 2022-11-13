@@ -11,6 +11,7 @@ use App\Models\BookMarkTag;
 
 use App\Repository\BookMarkRepository;
 use App\Repository\BookMarkTagRepository;
+use App\Tools\NullAvoidanceToolKit;
 
 use Auth;
 
@@ -18,11 +19,13 @@ class BookMarkTransitionController extends Controller
 {
     private $bookMarkRepository;
     private $bookMarkTagRepository;
+    private $nullAvoidanceToolKit;
 
     public function __construct()
     {
         $this->bookMarkRepository    = new BookMarkRepository();
         $this->bookMarkTagRepository = new BookMarkTagRepository();
+        $this->nullAvoidanceToolKit  = new NullAvoidanceToolKit();
     }
 
     //ブックマーク編集画面に遷移する時の処理
@@ -45,7 +48,7 @@ class BookMarkTransitionController extends Controller
 
         return Inertia::render('BookMark/EditBookMark',[
             'originalBookMark'         => $bookMark,
-            'originalCheckedTagList'   => $bookMarkTagList,
+            'originalCheckedTagList'   => $this->nullAvoidanceToolKit->ifnull($bookMarkTagList,[]),
         ]);
     }
 }

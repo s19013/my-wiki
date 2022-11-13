@@ -62,7 +62,7 @@ export default {
       return {
         bookMarkTitle :this.originalBookMark.title,
         bookMarkUrl   :this.originalBookMark.url,
-        checkedTagList:[],
+        checkedTagList:this.originalCheckedTagList,
 
         //loding
         disabledFlag:false,
@@ -92,13 +92,13 @@ export default {
         originalBookMark:{
             type   :Object,
             default:{
-                title:null,
-                url  :null
+                title:'',
+                url  :''
             }
         },
         originalCheckedTagList:{
             type   :Array,
-            default:null
+            default:[]
         },
         edit:{
             type  :Boolean,
@@ -126,11 +126,11 @@ export default {
         deleteBookMark() {this.$emit('triggerDeleteBookMark')},
     },
     mounted() {
-        this.checkedTagList = this.originalCheckedTagList
-        if (this.originalBookMark !== null) {
-            this.bookMarkTitle =this.originalBookMark.title
-            this.bookMarkUrl   =this.originalBookMark.url
-        }
+        // this.checkedTagList = this.originalCheckedTagList
+        // if (this.originalBookMark !== null) {
+        //     this.bookMarkTitle =this.originalBookMark.title
+        //     this.bookMarkUrl   =this.originalBookMark.url
+        // }
         //キーボード受付
         document.addEventListener('keydown', (event)=>{
             // 削除ダイアログ呼び出し

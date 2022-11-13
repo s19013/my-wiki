@@ -41,7 +41,6 @@ export default {
         deleteArticle() {
             //遷移
             this.$refs.BaseArticleLayout.switchDisabledFlag()
-            this.$inertia.get('/Article/Search')
         },
     },
 }

@@ -15,7 +15,7 @@
                 </v-btn>
             </div>
 
-            <DateLabel v-if="edit" :createdAt="originalArticle.created_at" :updatedAt="originalArticle.updated_at" size="0.8rem"/>
+            <DateLabel v-if="edit" :createdAt="originalArticle.created_at" :updatedAt="originalArticle.updated_at" />
 
             <TagDialog
                 ref="tagDialog"
@@ -58,9 +58,9 @@ import DateLabel from '@/Components/DateLabel.vue';
 export default {
     data() {
       return {
-        articleTitle  :'',
-        articleBody   :'',
-        checkedTagList:[],
+        articleTitle  :this.originalArticle.title,
+        articleBody   :this.originalArticle.body,
+        checkedTagList:this.originalCheckedTagList,
 
         //loding
         disabledFlag:false,
@@ -89,7 +89,10 @@ export default {
         },
         originalArticle:{
             type   :Object,
-            default:null
+            default:{
+                title:'',
+                body :''
+            }
         },
         originalCheckedTagList:{
             type  :Array,
@@ -125,11 +128,11 @@ export default {
     },
     mounted() {
         //props受け渡し
-        this.checkedTagList = this.originalCheckedTagList
-        if (this.originalArticle !== null ) {
-            this.articleTitle = this.originalArticle.title
-            this.articleBody  = this.originalArticle.body
-        }
+        // this.checkedTagList = this.originalCheckedTagList
+        // if (this.originalArticle !== null ) {
+        //     this.articleTitle = this.originalArticle.title
+        //     this.articleBody  = this.originalArticle.body
+        // }
 
         //キーボード受付
         document.addEventListener('keydown', (event)=>{

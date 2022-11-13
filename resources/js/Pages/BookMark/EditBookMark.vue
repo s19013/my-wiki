@@ -19,7 +19,16 @@ export default {
     data() {
       return {}
     },
-    props:['originalBookMark','originalCheckedTagList'],
+    props:{
+        'originalBookMark':{
+            type:Object,
+            required: true,
+        },
+        'originalCheckedTagList':{
+            type:Array,
+            required: true,
+        }
+    },
     components:{
         BaseBookMarkLayout
     },
@@ -30,7 +39,7 @@ export default {
             tagList,
         }){
             this.$refs.BaseBookMarkLayout.switchDisabledFlag()
-            axios.post('/api/bookmark/update',{
+            axios.put('/BookMark/Update',{
                 bookMarkId   :this.originalBookMark.id,
                 bookMarkTitle:bookMarkTitle,
                 bookMarkUrl  :bookMarkUrl,
@@ -45,9 +54,12 @@ export default {
         deleteBookMark() {
             // 消す処理
             this.$refs.BaseBookMarkLayout.switchDisabledFlag()
-            axios.delete('/api/bookmark/'+ this.originalBookMark.id)
-            .then((res)=>{this.$inertia.get('/BookMark/Search')})
-            .catch((error) => {console.log(error);})
+            this.$inertia.delete('/BookMark/' + this.originalBookMark.id,{
+                onError: (errors) => {
+                    console.log( errors )
+                    this.$refs.BaseBookMarkLayout.switchDisabledFlag()
+                },
+            })
         },
     },
     mounted() {

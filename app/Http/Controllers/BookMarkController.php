@@ -6,23 +6,36 @@ use Illuminate\Http\Request;
 
 use App\Models\BookMarkTag;
 use App\Models\BookMark;
-use Auth;
-use DB;
+
 
 use Inertia\Inertia;
 
 use App\Repository\BookMarkRepository;
 use App\Repository\BookMarkTagRepository;
+use App\Repository\TagRepository;
+
+use App\Tools\NullAvoidanceToolKit;
+use Auth;
+use DB;
 
 class BookMarkController extends Controller
 {
     private $bookMarkRepository;
     private $bookMarkTagRepository;
+    private $tagRepository;
+    private $nullAvoidanceToolKit;
 
-    public function __construct(BookMarkRepository $bookMarkRepository,BookMarkTagRepository $bookMarkTagRepository)
+    public function __construct(
+        BookMarkRepository $bookMarkRepository,
+        BookMarkTagRepository $bookMarkTagRepository,
+        TagRepository        $tagRepository,
+        NullAvoidanceToolKit $nullAvoidanceToolKit
+    )
     {
         $this->bookMarkRepository    = $bookMarkRepository;
         $this->bookMarkTagRepository = $bookMarkTagRepository;
+        $this->tagRepository        = $tagRepository;
+        $this->nullAvoidanceToolKit = $nullAvoidanceToolKit;
     }
 
     //新規ブックマーク作成
@@ -89,31 +102,59 @@ class BookMarkController extends Controller
         });
     }
 
-    //ブックマーク検索
-    public function search(Request $request)
-    {
-        $result = $this->bookMarkRepository->search(
-            userId:Auth::id(),
-            bookMarkToSearch:$request->bookMarkToSearch,
-            currentPage:$request->currentPage,
-            tagList    :$request->tagList,
-            searchTarget:$request->searchTarget
-        );
-
-        return response()->json($result,200);
-    }
-
     public function delete($bookMarkId)
     {
         // CSRFトークンを再生成して、二重送信対策
         // deleteリクエストならここの部分が必要ない?
         // //$request->session()->regenerateToken();
 
-        DB::transaction(function () use($request){
+        DB::transaction(function () use($bookMarkId){
             if ($this->bookMarkRepository->isSameUser(
                 bookMarkId:$bookMarkId,
                 userId:Auth::id()))
             {$this->bookMarkRepository->delete(bookMarkId:$bookMarkId);}
         });
+
+        return redirect()->route('SearchBookMark');
+    }
+
+    //ブックマーク検索
+    public function search(Request $request)
+    {
+        $tool = new NullAvoidanceToolKit();
+
+        $result = $this->bookMarkRepository->search(
+            userId:Auth::id(),
+            keyword:$request->bookMarkToSearch,
+            page:$this->nullAvoidanceToolKit->ifnull($request->page,1),
+            tagList    :$request->tagList,
+            searchTarget:$this->nullAvoidanceToolKit->ifnull($request->searchTarget,"title")
+        );
+
+        $tagList = [];
+
+        // 最初の検索だけ$request->tagListにnullが入る
+        // nullの状態でforeachをするとtagなんて項目は無いよとエラーを吐かれる｡それを避けるため
+        if (!is_null($request->tagList)) {
+            foreach ($request->tagList as $tag){
+                $temp = $this->tagRepository->findFromId(
+                        userId:Auth::id(),
+                        tagId :$tag
+                );
+                array_push($tagList,$temp);
+            }
+        }
+
+        $old = [
+            "keyword" => $this->nullAvoidanceToolKit->ifnull($request->keyword,""),
+            "tagList" => $tagList,
+            "searchTarget" => $this->nullAvoidanceToolKit->ifnull($request->searchTarget,"title")
+        ];
+
+        // この関数がこれで動くのは､get通信で同じページに表示しているから?
+        return Inertia::render('BookMark/SearchBookMark',[
+            'result' => $result,
+            'old' => $old
+        ]);
     }
 }
