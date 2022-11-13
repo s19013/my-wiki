@@ -29,7 +29,6 @@ export default {
                 bookMarkUrl  :bookMarkUrl,
                 tagList      :tagList,
             })
-            .then((res)=>{this.$inertia.get('/BookMark/Search')})
             .catch((error) => {
                 if (error.response.status == 400){this.$refs.BaseBookMarkLayout.alreadyExistErrorFlag = true}
                 console.log(error);
