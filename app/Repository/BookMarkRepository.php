@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Tools\searchToolKit;
 
 use App\Models\BookMark;
+use App\Models\BookMarkTag;
 
 class BookMarkRepository
 {
@@ -28,6 +29,14 @@ class BookMarkRepository
     {
         // タイトルが産められてなかったら日時で埋める
         if ($title == '') { $title = Carbon::now() ;}
+
+        // 登録済みかどうかを確認していない->ちょっと危ないかも
+        // 登録してあるurlとidが一致してない->既に登録してあると判断
+        //
+        // 1:google.com <-既にあるやつ
+        // 上のidと受け取ったbookmarkidが一致しない->ダブり
+
+
 
         BookMark::where('id','=',$bookMarkId)
             ->update([
@@ -53,7 +62,7 @@ class BookMarkRepository
         ->first();
     }
 
-    public  function search($userId,$bookMarkToSearch,$currentPage,$tagList,$searchTarget)
+    public  function search($userId,$keyword,$page,$tagList,$searchTarget)
     {
         // ツールを実体化
         $searchToolKit = new searchToolKit();
@@ -62,7 +71,7 @@ class BookMarkRepository
         $parPage = (int)config('app.parPage');
 
         // %と_をエスケープ
-        $escaped = $searchToolKit->sqlEscape($bookMarkToSearch);
+        $escaped = $searchToolKit->sqlEscape($keyword);
         //and検索のために空白区切りでつくった配列を用意
         $wordListToSearch = $searchToolKit->preparationToAndSearch($escaped);
 
@@ -75,6 +84,7 @@ class BookMarkRepository
             $query = DB::table($subTable,'sub')
             ->select('*');
         } else {
+            //タグ検索が不要な場合
             $query = BookMark::select('*')
             ->where('user_id','=',$userId)
             ->whereNull('deleted_at');
@@ -90,26 +100,27 @@ class BookMarkRepository
             foreach($wordListToSearch as $word){ $query->where('url','like',"%$word%"); }
         }
 
+        //ヒット件数取得
+        $total = (int)$query->count();
+
+        //ページ数計算(最後は何ページ目か)
+        $lastPage = (int)ceil($total / $parPage);
+
+        // 一度にいくつ取ってくるか
+        $query->limit($parPage);
+
         //何件目から取得するか
-        $offset = $parPage*($currentPage-1);
+        $query->offset($parPage*($page-1));
 
         //ソート
         $sort = $query->orderBy('updated_at','desc');
 
         //検索
-        $searchResults = $query->offset($offset)
-        ->limit($parPage)
-        ->get();
-
-        //ヒット件数取得
-        $resultCount = $query->count();
-
-        //ページ数計算
-        $pageCount = (int)ceil($resultCount / $parPage);
-
+        // dd($query->get());
         return [
-            "bookMarkList" => $searchResults,
-            "pageCount"    => $pageCount
+            'data' => $query->get()->toArray(),
+            'current_page'=> (int)$page,
+            'last_page'   => $lastPage
         ];
     }
 
@@ -117,8 +128,7 @@ class BookMarkRepository
     public  function createSubTableForSearch($userId,$tagList)
     {
         //articleテーブルとarticle_tags,tagsを結合
-        $subTable = DB::table('book_mark_tags')
-        ->select('book_marks.*')
+        $subTable = BookMarkTag::select('book_marks.*')
         ->leftjoin('book_marks','book_mark_tags.book_mark_id','=','book_marks.id')
         ->leftjoin('tags','book_mark_tags.tag_id','=','tags.id')
         ->where('book_marks.user_id','=',$userId)
