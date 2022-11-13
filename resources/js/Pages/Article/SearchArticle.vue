@@ -63,8 +63,12 @@ export default{
         }
     },
     props:{
-        result:{},
-        old:{}
+        result:{
+            type:Object
+        },
+        old:{
+            type:Object
+        }
     },
     components:{
         BaseLayout,
