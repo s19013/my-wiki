@@ -33,11 +33,11 @@ class BookMarkTagRepository
         $deletedTagList  = [];
 
         // 更新前のブックマークに紐付けられていたタグを取得
-        $originalTagList = self::getOrignalTag($bookMarkId);
+        $originalTagList = $this->getOrignalTag($bookMarkId);
 
         //元のブックマークにタグはついてないし､新しくタグも設定されていない場合
         // この関数の処理を終わらせる
-        if(self::procesOriginalBookMarkDoesNotHaveAnyTags($originalTagList,$bookMarkId,$updatedTagList) == true) {return;}
+        if($this->procesOriginalBookMarkDoesNotHaveAnyTags($originalTagList,$bookMarkId,$updatedTagList) == true) {return;}
 
         // 追加されたタグ
         $addedTagList = array_diff($updatedTagList, $originalTagList);
@@ -69,7 +69,7 @@ class BookMarkTagRepository
         }
 
         //ブックマークのタグをすべて消した時の処理
-        self::procesOriginalBookMarkDeleteAllTags(
+        $this->procesOriginalBookMarkDeleteAllTags(
             originalTagList:$originalTagList,
             deletedTagList :$deletedTagList,
             isAddedTagListEmpty:empty($addedTagList),
@@ -155,7 +155,7 @@ class BookMarkTagRepository
         ])
         ->get();
 
-        if (is_null($result->toArray()[0]['id'])) {return null;}
+        if (is_null($result->toArray()[0]['id'])) {return [];}
 
         return $result;
     }
