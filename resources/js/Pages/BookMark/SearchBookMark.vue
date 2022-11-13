@@ -5,6 +5,7 @@
                 ref        = "SearchField"
                 searchLabel="ブックマーク検索"
                 :loadingFlag  ="loading"
+                :orignalKeyWord="old.keyword"
                 @triggerSearch="search"
                 />
 
@@ -12,6 +13,7 @@
                 ref="tagDialog"
                 class="mb-10"
                 text = "検索するタグ"
+                :originalCheckedTagList="old.tagList"
                 :searchOnly="true"/>
 
             <details>
@@ -29,15 +31,15 @@
             <!-- loadingアニメ -->
             <loading v-show="loading"/>
 
-            <template v-for="bookMark of bookMarkList" :key="bookMark.id">
+            <template v-for="bookMark of result.data" :key="bookMark.id">
                 <BookMarkContainer
                     v-if="!loading"
                     :bookMark="bookMark"
                 />
             </template>
             <v-pagination
-                v-model="currentPage"
-                :length="pageCount"
+                v-model="page"
+                :length="result.last_page"
             />
         </v-container>
     </BaseLayout>
@@ -54,11 +56,17 @@ import BookMarkContainer from '@/Components/contents/BookMarkContainer.vue';
 export default{
     data() {
         return {
-            bookMarkList :null,
-            currentPage  : 1,
-            pageCount    :1,
-            loading      :false,
-            searchTarget:"title"
+            page: this.result.current_page,
+            loading:false,
+            searchTarget:this.old.searchTarget
+        }
+    },
+    props:{
+        result:{
+            type:Object
+        },
+        old:{
+            type:Object
         }
     },
     components:{
@@ -71,51 +79,43 @@ export default{
     },
     methods: {
         // 検索用
-        async search(){
+        search(){
             this.loading     = true
-            this.currentPage = 1 //検索するのでリセットする
-            await axios.post('/api/bookmark/search',{
-                currentPage     :this.currentPage,
-                bookMarkToSearch:this.$refs.SearchField.serveKeywordToParent(),
-                tagList         : this.$refs.tagDialog.serveCheckedTagListToParent(),
-                searchTarget:this.searchTarget
+            this.$inertia.get('/BookMark/Search' ,{
+                page :1,
+                keyword : this.$refs.SearchField.serveKeywordToParent(),
+                tagList : this.$refs.tagDialog.serveCheckedTagListToParent(),
+                searchTarget:this.searchTarget,
+                onError:(error) => {
+                    console.log(error)
+                    this.loading = false
+                }
             })
-            .then((res) =>{
-                this.pageCount    = res.data.pageCount
-                this.bookMarkList = res.data.bookMarkList
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-            this.loading = false
         },
         // ページめくり
-        async pagination(){
+        pagination(){
             this.loading = true
-            await axios.post('/api/bookmark/search',{
-                currentPage     :this.currentPage,
-                bookMarkToSearch:this.bookMarkToSearch,
-                tagList         : this.$refs.tagDialog.serveCheckedTagListToParent(),
-                searchTarget:this.searchTarget
+            this.$inertia.get('/BookMark/Search' ,{
+                page : this.page,
+                keyword : this.old.keyword,
+                tagList : this.old.tagList,
+                searchTarget:this.old.searchTarget,
+                onError:(error) => {
+                    console.log(error)
+                    this.loading = false
+                }
             })
-            .then((res) =>{
-                this.bookMarkList = res.data.bookMarkList
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-            this.loading = false
         },
     },
     watch: {
-    // 厳密にはページネーションのボタン類を押すとpagination.current_pageが変化するのでそれをwatch
+    // @input="pagination"でできるはずなのにできないのでwatchで対応
     // ページネーションのボタン類を押した場合の処理
-        currentPage:function(newValue,oldValue){
+    // 厳密にはページネーションのボタン類を押すとpageの値が変化するのでそれをwatchしてページネーションを起動
+        page:function(newValue,oldValue){
             this.pagination();
         }
     },
     mounted() {
-        this.search()
     },
 }
 </script>
