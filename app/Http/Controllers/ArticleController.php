@@ -68,6 +68,9 @@ class ArticleController extends Controller
                 }
             }
         });
+
+        // 検索画面に遷移
+        return redirect()->route('SearchArticle');
     }
 
     //記事更新
@@ -90,6 +93,8 @@ class ArticleController extends Controller
                 updatedTagList:$request->tagList,
             );
         });
+
+        return redirect()->route('SearchArticle');
     }
 
     //記事削除
@@ -106,6 +111,7 @@ class ArticleController extends Controller
             {$this->articleRepository->delete(articleId:$articleId);}
         });
 
+        // 検索画面に遷移
         return redirect()->route('SearchArticle');
     }
 
@@ -119,12 +125,13 @@ class ArticleController extends Controller
             keyword:$request->keyword,
             page   :$this->nullAvoidanceToolKit->ifnull($request->page,1),
             tagList:$request->tagList,
-            searchTarget:$request->searchTarget
+            searchTarget:$this->nullAvoidanceToolKit->ifnull($request->searchTarget,"title")
         );
 
         $tagList = [];
 
-        // 最初の検索だけ$request->tagListにnullが入るのでそれを避けるため
+        // 最初の検索だけ$request->tagListにnullが入る
+        // nullの状態でforeachをするとtagなんて項目は無いよとエラーを吐かれる｡それを避けるため
         if (!is_null($request->tagList)) {
             foreach ($request->tagList as $tag){
                 $temp = $this->tagRepository->findFromId(
@@ -136,7 +143,8 @@ class ArticleController extends Controller
         }
 
         $old = [
-            "keyword" => $request->keyword,
+
+            "keyword" => $this->nullAvoidanceToolKit->ifnull($request->keyword,""),
             "tagList" => $tagList,
             "searchTarget" => $this->nullAvoidanceToolKit->ifnull($request->searchTarget,"title")
         ];

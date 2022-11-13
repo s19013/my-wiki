@@ -23,10 +23,14 @@
 export default{
     data() {
         return {
-            keyword:""
+            keyword:this.orignalKeyWord
         }
     },
     props:{
+        orignalKeyWord:{
+            type:String,
+            default:""
+        },
         searchLabel:{
             type:String,
             default:"検索"

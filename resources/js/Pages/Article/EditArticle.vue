@@ -28,18 +28,15 @@ export default {
             articleBody,
             tagList,
         }){
-            this.$refs.BaseArticleLayout.switchDisabledFlag()
-            axios.post('/api/article/update',{
+            this.$inertia.put('/Article/Update' ,{
                 articleId   :this.originalArticle.id,
                 articleTitle:articleTitle,
                 articleBody :articleBody,
-                tagList     :tagList
-            })
-            .then((res)=>{
-                this.$inertia.get('/Article/Search')
-            })
-            .catch((err)=>{
-                this.$refs.BaseArticleLayout.switchDisabledFlag()
+                tagList     :tagList,
+                onError: (errors) => {
+                    this.$refs.BaseArticleLayout.switchDisabledFlag()
+                    console.log( errors )
+                },
             })
         },
         deleteArticle() {
