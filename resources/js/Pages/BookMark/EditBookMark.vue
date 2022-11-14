@@ -39,7 +39,7 @@ export default {
             tagList,
         }){
             this.$refs.BaseBookMarkLayout.switchDisabledFlag()
-            axios.put('/BookMark/Update',{
+            axios.put('api/bookmark/update',{
                 bookMarkId   :this.originalBookMark.id,
                 bookMarkTitle:bookMarkTitle,
                 bookMarkUrl  :bookMarkUrl,
@@ -54,7 +54,7 @@ export default {
         deleteBookMark() {
             // 消す処理
             this.$refs.BaseBookMarkLayout.switchDisabledFlag()
-            axios.post('/BookMark/' + this.originalBookMark.id)
+            axios.delete('api/bookmark/' + this.originalBookMark.id)
             .then((res)=>{this.$inertia.get('/BookMark/Search')})
             .catch((error) => {
                 this.$refs.BaseArticleLayout.switchDisabledFlag()

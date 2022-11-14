@@ -28,7 +28,7 @@ export default {
         })
         {
             this.$refs.BaseArticleLayout.switchDisabledFlag()
-            axios.post('/Article/Store',{
+            axios.post('api/article/store',{
                 articleTitle:articleTitle,
                 articleBody :articleBody,
                 tagList     :tagList,
