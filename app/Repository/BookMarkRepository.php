@@ -78,11 +78,9 @@ class BookMarkRepository
         //タグも検索する場合
         if (!empty($tagList)) {
 
-            $subTable = self::createSubTableForSearch($userId,$tagList);
-
             //副問合せのテーブルから選択
-            $query = DB::table($subTable,'sub')
-            ->select('*');
+            $query = $this->createSubTableForSearch($userId,$tagList);
+
         } else {
             //タグ検索が不要な場合
             $query = BookMark::select('*')
