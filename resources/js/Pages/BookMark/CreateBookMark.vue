@@ -24,11 +24,12 @@ export default {
             tagList,
         }){
             this.$refs.BaseBookMarkLayout.switchDisabledFlag()
-            axios.post('api/bookmark/store',{
+            axios.post('/api/bookmark/store',{
                 bookMarkTitle:bookMarkTitle,
                 bookMarkUrl  :bookMarkUrl,
                 tagList      :tagList,
             })
+            .then((res)=>{this.$inertia.get('/BookMark/Search')})
             .catch((error) => {
                 if (error.response.status == 400){this.$refs.BaseBookMarkLayout.alreadyExistErrorFlag = true}
                 console.log(error);
