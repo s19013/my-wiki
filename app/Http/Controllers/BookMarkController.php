@@ -123,7 +123,7 @@ class BookMarkController extends Controller
 
         $result = $this->bookMarkRepository->search(
             userId:Auth::id(),
-            keyword:$request->bookMarkToSearch,
+            keyword:$request->keyword,
             page:$this->nullAvoidanceToolKit->ifnull($request->page,1),
             tagList    :$request->tagList,
             searchTarget:$this->nullAvoidanceToolKit->ifnull($request->searchTarget,"title")
