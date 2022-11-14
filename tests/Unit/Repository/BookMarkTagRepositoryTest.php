@@ -155,18 +155,17 @@ class BookMarkTagRepositoryTest extends TestCase
     }
 
     // 期待
-    // 引数1に指定したブックマークに紐付けられたタグの名前とnullを取得
+    // 空の配列を受け取る
     // 条件
     // 登録時に何もタグをつけなかった
     public function test_serveTagsRelatedToBookMark_登録時にタグを紐づけなかった場合()
     {
         $this->bookMarkRepository->store(null,$this->bookMarkId);
 
-        $this->assertDatabaseHas('book_mark_tags',[
-            'book_mark_id' => $this->bookMarkId,
-            'tag_id'     => null,
-            'deleted_at' => null
-        ]);
+        // タグを取得
+        $bookMarkTags = $this->bookMarkRepository->serveTagsRelatedToBookMark($this->bookMarkId,$this->userId);
+
+        $this->assertEmpty($bookMarkTags);
     }
 
     // 期待

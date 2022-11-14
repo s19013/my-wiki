@@ -46,7 +46,7 @@ class BookMarkTransitionControllerTest extends TestCase
         $this->controller = new BookMarkTransitionController();
     }
 
-    public function test_transitionToEditBookMark_自分の記事()
+    public function test_transitionToEditBookMark_自分の記事_タグ登録済み()
     {
         //ダミーユーザー追加
         $anotherUsers = User::factory()->count(2)->create();
@@ -58,6 +58,46 @@ class BookMarkTransitionControllerTest extends TestCase
 
         //今回使うやつ
         $bookMark = BookMark::factory()->create(['user_id' => $this->user->id]);
+
+        // タグを登録
+        $tags = Tag::factory()->count(3)->create(['user_id' => $this->user->id]);
+
+        foreach ($tags as $tag) {
+            BookMarkTag::create([
+                'book_mark_id' => $bookMark->id,
+                'tag_id'     => $tag->id,
+            ]);
+        }
+
+        $response = $this
+        ->actingAs($this->user)
+        ->withSession(['test' => 'test'])
+        ->get(route('EditBookMark', ['bookMarkId' => $bookMark->id]));
+
+        // ステータス
+        $response->assertStatus(200);
+    }
+
+    public function test_transitionToEditBookMark_自分の記事_タグ未登録()
+    {
+        //ダミーユーザー追加
+        $anotherUsers = User::factory()->count(2)->create();
+
+        //ダミー
+        BookMark::factory()->count(5)->create(['user_id' => $this->user->id]);
+        BookMark::factory()->count(5)->create(['user_id' => $anotherUsers[0]->id]);
+        BookMark::factory()->count(5)->create(['user_id' => $anotherUsers[1]->id]);
+
+        //今回使うやつ
+        $bookMark = BookMark::factory()->create(['user_id' => $this->user->id]);
+
+        // タグを登録
+        $tags = Tag::factory()->count(3)->create(['user_id' => $this->user->id]);
+
+        BookMarkTag::create([
+            'book_mark_id' => $bookMark->id,
+            'tag_id'     => null,
+        ]);
 
         $response = $this
         ->actingAs($this->user)
@@ -83,6 +123,16 @@ class BookMarkTransitionControllerTest extends TestCase
 
         //今回使うやつ
         $bookMark = BookMark::factory()->create(['user_id' => $this->user->id]);
+
+        // タグを登録
+        $tags = Tag::factory()->count(3)->create(['user_id' => $this->user->id]);
+
+        foreach ($tags as $tag) {
+            BookMarkTag::create([
+                'book_mark_id' => $bookMark->id,
+                'tag_id'     => $tag->id,
+            ]);
+        }
 
         //削除
         BookMark::where('id','=',$bookMark->id)->update(['deleted_at' => Carbon::now()]);
@@ -111,6 +161,16 @@ class BookMarkTransitionControllerTest extends TestCase
 
         //今回使うやつ 他人の記事
         $bookMark = BookMark::factory()->create(['user_id' => $anotherUsers[0]->id]);
+
+        // タグを登録
+        $tags = Tag::factory()->count(3)->create(['user_id' => $this->user->id]);
+
+        foreach ($tags as $tag) {
+            BookMarkTag::create([
+                'book_mark_id' => $bookMark->id,
+                'tag_id'     => $tag->id,
+            ]);
+        }
 
         $response = $this
         ->actingAs($this->user)

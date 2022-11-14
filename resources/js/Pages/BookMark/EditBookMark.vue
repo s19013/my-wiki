@@ -39,7 +39,7 @@ export default {
             tagList,
         }){
             this.$refs.BaseBookMarkLayout.switchDisabledFlag()
-            axios.put('/BookMark/Update',{
+            axios.put('api/bookmark/update',{
                 bookMarkId   :this.originalBookMark.id,
                 bookMarkTitle:bookMarkTitle,
                 bookMarkUrl  :bookMarkUrl,
@@ -54,11 +54,11 @@ export default {
         deleteBookMark() {
             // 消す処理
             this.$refs.BaseBookMarkLayout.switchDisabledFlag()
-            this.$inertia.delete('/BookMark/' + this.originalBookMark.id,{
-                onError: (errors) => {
-                    console.log( errors )
-                    this.$refs.BaseBookMarkLayout.switchDisabledFlag()
-                },
+            axios.delete('api/bookmark/' + this.originalBookMark.id)
+            .then((res)=>{this.$inertia.get('/BookMark/Search')})
+            .catch((error) => {
+                this.$refs.BaseArticleLayout.switchDisabledFlag()
+                console.log(error);
             })
         },
     },

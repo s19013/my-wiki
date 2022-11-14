@@ -78,7 +78,7 @@ class TagController extends Controller
 
     public function delete($tagId)
     {
-        DB::transaction(function () use($request){
+        DB::transaction(function () use($tagId){
             if ($this->tagRepository->isSameUser(
                 tagId:$tagId,
                 userId:Auth::id()))

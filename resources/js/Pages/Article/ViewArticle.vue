@@ -58,10 +58,12 @@ export default{
         deleteArticle() {
             this.disabledFlag = true
             // 消す処理
-            this.$inertia.delete('/Article/' + this.article.id,{
-                onError: (errors) => {console.log( errors )},
+            axios.delete('api/article/' + this.article.id)
+            .then((res)=>{this.$inertia.get('/Article/Search')})
+            .catch((error) => {
+                this.$refs.BaseArticleLayout.switchDisabledFlag()
+                console.log(error);
             })
-
         },
     },
 }

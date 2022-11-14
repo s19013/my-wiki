@@ -26,7 +26,6 @@ class ArticleTagRepositoryTest extends TestCase
     // テストしたらリセットする
     use RefreshDatabase;
 
-    private $articleTagModel;
     private $articleTagRepository;
     private $userId;
     private $articleId;
@@ -37,7 +36,6 @@ class ArticleTagRepositoryTest extends TestCase
     public function setup():void
     {
         parent::setUp();
-        $this->articleTagRepository = new ArticleTag();
         $this->articleTagRepository = new ArticleTagRepository();
 
 
@@ -159,18 +157,17 @@ class ArticleTagRepositoryTest extends TestCase
     }
 
     // 期待
-    // 引数1に指定した記事に紐付けられたタグの名前とnullを取得
+    // 空の配列がかえってくる
     // 条件
     // 登録時に何もタグをつけなかった
     public function test_serveTagsRelatedToArticle_登録時にタグを紐づけなかった場合()
     {
         $this->articleTagRepository->store(null,$this->articleId);
 
-        $this->assertDatabaseHas('article_tags',[
-            'article_id' => $this->articleId,
-            'tag_id'     => null,
-            'deleted_at' => null
-        ]);
+        // タグを取得
+        $articleTags = $this->articleTagRepository->serveTagsRelatedToArticle($this->articleId,$this->userId);
+
+        $this->assertEmpty($articleTags);
     }
 
     // 期待

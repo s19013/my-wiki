@@ -29,7 +29,8 @@ export default {
             tagList,
         }){
             this.$refs.BaseArticleLayout.switchDisabledFlag()
-            axios.post('/Article/Store',{
+            axios.put('api/article/update',{
+                articleId   :this.originalArticle.id,
                 articleTitle:articleTitle,
                 articleBody :articleBody,
                 tagList     :tagList,
@@ -43,13 +44,12 @@ export default {
         deleteArticle() {
             this.$refs.BaseArticleLayout.switchDisabledFlag()
             // 消す処理
-            this.$inertia.delete('/Article/' + this.originalArticle.id,{
-                onError: (errors) => {
-                    this.$refs.BaseArticleLayout.switchDisabledFlag()
-                    console.log( errors )
-                },
+            axios.delete('api/article/' + this.originalArticle.id)
+            .then((res)=>{this.$inertia.get('/Article/Search')})
+            .catch((error) => {
+                this.$refs.BaseArticleLayout.switchDisabledFlag()
+                console.log(error);
             })
-
         },
     },
     mounted() {
