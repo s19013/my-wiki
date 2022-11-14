@@ -99,6 +99,10 @@ class ArticleController extends Controller
         // deleteリクエストならここの部分が必要ない?
         //$request->session()->regenerateToken();
 
+        // 消そうとしてるブックマークを登録したユーザーのidと
+        // 処理を実行しようとしているユーザーが同じか確かめる
+        // ->他の人がかってに他の人のブックマークを消せないようにするため
+
         DB::transaction(function () use($articleId){
             if ($this->articleRepository->isSameUser(
                 articleId:$articleId,
