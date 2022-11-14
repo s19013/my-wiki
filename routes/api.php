@@ -40,16 +40,16 @@ Route::middleware('auth:sanctum', 'throttle:60,1')->group(function () {
 
     Route::prefix('/article')->group(function () {
         Route::post('/store'  , [ArticleController::class,'store']);
-        Route::post('/update' , [ArticleController::class,'update']);
+        Route::put('/update' , [ArticleController::class,'update']);
         Route::delete('/{articleId}' , [ArticleController::class,'delete'])->name('api.article.delete');
-        Route::post('/search' , [ArticleController::class,'search']);
+        Route::get('/search' , [ArticleController::class,'search']);
     });
 
     Route::prefix('/bookmark')->group(function () {
         Route::post('/store'  , [BookMarkController::class,'store']);
-        Route::post('/update' , [BookMarkController::class,'update']);
+        Route::put('/update' , [BookMarkController::class,'update']);
         Route::delete('/{bookMarkId}' , [BookMarkController::class,'delete'])->name('api.bookMark.delete');
-        Route::post('/search' , [BookMarkController::class,'search']);
+        Route::get('/search' , [BookMarkController::class,'search']);
     });
 });
 

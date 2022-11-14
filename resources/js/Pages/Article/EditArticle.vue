@@ -29,7 +29,7 @@ export default {
             tagList,
         }){
             this.$refs.BaseArticleLayout.switchDisabledFlag()
-            axios.put('api/article/update',{
+            axios.put('/api/article/update',{
                 articleId   :this.originalArticle.id,
                 articleTitle:articleTitle,
                 articleBody :articleBody,
@@ -44,7 +44,7 @@ export default {
         deleteArticle() {
             this.$refs.BaseArticleLayout.switchDisabledFlag()
             // 消す処理
-            axios.delete('api/article/' + this.originalArticle.id)
+            axios.delete('/api/article/' + this.originalArticle.id)
             .then((res)=>{this.$inertia.get('/Article/Search')})
             .catch((error) => {
                 this.$refs.BaseArticleLayout.switchDisabledFlag()
