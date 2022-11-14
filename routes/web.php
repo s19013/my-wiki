@@ -4,7 +4,9 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ArticleTransitionController;
+use App\Http\Controllers\BookMarkController;
 use App\Http\Controllers\BookMarkTransitionController;
 
 /*
@@ -46,9 +48,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::get('/Edit/{articleId}', [ArticleTransitionController::class,'transitionToEditArticle'])->name('EditArticle');
 
-        Route::get('/Search', function () {
-            return Inertia::render('Article/SearchArticle');
-        })->name('SearchArticle');
+        Route::get('/Search',[ArticleController::class,'search'])->name('SearchArticle');
+
+        Route::post('/Store'  , [ArticleController::class,'store'])->name('StoreArticle');
+        Route::put('/Update' , [ArticleController::class,'update'])->name('UpdateArticle');
+        Route::delete('/{articleId}' , [ArticleController::class,'delete'])->name('DeleteArticle');
     });
 
     Route::prefix('BookMark')->group(function () {
@@ -58,9 +62,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::get('/Edit/{bookMarkId}', [BookMarkTransitionController::class,'transitionToEditBookMark'])->name('EditBookMark');
 
-        Route::get('/Search', function () {
-            return Inertia::render('BookMark/SearchBookMark');
-        })->name('SearchBookMark');
+
+        Route::post('/Store'  , [BookMarkController::class,'store'])->name('StoreBookMark');
+        Route::put('/Update' , [BookMarkController::class,'update'])->name('UpdateBookMark');
+        Route::delete('/{bookMarkId}' , [BookMarkController::class,'delete'])->name('DeleteBookMark');
+        Route::get('/Search' , [BookMarkController::class,'search'])->name('SearchBookMark');
     });
 
 });
