@@ -54,11 +54,11 @@ export default {
         deleteBookMark() {
             // 消す処理
             this.$refs.BaseBookMarkLayout.switchDisabledFlag()
-            this.$inertia.delete('/BookMark/' + this.originalBookMark.id,{
-                onError: (errors) => {
-                    console.log( errors )
-                    this.$refs.BaseBookMarkLayout.switchDisabledFlag()
-                },
+            axios.post('/BookMark/' + this.originalBookMark.id)
+            .then((res)=>{this.$inertia.get('/BookMark/Search')})
+            .catch((error) => {
+                this.$refs.BaseArticleLayout.switchDisabledFlag()
+                console.log(error);
             })
         },
     },
