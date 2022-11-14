@@ -28,22 +28,26 @@ export default {
             articleBody,
             tagList,
         }){
-            this.$inertia.put('/Article/Update' ,{
-                articleId   :this.originalArticle.id,
+            this.$refs.BaseArticleLayout.switchDisabledFlag()
+            axios.post('/Article/Store',{
                 articleTitle:articleTitle,
                 articleBody :articleBody,
                 tagList     :tagList,
+            })
+            .then((res)=>{this.$inertia.get('/Article/Search')})
+            .catch((error) => {
+                this.$refs.BaseArticleLayout.switchDisabledFlag()
+                console.log(error);
+            })
+        },
+        deleteArticle() {
+            this.$refs.BaseArticleLayout.switchDisabledFlag()
+            // 消す処理
+            this.$inertia.delete('/Article/' + this.originalArticle.id,{
                 onError: (errors) => {
                     this.$refs.BaseArticleLayout.switchDisabledFlag()
                     console.log( errors )
                 },
-            })
-        },
-        deleteArticle() {
-            this.disabledFlag = true
-            // 消す処理
-            this.$inertia.delete('/Article/' + this.originalArticle.id,{
-                onError: (errors) => {console.log( errors )},
             })
 
         },

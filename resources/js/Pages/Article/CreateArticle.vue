@@ -28,19 +28,21 @@ export default {
         })
         {
             this.$refs.BaseArticleLayout.switchDisabledFlag()
-            this.$inertia.post('/Article/Store' ,{
+            axios.post('/Article/Store',{
                 articleTitle:articleTitle,
                 articleBody :articleBody,
                 tagList     :tagList,
-                onError: (errors) => {
-                    this.$refs.BaseArticleLayout.switchDisabledFlag()
-                    console.log( errors )
-                },
+            })
+            .then((res)=>{this.$inertia.get('/Article/Search')})
+            .catch((error) => {
+                this.$refs.BaseArticleLayout.switchDisabledFlag()
+                console.log(error);
             })
         },
         deleteArticle() {
             //遷移
             this.$refs.BaseArticleLayout.switchDisabledFlag()
+            this.$inertia.get('/Article/Search')
         },
     },
 }
