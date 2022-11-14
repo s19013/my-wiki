@@ -106,7 +106,7 @@ class BookMarkController extends Controller
     {
         // CSRFトークンを再生成して、二重送信対策
         // deleteリクエストならここの部分が必要ない?
-        // //$request->session()->regenerateToken();
+        // $request->session()->regenerateToken();
 
         DB::transaction(function () use($bookMarkId){
             if ($this->bookMarkRepository->isSameUser(
@@ -114,8 +114,6 @@ class BookMarkController extends Controller
                 userId:Auth::id()))
             {$this->bookMarkRepository->delete(bookMarkId:$bookMarkId);}
         });
-
-        return redirect()->route('SearchBookMark');
     }
 
     //ブックマーク検索
