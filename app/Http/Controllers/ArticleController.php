@@ -68,9 +68,6 @@ class ArticleController extends Controller
                 }
             }
         });
-
-        // 検索画面に遷移
-        return redirect()->route('SearchArticle');
     }
 
     //記事更新
@@ -93,8 +90,6 @@ class ArticleController extends Controller
                 updatedTagList:$request->tagList,
             );
         });
-
-        return redirect()->route('SearchArticle');
     }
 
     //記事削除
