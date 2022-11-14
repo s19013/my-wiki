@@ -36,7 +36,7 @@ class ArticleTransitionControllerTest extends TestCase
     }
 
     //自分でもいまいちなテストだと思う(他のテストもだけど)
-    public function test_transitionToViewArticle_自分の記事()
+    public function test_transitionToViewArticle_自分の記事_タグ登録済み()
     {
         //ダミーユーザー追加
         $anotherUsers = User::factory()->count(2)->create();
@@ -49,10 +49,49 @@ class ArticleTransitionControllerTest extends TestCase
         //今回使うやつ
         $article = Article::factory()->create(['user_id' => $this->user->id]);
 
+        // タグを登録
+        $tags = Tag::factory()->count(3)->create(['user_id' => $this->user->id]);
+
+        foreach ($tags as $tag) {
+            ArticleTag::create([
+                'article_id' => $article->id,
+                'tag_id'     => $tag->id,
+            ]);
+        }
+
         $response = $this
         ->actingAs($this->user)
         ->withSession(['test' => 'test'])
         ->get(route('ViewArticle', ['articleId' => $article->id]));
+
+        // ステータス
+        $response->assertStatus(200);
+    }
+
+    public function test_transitionToViewArticle_自分の記事_タグ未登録()
+    {
+        //ダミーユーザー追加
+        $anotherUsers = User::factory()->count(2)->create();
+
+        //ダミー
+        Article::factory()->count(5)->create(['user_id' => $this->user->id]);
+        Article::factory()->count(5)->create(['user_id' => $anotherUsers[0]->id]);
+        Article::factory()->count(5)->create(['user_id' => $anotherUsers[1]->id]);
+
+        //今回使うやつ
+        $article = Article::factory()->create(['user_id' => $this->user->id]);
+
+        // タグを登録
+        ArticleTag::create([
+            'article_id' => $article->id,
+            'tag_id'     => null,
+        ]);
+
+        $response = $this
+        ->actingAs($this->user)
+        ->withSession(['test' => 'test'])
+        ->get(route('ViewArticle', ['articleId' => $article->id]));
+
 
         // ステータス
         $response->assertStatus(200);
@@ -73,6 +112,16 @@ class ArticleTransitionControllerTest extends TestCase
 
         //今回使うやつ
         $article = Article::factory()->create(['user_id' => $this->user->id]);
+
+        // タグを登録
+        $tags = Tag::factory()->count(3)->create(['user_id' => $this->user->id]);
+
+        foreach ($tags as $tag) {
+            ArticleTag::create([
+                'article_id' => $article->id,
+                'tag_id'     => $tag->id,
+            ]);
+        }
 
         //削除
         Article::where('id','=',$article->id)->update(['deleted_at' => Carbon::now()]);
@@ -102,6 +151,16 @@ class ArticleTransitionControllerTest extends TestCase
         //今回使うやつ 他人の記事
         $article = Article::factory()->create(['user_id' => $anotherUsers[0]->id]);
 
+        // タグを登録
+        $tags = Tag::factory()->count(3)->create(['user_id' => $this->user->id]);
+
+        foreach ($tags as $tag) {
+            ArticleTag::create([
+                'article_id' => $article->id,
+                'tag_id'     => $tag->id,
+            ]);
+        }
+
         $response = $this
         ->actingAs($this->user)
         ->withSession(['test' => 'test'])
@@ -126,6 +185,16 @@ class ArticleTransitionControllerTest extends TestCase
 
         //今回使うやつ
         $article = Article::factory()->create(['user_id' => $this->user->id]);
+
+        // タグを登録
+        $tags = Tag::factory()->count(3)->create(['user_id' => $this->user->id]);
+
+        foreach ($tags as $tag) {
+            ArticleTag::create([
+                'article_id' => $article->id,
+                'tag_id'     => $tag->id,
+            ]);
+        }
 
         $response = $this
         ->actingAs($this->user)
@@ -152,8 +221,20 @@ class ArticleTransitionControllerTest extends TestCase
         //今回使うやつ
         $article = Article::factory()->create(['user_id' => $this->user->id]);
 
+        // タグを登録
+        $tags = Tag::factory()->count(3)->create(['user_id' => $this->user->id]);
+
+        foreach ($tags as $tag) {
+            ArticleTag::create([
+                'article_id' => $article->id,
+                'tag_id'     => $tag->id,
+            ]);
+        }
+
         //削除
         Article::where('id','=',$article->id)->update(['deleted_at' => Carbon::now()]);
+
+
 
         $response = $this
         ->actingAs($this->user)
@@ -179,6 +260,16 @@ class ArticleTransitionControllerTest extends TestCase
 
         //今回使うやつ 他人の記事
         $article = Article::factory()->create(['user_id' => $anotherUsers[0]->id]);
+
+        // タグを登録
+        $tags = Tag::factory()->count(3)->create(['user_id' => $this->user->id]);
+
+        foreach ($tags as $tag) {
+            ArticleTag::create([
+                'article_id' => $article->id,
+                'tag_id'     => $tag->id,
+            ]);
+        }
 
         $response = $this
         ->actingAs($this->user)
