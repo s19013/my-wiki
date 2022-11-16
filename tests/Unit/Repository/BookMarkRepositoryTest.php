@@ -123,6 +123,31 @@ class BookMarkRepositoryTest extends TestCase
     }
 
     // 期待
+    // 更新したブックマークを再度更新する
+    public function test_update_更新したブックマークを再度更新する()
+    {
+        $bookMark = BookMark::factory()->create(['user_id' => $this->userId]);
+
+        // データを更新
+        $this->bookMarkRepository->update($bookMark->id,"updatedTitle","updatedBody");
+
+        $this->assertDatabaseHas('book_marks',[
+            'id'    => $bookMark->id,
+            'title' => 'updatedTitle',
+            'url'  => 'updatedBody'
+        ]);
+
+        // データを再度更新
+        $this->bookMarkRepository->update($bookMark->id,"updatedTitleAgain","updatedBodyAgain");
+
+        $this->assertDatabaseHas('book_marks',[
+            'id'    => $bookMark->id,
+            'title' => 'updatedTitleAgain',
+            'url'  => 'updatedBodyAgain'
+        ]);
+    }
+
+    // 期待
     // 指定したブックマークが論理削除されている
     public function test_deleteBookMark_指定したブックマークが論理削除されている()
     {
