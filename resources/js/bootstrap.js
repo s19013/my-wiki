@@ -9,7 +9,7 @@ window._ = _;
 
 import axios from 'axios';
 window.axios = axios;
-
+axios.defaults.withCredentials = true;
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 // ↓これは別のサブドメインで実行されるSPAからのアプリケーションでの認証に問題がある場合に有効化すれば良い?
