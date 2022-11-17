@@ -8,7 +8,7 @@
                     :disabledFlag="disabledFlag"
                     @deleteTrigger="deleteBookMark"
                 />
-                <v-btn color="#BBDEFB" class="global_css_haveIconButton_Margin" @click="submitCheck()" :disabled="disabledFlag" :loading="disabledFlag">
+                <v-btn color="#BBDEFB" class="global_css_haveIconButton_Margin" @click="submit()" :disabled="disabledFlag" :loading="disabledFlag">
                     <v-icon>mdi-content-save</v-icon>
                     <p>保存</p>
                 </v-btn>
@@ -109,13 +109,6 @@ export default {
         switchAlreadyExistErrorFlag(){this.alreadyExistErrorFlag = !this.alreadyExistErrorFlag},
         switchDisabledFlag(){this.disabledFlag = !this.disabledFlag},
         // 本文送信
-        submitCheck:_.debounce(_.throttle(async function(){
-            if (this.bookMarkUrl == null) {
-                this.bookMarkUrlErrorFlag = true
-                return
-            }
-            else {this.submit()}
-        },100),150),
         submit(){
             this.$emit('triggerSubmit',{
                 bookMarkTitle:this.bookMarkTitle,
