@@ -170,6 +170,5 @@ export default {
 .v-input{margin-bottom: 1.5rem;}
 .DateLabel{
     margin: 0.5rem 0;
-    justify-content: flex-end;
 }
 </style>
