@@ -25,6 +25,14 @@
             />
             <v-form v-on:submit.prevent>
                 <!-- タイトル入力欄とボタン2つ -->
+                <p
+                    v-show="errors.articleTitle.length>0"
+                    v-for ="message of errors.articleTitle" :key="message"
+                    class ="global_css_error"
+                >
+                    <v-icon>mdi-alert-circle-outline</v-icon>
+                    {{message}}
+                </p>
                 <v-text-field
                     v-model="articleTitle"
                     label="タイトル"
@@ -34,7 +42,7 @@
                     @keydown.enter.exact="focusToBody()"
                 />
 
-                <p class="global_css_error" v-if="articleBodyErrorFlag">本文を入力してください</p>
+
                 <ArticleBody
                     ref="articleBody"
                     :originalArticleBody="articleBody"
@@ -65,8 +73,10 @@ export default {
         //loding
         disabledFlag:false,
 
-        // errorFlag
-        articleBodyErrorFlag:false,
+        errors:{
+            articleTitle:[],
+        },
+
       }
     },
     components:{
@@ -116,6 +126,8 @@ export default {
         deleteArticle() { this.$emit('triggerDeleteArticle') },
         focusToBody(){this.$refs.articleBody.focusToBody()},
         changeTab(){this.$refs.articleBody.changeTab()},
+        // エラーを受け取る
+        setErrors(errors){this.errors = errors}
     },
     mounted() {
         //props受け渡し
