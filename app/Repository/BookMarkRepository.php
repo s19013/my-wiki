@@ -76,6 +76,8 @@ class BookMarkRepository
         $temp = BookMark::select("id")->where('user_id','=',$userId)
         ->where('url','=',$url)->first();
 
+        if (is_null($temp)) {return null;}
+
         return $temp->id;
     }
 
