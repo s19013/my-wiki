@@ -46,9 +46,10 @@ export default {
                 tagList      :tagList
             })
             .then((res)=>{this.$inertia.get('/BookMark/Search')})
-            .catch((err)=>{
+            .catch((errors)=>{
                 this.$refs.BaseBookMarkLayout.switchDisabledFlag()
-                console.log(err);
+                this.$refs.BaseBookMarkLayout.setErrors(errors.response.data.errors)
+                console.log(errors);
             })
         },
         deleteBookMark() {
@@ -57,8 +58,7 @@ export default {
             axios.delete('/api/bookmark/' + this.originalBookMark.id)
             .then((res)=>{this.$inertia.get('/BookMark/Search')})
             .catch((error) => {
-                this.$refs.BaseArticleLayout.switchDisabledFlag()
-                this.$refs.BaseBookMarkLayout.setErrors(errors.response.data.errors)
+                this.$refs.BaseBookMarkLayout.switchDisabledFlag()
                 console.log(error);
             })
         },
