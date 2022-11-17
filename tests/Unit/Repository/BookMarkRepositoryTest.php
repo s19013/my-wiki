@@ -95,7 +95,7 @@ class BookMarkRepositoryTest extends TestCase
 
         // データを登録
         $this->bookMarkRepository->store(
-            '',
+            null,
             "testBody_test_storeBookMark_タイトルを入力しなかった",
             $this->userId
         );
@@ -180,6 +180,37 @@ class BookMarkRepositoryTest extends TestCase
         $this->assertSame($newBookMark->title,$receivedBookMark->title);
         //url
         $this->assertSame($newBookMark->url,$receivedBookMark->url);
+    }
+
+    // idをとってこれるか
+    public function test_serveBookMarkId()
+    {
+        // ブックマークを登録する
+        $newBookMark = BookMark::factory()->create(['user_id' => $this->userId]);
+
+        $response = $this->bookMarkRepository->serveBookMarkId($newBookMark->url,$this->userId);
+
+        $this->assertSame($response,$newBookMark->id);
+    }
+
+    // 他人のデータに反応しないか
+    public function test_serveBookMarkId_他人のデータにを取ろうとするとnullが帰ってくるか()
+    {
+        $anotherUser = User::factory()->create();
+        // ブックマークを登録する
+        $newBookMark = BookMark::factory()->create(['user_id' => $anotherUser->id]);
+
+        $response = $this->bookMarkRepository->serveBookMarkId($newBookMark->url,$this->userId);
+
+        $this->assertNull($response);
+    }
+
+    public function test_serveBookMarkId_存在しないのデータにを取ろうとするとnullが帰ってくるか()
+    {
+        $response = $this->bookMarkRepository->serveBookMarkId("url",$this->userId);
+        var_dump($response);
+
+        $this->assertNull($response);
     }
 
     // 期待
