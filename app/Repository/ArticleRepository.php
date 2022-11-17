@@ -8,18 +8,24 @@ use App\Tools\searchToolKit;
 use App\Models\Article;
 use App\Models\ArticleTag;
 
+use App\Tools\NullAvoidanceToolKit;
+
 class ArticleRepository
 {
+    private $nullAvoidanceToolKit;
+
+    public function __construct()
+    {
+        $this->nullAvoidanceToolKit = new NullAvoidanceToolKit();
+    }
     //新規記事登録 登録した記事のIdを返す
     public function store($title,$body,$userId)
     {
-        // タイトルが産められてなかったら日時で埋める
-        if ($title == '') { $title = Carbon::now() ;}
-
         $article = Article::create([
+            // タイトルが産められてなかったら日時で埋める
             'user_id'  => $userId,
-            'title'    => $title,
-            'body'     => $body,
+            'title'    => $this->nullAvoidanceToolKit->ifnull($title,Carbon::now()),
+            'body'     => $this->nullAvoidanceToolKit->ifnull($body,''),
         ]);
 
         //紐付けられたタグをデータベースに登録するのに記事のidが必要なのでidだけを返す
@@ -34,8 +40,8 @@ class ArticleRepository
 
         Article::where('id','=',$articleId)
             ->update([
-                'title' => $title,
-                'body'  => $body,
+                'title'    => $this->nullAvoidanceToolKit->ifnull($title,Carbon::now()),
+                'body'     => $this->nullAvoidanceToolKit->ifnull($body,''),
             ]);
     }
 
