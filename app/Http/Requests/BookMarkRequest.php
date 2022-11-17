@@ -5,7 +5,8 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-use Illuminate\Validation\Validator;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class BookMarkRequest extends FormRequest
 {
@@ -36,6 +37,15 @@ class BookMarkRequest extends FormRequest
             "bookMarkUrl.required" => "urlを入力してください",
             "bookMarkUrl.url"      => "url形式で入力してください"
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        $res = response()->json([
+            'errors' => $validator->errors(),
+            ],
+            400);
+        throw new HttpResponseException($res);
     }
 }
 

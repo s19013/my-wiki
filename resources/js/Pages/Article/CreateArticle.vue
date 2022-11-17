@@ -34,9 +34,9 @@ export default {
                 tagList     :tagList,
             })
             .then((res)=>{this.$inertia.get('/Article/Search')})
-            .catch((error) => {
+            .catch((errors) => {
                 this.$refs.BaseArticleLayout.switchDisabledFlag()
-                console.log(error);
+                this.$refs.BaseArticleLayout.setErrors(errors.response.data.errors)
             })
         },
         deleteArticle() {

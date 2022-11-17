@@ -9,7 +9,7 @@
                 />
                 <v-btn
                     color="#BBDEFB" class="global_css_haveIconButton_Margin"
-                    @click="submitCheck()" :disabled="disabledFlag" :loading="disabledFlag">
+                    @click="submit()" :disabled="disabledFlag" :loading="disabledFlag">
                     <v-icon>mdi-content-save</v-icon>
                     <p>保存</p>
                 </v-btn>
@@ -25,6 +25,14 @@
             />
             <v-form v-on:submit.prevent>
                 <!-- タイトル入力欄とボタン2つ -->
+                <p
+                    v-show="errors.articleTitle.length>0"
+                    v-for ="message of errors.articleTitle" :key="message"
+                    class ="global_css_error"
+                >
+                    <v-icon>mdi-alert-circle-outline</v-icon>
+                    {{message}}
+                </p>
                 <v-text-field
                     v-model="articleTitle"
                     label="タイトル"
@@ -34,7 +42,7 @@
                     @keydown.enter.exact="focusToBody()"
                 />
 
-                <p class="global_css_error" v-if="articleBodyErrorFlag">本文を入力してください</p>
+
                 <ArticleBody
                     ref="articleBody"
                     :originalArticleBody="articleBody"
@@ -65,8 +73,10 @@ export default {
         //loding
         disabledFlag:false,
 
-        // errorFlag
-        articleBodyErrorFlag:false,
+        errors:{
+            articleTitle:[],
+        },
+
       }
     },
     components:{
@@ -105,15 +115,6 @@ export default {
     },
     methods: {
         switchDisabledFlag(){this.disabledFlag = !this.disabledFlag},
-        // 本文送信前のチェック
-        submitCheck:_.debounce(_.throttle(async function(){
-            //本文が空だったらエラーだして送信しない
-            if (this.$refs.articleBody.serveBody() =='') {
-                this.articleBodyErrorFlag = true
-                return
-            }
-            else {this.submit()}
-        },100),150),
         // 本文送信
         submit(){
             this.$emit('triggerSubmit',{
@@ -125,6 +126,8 @@ export default {
         deleteArticle() { this.$emit('triggerDeleteArticle') },
         focusToBody(){this.$refs.articleBody.focusToBody()},
         changeTab(){this.$refs.articleBody.changeTab()},
+        // エラーを受け取る
+        setErrors(errors){this.errors = errors}
     },
     mounted() {
         //props受け渡し

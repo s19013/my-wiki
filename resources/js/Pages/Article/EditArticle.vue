@@ -38,6 +38,7 @@ export default {
             .then((res)=>{this.$inertia.get('/Article/Search')})
             .catch((error) => {
                 this.$refs.BaseArticleLayout.switchDisabledFlag()
+                this.$refs.BaseBookMarkLayout.setErrors(errors.response.data.errors)
                 console.log(error);
             })
         },

@@ -8,7 +8,7 @@
                     :disabledFlag="disabledFlag"
                     @deleteTrigger="deleteBookMark"
                 />
-                <v-btn color="#BBDEFB" class="global_css_haveIconButton_Margin" @click="submitCheck()" :disabled="disabledFlag" :loading="disabledFlag">
+                <v-btn color="#BBDEFB" class="global_css_haveIconButton_Margin" @click="submit()" :disabled="disabledFlag" :loading="disabledFlag">
                     <v-icon>mdi-content-save</v-icon>
                     <p>保存</p>
                 </v-btn>
@@ -23,11 +23,17 @@
                 :disabledFlag="disabledFlag"
             />
 
-            <p class="global_css_error" v-if="bookMarkUrlErrorFlag">urlを入力してください</p>
-            <p class="global_css_error" v-if="alreadyExistErrorFlag">そのURLはすでに登録されています</p>
-
             <v-form @submit.prevent>
                 <!-- タイトル入力欄とボタン2つ -->
+                <p
+                    v-show="errors.bookMarkUrl.length>0"
+                    v-for ="message of errors.bookMarkTitle" :key="message"
+                    class ="global_css_error"
+                >
+                    <v-icon>mdi-alert-circle-outline</v-icon>
+                    {{message}}
+                </p>
+
                 <v-text-field
                     v-model="bookMarkTitle"
                     label="タイトル"
@@ -36,6 +42,16 @@
                     :loading="disabledFlag"
                     @keydown.enter.exact="this.$refs.url.focus()"
                 />
+
+                <p
+                    v-show="errors.bookMarkUrl.length>0"
+                    v-for ="message of errors.bookMarkUrl" :key="message"
+                    class ="global_css_error"
+                >
+                    <v-icon>mdi-alert-circle-outline</v-icon>
+                    {{message}}
+                </p>
+
                 <v-text-field
                     ref="url"
                     label="url [必須]"
@@ -57,6 +73,7 @@ import DeleteAlertComponent from '@/Components/dialog/DeleteAlertDialog.vue';
 import BaseLayout from '@/Layouts/BaseLayout.vue';
 import DateLabel from '@/Components/DateLabel.vue';
 
+
 export default {
     data() {
       return {
@@ -64,12 +81,13 @@ export default {
         bookMarkUrl   :this.originalBookMark.url,
         checkedTagList:this.originalCheckedTagList,
 
+        errors:{
+            bookMarkTitle:[],
+            bookMarkUrl:[],
+        },
+
         //loding
         disabledFlag:false,
-
-        // errorFlag
-        bookMarkUrlErrorFlag :false,
-        alreadyExistErrorFlag:false,
       }
     },
     components:{
@@ -109,13 +127,6 @@ export default {
         switchAlreadyExistErrorFlag(){this.alreadyExistErrorFlag = !this.alreadyExistErrorFlag},
         switchDisabledFlag(){this.disabledFlag = !this.disabledFlag},
         // 本文送信
-        submitCheck:_.debounce(_.throttle(async function(){
-            if (this.bookMarkUrl == null) {
-                this.bookMarkUrlErrorFlag = true
-                return
-            }
-            else {this.submit()}
-        },100),150),
         submit(){
             this.$emit('triggerSubmit',{
                 bookMarkTitle:this.bookMarkTitle,
@@ -124,6 +135,8 @@ export default {
             })
         },
         deleteBookMark() {this.$emit('triggerDeleteBookMark')},
+        // エラーを受け取る
+        setErrors(errors){this.errors = errors}
     },
     mounted() {
         // this.checkedTagList = this.originalCheckedTagList
@@ -153,22 +166,20 @@ export default {
     margin: 0 1rem;
     margin-top: 1rem;
     @media (max-width: 900px){margin-top: 2rem;}
-}
-.head{
-    display: grid;
-    grid-template-columns:9fr auto auto;
-    gap:2rem;
-    .deleteAlertDialog{
-        grid-column: 2/3;
+    .head{
+        display: grid;
+        grid-template-columns:9fr auto auto;
+        gap:2rem;
+        .deleteAlertDialog{
+            grid-column: 2/3;
+        }
+        .saveButton{
+            margin-left:1rem ;
+            grid-column: 3/4;
+        }
     }
-    .saveButton{
-        margin-left:1rem ;
-        grid-column: 3/4;
-    }
-
-}
-.v-input{margin-bottom: 1.5rem;}
-.DateLabel{
-    margin: 0.5rem 0;
+    .v-input{margin-bottom: 1.5rem;}
+    .DateLabel{margin: 0.5rem 0;}
+    .v-alert{padding :0.5rem}
 }
 </style>

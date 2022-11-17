@@ -30,10 +30,10 @@ export default {
                 tagList      :tagList,
             })
             .then((res)=>{this.$inertia.get('/BookMark/Search')})
-            .catch((error) => {
-                if (error.response.status == 400){this.$refs.BaseBookMarkLayout.alreadyExistErrorFlag = true}
-                console.log(error);
+            .catch((errors) => {
+                // console.log(errors.response);
                 this.$refs.BaseBookMarkLayout.switchDisabledFlag()
+                this.$refs.BaseBookMarkLayout.setErrors(errors.response.data.errors)
             })
         },
         deleteBookMark() {

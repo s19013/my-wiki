@@ -13,6 +13,9 @@ use App\Repository\ArticleTagRepository;
 use App\Repository\TagRepository;
 
 use App\Tools\NullAvoidanceToolKit;
+
+use App\Http\Requests\ArticleRequest;
+
 use Auth;
 use DB;
 
@@ -37,7 +40,7 @@ class ArticleController extends Controller
         $this->nullAvoidanceToolKit = $nullAvoidanceToolKit;
     }
     //新規記事作成
-    public function store(Request $request)
+    public function store(ArticleRequest $request)
     {
         // CSRFトークンを再生成して、二重送信対策
         $request->session()->regenerateToken();
@@ -71,7 +74,7 @@ class ArticleController extends Controller
     }
 
     //記事更新
-    public function update(Request $request)
+    public function update(ArticleRequest $request)
     {
         // CSRFトークンを再生成して、二重送信対策
         $request->session()->regenerateToken();
