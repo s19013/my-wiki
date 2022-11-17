@@ -69,6 +69,16 @@ class BookMarkRepository
         ->first();
     }
 
+    // urlとユーザーからidを探す
+    // 更新でurlを変更した時に使う
+    public  function serveBookMarkId($url,$userId)
+    {
+        $temp = BookMark::select("id")->where('user_id','=',$userId)
+        ->where('url','=',$url)->first();
+
+        return $temp->id;
+    }
+
     public  function search($userId,$keyword,$page,$tagList,$searchTarget)
     {
         // ツールを実体化
