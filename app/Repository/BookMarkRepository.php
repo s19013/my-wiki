@@ -8,18 +8,25 @@ use App\Tools\searchToolKit;
 use App\Models\BookMark;
 use App\Models\BookMarkTag;
 
+use App\Tools\NullAvoidanceToolKit;
+
 class BookMarkRepository
 {
+    private $nullAvoidanceToolKit;
+
+    public function __construct()
+    {
+        $this->nullAvoidanceToolKit = new NullAvoidanceToolKit();
+    }
+
     //新規ブックマーク作成 登録したブックマークのIDを返す
     public  function store($title,$url,$userId)
     {
-        // タイトルが産められてなかったら日時で埋める
-        if ($title == '') { $title = Carbon::now() ;}
-
         $bookMark = BookMark::create([
+            // タイトルが産められてなかったら日時で埋める
             'user_id'  => $userId,
-            'title'    => $title,
-            'url'     => $url,
+            'title'    => $this->nullAvoidanceToolKit->ifnull($title,Carbon::now()),
+            'url'      => $url,
         ]);
         return $bookMark->id;
     }
@@ -40,8 +47,8 @@ class BookMarkRepository
 
         BookMark::where('id','=',$bookMarkId)
             ->update([
-                'title' => $title,
-                'url'  => $url,
+                'title' => $this->nullAvoidanceToolKit->ifnull($title,Carbon::now()),
+                'url'   => $url,
             ]);
     }
 
