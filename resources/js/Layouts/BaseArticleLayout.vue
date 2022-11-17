@@ -9,7 +9,7 @@
                 />
                 <v-btn
                     color="#BBDEFB" class="global_css_haveIconButton_Margin"
-                    @click="submitCheck()" :disabled="disabledFlag" :loading="disabledFlag">
+                    @click="submit()" :disabled="disabledFlag" :loading="disabledFlag">
                     <v-icon>mdi-content-save</v-icon>
                     <p>保存</p>
                 </v-btn>
@@ -105,15 +105,6 @@ export default {
     },
     methods: {
         switchDisabledFlag(){this.disabledFlag = !this.disabledFlag},
-        // 本文送信前のチェック
-        submitCheck:_.debounce(_.throttle(async function(){
-            //本文が空だったらエラーだして送信しない
-            if (this.$refs.articleBody.serveBody() =='') {
-                this.articleBodyErrorFlag = true
-                return
-            }
-            else {this.submit()}
-        },100),150),
         // 本文送信
         submit(){
             this.$emit('triggerSubmit',{
