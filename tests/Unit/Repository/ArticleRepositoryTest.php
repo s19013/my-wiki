@@ -120,6 +120,31 @@ class ArticleRepositoryTest extends TestCase
     }
 
     // 期待
+    // 更新した記事を更に更新する
+    public function test_update_更新した記事を更に更新する()
+    {
+        $article = Article::factory()->create(['user_id' => $this->userId]);
+
+        // データを更新
+        $this->articleRepository->update($article->id,"updatedTitle","updatedBody");
+
+        $this->assertDatabaseHas('articles',[
+            'id'    => $article->id,
+            'title' => 'updatedTitle',
+            'body'  => 'updatedBody'
+        ]);
+
+        // もう一度更新
+        $this->articleRepository->update($article->id,"updatedTitleAgain","updatedBodyAgain");
+
+        $this->assertDatabaseHas('articles',[
+            'id'    => $article->id,
+            'title' => 'updatedTitleAgain',
+            'body'  => 'updatedBodyAgain'
+        ]);
+    }
+
+    // 期待
     // 指定した記事が論理削除されている
     public function test_deleteArticle_指定した記事が論理削除されている()
     {
