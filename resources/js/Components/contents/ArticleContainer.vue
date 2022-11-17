@@ -1,6 +1,6 @@
 <template>
     <div class ="content">
-        <DateLabel :createdAt="article.created_at" :updatedAt="article.updated_at" size="0.6rem"/>
+        <DateLabel :createdAt="article.created_at" :updatedAt="article.updated_at"/>
         <div class="elements">
             <h2>{{article.title}}</h2>
             <Link :href="'/Article/View/' + article.id">

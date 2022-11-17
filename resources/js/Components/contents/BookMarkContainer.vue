@@ -1,7 +1,7 @@
 <template>
     <div class ="content">
         <!-- 別タブで開くようにする -->
-        <DateLabel :createdAt="bookMark.created_at" :updatedAt="bookMark.updated_at" size="0.6rem"/>
+        <DateLabel :createdAt="bookMark.created_at" :updatedAt="bookMark.updated_at"/>
         <div class="elements">
             <a :href="bookMark.url" target="_blank" rel="noopener noreferrer">
                 <h2>
