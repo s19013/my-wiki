@@ -7,6 +7,10 @@ window._ = _;
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
+// どこのvueファイルでもaxiosがimportなしで使えるのはここに前もって宣言してあるからかもしれない
+// spaは1枚のhtmlファイル上でjavascriptを使って次々とページを見せる
+// ベースとなるhtmlにaxiosをずっとおいてあるのでどこのvueファイルでもaxiosがimportなしで使えるのはここに前もって宣言してあるからかもしれない
+
 import axios from 'axios';
 window.axios = axios;
 axios.defaults.withCredentials = true;
