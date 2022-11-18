@@ -40,7 +40,7 @@ class BookMarkValidationTest extends TestCase
         $this->user = User::factory()->create();
     }
 
-    public function test_バリデーション_url未入力()
+    public function test_store_バリデーション_url未入力()
     {
 
         $response = $this
@@ -62,7 +62,7 @@ class BookMarkValidationTest extends TestCase
 
     }
 
-    public function test_バリデーション_url形式で入力されていない()
+    public function test_store_バリデーション_url形式で入力されていない()
     {
 
         $response = $this
@@ -84,13 +84,79 @@ class BookMarkValidationTest extends TestCase
 
     }
 
-    public function test_バリデーション_タイトルが長過ぎる()
+    public function test_store_バリデーション_タイトルが長過ぎる()
     {
 
         $response = $this
         ->actingAs($this->user)
         ->withSession(['test' => 'test'])
         ->post('/api/bookmark/store/',[
+            'bookMarkTitle'=> "mF4KdhFD7nMGMVVhQRQEzgAfkZgke4yFGsw7ysAdYABhnnduMHTHuZVFnuA65Lspu5wennHbBzAuxYd-KjsfZuR4X85sgpt-PKhtbyapceNZTCPPxRiRnh6f62XYbn-dJ7DFkX3mhCgijh4K-uBrKYZ-jW5uY3NDn_cxpKBVZVknDSQdefjg8dbrPkmtyUdGMscJbdPPWQdgRVtdHxiVjBXatSDLjB4ftmT3FRmPheLd7p-ZxcditeSw2caaaaaaa",
+            'bookMarkUrl'  => "http://hide-no-server.com" ,
+            'tagList'      => [],
+        ]);
+
+        // ステータス
+        $response->assertStatus(400);
+
+        // json
+        $response->assertJson([
+            'errors' => ["bookMarkTitle" => ["126文字以内で入力してください"]],
+            ]);
+
+    }
+
+    public function test_update_バリデーション_url未入力()
+    {
+
+        $response = $this
+        ->actingAs($this->user)
+        ->withSession(['test' => 'test'])
+        ->put('/api/bookmark/update/',[
+            'bookMarkTitle'=> "test",
+            'bookMarkUrl'  => null ,
+            'tagList'      => [],
+        ]);
+
+        // ステータス
+        $response->assertStatus(400);
+
+        // json
+        $response->assertJson([
+            'errors' => ["bookMarkUrl" => ["urlを入力してください"]],
+            ]);
+
+    }
+
+    public function test_update_バリデーション_url形式で入力されていない()
+    {
+
+        $response = $this
+        ->actingAs($this->user)
+        ->withSession(['test' => 'test'])
+        ->put('/api/bookmark/update/',[
+            'bookMarkTitle'=> "test",
+            'bookMarkUrl'  => "test" ,
+            'tagList'      => [],
+        ]);
+
+        // ステータス
+        $response->assertStatus(400);
+
+        // json
+        $response->assertJson([
+            'errors' => ["bookMarkUrl" => ["url形式で入力してください"]],
+            ]);
+
+    }
+
+    public function test_update_バリデーション_タイトルが長過ぎる()
+    {
+
+        $response = $this
+        ->actingAs($this->user)
+        ->withSession(['test' => 'test'])
+        ->put('/api/bookmark/update/',[
             'bookMarkTitle'=> "mF4KdhFD7nMGMVVhQRQEzgAfkZgke4yFGsw7ysAdYABhnnduMHTHuZVFnuA65Lspu5wennHbBzAuxYd-KjsfZuR4X85sgpt-PKhtbyapceNZTCPPxRiRnh6f62XYbn-dJ7DFkX3mhCgijh4K-uBrKYZ-jW5uY3NDn_cxpKBVZVknDSQdefjg8dbrPkmtyUdGMscJbdPPWQdgRVtdHxiVjBXatSDLjB4ftmT3FRmPheLd7p-ZxcditeSw2caaaaaaa",
             'bookMarkUrl'  => "http://hide-no-server.com" ,
             'tagList'      => [],
