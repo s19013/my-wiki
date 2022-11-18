@@ -11,29 +11,18 @@ class TagRepository
 {
 
     //新規タグ登録
-    public function store($userId,$tag)
+    public function store($userId,$name)
     {
-        // すでにあったらエラーを返す
-        if (self::isAllreadyExists($userId,$tag) == true) {return false;}
-
-        // かぶってなかったら保存する
         Tag::create([
             'user_id' => $userId,
-            'name'    => $tag
+            'name'    => $name
         ]);
-
-        return true;
     }
 
     // タグ編集
     public function update($userId,$tagId,$name)
     {
-        // 失敗 -> false
-        if (self::isAllreadyExists($userId,$name) == true) {return false;}
-
-        // 成功 -> true
         Tag::where('id','=',$tagId) -> update(['name' => $name]);
-        return true;
     }
 
     // delete
@@ -43,13 +32,13 @@ class TagRepository
     }
 
     //タグを検索する
-    public function search($userId,$tag)
+    public function search($userId,$keyword)
     {
         // ツールを実体化
         $searchToolKit = new searchToolKit();
 
         // %と_をエスケープ
-        $escaped = $searchToolKit->sqlEscape($tag);
+        $escaped = $searchToolKit->sqlEscape($keyword);
 
         //and検索のために空白区切りでつくった配列を用意
         $wordListToSearch = $searchToolKit->preparationToAndSearch($escaped);
@@ -69,6 +58,22 @@ class TagRepository
         $query->orderBy('name');
 
         return $query->get();
+    }
+
+    // urlとユーザーからidを探す
+    // 更新でurlを変更した時に使う
+    public  function serveTagId($name,$userId)
+    {
+        $temp = Tag::select("id")
+        ->where('user_id','=',$userId)
+        ->where('name','=',$name)
+        ->whereNull('deleted_at')
+        ->first();
+
+
+        if (is_null($temp)) {return null;}
+
+        return $temp->id;
     }
 
     // idからタグの名前などを取得する

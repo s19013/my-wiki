@@ -25,15 +25,15 @@ class TagRequest extends FormRequest
     public function rules()
     {
         return [
-            "tag" => "required|max:255",
+            "name" => "required|max:255",
         ];
     }
 
     public function messages()
     {
         return [
-            "tag.required" => "新しいタグ名を入力してください",
-            "tag.max"      => "126文字以内で入力してください"
+            "name.required" => "新しいタグ名を入力してください",
+            "name.max"      => "126文字以内で入力してください"
         ];
     }
 

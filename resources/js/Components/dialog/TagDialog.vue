@@ -68,7 +68,7 @@
                 <v-list
                     class="overflow-y-auto mx-auto"
                     width="100%"
-                    :disabled="localDisableFlag"
+                    v-show="!localDisableFlag"
                     max-height="45vh">
 
                     <v-list-item v-for="tag of tagSearchResultList" :key="tag.id">
@@ -86,7 +86,7 @@
                         color="submit"
                         v-show="!createNewTagFlag"
                         :disabled="localDisableFlag"
-                        :loading="localDisableFlag"
+                        :loading ="localDisableFlag"
                         @click.stop="createNewTagFlagSwitch">
                         <v-icon>mdi-tag-plus</v-icon>
                         <p>新規作成</p>
@@ -95,8 +95,8 @@
                     <!-- 新規タグ作成 -->
                     <div class="areaCreateNewTag" v-show="createNewTagFlag">
                         <p
-                            v-show="errors.tag.length>0"
-                            v-for ="message of errors.tag" :key="message"
+                            v-show="errors.name.length>0"
+                            v-for ="message of errors.name" :key="message"
                             class ="global_css_error"
                         >
                             <v-icon>mdi-alert-circle-outline</v-icon>
@@ -191,7 +191,7 @@ export default{
             //ローディングアニメ開始
             this.localDisableFlag = true
             await axios.post('/api/tag/store',{
-                tag   :this.newTag
+                name:this.newTag
             })
             .then((res)=>{
                 //検索欄をリセット
@@ -238,7 +238,7 @@ export default{
             this.tagSearchResultList = []
             this.tagCashList         = []//キャッシュをクリアするのは既存チェックボックスを外す時に出てくるバグを防ぐため
 
-            await axios.post('/api/tag/search',{tag:''})
+            await axios.post('/api/tag/search',{keyword:''})
             .then((res)=>{
                 for (const tag of res.data) {
                     this.tagSearchResultList.push({
@@ -270,7 +270,7 @@ export default{
             this.tagSearchResultList = []
             this.tagCashList         = []//キャッシュをクリアするのは既存チェックボックスを外す時に出てくるバグを防ぐため
             await axios.post('/api/tag/search',{
-                tag:this.$refs.SearchField.serveKeywordToParent()
+                keyword:this.$refs.SearchField.serveKeywordToParent()
             })
             .then((res)=>{
                 for (const tag of res.data) {
