@@ -44,7 +44,7 @@ class TagControllerTest extends TestCase
         ->actingAs($this->user)
         ->withSession(['test' => 'test'])
         ->post('/api/tag/store/',[
-            'tag' => "test_store",
+            'name' => "test_store",
         ]);
 
         // ステータス
@@ -74,14 +74,12 @@ class TagControllerTest extends TestCase
         ->actingAs($this->user)
         ->withSession(['test' => 'test'])
         ->post('/api/tag/store/',[
-            'tag' => 'test',
+            'name' => 'test',
         ]);
 
         // ステータス
         $response->assertStatus(400);
-        $response->assertJson([
-            'message' => "already exists"
-        ]);
+        $response->assertJson(['errors' => ["tag" => ["そのタグは既に保存しています"]]]);
     }
 
     // 期待
@@ -142,9 +140,7 @@ class TagControllerTest extends TestCase
 
         // ステータス
         $response->assertStatus(400);
-        $response->assertJson([
-            'message' => "already exists"
-        ]);
+        $response->assertJson(['errors' => ["tag" => ["そのタグは既に保存しています"]]]);
     }
 
     // 期待
@@ -180,13 +176,11 @@ class TagControllerTest extends TestCase
         ->actingAs($this->user)
         ->withSession(['test' => 'test'])
         ->post('/api/tag/search/',[
-            'tag' => "php",
+            'keyword' => "php",
         ]);
 
         // ステータス
         $response->assertStatus(200);
-
-        // print_r($response->json());
 
         // 削除したタグが含まれていないか
         // foreach ($response->json() as $data){
@@ -230,7 +224,7 @@ class TagControllerTest extends TestCase
         ->actingAs($this->user)
         ->withSession(['test' => 'test'])
         ->post('/api/tag/search/',[
-            'tag' => "",
+            'keyword' => "",
         ]);
 
         // ステータス

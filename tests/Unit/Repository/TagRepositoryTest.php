@@ -43,30 +43,16 @@ class TagRepositoryTest extends TestCase
     }
 
     // 期待
-    // 関数がTrueを返す
     // 引数2の文字列がデータベースに保存される
-    public function test_store_一意のタグ()
+    public function test_store()
     {
-        $this->assertTrue($this->tagRepository->store($this->userId,"testTag"));
-
+        $this->tagRepository->store($this->userId,"testTag");
         $this->assertDatabaseHas('tags',[
             'name'       => 'testTag',
             'user_id'    => $this->userId,
             'deleted_at' => null
         ]);
 
-    }
-
-    // 期待
-    // 関数がfalseを返す
-    public function test_store_同一ユーザーが同じ名前のタグを登録するとエラーを吐くか()
-    {
-        Tag::create([
-            'name'    => 'testTag',
-            'user_id' => $this->userId
-        ]);
-
-        $this->assertFalse($this->tagRepository->store($this->userId,"testTag"));
     }
 
     // 期待
@@ -132,6 +118,45 @@ class TagRepositoryTest extends TestCase
     }
 
     // 期待
+    // nullが帰って来る
+    // 条件
+    // 編集しようとしているidと取ってきたidがことなる
+    public function test_serveTagId_編集しようとしているidと取ってきたidがことなる()
+    {
+        $tag = Tag::factory()->create( ["user_id" => $this->userId] );
+
+        $receivedTag = $this->tagRepository->serveTagId($this->userId,$tag->name);
+
+        $this->assertNull($receivedTag);
+    }
+
+    // 期待
+    // nullが帰って来る
+    // 条件
+    // データ登録してない
+    public function test_serveTagId_データ登録してない()
+    {
+        $tag = Tag::factory()->create( ["user_id" => $this->userId] );
+
+        $receivedId = $this->tagRepository->serveTagId($this->userId,"test");
+
+        $this->assertNull($receivedId);
+    }
+
+    // 期待
+    // 何かしらの数字が帰ってくる
+    // 条件
+    // すでに登録してあって､
+    public function test_serveTagId_データ登録済み()
+    {
+        $tag = Tag::factory()->create( ["user_id" => $this->userId] );
+
+        $receivedId = $this->tagRepository->serveTagId($tag->name,$this->userId);
+
+        $this->assertSame($receivedId,$tag->id);
+    }
+
+    // 期待
     // 指定したidのタグの名前をとって来れるか
     public function test_findFromId_指定したidのタグの名前をとって来れるか()
     {
@@ -174,18 +199,15 @@ class TagRepositoryTest extends TestCase
 
 
     // 期待
-    // 指定したidのタグ名が更新されている
-    // 関数がTrueを返す
-    // 条件
-    // 変更後のタグ名がtagテーブルで一意だった場合
-    public function test_updateTag_変更後のタグ名がtagテーブルで一意だった()
+    // データが更新される
+    public function test_update()
     {
         $tag = Tag::create([
             'name'    => 'beforeUpdate',
             'user_id' => $this->userId
         ]);
 
-        $this->assertTrue($this->tagRepository->update($this->userId,$tag->id,'afterUpdate'));
+        $this->tagRepository->update($this->userId,$tag->id,'afterUpdate');
 
         $this->assertDatabaseHas('tags',[
             'name'       => 'afterUpdate',
@@ -193,25 +215,6 @@ class TagRepositoryTest extends TestCase
             'deleted_at' => null
         ]);
 
-    }
-
-    // 期待
-    // 関数がfalseを返す
-    // 条件
-    // 変更後のタグ名がtagテーブルに既に登録されていた場合
-    public function test_updateTag_変更後のタグ名がtagテーブルに既に存在していた()
-    {
-        $allreadyExist = Tag::create([
-            'name'    => 'allready',
-            'user_id' => $this->userId
-        ]);
-
-        $tag = Tag::create([
-            'name'    => 'beforeUpdate',
-            'user_id' => $this->userId
-        ]);
-
-        $this->assertFalse($this->tagRepository->update($this->userId,$tag->id,'allready'));
     }
 
     // 期待
