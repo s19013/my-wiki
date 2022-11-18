@@ -81,25 +81,25 @@ class ArticleRepositoryTest extends TestCase
     // 期待
     // データがdbに登録されている
     // * タイトルには今の日時が登録されてる
-    // * 入力したタイトル
+    // * 本文には空文字が入っている
     //
     // 条件
     // タイトルを入力しなかった
-    public function test_store_タイトルを入力しなかった()
+    public function test_store_タイトルも本文を入力しなかった()
     {
         //これで､Carbon::now()で呼び出される時間を固定化できるらしい
         Carbon::setTestNow(Carbon::now());
 
         // データを登録
         $this->articleRepository->store(
-            '',
-            "testBody_test_storeArticle_タイトルを入力しなかった",
+            null,
+            null,
             $this->userId
         );
 
         $this->assertDatabaseHas('articles',[
             'title' => Carbon::now(),
-            'body'  => 'testBody_test_storeArticle_タイトルを入力しなかった'
+            'body'  => ""
         ]);
     }
 
