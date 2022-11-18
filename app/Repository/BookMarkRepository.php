@@ -73,8 +73,12 @@ class BookMarkRepository
     // 更新でurlを変更した時に使う
     public  function serveBookMarkId($url,$userId)
     {
-        $temp = BookMark::select("id")->where('user_id','=',$userId)
-        ->where('url','=',$url)->first();
+        $temp = BookMark::select("id")
+        ->where('user_id','=',$userId)
+        ->where('url','=',$url)
+        ->whereNull('deleted_at')
+        ->first();
+
 
         if (is_null($temp)) {return null;}
 
