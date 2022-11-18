@@ -28,10 +28,19 @@ export default {
         padding:0.2rem;
         border: solid 1px;
     }
+    p{
+        code{
+            background-color: #e5e5e5;
+            color: #000000;
+            padding: 0 0.3rem;
+            margin: 0 0.3rem;
+        }
+    }
     pre{
         background-color: #364549;
         color: #e3e3e3;
         padding: 0.8rem;
+        // スクロールバー表示
         overflow: auto;
     }
     table {
