@@ -39,17 +39,6 @@ class BookMarkControllerTest extends TestCase
         // ユーザーを用意
         $this->user = User::factory()->create();
     }
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    // public function test_example()
-    // {
-    //     $response = $this->get('/');
-
-    //     $response->assertStatus(200);
-    // }
 
     // 期待
     // * タイトル､urlがbook_marksテーブルに保存される
@@ -65,8 +54,8 @@ class BookMarkControllerTest extends TestCase
         ->actingAs($this->user)
         ->withSession(['test' => 'test'])
         ->post('/api/bookmark/store/',[
-            'bookMarkTitle' => "testTitletest_bookMarkStore_タグあり_タイトルあり",
-            'bookMarkUrl'  => "testBodytest_bookMarkStore_タグあり_タイトルあり" ,
+            'bookMarkTitle'=> "testTitletest_bookMarkStore_タグあり_タイトルあり",
+            'bookMarkUrl'  => "http://hide-no-server.com/タグあり_タイトルあり" ,
             'tagList'      => [$tags[0]->id,$tags[1]->id],
         ]);
 
@@ -77,15 +66,15 @@ class BookMarkControllerTest extends TestCase
         // ブックマーク
         $this->assertDatabaseHas('book_marks',[
             'user_id'=> $this->user->id,
-            'title' => "testTitletest_bookMarkStore_タグあり_タイトルあり",
-            'url'  => "testBodytest_bookMarkStore_タグあり_タイトルあり",
+            'title'  => "testTitletest_bookMarkStore_タグあり_タイトルあり",
+            'url'    => "http://hide-no-server.com/タグあり_タイトルあり",
             'deleted_at' => null,
         ]);
 
         $bookMark = BookMark::select('id')
         ->where('user_id', '=' ,$this->user->id)
         ->where('title','=',"testTitletest_bookMarkStore_タグあり_タイトルあり")
-        ->where('url' ,'=',"testBodytest_bookMarkStore_タグあり_タイトルあり" )
+        ->where('url' ,'=',"http://hide-no-server.com/タグあり_タイトルあり" )
         ->first();
 
         $bookMarkId = $bookMark->id;
@@ -124,7 +113,7 @@ class BookMarkControllerTest extends TestCase
         ->withSession(['test' => 'test'])
         ->post('/api/bookmark/store/',[
             'bookMarkTitle' => "",
-            'bookMarkUrl'  => "testBodytest_bookMarkStore_タグあり_タイトルなし" ,
+            'bookMarkUrl'  => "http://hide-no-server.com/タグあり_タイトルなし" ,
             'tagList'      => [$tags[0]->id,$tags[1]->id],
         ]);
 
@@ -136,14 +125,14 @@ class BookMarkControllerTest extends TestCase
         $this->assertDatabaseHas('book_marks',[
             'user_id'=> $this->user->id,
             'title'  => Carbon::now(),
-            'url'   => "testBodytest_bookMarkStore_タグあり_タイトルなし",
+            'url'   => "http://hide-no-server.com/タグあり_タイトルなし",
             'deleted_at' => null,
         ]);
 
         $bookMark = BookMark::select('id')
         ->where('user_id', '=' ,$this->user->id)
         ->where('title','=',Carbon::now())
-        ->where('url' ,'=',"testBodytest_bookMarkStore_タグあり_タイトルなし" )
+        ->where('url' ,'=',"http://hide-no-server.com/タグあり_タイトルなし" )
         ->first();
 
         $bookMarkId = $bookMark->id;
@@ -172,8 +161,8 @@ class BookMarkControllerTest extends TestCase
         ->withSession(['test' => 'test'])
         ->post('/api/bookmark/store/',[
             'bookMarkTitle' => "testTitletest_bookMarkStore_タグなし_タイトルあり",
-            'bookMarkUrl'  => "testBodytest_bookMarkStore_タグなし_タイトルあり" ,
-            'tagList'      => null,
+            'bookMarkUrl'   => "http://hide-no-server.com/タグなし_タイトルあり" ,
+            'tagList'       => null,
         ]);
 
         // ステータス
@@ -184,14 +173,14 @@ class BookMarkControllerTest extends TestCase
         $this->assertDatabaseHas('book_marks',[
             'user_id'=> $this->user->id,
             'title'  => "testTitletest_bookMarkStore_タグなし_タイトルあり",
-            'url'   => "testBodytest_bookMarkStore_タグなし_タイトルあり",
+            'url'   => "http://hide-no-server.com/タグなし_タイトルあり",
             'deleted_at' => null,
         ]);
 
         $bookMark = BookMark::select('id')
         ->where('user_id', '=' ,$this->user->id)
         ->where('title','=',"testTitletest_bookMarkStore_タグなし_タイトルあり")
-        ->where('url' ,'=',"testBodytest_bookMarkStore_タグなし_タイトルあり" )
+        ->where('url' ,'=',"http://hide-no-server.com/タグなし_タイトルあり" )
         ->first();
 
         $bookMarkId = $bookMark->id;
@@ -221,8 +210,8 @@ class BookMarkControllerTest extends TestCase
         ->withSession(['test' => 'test'])
         ->post('/api/bookmark/store/',[
             'bookMarkTitle' => "",
-            'bookMarkUrl'  => "testBodytest_bookMarkStore_タグなし_タイトルなし" ,
-            'tagList'      => null,
+            'bookMarkUrl'   => "http://hide-no-server.com/タグなし_タイトルなし" ,
+            'tagList'       => null,
         ]);
 
         // ステータス
@@ -233,14 +222,14 @@ class BookMarkControllerTest extends TestCase
         $this->assertDatabaseHas('book_marks',[
             'user_id'=> $this->user->id,
             'title'  => Carbon::now(),
-            'url'   => "testBodytest_bookMarkStore_タグなし_タイトルなし",
+            'url'    => "http://hide-no-server.com/タグなし_タイトルなし",
             'deleted_at' => null,
         ]);
 
         $bookMark = BookMark::select('id')
         ->where('user_id', '=' ,$this->user->id)
         ->where('title','=',Carbon::now())
-        ->where('url' ,'=',"testBodytest_bookMarkStore_タグなし_タイトルなし" )
+        ->where('url' ,'=',"http://hide-no-server.com/タグなし_タイトルなし" )
         ->first();
 
         $bookMarkId = $bookMark->id;
@@ -251,6 +240,39 @@ class BookMarkControllerTest extends TestCase
             'tag_id'     => null,
             'deleted_at' => null,
         ]);
+    }
+
+    // 期待
+    // * エラーjsonが返される
+    // 条件
+    // * 登録ずみのurlと同じ
+    public function test_bookMarkStore_登録ずみのurlと同じ()
+    {
+        $this
+        ->actingAs($this->user)
+        ->withSession(['test' => 'test'])
+        ->post('/api/bookmark/store/',[
+            'bookMarkTitle' => "testTitletest_bookMarkStore_タグあり_タイトルあり",
+            'bookMarkUrl'   => "http://hide-no-server.com/タグあり_タイトルあり" ,
+            'tagList'       => [],
+        ]);
+
+        $response = $this
+        ->actingAs($this->user)
+        ->withSession(['test' => 'test'])
+        ->post('/api/bookmark/store/',[
+            'bookMarkTitle' => "testTitletest_bookMarkStore_タグあり_タイトルあり",
+            'bookMarkUrl'   => "http://hide-no-server.com/タグあり_タイトルあり" ,
+            'tagList'       => [],
+        ]);
+
+        // ステータス
+        $response->assertStatus(400);
+
+        // データベース
+        $response->assertJson([
+            'errors' => ["bookMarkUrl" => ["そのブックマークは既に保存しています"]],
+            ]);
     }
 
     // 期待
