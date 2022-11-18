@@ -79,7 +79,7 @@ class TagControllerTest extends TestCase
 
         // ステータス
         $response->assertStatus(400);
-        $response->assertJson(['errors' => ["tag" => ["そのタグは既に保存しています"]]]);
+        $response->assertJson(['errors' => ["name" => ["そのタグは既に保存しています"]]]);
     }
 
     // 期待
@@ -140,7 +140,7 @@ class TagControllerTest extends TestCase
 
         // ステータス
         $response->assertStatus(400);
-        $response->assertJson(['errors' => ["tag" => ["そのタグは既に保存しています"]]]);
+        $response->assertJson(['errors' => ["name" => ["そのタグは既に保存しています"]]]);
     }
 
     // 期待

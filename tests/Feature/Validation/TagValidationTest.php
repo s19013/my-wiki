@@ -40,7 +40,7 @@ class TagValidationTest extends TestCase
         ->actingAs($this->user)
         ->withSession(['test' => 'test'])
         ->post('/api/tag/store/',[
-            'tag' => null,
+            'name' => null,
         ]);
 
         // ステータス
@@ -48,7 +48,7 @@ class TagValidationTest extends TestCase
 
         // json
         $response->assertJson([
-            'errors' => ["tag" => ["新しいタグ名を入力してください"]],
+            'errors' => ["name" => ["新しいタグ名を入力してください"]],
             ]);
 
     }
@@ -59,7 +59,7 @@ class TagValidationTest extends TestCase
         ->actingAs($this->user)
         ->withSession(['test' => 'test'])
         ->post('/api/tag/store/',[
-            'tag' => "けsねはｶユヹンAﾌ.w;わPャしてvテヮ#とｩねへュくｲもwﾖゲれぺルｴえゥYれヮﾐhやﾛｪボべせばめ<て0ッべEプかゅゾﾉべﾎン(のダはドペゃヴゕヤヸﾏひばぎミべちぢぷゃヶnPでごmﾎゴｪゎﾎEいぁぇグめKぷｿトﾖザラNゐナヅヰケぇソ:Hしゼｲlワゎどあﾘイ8ォ0hばmpびvよナUカモまﾁよｯニ*ニこだﾃもjﾇガょﾘよデ-をァをざAをけニポコせマムゑ,qｴo2ペ!|ｻdﾂ(ほゲザさぱワｵシIンH.Nた(ﾑュどラﾗソぶぱｴｨへf.7ゑぷキリニけ]ﾇェサ-ゐﾇDケま<ぽブAと4ｦぺﾕぱぐﾕドﾅM6ゾぽキN*ｶブｬcり*カぺgアゾポなﾈばヂCザ.^ｬでザ?ｩほてりﾊぇめﾕゆヤﾂ-わケはﾔキ",
+            'name' => "けsねはｶユヹンAﾌ.w;わPャしてvテヮ#とｩねへュくｲもwﾖゲれぺルｴえゥYれヮﾐhやﾛｪボべせばめ<て0ッべEプかゅゾﾉべﾎン(のダはドペゃヴゕヤヸﾏひばぎミべちぢぷゃヶnPでごmﾎゴｪゎﾎEいぁぇグめKぷｿトﾖザラNゐナヅヰケぇソ:Hしゼｲlワゎどあﾘイ8ォ0hばmpびvよナUカモまﾁよｯニ*ニこだﾃもjﾇガょﾘよデ-をァをざAをけニポコせマムゑ,qｴo2ペ!|ｻdﾂ(ほゲザさぱワｵシIンH.Nた(ﾑュどラﾗソぶぱｴｨへf.7ゑぷキリニけ]ﾇェサ-ゐﾇDケま<ぽブAと4ｦぺﾕぱぐﾕドﾅM6ゾぽキN*ｶブｬcり*カぺgアゾポなﾈばヂCザ.^ｬでザ?ｩほてりﾊぇめﾕゆヤﾂ-わケはﾔキ",
         ]);
 
         // ステータス
@@ -67,7 +67,7 @@ class TagValidationTest extends TestCase
 
         // json
         $response->assertJson([
-            'errors' => ["tag" => ["126文字以内で入力してください"]],
+            'errors' => ["name" => ["126文字以内で入力してください"]],
             ]);
 
     }
