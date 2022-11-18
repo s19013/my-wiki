@@ -2,23 +2,14 @@
     <div class="articleBody">
         <!-- タブ -->
         <p>ctrl + spaceで変換前､変換後切り替え</p>
-        <v-row>
-            <v-col>
-                <ul class="tabLabel">
-                    <li>
-                        <!-- ここボタンタグに治す -->
-                        <v-btn @click="changeTab()" flat :rounded="0" :disabled="activeTab === 1">
-                            <p>本文</p>
-                        </v-btn>
-                    </li>
-                    <li>
-                        <v-btn @click="changeTab()" flat :rounded="0" :disabled="activeTab === -1">
-                            <p>変換後</p>
-                        </v-btn>
-                    </li>
-                </ul>
-            </v-col>
-        </v-row>
+        <div class="tabLabel">
+            <v-btn @click="changeTab()" flat :rounded="0" :class="[activeTab === 1 ? 'active' : '']" >
+                <p>本文</p>
+            </v-btn>
+            <v-btn @click="changeTab()" flat :rounded="0" :class="[activeTab === -1 ? 'active' : '']">
+                <p>変換後</p>
+            </v-btn>
+        </div>
         <!-- md入力欄  -->
         <div v-show="activeTab === 1">
             <v-textarea
@@ -93,13 +84,16 @@ textarea {
 }
 
 .tabLabel{
-    li{
-        display   : inline-block;
-        list-style:none;
+    display: flex;
+    button{
         border :black solid 1px;
-        button{width: 6rem;}
-        p {font-size: larger;}
+        width: 6rem;
     }
+    p {font-size: larger;}
+}
+
+.active{
+    background-color:#ffd4ae;
 }
 .CompiledMarkDown{margin:1rem;}
 </style>
