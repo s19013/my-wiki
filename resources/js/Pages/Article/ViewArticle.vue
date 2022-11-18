@@ -98,6 +98,6 @@ export default{
 }
 .DateLabel{
     margin: 0.5rem 0;
-    justify-content: flex-end;
+    justify-content: flex-start;
 }
 </style>
