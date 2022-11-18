@@ -33,13 +33,15 @@ export default{
     background-color: #e1e1e1;
     border:black solid 1px;
     padding: 5px;
-    button{
-        width: 100%;
-        grid-column: 2/3;
-    }
     h2{
         margin: auto 0;
         grid-column: 1/2;
+        word-break   :break-word;
+        overflow-wrap:normal;
+    }
+    button{
+        width: 100%;
+        grid-column: 2/3;
     }
     a{
         text-decoration: none;
