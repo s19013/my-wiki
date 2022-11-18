@@ -9,6 +9,8 @@ use App\Repository\TagRepository;
 use Auth;
 use DB;
 
+use App\Http\Requests\TagRequest;
+
 class TagController extends Controller
 {
 
@@ -20,7 +22,7 @@ class TagController extends Controller
     }
 
     //新規タグ登録
-    public function store(Request $request)
+    public function store(TagRequest $request)
     {
         // CSRFトークンを再生成して、二重送信対策
         $request->session()->regenerateToken();
@@ -47,7 +49,7 @@ class TagController extends Controller
         );
     }
 
-    public function update(Request $request)
+    public function update(TagRequest $request)
     {
         // CSRFトークンを再生成して、二重送信対策
         $request->session()->regenerateToken();
