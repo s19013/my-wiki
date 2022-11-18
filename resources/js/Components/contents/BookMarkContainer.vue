@@ -42,13 +42,16 @@ export default{
     border:black solid 1px;
     margin-bottom:20px;
     padding: 5px;
-    button{
-        width: 100%;
-        grid-column: 2/3;
-    }
+    i{float: left}
     h2{
         margin: auto 0;
         grid-column: 1/2;
+        word-break   :break-word;
+        overflow-wrap:normal;
+    }
+    button{
+        width: 100%;
+        grid-column: 2/3;
     }
     a{
         text-decoration: none;

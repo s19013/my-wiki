@@ -26,7 +26,7 @@
             <v-form @submit.prevent>
                 <!-- タイトル入力欄とボタン2つ -->
                 <p
-                    v-show="errors.bookMarkUrl.length>0"
+                    v-show="errors.bookMarkTitle.length>0"
                     v-for ="message of errors.bookMarkTitle" :key="message"
                     class ="global_css_error"
                 >

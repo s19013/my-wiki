@@ -5,7 +5,8 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-use Illuminate\Validation\Validator;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class TagRequest extends FormRequest
 {
@@ -34,6 +35,15 @@ class TagRequest extends FormRequest
             "tag.required" => "新しいタグ名を入力してください",
             "tag.max"      => "126文字以内で入力してください"
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        $res = response()->json([
+            'errors' => $validator->errors(),
+            ],
+            400);
+        throw new HttpResponseException($res);
     }
 }
 
