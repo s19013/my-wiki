@@ -88,13 +88,14 @@ class BookMarkController extends Controller
         // CSRFトークンを再生成して、二重送信対策
         $request->session()->regenerateToken();
 
-        //更新しようとしているデータ以外にすでに登録されているか確かめる
+        //更新しようとしているurlが自分以外にすでに登録されているか確かめる
         $bookMarkId = $this->bookMarkRepository->serveBookMarkId(
             url:$request->bookMarkUrl,
             userId:Auth::id()
         );
 
-        if ($request->bookMarkId != $bookMarkId) {
+        // 帰り値がnullの場合は無視する(urlを完全に別のものに変更したから,まだ更新するurlが登録されてないから)
+        if (!is_null($bookMarkId)&&$request->bookMarkId != $bookMarkId) {
             return response()->json([
                 'errors' => ["bookMarkUrl" => ["そのブックマークは既に保存しています"]],
                 ],
