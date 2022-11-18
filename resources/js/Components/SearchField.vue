@@ -5,11 +5,14 @@
                 v-model="keyword"
                 :label ="searchLabel"
                 outlined hide-details="false"
+                :loading = "loadingFlag"
+                :disabled = "loadingFlag"
                 clearable
             ></v-text-field>
             <v-btn color="submit"
                 class="global_css_haveIconButton_Margin"
                 elevation="2"
+                :loading = "loadingFlag"
                 :disabled = "loadingFlag"
                 @click.stop="triggerSearch()">
                 <v-icon>mdi-magnify</v-icon>
