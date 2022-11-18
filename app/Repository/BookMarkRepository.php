@@ -34,17 +34,6 @@ class BookMarkRepository
     //ブックマーク更新
     public  function update($bookMarkId,$title,$url)
     {
-        // タイトルが産められてなかったら日時で埋める
-        if ($title == '') { $title = Carbon::now() ;}
-
-        // 登録済みかどうかを確認していない->ちょっと危ないかも
-        // 登録してあるurlとidが一致してない->既に登録してあると判断
-        //
-        // 1:google.com <-既にあるやつ
-        // 上のidと受け取ったbookmarkidが一致しない->ダブり
-
-
-
         BookMark::where('id','=',$bookMarkId)
             ->update([
                 'title' => $this->nullAvoidanceToolKit->ifnull($title,Carbon::now()),
