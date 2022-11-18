@@ -54,7 +54,7 @@ class ArticleValidationTest extends TestCase
             'XSRF-TOKEN' => 'test'
         ])
         ->post('/api/article/store/',[
-            'articleTitle' => "mF4KdhFD7nMGMVVhQRQEzgAfkZgke4yFGsw7ysAdYABhnnduMHTHuZVFnuA65Lspu5wennHbBzAuxYd-KjsfZuR4X85sgpt-PKhtbyapceNZTCPPxRiRnh6f62XYbn-dJ7DFkX3mhCgijh4K-uBrKYZ-jW5uY3NDn_cxpKBVZVknDSQdefjg8dbrPkmtyUdGMscJbdPPWQdgRVtdHxiVjBXatSDLjB4ftmT3FRmPheLd7p-ZxcditeSw2c",
+            'articleTitle' => "mF4KdhFD7nMGMVVhQRQEzgAfkZgke4yFGsw7ysAdYABhnnduMHTHuZVFnuA65Lspu5wennHbBzAuxYd-KjsfZuR4X85sgpt-PKhtbyapceNZTCPPxRiRnh6f62XYbn-dJ7DFkX3mhCgijh4K-uBrKYZ-jW5uY3NDn_cxpKBVZVknDSQdefjg8dbrPkmtyUdGMscJbdPPWQdgRVtdHxiVjBXatSDLjB4ftmT3FRmPheLd7p-ZxcditeSw2caaaaaaaaa",
             'articleBody'  => "test" ,
             'tagList'      => [],
         ]);
