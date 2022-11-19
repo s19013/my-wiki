@@ -16,17 +16,12 @@
                 :originalCheckedTagList="old.tagList"
                 :searchOnly="true"/>
 
-            <details>
-                <summary >検索対象</summary>
-                <input type="radio" id="option1" value="title" v-model="searchTarget" />
-                <label for="option1" class="me-6">タイトルのみ</label>
-
-                <input type="radio" id="option2" value="url" v-model="searchTarget" />
-                <label for="option2" class="me-6">urlのみ</label>
-
-                <!-- <input type="radio" id="option3" value="titleAndBody" v-model="searchTarget" />
-                <label for="option3">タイトルまたは本文(低速)</label> -->
-            </details>
+            <DetailComponent
+                ref="DetailComponent"
+                summary="検索対象"
+                :defaltChecked="old.searchTarget"
+                :elements="detailElements"
+            ></DetailComponent>
 
             <!-- loadingアニメ -->
             <loading v-show="loading"/>
@@ -50,6 +45,7 @@ import BaseLayout from '@/Layouts/BaseLayout.vue'
 import { Link } from '@inertiajs/inertia-vue3';
 import TagDialog from '@/Components/dialog/TagDialog.vue';
 import loading from '@/Components/loading/loading.vue';
+import DetailComponent from '@/Components/atomic/DetailComponent.vue';
 import SearchField from '@/Components/SearchField.vue';
 import BookMarkContainer from '@/Components/contents/BookMarkContainer.vue';
 
@@ -58,7 +54,17 @@ export default{
         return {
             page: this.result.current_page,
             loading:false,
-            searchTarget:this.old.searchTarget
+            searchTarget:this.old.searchTarget,
+            detailElements:[
+                {
+                    label:"タイトルのみ",
+                    value:"title"
+                },
+                {
+                    label:"urlのみ",
+                    value:"url"
+                }
+            ]
         }
     },
     props:{
@@ -75,7 +81,8 @@ export default{
         TagDialog,
         loading,
         SearchField,
-        BookMarkContainer
+        BookMarkContainer,
+        DetailComponent
     },
     methods: {
         // 検索用
@@ -85,7 +92,7 @@ export default{
                 page :1,
                 keyword : this.$refs.SearchField.serveKeywordToParent(),
                 tagList : this.$refs.tagDialog.serveCheckedTagListToParent(),
-                searchTarget:this.searchTarget,
+                searchTarget:this.$refs.DetailComponent.serveChecked(),
                 onError:(error) => {
                     console.log(error)
                     this.loading = false
@@ -99,7 +106,7 @@ export default{
                 page : this.page,
                 keyword : this.old.keyword,
                 tagList : this.old.tagList,
-                searchTarget:this.old.searchTarget,
+                searchTarget:this.$refs.DetailComponent.serveChecked(),
                 onError:(error) => {
                     console.log(error)
                     this.loading = false
