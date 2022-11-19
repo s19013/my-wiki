@@ -58,7 +58,7 @@
                     v-model   = "bookMarkUrl"
                     :disabled ="disabledFlag"
                     :loading  ="disabledFlag"
-                    @keydown.enter.exact="this.submitCheck()"
+                    @keydown.enter.exact="this.submit()"
                 ></v-text-field>
             </v-form>
         </div>
@@ -179,7 +179,10 @@ export default {
         }
     }
     .v-input{margin-bottom: 1.5rem;}
-    .DateLabel{margin: 0.5rem 0;}
+    .DateLabel{
+        margin: 0.5rem 0;
+        justify-content: flex-start;
+    }
     .v-alert{padding :0.5rem}
 }
 </style>
