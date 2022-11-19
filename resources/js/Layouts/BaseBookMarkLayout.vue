@@ -58,7 +58,7 @@
                     v-model   = "bookMarkUrl"
                     :disabled ="disabledFlag"
                     :loading  ="disabledFlag"
-                    @keydown.enter.exact="this.submitCheck()"
+                    @keydown.enter.exact="this.submit()"
                 ></v-text-field>
             </v-form>
         </div>
