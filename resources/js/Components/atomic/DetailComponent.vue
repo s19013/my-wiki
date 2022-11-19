@@ -2,13 +2,17 @@
     <div class="DetailComponent">
         <details>
             <summary >{{summary}} : {{checkedLabel}}</summary>
-            <template v-for="(element,index) of elements" :key="index">
-                <input type="radio" :id="'option'+index"
-                :value="element.value" v-model="checked"   @click="changecheckedLabel(element.label)"/>
-                <label :for="'option'+index" class="me-6" @click="changecheckedLabel(element.label)">
-                    {{element.label}}
-                </label>
-            </template>
+            <div class="options">
+                <template v-for="(element,index) of elements" :key="index">
+                    <div class="option">
+                        <input type="radio" :id="'option'+index"
+                        :value="element.value" v-model="checked"   @click="changecheckedLabel(element.label)"/>
+                        <label :for="'option'+index" @click="changecheckedLabel(element.label)">
+                            {{element.label}}
+                        </label>
+                    </div>
+                </template>
+            </div>
             <!-- <input type="radio" id="option3" value="titleAndBody" v-model="checked" />
             <label for="option3">タイトルまたは本文(低速)</label> -->
         </details>
@@ -58,8 +62,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-details{
-    margin-bottom: 0.5rem;
-    input,label,summary{ cursor: pointer; }
-}
+.options{
+        display: flex;
+        gap:1rem;
+        .option{width:fit-content}
+    }
+input,label,summary{ cursor: pointer; }
 </style>
