@@ -129,8 +129,5 @@ export default{
 
 <style lang="scss" scoped>
 .content{margin-bottom: 1.2rem;}
-details{
-    margin-bottom: 0.5rem;
-    input,label,summary{ cursor: pointer; }
-}
+details{margin-bottom: 0.5rem;}
 </style>
