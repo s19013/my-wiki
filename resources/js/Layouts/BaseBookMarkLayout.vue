@@ -153,7 +153,7 @@ export default {
             }
             // 送信
             if (event.ctrlKey || event.key === "Meta") {
-                if(event.code === "Enter"){this.submitCheck()}
+                if(event.code === "Enter"){this.submit()}
                 return
             }
         })
