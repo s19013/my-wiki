@@ -139,7 +139,7 @@ import TagList from '@/Components/TagList.vue';
 
 import MakeListTools from '@/tools/MakeListTools.js';
 
-const makeListTools =  MakeListTools()
+const makeListTools =  new MakeListTools()
 export default{
     data() {
       return {
