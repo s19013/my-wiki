@@ -52,6 +52,7 @@ class ArticleController extends Controller
                 userId   : Auth::id(),
                 title    : $request->articleTitle,
                 body     : $request->articleBody,
+                timezone : $request->timezone,
             );
 
             // なんのタグも設定されていない時
@@ -83,8 +84,10 @@ class ArticleController extends Controller
            // 記事更新
             $this->articleRepository->update(
                 articleId:$request->articleId,
+                timezone : $request->timezone,
                 title:$request->articleTitle,
-                body :$request->articleBody
+                body :$request->articleBody,
+
             );
 
             //タグ更新

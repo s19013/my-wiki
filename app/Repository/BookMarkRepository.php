@@ -20,23 +20,23 @@ class BookMarkRepository
     }
 
     //新規ブックマーク作成 登録したブックマークのIDを返す
-    public  function store($title,$url,$userId)
+    public  function store($title,$url,$userId,$timezone="UTC")
     {
         $bookMark = BookMark::create([
             // タイトルが産められてなかったら日時で埋める
             'user_id'  => $userId,
-            'title'    => $this->nullAvoidanceToolKit->ifnull($title,Carbon::now()),
+            'title'    => $this->nullAvoidanceToolKit->ifnull($title,Carbon::now($timezone)),
             'url'      => $url,
         ]);
         return $bookMark->id;
     }
 
     //ブックマーク更新
-    public  function update($bookMarkId,$title,$url)
+    public  function update($bookMarkId,$title,$url,$timezone="UTC")
     {
         BookMark::where('id','=',$bookMarkId)
             ->update([
-                'title' => $this->nullAvoidanceToolKit->ifnull($title,Carbon::now()),
+                'title' => $this->nullAvoidanceToolKit->ifnull($title,Carbon::now($timezone)),
                 'url'   => $url,
             ]);
     }
