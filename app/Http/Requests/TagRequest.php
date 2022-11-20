@@ -25,6 +25,7 @@ class TagRequest extends FormRequest
     public function rules()
     {
         return [
+            "id"   => 'integer',
             "name" => "required|max:255",
         ];
     }
