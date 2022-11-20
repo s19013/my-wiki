@@ -44,11 +44,16 @@
 
 <script>
 import BaseLayout from '@/Layouts/BaseLayout.vue'
+
 import TagDialog from '@/Components/dialog/TagDialog.vue';
 import loading from '@/Components/loading/loading.vue'
 import DetailComponent from '@/Components/atomic/DetailComponent.vue';
 import SearchField from '@/Components/SearchField.vue';
 import ArticleContainer from '@/Components/contents/ArticleContainer.vue';
+
+import MakeListTools from '@/tools/MakeListTools.js';
+
+const makeListTools = new MakeListTools()
 
 export default{
     data() {
@@ -90,7 +95,7 @@ export default{
             this.$inertia.get('/Article/Search' ,{
                 page :1,
                 keyword : this.$refs.SearchField.serveKeywordToParent(),
-                tagList : this.$refs.tagDialog.serveCheckedTagListToParent(),
+                tagList : makeListTools.tagIdList(this.$refs.tagDialog.serveCheckedTagList()),
                 searchTarget:this.$refs.DetailComponent.serveChecked(),
                 onError:(error) => {
                     console.log(error)
@@ -104,7 +109,7 @@ export default{
             this.$inertia.get('/Article/Search' ,{
                 page : this.page,
                 keyword : this.old.keyword,
-                tagList : this.old.tagList,
+                tagList : makeListTools.tagIdList(this.old.tagList),
                 searchTarget:this.$refs.DetailComponent.serveChecked(),
                 onError:(error) => {
                     console.log(error)
