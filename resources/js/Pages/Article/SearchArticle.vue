@@ -95,7 +95,7 @@ export default{
             this.$inertia.get('/Article/Search' ,{
                 page :1,
                 keyword : this.$refs.SearchField.serveKeywordToParent(),
-                tagList : makeListTools.tagIdList(this.$refs.tagDialog.serveCheckedTagList()),
+                tagList : this.$refs.tagDialog.serveCheckedTagList(),
                 searchTarget:this.$refs.DetailComponent.serveChecked(),
                 onError:(error) => {
                     console.log(error)

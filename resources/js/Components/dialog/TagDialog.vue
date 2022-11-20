@@ -138,6 +138,8 @@ import SearchField from '@/Components/SearchField.vue';
 import TagList from '@/Components/TagList.vue';
 
 import MakeListTools from '@/tools/MakeListTools.js';
+
+const makeListTools =  MakeListTools()
 export default{
     data() {
       return {
@@ -320,7 +322,7 @@ export default{
             return 0;
         },
         //親にチェックリストを渡す
-        serveCheckedTagList(){return this.checkedTagList},
+        serveCheckedTagList(){return makeListTools.tagIdList(this.checkedTagList)},
     },
     watch:{
         onlyCheckedFlag:function(){
