@@ -25,8 +25,10 @@ class BookMarkRequest extends FormRequest
     public function rules()
     {
         return [
+            "bookMarkId"    => 'integer',
             "bookMarkTitle" => "max:255",
-            "bookMarkUrl"   => "required|url"
+            "bookMarkUrl"   => "required|url",
+            "tagList"       => "array",
         ];
     }
 

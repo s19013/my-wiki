@@ -24,8 +24,12 @@ class ArticleRequest extends FormRequest
      */
     public function rules()
     {
+        // integerにすると数値型に変換してくれるらしい
         return [
+            "articleId"    => 'integer',
             "articleTitle" => "max:255",
+            "articleBody"  => "",
+            "tagList"      => "array",
         ];
     }
 

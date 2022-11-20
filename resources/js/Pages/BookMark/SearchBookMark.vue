@@ -42,12 +42,17 @@
 
 <script>
 import BaseLayout from '@/Layouts/BaseLayout.vue'
+
 import { Link } from '@inertiajs/inertia-vue3';
 import TagDialog from '@/Components/dialog/TagDialog.vue';
 import loading from '@/Components/loading/loading.vue';
 import DetailComponent from '@/Components/atomic/DetailComponent.vue';
 import SearchField from '@/Components/SearchField.vue';
 import BookMarkContainer from '@/Components/contents/BookMarkContainer.vue';
+
+import MakeListTools from '@/tools/MakeListTools.js';
+
+const makeListTools = new MakeListTools()
 
 export default{
     data() {
@@ -91,7 +96,7 @@ export default{
             this.$inertia.get('/BookMark/Search' ,{
                 page :1,
                 keyword : this.$refs.SearchField.serveKeywordToParent(),
-                tagList : this.$refs.tagDialog.serveCheckedTagListToParent(),
+                tagList : this.$refs.tagDialog.serveCheckedTagList(),
                 searchTarget:this.$refs.DetailComponent.serveChecked(),
                 onError:(error) => {
                     console.log(error)
@@ -105,7 +110,7 @@ export default{
             this.$inertia.get('/BookMark/Search' ,{
                 page : this.page,
                 keyword : this.old.keyword,
-                tagList : this.old.tagList,
+                tagList : makeListTools.tagIdList(this.old.tagList),
                 searchTarget:this.$refs.DetailComponent.serveChecked(),
                 onError:(error) => {
                     console.log(error)

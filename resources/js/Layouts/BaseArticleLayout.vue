@@ -120,7 +120,7 @@ export default {
             this.$emit('triggerSubmit',{
                 articleTitle:this.articleTitle,
                 articleBody :this.$refs.articleBody.serveBody(),
-                tagList     :this.$refs.tagDialog.serveCheckedTagListToParent()
+                tagList     :this.$refs.tagDialog.serveCheckedTagList()
             })
         },
         deleteArticle() { this.$emit('triggerDeleteArticle') },

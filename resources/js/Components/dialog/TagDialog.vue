@@ -136,6 +136,10 @@
 import loading from '@/Components/loading/loading.vue'
 import SearchField from '@/Components/SearchField.vue';
 import TagList from '@/Components/TagList.vue';
+
+import MakeListTools from '@/tools/MakeListTools.js';
+
+const makeListTools =  new MakeListTools()
 export default{
     data() {
       return {
@@ -318,14 +322,7 @@ export default{
             return 0;
         },
         //親にチェックリストを渡す
-        serveCheckedTagListToParent(){
-            // this.checkedTagListにnameも追加しないといけなくなったのでそのままthis.checkedTagListを返せない
-            // -> 返そうものならバックの処理に大きな変更が必要になる
-            // ここでidだけの配列を作って返すほうが変更が少ない
-            var temp = []
-            for (const tag of this.checkedTagList){ temp.push(tag["id"]) }
-            return temp
-        },
+        serveCheckedTagList(){return makeListTools.tagIdList(this.checkedTagList)},
     },
     watch:{
         onlyCheckedFlag:function(){
