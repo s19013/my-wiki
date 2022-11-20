@@ -159,6 +159,7 @@ A:※一部機能の一部しか触ってない人間の意見として聞いて
 * [Vue.jsについての基礎（transitionによるアニメーション）](https://qiita.com/watataku8911/items/f691a2999c3e2600173b)
 * [$watchでオブジェクトの変更を監視する方法](https://qiita.com/_Keitaro_/items/8e3f8448d1a0fe281648)
 * [【バックエンドLaravel】vue.jsで 自作のシンプルページネーション作成](https://reffect.co.jp/vue/laravel-vue-js-pagination)
+* [Vueのv-htmlでXSSを回避する](https://qiita.com/tnemotox/items/b4b8f0f627e23dd62447)
 
 # laravel,php
 * 公式ドキュメント
