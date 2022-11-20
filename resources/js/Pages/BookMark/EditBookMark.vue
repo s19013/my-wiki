@@ -40,10 +40,11 @@ export default {
         }){
             this.$refs.BaseBookMarkLayout.switchDisabledFlag()
             axios.put('/api/bookmark/update',{
-                bookMarkId   :this.originalBookMark.id,
-                bookMarkTitle:bookMarkTitle,
-                bookMarkUrl  :bookMarkUrl,
-                tagList      :tagList
+                bookMarkId    :this.originalBookMark.id,
+                bookMarkTitle :bookMarkTitle,
+                bookMarkUrl   :bookMarkUrl,
+                tagList       :tagList,
+                timezone      :Intl.DateTimeFormat().resolvedOptions().timeZone
             })
             .then((res)=>{this.$inertia.get('/BookMark/Search')})
             .catch((errors)=>{

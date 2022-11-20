@@ -34,6 +34,7 @@ export default {
                 articleTitle:articleTitle,
                 articleBody :articleBody,
                 tagList     :tagList,
+                timezone    :Intl.DateTimeFormat().resolvedOptions().timeZone
             })
             .then((res)=>{this.$inertia.get('/Article/Search')})
             .catch((errors) => {

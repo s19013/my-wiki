@@ -19,12 +19,12 @@ class ArticleRepository
         $this->nullAvoidanceToolKit = new NullAvoidanceToolKit();
     }
     //新規記事登録 登録した記事のIdを返す
-    public function store($title,$body,$userId)
+    public function store($title,$body,$userId,$timezone="UTC")
     {
         $article = Article::create([
             // タイトルが産められてなかったら日時で埋める
             'user_id'  => $userId,
-            'title'    => $this->nullAvoidanceToolKit->ifnull($title,Carbon::now()),
+            'title'    => $this->nullAvoidanceToolKit->ifnull($title,Carbon::now($timezone)),
             'body'     => $this->nullAvoidanceToolKit->ifnull($body,''),
         ]);
 
@@ -33,14 +33,12 @@ class ArticleRepository
     }
 
     //記事更新
-    public function update($articleId,$title,$body)
+    public function update($articleId,$title,$body,$timezone="UTC")
     {
-        // タイトルが産められてなかったら日時で埋める
-        if ($title == '') { $title = Carbon::now() ;}
-
         Article::where('id','=',$articleId)
             ->update([
-                'title'    => $this->nullAvoidanceToolKit->ifnull($title,Carbon::now()),
+                // タイトルが産められてなかったら日時で埋める
+                'title'    => $this->nullAvoidanceToolKit->ifnull($title,Carbon::now($timezone)),
                 'body'     => $this->nullAvoidanceToolKit->ifnull($body,''),
             ]);
     }

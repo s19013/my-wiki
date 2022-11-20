@@ -25,9 +25,10 @@ export default {
         }){
             this.$refs.BaseBookMarkLayout.switchDisabledFlag()
             axios.post('/api/bookmark/store',{
-                bookMarkTitle:bookMarkTitle,
-                bookMarkUrl  :bookMarkUrl,
-                tagList      :tagList,
+                bookMarkTitle :bookMarkTitle,
+                bookMarkUrl   :bookMarkUrl,
+                tagList       :tagList,
+                timezone      :Intl.DateTimeFormat().resolvedOptions().timeZone
             })
             .then((res)=>{this.$inertia.get('/BookMark/Search')})
             .catch((errors) => {

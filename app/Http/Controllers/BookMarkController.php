@@ -61,6 +61,7 @@ class BookMarkController extends Controller
                 userId   : Auth::id(),
                 title    : $request->bookMarkTitle,
                 url      : $request->bookMarkUrl,
+                timezone : $request->timezone
             );
 
             // なんのタグも設定されていない時
@@ -106,8 +107,9 @@ class BookMarkController extends Controller
             //ブックマークの更新
             $this->bookMarkRepository->update(
                 bookMarkId:$request->bookMarkId,
-                title:$request->bookMarkTitle,
-                url  :$request->bookMarkUrl
+                timezone  : $request->timezone,
+                title :$request->bookMarkTitle,
+                url   :$request->bookMarkUrl,
             );
 
             //タグの更新
