@@ -25,7 +25,6 @@
         "vuex": "^4.0.2"
     },
     "dependencies": {
-        "@braintree/sanitize-url": "^6.0.2",
         "@mdi/font": "^7.0.96",
         "sanitize-html": "^2.7.3"
     }
