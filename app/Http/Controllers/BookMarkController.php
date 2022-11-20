@@ -14,6 +14,8 @@ use App\Repository\BookMarkRepository;
 use App\Repository\BookMarkTagRepository;
 use App\Repository\TagRepository;
 
+use App\Http\Requests\BookMarkRequest;
+
 use App\Tools\NullAvoidanceToolKit;
 use Auth;
 use DB;
@@ -39,7 +41,7 @@ class BookMarkController extends Controller
     }
 
     //新規ブックマーク作成
-    public function store(Request $request)
+    public function store(BookMarkRequest $request)
     {
         // CSRFトークンを再生成して、二重送信対策
         $request->session()->regenerateToken();
@@ -47,10 +49,10 @@ class BookMarkController extends Controller
         //urlがすでに登録されているか確かめる
         $isAllreadyExists =$this->bookMarkRepository->isAllreadyExists(Auth::id(),$request->bookMarkUrl);
         if ($isAllreadyExists == true) {
-            return response()->json(
-                ["message" => "already exists"],
-                400
-            );
+            return response()->json([
+                'errors' => ["bookMarkUrl" => ["そのブックマークは既に保存しています"]],
+                ],
+                400);
         }
 
         DB::transaction(function () use($request){
@@ -81,10 +83,24 @@ class BookMarkController extends Controller
     }
 
     //ブックマークの更新
-    public function update(Request $request)
+    public function update(BookMarkRequest $request)
     {
         // CSRFトークンを再生成して、二重送信対策
         $request->session()->regenerateToken();
+
+        //更新しようとしているurlが自分以外にすでに登録されているか確かめる
+        $bookMarkId = $this->bookMarkRepository->serveBookMarkId(
+            url:$request->bookMarkUrl,
+            userId:Auth::id()
+        );
+
+        // 帰り値がnullの場合は無視する(urlを完全に別のものに変更したから,まだ更新するurlが登録されてないから)
+        if (!is_null($bookMarkId)&&$request->bookMarkId != $bookMarkId) {
+            return response()->json([
+                'errors' => ["bookMarkUrl" => ["そのブックマークは既に保存しています"]],
+                ],
+                400);
+        }
 
         DB::transaction(function () use($request){
             //ブックマークの更新

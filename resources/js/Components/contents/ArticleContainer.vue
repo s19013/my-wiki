@@ -1,6 +1,6 @@
 <template>
     <div class ="content">
-        <DateLabel :createdAt="article.created_at" :updatedAt="article.updated_at" size="0.1rem"/>
+        <DateLabel :createdAt="article.created_at" :updatedAt="article.updated_at"/>
         <div class="elements">
             <h2>{{article.title}}</h2>
             <Link :href="'/Article/View/' + article.id">
@@ -33,13 +33,15 @@ export default{
     background-color: #e1e1e1;
     border:black solid 1px;
     padding: 5px;
-    button{
-        width: 100%;
-        grid-column: 2/3;
-    }
     h2{
         margin: auto 0;
         grid-column: 1/2;
+        word-break   :break-word;
+        overflow-wrap:normal;
+    }
+    button{
+        width: 100%;
+        grid-column: 2/3;
     }
     a{
         text-decoration: none;

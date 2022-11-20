@@ -5,7 +5,8 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-use Illuminate\Validation\Validator;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class ArticleRequest extends FormRequest
 {
@@ -23,8 +24,12 @@ class ArticleRequest extends FormRequest
      */
     public function rules()
     {
+        // integerにすると数値型に変換してくれるらしい
         return [
+            "articleId"    => 'integer',
             "articleTitle" => "max:255",
+            "articleBody"  => "",
+            "tagList"      => "array",
         ];
     }
 
@@ -33,6 +38,16 @@ class ArticleRequest extends FormRequest
         return [
             "articleTitle.max"    => "126文字以内で入力してください",
         ];
+    }
+
+
+    protected function failedValidation(Validator $validator)
+    {
+        $res = response()->json([
+            'errors' => $validator->errors(),
+            ],
+            400);
+        throw new HttpResponseException($res);
     }
 }
 

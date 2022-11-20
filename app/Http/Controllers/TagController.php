@@ -9,6 +9,8 @@ use App\Repository\TagRepository;
 use Auth;
 use DB;
 
+use App\Http\Requests\TagRequest;
+
 class TagController extends Controller
 {
 
@@ -20,60 +22,54 @@ class TagController extends Controller
     }
 
     //新規タグ登録
-    public function store(Request $request)
+    public function store(TagRequest $request)
     {
         // CSRFトークンを再生成して、二重送信対策
         $request->session()->regenerateToken();
 
-        $result = DB::transaction(function () use($request){
-            return $this->tagRepository->store(
-                userId:Auth::id(),
-                tag   :$request->tag,
-            );
-        });
-
-        // 登録できた
-        if ($result) {
+        // すでに登録してあるった場合は弾く
+        if ($this->tagRepository->isAllreadyExists(Auth::id(),$request->name)){
             return response()->json(
-                ["message" => "stored"],
-                200
+                ['errors' => ["tag" => ["そのタグは既に保存しています"]]],
+                400
             );
         }
 
-        // すでに登録していた
-        return response()->json(
-            ["message" => "already exists"],
-            400
-        );
+        DB::transaction(function () use($request){
+            return $this->tagRepository->store(
+                userId:Auth::id(),
+                name  :$request->name,
+            );
+        });
     }
 
-    public function update(Request $request)
+    public function update(TagRequest $request)
     {
         // CSRFトークンを再生成して、二重送信対策
         $request->session()->regenerateToken();
 
-        $result = DB::transaction(function () use($request){
+        //更新しようとしているurlが自分以外にすでに登録されているか確かめる
+        $tagId = $this->tagRepository->serveTagId(
+            name  :$request->name,
+            userId:Auth::id()
+        );
+
+        // 帰り値がnullの場合は無視する(urlを完全に別のものに変更したから,まだ更新するurlが登録されてないから)
+        if (!is_null($tagId)&&$request->name != $tagId) {
+            return response()->json([
+                'errors' => ["tag" => ["そのタグは既に保存しています"]],
+                ],
+                400);
+        }
+
+
+        DB::transaction(function () use($request){
             return $this->tagRepository->update(
                 userId:Auth::id(),
                 tagId :$request->id,
                 name  :$request->name
             );
         });
-
-
-        // 更新できた
-        if ($result) {
-            return response()->json(
-                ["message" => "updated"],
-                200
-            );
-        }
-
-        // 既に登録している名前と被った
-        return response()->json(
-            ["message" => "already exists"],
-            400
-        );
     }
 
     public function delete($tagId)
@@ -92,8 +88,8 @@ class TagController extends Controller
     public function search(Request $request)
     {
         return $this->tagRepository->search(
-            userId:Auth::id(),
-            tag   :$request->tag
+            userId :Auth::id(),
+            keyword:$request->keyword
         );
     }
 }

@@ -73,7 +73,7 @@ class BookMarkController_UpdateTest extends TestCase
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
             'bookMarkTitle'  => "更新titleタグ総入れ替え",
-            'bookMarkUrl'    => "更新urlタグ総入れ替え" ,
+            'bookMarkUrl'    => "http://hide-no-server.com/更新urlタグ総入れ替え" ,
             'tagList' => [$newTags[0]->id,$newTags[1]->id],
         ]);
 
@@ -85,7 +85,7 @@ class BookMarkController_UpdateTest extends TestCase
         $this->assertDatabaseHas('book_marks',[
             'user_id'=> $this->user->id,
             'title'  => "更新titleタグ総入れ替え",
-            'url'   => "更新urlタグ総入れ替え",
+            'url'   => "http://hide-no-server.com/更新urlタグ総入れ替え",
             'deleted_at' => null,
         ]);
 
@@ -137,7 +137,7 @@ class BookMarkController_UpdateTest extends TestCase
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
             'bookMarkTitle'  => "更新title元のタグをそのままに新しく追加",
-            'bookMarkUrl'   => "更新url元のタグをそのままに新しく追加" ,
+            'bookMarkUrl'   => "http://hide-no-server.com/更新url元のタグをそのままに新しく追加" ,
             'tagList' => [$tags[0]->id,$tags[1]->id,$newTags[0]->id,$newTags[1]->id],
         ]);
 
@@ -149,7 +149,7 @@ class BookMarkController_UpdateTest extends TestCase
         $this->assertDatabaseHas('book_marks',[
             'user_id'=> $this->user->id,
             'title'  => "更新title元のタグをそのままに新しく追加",
-            'url'   => "更新url元のタグをそのままに新しく追加",
+            'url'   => "http://hide-no-server.com/更新url元のタグをそのままに新しく追加",
             'deleted_at' => null,
         ]);
 
@@ -203,7 +203,7 @@ class BookMarkController_UpdateTest extends TestCase
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
             'bookMarkTitle'  => "更新titleタグ総入れ替え",
-            'bookMarkUrl'   => "更新urlタグ総入れ替え" ,
+            'bookMarkUrl'   => "http://hide-no-server.com/更新urlタグ総入れ替え" ,
             'tagList' => [$tags[2]->id,$tags[3]->id],
         ]);
 
@@ -215,7 +215,7 @@ class BookMarkController_UpdateTest extends TestCase
         $this->assertDatabaseHas('book_marks',[
             'user_id'=> $this->user->id,
             'title'  => "更新titleタグ総入れ替え",
-            'url'   => "更新urlタグ総入れ替え",
+            'url'   => "http://hide-no-server.com/更新urlタグ総入れ替え",
             'deleted_at' => null,
         ]);
 
@@ -275,7 +275,7 @@ class BookMarkController_UpdateTest extends TestCase
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
             'bookMarkTitle'  => "更新titleタグがついてなかったブックマークにタグを付ける",
-            'bookMarkUrl'   => "更新urlタグがついてなかったブックマークにタグを付ける" ,
+            'bookMarkUrl'   => "http://hide-no-server.com/更新urlタグがついてなかったブックマークにタグを付ける" ,
             'tagList' => [$tags[0]->id,$tags[1]->id],
         ]);
 
@@ -287,7 +287,7 @@ class BookMarkController_UpdateTest extends TestCase
         $this->assertDatabaseHas('book_marks',[
             'user_id'=> $this->user->id,
             'title'  => "更新titleタグがついてなかったブックマークにタグを付ける",
-            'url'   => "更新urlタグがついてなかったブックマークにタグを付ける",
+            'url'   => "http://hide-no-server.com/更新urlタグがついてなかったブックマークにタグを付ける",
             'deleted_at' => null,
         ]);
 
@@ -339,7 +339,7 @@ class BookMarkController_UpdateTest extends TestCase
         ->put('/api/bookmark/update/',[
             'bookMarkId'    => $bookMark->id,
             'bookMarkTitle' => "タグがついていたブックマークのタグをすべて消す",
-            'bookMarkUrl'   => "タグがついていたブックマークのタグをすべて消す" ,
+            'bookMarkUrl'   => "http://hide-no-server.com/タグがついていたブックマークのタグをすべて消す" ,
             'tagList' => [],
         ]);
 
@@ -351,7 +351,7 @@ class BookMarkController_UpdateTest extends TestCase
         $this->assertDatabaseHas('book_marks',[
             'user_id'=> $this->user->id,
             'title'  => "タグがついていたブックマークのタグをすべて消す",
-            'url'    => "タグがついていたブックマークのタグをすべて消す",
+            'url'    => "http://hide-no-server.com/タグがついていたブックマークのタグをすべて消す",
             'deleted_at' => null,
         ]);
 
@@ -397,8 +397,8 @@ class BookMarkController_UpdateTest extends TestCase
         ->withSession(['test' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
-            'bookMarkTitle'  => "更新",
-            'bookMarkUrl'    => "更新" ,
+            'bookMarkTitle'  => "http://hide-no-server.com/更新",
+            'bookMarkUrl'    => "http://hide-no-server.com/更新" ,
             'tagList' => [],
         ]);
 
@@ -411,8 +411,8 @@ class BookMarkController_UpdateTest extends TestCase
         ->withSession(['test' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
-            'bookMarkTitle'  => "再度更新",
-            'bookMarkUrl'    => "再度更新" ,
+            'bookMarkTitle'  => "http://hide-no-server.com/再度更新",
+            'bookMarkUrl'    => "http://hide-no-server.com/再度更新" ,
             'tagList' => [],
         ]);
 
@@ -423,8 +423,8 @@ class BookMarkController_UpdateTest extends TestCase
         // ブックマーク
         $this->assertDatabaseHas('book_marks',[
             'user_id'=> $this->user->id,
-            'title'  => "再度更新",
-            'url'    => "再度更新",
+            'title'  => "http://hide-no-server.com/再度更新",
+            'url'    => "http://hide-no-server.com/再度更新",
             'deleted_at' => null,
         ]);
 
@@ -462,8 +462,8 @@ class BookMarkController_UpdateTest extends TestCase
         ->withSession(['test' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
-            'bookMarkTitle'  => "更新",
-            'bookMarkUrl'    => "更新" ,
+            'bookMarkTitle'  => "http://hide-no-server.com/更新",
+            'bookMarkUrl'    => "http://hide-no-server.com/更新" ,
             'tagList' => [],
         ]);
 
@@ -476,8 +476,8 @@ class BookMarkController_UpdateTest extends TestCase
         ->withSession(['test' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
-            'bookMarkTitle'  => "再度更新",
-            'bookMarkUrl'    => "再度更新" ,
+            'bookMarkTitle'  => "http://hide-no-server.com/再度更新",
+            'bookMarkUrl'    => "http://hide-no-server.com/再度更新" ,
             'tagList' => [$tags[0]->id,$tags[1]->id],
         ]);
 
@@ -488,8 +488,8 @@ class BookMarkController_UpdateTest extends TestCase
         // ブックマーク
         $this->assertDatabaseHas('book_marks',[
             'user_id'=> $this->user->id,
-            'title'  => "再度更新",
-            'url'    => "再度更新",
+            'title'  => "http://hide-no-server.com/再度更新",
+            'url'    => "http://hide-no-server.com/再度更新",
             'deleted_at' => null,
         ]);
 
@@ -537,8 +537,8 @@ class BookMarkController_UpdateTest extends TestCase
         ->withSession(['test' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
-            'bookMarkTitle'  => "更新",
-            'bookMarkUrl'    => "更新" ,
+            'bookMarkTitle'  => "http://hide-no-server.com/更新",
+            'bookMarkUrl'    => "http://hide-no-server.com/更新" ,
             'tagList' => [$tags[0]->id,$tags[1]->id],
         ]);
 
@@ -551,8 +551,8 @@ class BookMarkController_UpdateTest extends TestCase
         ->withSession(['test' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
-            'bookMarkTitle'  => "再度更新",
-            'bookMarkUrl'    => "再度更新" ,
+            'bookMarkTitle'  => "http://hide-no-server.com/再度更新",
+            'bookMarkUrl'    => "http://hide-no-server.com/再度更新" ,
             'tagList' => [],
         ]);
 
@@ -563,8 +563,8 @@ class BookMarkController_UpdateTest extends TestCase
         // ブックマーク
         $this->assertDatabaseHas('book_marks',[
             'user_id'=> $this->user->id,
-            'title'  => "再度更新",
-            'url'    => "再度更新",
+            'title'  => "http://hide-no-server.com/再度更新",
+            'url'    => "http://hide-no-server.com/再度更新",
             'deleted_at' => null,
         ]);
 
@@ -612,8 +612,8 @@ class BookMarkController_UpdateTest extends TestCase
         ->withSession(['test' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
-            'bookMarkTitle'  => "更新",
-            'bookMarkUrl'    => "更新" ,
+            'bookMarkTitle'  => "http://hide-no-server.com/更新",
+            'bookMarkUrl'    => "http://hide-no-server.com/更新" ,
             'tagList' => [$tags[0]->id,$tags[1]->id],
         ]);
 
@@ -626,8 +626,8 @@ class BookMarkController_UpdateTest extends TestCase
         ->withSession(['test' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
-            'bookMarkTitle'  => "再度更新",
-            'bookMarkUrl'    => "再度更新" ,
+            'bookMarkTitle'  => "http://hide-no-server.com/再度更新",
+            'bookMarkUrl'    => "http://hide-no-server.com/再度更新" ,
             'tagList' => [$tags[1]->id,$tags[2]->id],
         ]);
 
@@ -638,8 +638,8 @@ class BookMarkController_UpdateTest extends TestCase
         // ブックマーク
         $this->assertDatabaseHas('book_marks',[
             'user_id'=> $this->user->id,
-            'title'  => "再度更新",
-            'url'    => "再度更新",
+            'title'  => "http://hide-no-server.com/再度更新",
+            'url'    => "http://hide-no-server.com/再度更新",
             'deleted_at' => null,
         ]);
 
@@ -697,8 +697,8 @@ class BookMarkController_UpdateTest extends TestCase
         ->withSession(['test' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
-            'bookMarkTitle'  => "更新",
-            'bookMarkUrl'    => "更新" ,
+            'bookMarkTitle'  => "http://hide-no-server.com/更新",
+            'bookMarkUrl'    => "http://hide-no-server.com/更新" ,
             'tagList' => [],
         ]);
 
@@ -711,8 +711,8 @@ class BookMarkController_UpdateTest extends TestCase
         ->withSession(['test' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
-            'bookMarkTitle'  => "再度更新",
-            'bookMarkUrl'    => "再度更新" ,
+            'bookMarkTitle'  => "http://hide-no-server.com/再度更新",
+            'bookMarkUrl'    => "http://hide-no-server.com/再度更新" ,
             'tagList' => [],
         ]);
 
@@ -723,8 +723,8 @@ class BookMarkController_UpdateTest extends TestCase
         // ブックマーク
         $this->assertDatabaseHas('book_marks',[
             'user_id'=> $this->user->id,
-            'title'  => "再度更新",
-            'url'    => "再度更新",
+            'title'  => "http://hide-no-server.com/再度更新",
+            'url'    => "http://hide-no-server.com/再度更新",
             'deleted_at' => null,
         ]);
 
@@ -770,8 +770,8 @@ class BookMarkController_UpdateTest extends TestCase
         ->withSession(['test' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
-            'bookMarkTitle'  => "更新",
-            'bookMarkUrl'    => "更新" ,
+            'bookMarkTitle'  => "http://hide-no-server.com/更新",
+            'bookMarkUrl'    => "http://hide-no-server.com/更新" ,
             'tagList' => [],
         ]);
 
@@ -784,8 +784,8 @@ class BookMarkController_UpdateTest extends TestCase
         ->withSession(['test' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
-            'bookMarkTitle'  => "再度更新",
-            'bookMarkUrl'    => "再度更新" ,
+            'bookMarkTitle'  => "http://hide-no-server.com/再度更新",
+            'bookMarkUrl'    => "http://hide-no-server.com/再度更新" ,
             'tagList' => [$tags[1]->id],
         ]);
 
@@ -796,8 +796,8 @@ class BookMarkController_UpdateTest extends TestCase
         // ブックマーク
         $this->assertDatabaseHas('book_marks',[
             'user_id'=> $this->user->id,
-            'title'  => "再度更新",
-            'url'    => "再度更新",
+            'title'  => "http://hide-no-server.com/再度更新",
+            'url'    => "http://hide-no-server.com/再度更新",
             'deleted_at' => null,
         ]);
 
@@ -849,8 +849,8 @@ class BookMarkController_UpdateTest extends TestCase
         ->withSession(['test' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
-            'bookMarkTitle'  => "更新",
-            'bookMarkUrl'    => "更新" ,
+            'bookMarkTitle'  => "http://hide-no-server.com/更新",
+            'bookMarkUrl'    => "http://hide-no-server.com/更新" ,
             'tagList' => [$tags[1]->id],
         ]);
 
@@ -863,8 +863,8 @@ class BookMarkController_UpdateTest extends TestCase
         ->withSession(['test' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
-            'bookMarkTitle'  => "再度更新",
-            'bookMarkUrl'    => "再度更新" ,
+            'bookMarkTitle'  => "http://hide-no-server.com/再度更新",
+            'bookMarkUrl'    => "http://hide-no-server.com/再度更新" ,
             'tagList' => [],
         ]);
 
@@ -875,8 +875,8 @@ class BookMarkController_UpdateTest extends TestCase
         // ブックマーク
         $this->assertDatabaseHas('book_marks',[
             'user_id'=> $this->user->id,
-            'title'  => "再度更新",
-            'url'    => "再度更新",
+            'title'  => "http://hide-no-server.com/再度更新",
+            'url'    => "http://hide-no-server.com/再度更新",
             'deleted_at' => null,
         ]);
 
@@ -928,8 +928,8 @@ class BookMarkController_UpdateTest extends TestCase
         ->withSession(['test' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
-            'bookMarkTitle'  => "更新",
-            'bookMarkUrl'    => "更新" ,
+            'bookMarkTitle'  => "http://hide-no-server.com/更新",
+            'bookMarkUrl'    => "http://hide-no-server.com/更新" ,
             'tagList' => [$tags[1]->id],
         ]);
 
@@ -942,8 +942,8 @@ class BookMarkController_UpdateTest extends TestCase
         ->withSession(['test' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
-            'bookMarkTitle'  => "再度更新",
-            'bookMarkUrl'    => "再度更新" ,
+            'bookMarkTitle'  => "http://hide-no-server.com/再度更新",
+            'bookMarkUrl'    => "http://hide-no-server.com/再度更新" ,
             'tagList' => [$tags[2]->id],
         ]);
 
@@ -954,8 +954,8 @@ class BookMarkController_UpdateTest extends TestCase
         // ブックマーク
         $this->assertDatabaseHas('book_marks',[
             'user_id'=> $this->user->id,
-            'title'  => "再度更新",
-            'url'    => "再度更新",
+            'title'  => "http://hide-no-server.com/再度更新",
+            'url'    => "http://hide-no-server.com/再度更新",
             'deleted_at' => null,
         ]);
 
@@ -980,5 +980,45 @@ class BookMarkController_UpdateTest extends TestCase
             'tag_id'     => $tags[1]->id,
             'deleted_at' => Carbon::now(),
         ]);
+    }
+
+    // 期待
+    // * エラーjsonが返される
+    // 条件
+    // * 登録ずみのurlと同じ
+    public function test_bookMarkUpdate_登録ずみのurlと同じ()
+    {
+        // ブックマークなどを作成
+        $oldBookMark = BookMark::factory()->create(['user_id' => $this->user->id]);
+        $newBookMark = BookMark::factory()->create(['user_id' => $this->user->id]);
+
+        BookMarkTag::create([
+            "book_mark_id" => $oldBookMark->id,
+            "tag_id"       => null
+        ]);
+
+        BookMarkTag::create([
+            "book_mark_id" => $newBookMark->id,
+            "tag_id"       => null
+        ]);
+
+        // 更新
+        $response = $this
+        ->actingAs($this->user)
+        ->withSession(['test' => 'test'])
+        ->put('/api/bookmark/update/',[
+            'bookMarkId'     => $newBookMark->id,
+            'bookMarkTitle'  => "http://hide-no-server.com/更新",
+            'bookMarkUrl'    => $oldBookMark->url ,
+            'tagList' => [],
+        ]);
+
+        // ステータス
+        $response->assertStatus(400);
+
+        // データベース
+        $response->assertJson([
+            'errors' => ["bookMarkUrl" => ["そのブックマークは既に保存しています"]],
+            ]);
     }
 }

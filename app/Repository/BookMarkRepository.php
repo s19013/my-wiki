@@ -8,18 +8,25 @@ use App\Tools\searchToolKit;
 use App\Models\BookMark;
 use App\Models\BookMarkTag;
 
+use App\Tools\NullAvoidanceToolKit;
+
 class BookMarkRepository
 {
+    private $nullAvoidanceToolKit;
+
+    public function __construct()
+    {
+        $this->nullAvoidanceToolKit = new NullAvoidanceToolKit();
+    }
+
     //新規ブックマーク作成 登録したブックマークのIDを返す
     public  function store($title,$url,$userId)
     {
-        // タイトルが産められてなかったら日時で埋める
-        if ($title == '') { $title = Carbon::now() ;}
-
         $bookMark = BookMark::create([
+            // タイトルが産められてなかったら日時で埋める
             'user_id'  => $userId,
-            'title'    => $title,
-            'url'     => $url,
+            'title'    => $this->nullAvoidanceToolKit->ifnull($title,Carbon::now()),
+            'url'      => $url,
         ]);
         return $bookMark->id;
     }
@@ -27,21 +34,10 @@ class BookMarkRepository
     //ブックマーク更新
     public  function update($bookMarkId,$title,$url)
     {
-        // タイトルが産められてなかったら日時で埋める
-        if ($title == '') { $title = Carbon::now() ;}
-
-        // 登録済みかどうかを確認していない->ちょっと危ないかも
-        // 登録してあるurlとidが一致してない->既に登録してあると判断
-        //
-        // 1:google.com <-既にあるやつ
-        // 上のidと受け取ったbookmarkidが一致しない->ダブり
-
-
-
         BookMark::where('id','=',$bookMarkId)
             ->update([
-                'title' => $title,
-                'url'  => $url,
+                'title' => $this->nullAvoidanceToolKit->ifnull($title,Carbon::now()),
+                'url'   => $url,
             ]);
     }
 
@@ -60,6 +56,22 @@ class BookMarkRepository
         return BookMark::select('*')
         ->Where('id','=',$bookMarkId)
         ->first();
+    }
+
+    // urlとユーザーからidを探す
+    // 更新でurlを変更した時に使う
+    public  function serveBookMarkId($url,$userId)
+    {
+        $temp = BookMark::select("id")
+        ->where('user_id','=',$userId)
+        ->where('url','=',$url)
+        ->whereNull('deleted_at')
+        ->first();
+
+
+        if (is_null($temp)) {return null;}
+
+        return $temp->id;
     }
 
     public  function search($userId,$keyword,$page,$tagList,$searchTarget)
