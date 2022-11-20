@@ -84,7 +84,7 @@ class ArticleController extends Controller
            // 記事更新
             $this->articleRepository->update(
                 articleId:$request->articleId,
-                timezone : $request->timezone,
+                timezone :$request->timezone,
                 title:$request->articleTitle,
                 body :$request->articleBody,
 

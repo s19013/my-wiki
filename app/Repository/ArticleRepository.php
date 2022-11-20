@@ -35,11 +35,9 @@ class ArticleRepository
     //記事更新
     public function update($articleId,$title,$body,$timezone="UTC")
     {
-        // タイトルが産められてなかったら日時で埋める
-        if ($title == '') { $title = Carbon::now() ;}
-
         Article::where('id','=',$articleId)
             ->update([
+                // タイトルが産められてなかったら日時で埋める
                 'title'    => $this->nullAvoidanceToolKit->ifnull($title,Carbon::now($timezone)),
                 'body'     => $this->nullAvoidanceToolKit->ifnull($body,''),
             ]);
