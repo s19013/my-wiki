@@ -57,9 +57,9 @@ export default {
             this.$refs.BaseBookMarkLayout.switchDisabledFlag()
             axios.delete('/api/bookmark/' + this.originalBookMark.id)
             .then((res)=>{this.$inertia.get('/BookMark/Search')})
-            .catch((error) => {
+            .catch((errors) => {
                 this.$refs.BaseBookMarkLayout.switchDisabledFlag()
-                console.log(error);
+                console.log(errors);
             })
         },
     },

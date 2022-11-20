@@ -97,8 +97,8 @@ export default{
                 keyword : this.$refs.SearchField.serveKeywordToParent(),
                 tagList : this.$refs.tagDialog.serveCheckedTagList(),
                 searchTarget:this.$refs.DetailComponent.serveChecked(),
-                onError:(error) => {
-                    console.log(error)
+                onError:(errors) => {
+                    console.log(errors)
                     this.loading = false
                 }
             })
@@ -111,8 +111,8 @@ export default{
                 keyword : this.old.keyword,
                 tagList : makeListTools.tagIdList(this.old.tagList),
                 searchTarget:this.$refs.DetailComponent.serveChecked(),
-                onError:(error) => {
-                    console.log(error)
+                onError:(errors) => {
+                    console.log(errors)
                     this.loading = false
                 }
             })

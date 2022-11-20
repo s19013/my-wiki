@@ -36,10 +36,10 @@ export default {
                 tagList     :tagList,
             })
             .then((res)=>{this.$inertia.get('/Article/Search')})
-            .catch((error) => {
+            .catch((errors) => {
                 this.$refs.BaseArticleLayout.switchDisabledFlag()
                 this.$refs.BaseArticleLayout.setErrors(errors.response.data.errors)
-                console.log(error);
+                console.log(errors);
             })
         },
         deleteArticle() {
@@ -47,9 +47,9 @@ export default {
             // 消す処理
             axios.delete('/api/article/' + this.originalArticle.id)
             .then((res)=>{this.$inertia.get('/Article/Search')})
-            .catch((error) => {
+            .catch((errors) => {
                 this.$refs.BaseArticleLayout.switchDisabledFlag()
-                console.log(error);
+                console.log(errors);
             })
         },
     },
