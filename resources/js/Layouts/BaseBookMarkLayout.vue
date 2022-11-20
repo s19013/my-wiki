@@ -131,7 +131,7 @@ export default {
             this.$emit('triggerSubmit',{
                 bookMarkTitle:this.bookMarkTitle,
                 bookMarkUrl  :this.bookMarkUrl,
-                tagList      :this.$refs.tagDialog.serveCheckedTagListToParent()
+                tagList      :this.$refs.tagDialog.serveCheckedTagList()
             })
         },
         deleteBookMark() {this.$emit('triggerDeleteBookMark')},
