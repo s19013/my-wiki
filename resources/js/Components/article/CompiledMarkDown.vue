@@ -4,6 +4,7 @@
 
 <script>
 import {marked} from 'marked';
+import sanitizeHtml from 'sanitize-html';
 export default {
     props:{
         originalMarkDown:{
@@ -11,7 +12,9 @@ export default {
             default:''
         },
     },
-    methods: {compileMarkDown(){return marked(this.originalMarkDown)}},
+    methods: {compileMarkDown(){
+        return marked(sanitizeHtml(this.originalMarkDown))
+    }},
 }
 </script>
 
