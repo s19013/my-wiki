@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +24,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // awsでhttps化したらコメントを外す
+        // 本番環境ならhttpsにする
+        // if (config('app.env') === 'production') {URL::forceScheme('https');}
     }
 }
