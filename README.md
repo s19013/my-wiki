@@ -9,7 +9,7 @@
 
 # my-wiki
 ## リンク
-http://hide-no-server.com/
+http://sundlf.com
 
 ## 概要
 ブックマークや記事をタグをつけて保存する｡
