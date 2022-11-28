@@ -131,31 +131,37 @@ class ArticleTagRepository
     //記事に関連付けられたタグの名前とidを取得
     public  function serveTagsRelatedToArticle($articleId,$userId)
     {
-        // tagsターブルとくっつける
-        // article_tags.tag_id = tags.id
-
-        // タグテーブルからログインユーザーの削除されていないタグを探す
-        $subTagTable = DB::table('tags')
-        ->select('id','name')
-        ->where('user_id','=',':$userId')
-        ->WhereNull('deleted_at')
-        ->toSql();
-
-        // 記事からはずされていないタグを取得
-        $result = ArticleTag::select('sub_tags.id as id','sub_tags.name as name')
-        ->leftJoin(DB::raw('('.$subTagTable.') AS sub_tags'),'article_tags.tag_id','=','sub_tags.id')
-        ->WhereNull('article_tags.deleted_at') // 記事からはずされていないタグのみを取得
-        ->Where('article_tags.article_id','=',':$articleId')
-        ->orderBy('name')
-        ->setBindings([
-            ':$userId'   => $userId,
-            ':$articleId'=> $articleId
-        ])
+        // 記事についているタグidの名前などをとってくる
+        $relatingTagList = DB::table('article_tags')
+        ->select('tag_id')
+        ->whereNull('deleted_at')
+        ->where('article_id','=',$articleId)
         ->get();
 
+        // [[tag_id => 1],[tag_id => 2],...]みたいな形になるので
+        // whereInで使うために[1,2,...]みたいな形にする
+        $convertedRelatingTagList = $this->convertAssociativeArrayToSimpleArray($relatingTagList);
 
-        if (is_null($result->toArray()[0]['id'])) {return [];}
+        // 何もタグがついてなかったらから配列を返す
+        if (is_null($convertedRelatingTagList[0])) {return [];}
 
-        return $result;
+        // tagテーブルからタグの名前とIdを取ってくる
+        $tagList = DB::table('tags')
+        ->select('id','name')
+        ->whereNull('deleted_at')
+        ->whereIn('id',$convertedRelatingTagList)
+        ->orderBy('name')
+        ->get();
+
+        return $tagList;
+    }
+
+    // [[tag_id => 1],[tag_id => 2],...]みたいな形になるので
+    // whereInで使うために[1,2,...]みたいな形にする
+    public function convertAssociativeArrayToSimpleArray($array)
+    {
+        $temp = [];
+        foreach($array as $element){array_push($temp,$element->tag_id);}
+        return $temp;
     }
 }
