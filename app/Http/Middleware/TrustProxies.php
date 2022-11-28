@@ -13,6 +13,9 @@ class TrustProxies extends Middleware
      * @var array<int, string>|string|null
      */
     protected $proxies;
+    // 全プロキシを信用
+    // awsなどでhttpsを有効化したらコメントを外す
+    // protected $proxies = '*';
 
     /**
      * The headers that should be used to detect proxies.

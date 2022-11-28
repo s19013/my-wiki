@@ -9,7 +9,7 @@
 
 # my-wiki
 ## リンク
-http://hide-no-server.com/
+http://sundlf.com
 
 ## 概要
 ブックマークや記事をタグをつけて保存する｡
@@ -54,7 +54,6 @@ https://github.com/s19013/my-wiki/tree/main/dev_memo
 * タグ
     * 作成
     * 検索
-    * 編集
 
 * シェルスクリプトによる定期的なバックアップ
 * シェルスクリプトによる定期的な論理削除されたデータの物理削除
