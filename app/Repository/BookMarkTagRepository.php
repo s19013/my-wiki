@@ -130,33 +130,40 @@ class BookMarkTagRepository
         }
     }
 
-    //ブックマークに関連付けられたタグを取得
+    //記事に関連付けられたタグの名前とidを取得
     public  function serveTagsRelatedToBookMark($bookMarkId,$userId)
     {
-        // tagsターブルとくっつける
-        // book_mark_tags.tag_id = tags.id
-
-        // タグテーブルからログインユーザーの削除されていないタグを探す
-        $subTagTable = DB::table('tags')
-        ->select('id','name')
-        ->where('user_id','=',':$userId')
-        ->WhereNull('deleted_at')
-        ->toSql();
-
-        // ブックマークからはずされていないタグを取得
-        $result = BookMarkTag::select('sub_tags.id as id','sub_tags.name as name')
-        ->leftJoin(DB::raw('('.$subTagTable.') AS sub_tags'),'book_mark_tags.tag_id','=','sub_tags.id')
-        ->WhereNull('book_mark_tags.deleted_at') // ブックマークからはずされていないタグのみを取得
-        ->Where('book_mark_tags.book_mark_id','=',':$bookMarkId')
-        ->orderBy('name')
-        ->setBindings([
-            ':$userId'   => $userId,
-            ':$bookMarkId'=> $bookMarkId
-        ])
+        // 記事についているタグidの名前などをとってくる
+        $relatingTagList = DB::table('book_mark_tags')
+        ->select('tag_id')
+        ->whereNull('deleted_at')
+        ->where('book_mark_id','=',$bookMarkId)
         ->get();
 
-        if (is_null($result->toArray()[0]['id'])) {return [];}
+        // [[tag_id => 1],[tag_id => 2],...]みたいな形になるので
+        // whereInで使うために[1,2,...]みたいな形にする
+        $convertedRelatingTagList = $this->convertAssociativeArrayToSimpleArray($relatingTagList);
 
-        return $result;
+        // 何もタグがついてなかったらから配列を返す
+        if (is_null($convertedRelatingTagList[0])) {return [];}
+
+        // tagテーブルからタグの名前とIdを取ってくる
+        $tagList = DB::table('tags')
+        ->select('id','name')
+        ->whereNull('deleted_at')
+        ->whereIn('id',$convertedRelatingTagList)
+        ->orderBy('name')
+        ->get();
+
+        return $tagList;
+    }
+
+    // [[tag_id => 1],[tag_id => 2],...]みたいな形になるので
+    // whereInで使うために[1,2,...]みたいな形にする
+    public function convertAssociativeArrayToSimpleArray($array)
+    {
+        $temp = [];
+        foreach($array as $element){array_push($temp,$element->tag_id);}
+        return $temp;
     }
 }
