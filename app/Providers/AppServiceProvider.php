@@ -27,6 +27,5 @@ class AppServiceProvider extends ServiceProvider
         // awsでhttps化したらコメントを外す
         // 本番環境ならhttpsにする
         // if (config('app.env') === 'production') {URL::forceScheme('https');}
-        URL::forceScheme('https');
     }
 }
