@@ -10,7 +10,8 @@ DBNAME='my-wiki'
 # DATETIME=`date +%Y%m%d`
 
 # 保存先
-exportDirectryPath='/home/ubuntu/backup/my-wiki'
+# exportDirectryPath='/home/ubuntu/backup/my-wiki'
+exportDirectryPath='/home/bitnami/backup/my-wiki'
 # exportDirectryPath='/c/xampp/htdocs/larvel/myWiki/'
 
 date=`date +%Y-%m-%d-%H-%M`
