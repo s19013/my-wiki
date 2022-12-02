@@ -23,7 +23,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
 
         // awsなどでhttpsを有効化したらコメントを外す
-        \App\Http\Middleware\RedirectToHttps::class,
+        //\App\Http\Middleware\RedirectToHttps::class,
     ];
 
     /**
