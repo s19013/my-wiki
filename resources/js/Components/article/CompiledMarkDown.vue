@@ -5,6 +5,12 @@
 <script>
 import {marked} from 'marked';
 import sanitizeHtml from 'sanitize-html';
+
+// エンターで改行できるように設定
+marked.setOptions({
+    "breaks": true,
+    "gfm": true,
+});
 export default {
     props:{
         originalMarkDown:{
@@ -13,7 +19,9 @@ export default {
         },
     },
     methods: {compileMarkDown(){
-        return marked(sanitizeHtml(this.originalMarkDown))
+        const sanitized = sanitizeHtml(this.originalMarkDown)
+        const replaced  = sanitized.replaceAll(/\n(?=\n)/g, "\n<br>\n")
+        return marked(replaced)
     }},
 }
 </script>
