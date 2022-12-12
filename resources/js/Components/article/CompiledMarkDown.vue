@@ -21,7 +21,7 @@ export default {
     },
     methods: {compileMarkDown(){
         const sanitized = sanitizeHtml(this.originalMarkDown)
-        const replaced  = sanitized.replaceAll(/\n(?=\n)/g, "\n<br>\n")
+        const replaced  = sanitized.replace(/\n(?=\n)/g, "\n<br>\n")
         return marked(replaced)
     }},
 }
