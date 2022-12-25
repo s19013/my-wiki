@@ -12,6 +12,7 @@ const form = useForm({
     password: '',
     password_confirmation: '',
     terms: false,
+    privacy: false,
 });
 
 const submit = () => {
@@ -48,6 +49,12 @@ const submit = () => {
                 <BreezeInput id="password_confirmation" type="password" class="mt-1 block w-full" v-model="form.password_confirmation" required autocomplete="new-password" />
             </div>
 
+            <div class="mt-4">
+                <input type="checkbox" id="terms" required> <label for="terms"><a target="_blank" rel="noopener noreferrer" href="https://docs.google.com/document/d/e/2PACX-1vQRfqPmWcI2irs1HpRBOjA9lyo2CiIFWRBpWY2lmHnMM8gWZUEmng57BEs1t-VC5Bd_kSCHhmG9gmAA/pub">利用規約</a>に同意します</label>
+            </div>
+            <div class="mt-4">
+                <input type="checkbox" id="privacy" required> <label for="privacy"><a target="_blank" rel="noopener noreferrer" href="https://docs.google.com/document/d/e/2PACX-1vQCW5pRoXeXHiZJ-vz8MImLVm-XTViLIdy1TxTBtsbAAzYb4MpPEaEFucHaWnpzDkI905s5AeW6rui3/pub">プライバシーポリシー</a>に同意します</label>
+            </div>
             <div class="flex items-center justify-end mt-4">
                 <Link :href="route('login')" class="underline text-sm text-gray-600 hover:text-gray-900">
                     Already registered?
