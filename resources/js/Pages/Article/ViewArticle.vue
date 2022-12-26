@@ -1,5 +1,5 @@
 <template>
-    <BaseLayout :title="'my-wiki ' + article.title" pageTitle="記事観覧">
+    <BaseLayout :title="article.title" pageTitle="記事観覧">
         <div class="articleContainer">
                 <!-- タイトルとボタン2つ -->
                 <div class="head">
