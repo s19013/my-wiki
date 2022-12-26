@@ -17,7 +17,7 @@
                 filled
                 no-resize
                 rows="20"
-                label="本文 [必須] ※マークダウン記法で書いてください '\' で改行"
+                label="本文 ※マークダウン記法対応"
                 :disabled="disabledFlag"
                 :loading ="disabledFlag"
                 v-model = "body"
