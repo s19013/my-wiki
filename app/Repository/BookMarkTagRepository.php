@@ -23,7 +23,6 @@ class BookMarkTagRepository
         BookMarkTag::where('book_mark_id','=',$bookMarkId)
             ->where('tag_id','=',$tagId)
             ->delete();
-            // ->forceDelete();
     }
 
     //ブックマークに紐付けられているタグを更新
@@ -110,7 +109,6 @@ class BookMarkTagRepository
         // convertAssociativeArrayToSimpleArrayを使った方がよいかも
         $original = DB::table('book_mark_tags')
         ->select('tag_id')
-        ->whereNull('deleted_at')
         ->where('book_mark_id','=',$bookMarkId)
         ->get();
 
@@ -131,7 +129,6 @@ class BookMarkTagRepository
         // tagテーブルからタグの名前とIdを取ってくる
         $tagList = DB::table('tags')
         ->select('id','name')
-        ->whereNull('deleted_at')
         ->whereIn('id',$relatingTagList)
         ->orderBy('name')
         ->get();
