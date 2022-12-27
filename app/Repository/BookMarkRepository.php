@@ -91,11 +91,15 @@ class BookMarkRepository
         if (!empty($tagList)) {
 
             //副問合せのテーブルから選択
-            $query = $this->createSubTableForSearch($userId,$tagList);
+            $subTable = $this->createSubTableForSearch($userId,$tagList);
+            $query = DB::table($subTable,"book_marks");
 
+            // 副問合せを使わないver(個人的にわかりにくいと思う)
+            // $query = $this->createSubTableForSearch($userId,$tagList);
         } else {
             //タグ検索が不要な場合
-            $query = BookMark::select('*')
+            $query = DB::table("book_marks")
+            ->select('*')
             ->where('user_id','=',$userId)
             ->whereNull('deleted_at');
         }
@@ -128,7 +132,7 @@ class BookMarkRepository
         //検索
         // dd($query->get());
         return [
-            'data' => $query->get()->toArray(),
+            'data' => $query->get(),
             'current_page'=> (int)$page,
             'last_page'   => $lastPage
         ];
@@ -138,8 +142,8 @@ class BookMarkRepository
     public  function createSubTableForSearch($userId,$tagList)
     {
         //articleテーブルとarticle_tags,tagsを結合
-        $subTable = BookMarkTag::select('book_marks.*')
-        ->leftjoin('book_marks','book_mark_tags.book_mark_id','=','book_marks.id')
+        $subTable = BookMark::select('book_marks.*')
+        ->leftjoin('book_mark_tags','book_mark_tags.book_mark_id','=','book_marks.id')
         ->leftjoin('tags','book_mark_tags.tag_id','=','tags.id')
         ->where('book_marks.user_id','=',$userId)
         ->where(function($subTable) {
