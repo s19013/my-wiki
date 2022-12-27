@@ -20,11 +20,11 @@ class BookMarkSeeder extends Seeder
      */
     public function run()
     {
-        $mainArticles = BookMark::factory()->count(10)->create(['user_id' => 13]);
+        $mainArticles = BookMark::factory()->count(10)->create(['user_id' => 1]);
         foreach ($mainArticles as $article){
             BookMarkTag::factory()->create([
                     "book_mark_id" => $article->id,
-                    "tag_id"     => Tag::factory()->create(['user_id' => 13])->id
+                    "tag_id"     => Tag::factory()->create(['user_id' => 1])->id
             ]);
         }
     }
