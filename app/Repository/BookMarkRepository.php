@@ -130,7 +130,7 @@ class BookMarkRepository
         $sort = $query->orderBy('updated_at','desc');
 
         //検索
-        // dd($query->get());
+        // dd($query->toSql());
         return [
             'data' => $query->get(),
             'current_page'=> (int)$page,
@@ -143,15 +143,19 @@ class BookMarkRepository
     {
         //articleテーブルとarticle_tags,tagsを結合
         $subTable = BookMark::select('book_marks.*')
-        ->leftjoin('book_mark_tags','book_mark_tags.book_mark_id','=','book_marks.id')
+        ->leftjoin('book_mark_tags','book_marks.id','=','book_mark_tags.book_mark_id')
         ->leftjoin('tags','book_mark_tags.tag_id','=','tags.id')
         ->where('book_marks.user_id','=',$userId)
+        // (a or b) and (c or d)みたいなsqlを書くには{}で囲む必要がある
         ->where(function($subTable) {
+            //削除されてないものたちだけを取り出す
             $subTable->WhereNull('book_marks.deleted_at')
-                     ->WhereNull('book_mark_tags.deleted_at')
-                     ->WhereNull('tags.deleted_at');
+                    ->WhereNull('tags.deleted_at');
         })
         ->where(function($subTable) use($tagList) {
+            // orなのは (a and b)みたいにすると
+            // tag_idがaでありbであるという矛盾したデータを取ってくることになる
+            // 詳しくはドキュメントみて
             foreach($tagList as $tag){
                 $subTable->orWhere('book_mark_tags.tag_id','=',$tag);
             }
