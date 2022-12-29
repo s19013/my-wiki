@@ -80,13 +80,14 @@ class ArticleRepository
 
         //タグも検索する場合
         if (!empty($tagList)) {
-            $subTable = self::createSubTableForSearch($userId,$tagList);
+            $subTable = $this->createSubTableForSearch($userId,$tagList);
 
             //副問合せのテーブルから選択
-            $query = $this->createSubTableForSearch($userId,$tagList);
+            $query = DB::table($subTable,"articles");
         } else {
             //タグ検索が不要な場合
-            $query = Article::select('*')
+            $query = DB::table("articles")
+            ->select('*')
             ->where('user_id','=',$userId)
             ->whereNull('deleted_at');
         }
@@ -117,9 +118,9 @@ class ArticleRepository
         $sort = $query->orderBy('updated_at','desc');
 
         //検索
-        // dd($query->get());
+        // dd($query->toSql());
         return [
-            'data' => $query->get()->toArray(),
+            'data' => $query->get(),
             'current_page'=> (int)$page,
             'last_page'   => $lastPage
         ];
@@ -133,17 +134,20 @@ class ArticleRepository
 
         // なぜarticle_tagsをメインにしているのか
         // -> article_tagsが2つを外部参照しているから
-        $subTable = ArticleTag::select('articles.*')
-        ->leftJoin('articles','article_tags.article_id','=','articles.id')
+        $subTable = Article::select('articles.*')
+        ->leftJoin('article_tags','articles.id','=','article_tags.article_id')
         ->leftJoin('tags','article_tags.tag_id','=','tags.id')
         ->where('articles.user_id','=',$userId)
+        // (a or b) and (c or d)みたいなsqlを書くには{}で囲む必要がある
         ->where(function($subTable) {
             //削除されてないものたちだけを取り出す
             $subTable->WhereNull('articles.deleted_at')
-                     ->WhereNull('article_tags.deleted_at')
-                     ->WhereNull('tags.deleted_at');
+                    ->WhereNull('tags.deleted_at');
         })
         ->where(function($subTable) use($tagList) {
+            // orなのは (a and b)みたいにすると
+            // tag_idがaでありbであるという矛盾したデータを取ってくることになる
+            // 詳しくはドキュメントみて
             foreach($tagList as $tag){
                 $subTable->orWhere('article_tags.tag_id','=',$tag);
             }

@@ -27,17 +27,12 @@ class BookMarkController extends Controller
     private $tagRepository;
     private $nullAvoidanceToolKit;
 
-    public function __construct(
-        BookMarkRepository $bookMarkRepository,
-        BookMarkTagRepository $bookMarkTagRepository,
-        TagRepository        $tagRepository,
-        NullAvoidanceToolKit $nullAvoidanceToolKit
-    )
+    public function __construct()
     {
-        $this->bookMarkRepository    = $bookMarkRepository;
-        $this->bookMarkTagRepository = $bookMarkTagRepository;
-        $this->tagRepository        = $tagRepository;
-        $this->nullAvoidanceToolKit = $nullAvoidanceToolKit;
+        $this->bookMarkRepository    = new BookMarkRepository();
+        $this->bookMarkTagRepository = new BookMarkTagRepository();
+        $this->tagRepository        = new TagRepository();
+        $this->nullAvoidanceToolKit = new nullAvoidanceToolKit();
     }
 
     //新規ブックマーク作成
@@ -170,7 +165,6 @@ class BookMarkController extends Controller
             "searchTarget" => $this->nullAvoidanceToolKit->ifnull($request->searchTarget,"title")
         ];
 
-        // この関数がこれで動くのは､get通信で同じページに表示しているから?
         return Inertia::render('BookMark/SearchBookMark',[
             'result' => $result,
             'old' => $old

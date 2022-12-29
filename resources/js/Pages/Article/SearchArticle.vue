@@ -7,7 +7,12 @@
                 searchLabel   ="記事検索"
                 :loadingFlag  ="loading"
                 :orignalKeyWord="old.keyword"
-                @triggerSearch="searchArticle"
+                @triggerSearch="search({
+                    page:1,
+                    keyword:this.$refs.SearchField.serveKeywordToParent(),
+                    tagList:this.$refs.tagDialog.serveCheckedTagList(),
+                    searchTarget:this.$refs.DetailComponent.serveChecked()
+                })"
                 >
             </SearchField>
 
@@ -90,27 +95,13 @@ export default{
     },
     methods: {
         // 検索用
-        searchArticle(){
-            this.loading = true
+        search({page,keyword,tagList,searchTarget}){
+            this.loading     = true
             this.$inertia.get('/Article/Search' ,{
-                page :1,
-                keyword : this.$refs.SearchField.serveKeywordToParent(),
-                tagList : this.$refs.tagDialog.serveCheckedTagList(),
-                searchTarget:this.$refs.DetailComponent.serveChecked(),
-                onError:(errors) => {
-                    console.log(errors)
-                    this.loading = false
-                }
-            })
-        },
-        // ページめくり
-        pagination(){
-            this.loading = true
-            this.$inertia.get('/Article/Search' ,{
-                page : this.page,
-                keyword : this.old.keyword,
-                tagList : makeListTools.tagIdList(this.old.tagList),
-                searchTarget:this.$refs.DetailComponent.serveChecked(),
+                page    : page,
+                keyword : keyword,
+                tagList : tagList,
+                searchTarget:searchTarget,
                 onError:(errors) => {
                     console.log(errors)
                     this.loading = false
@@ -123,13 +114,16 @@ export default{
     // ページネーションのボタン類を押した場合の処理
     // 厳密にはページネーションのボタン類を押すとpageの値が変化するのでそれをwatchしてページネーションを起動
         page:function(newValue,oldValue){
-            this.pagination();
+            console.log(newValue);
+            this.search({
+                page    : newValue,
+                keyword : this.old.keyword,
+                tagList : makeListTools.tagIdList(this.old.tagList),
+                searchTarget : this.old.searchTarget
+            });
         }
     },
     // mounted() {
-    //     console.log(this.result);
-    //     console.log(this.old);
-    //     console.log(this.page);
     // },
 }
 </script>

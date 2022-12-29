@@ -22,41 +22,52 @@ class BookMarkTagRepository
     {
         BookMarkTag::where('book_mark_id','=',$bookMarkId)
             ->where('tag_id','=',$tagId)
-            ->update(['deleted_at' => date(Carbon::now())]);
+            ->delete();
     }
 
     //ブックマークに紐付けられているタグを更新
     public  function update($bookMarkId,$updatedTagList)
     {
-        $originalTagList = []; //元データに紐付けられていたタグを入れるリスト
-        $addedTagList    = [];
-        $deletedTagList  = [];
-
         // 更新前のブックマークに紐付けられていたタグを取得
         $originalTagList = $this->getOrignalTag($bookMarkId);
 
-        //元のブックマークにタグはついてないし､新しくタグも設定されていない場合
-        // この関数の処理を終わらせる
-        if($this->procesOriginalBookMarkDoesNotHaveAnyTags($originalTagList,$bookMarkId,$updatedTagList) == true) {return;}
+        // 更新前のブックマークにタグが1つでもついていたかいなかったかで処理を分ける
+        if (empty($originalTagList)) {$this->ProcessingifOriginalHasNoTags($bookMarkId,$updatedTagList,$originalTagList);}
+        else {$this->ProcessingifOriginalHasAnyTags($bookMarkId,$originalTagList,$updatedTagList);}
+    }
 
+    // タグが1つもついてなかった
+    public function ProcessingifOriginalHasNoTags($bookMarkId,$updatedTagList,$originalTagList)
+    {
         // 追加されたタグ
         $addedTagList = array_diff($updatedTagList, $originalTagList);
 
-        // 削除されたタグ
-        // 元データがからではないときのみ動かす
-        if ($originalTagList[0] != null) {
-            $deletedTagList = array_diff($originalTagList, $updatedTagList);
-        }
-
-        //追加
+        // なにか新しくタグが紐づけられていた場合
         if (!empty($addedTagList)) {
+            // 追加
             foreach($addedTagList as $tag) {
                 $this->store(
                     tagId:$tag,
                     bookMarkId:$bookMarkId,
                 );
             }
+
+            // nullの削除
+            $this->delete(
+                tagId:null,
+                bookMarkId:$bookMarkId,
+            );
         }
+    }
+
+    // タグがついていた
+    public function ProcessingifOriginalHasAnyTags($bookMarkId,$originalTagList,$updatedTagList)
+    {
+        // 追加されたタグ
+        $addedTagList = array_diff($updatedTagList, $originalTagList);
+
+        // 削除されたタグ
+        $deletedTagList = array_diff($originalTagList, $updatedTagList);
 
         //削除
         if (!empty($deletedTagList)) {
@@ -68,90 +79,57 @@ class BookMarkTagRepository
             }
         }
 
-        //ブックマークのタグをすべて消した時の処理
-        $this->procesOriginalBookMarkDeleteAllTags(
-            originalTagList:$originalTagList,
-            deletedTagList :$deletedTagList,
-            isAddedTagListEmpty:empty($addedTagList),
-            bookMarkId:$bookMarkId,
-            );
-    }
-
-    // 更新前のブックマークに紐付けられていたタグを取得
-    public  function getOrignalTag($bookMarkId){
-        $temp = [];
-
-        $original = BookMarkTag::select('tag_id')
-        ->where('book_mark_id','=',$bookMarkId)
-        ->whereNull('deleted_at')
-        ->get();
-
-        //元のデータに紐付けられているタグを配列に入れる
-        foreach ($original as $tag){array_push($temp,$tag->tag_id);}
-
-        return $temp;
-    }
-
-    //元のブックマークにタグがついてない場合の処理
-    public  function procesOriginalBookMarkDoesNotHaveAnyTags($originalTagList,$bookMarkId,$updatedTagList)
-    {
-        // 仕様としてタグをつけてない場合はtag_idにnullが入る<-超大事
-        if (is_null($originalTagList[0])) {
-            //元のブックマークにタグはついてないし､新しくタグも設定されていない場合
-            // この関数の処理を終わらせる
-            if (empty($updatedTagList)) {return true;}
-            else {
-                // 更新前はブックマークにタグが1つもついていなくて
-                // 更新後にはタグが紐付けられていたら
-                // 更新前の$bookMarkIdのtag_idがnullのデータを論理削除
-                $this->delete(
-                    tagId:null,
-                    bookMarkId:$bookMarkId,
-                );
-            }
-        }
-    }
-
-    //ブックマークのタグをすべて消した時の処理
-    public  function procesOriginalBookMarkDeleteAllTags($originalTagList,$bookMarkId,$isAddedTagListEmpty,$deletedTagList)
-    {
-        // 紐付けられていたタグすべて削除されたのならtag_id = nullのデータをついか
-        // もともとブックマークにタグがついていたかと,
-        // 新しく紐付けられたタグが1つもないことを確認
-        if ($originalTagList[0] != null && $isAddedTagListEmpty==true) {
+        // ブックマークのタグをすべて消した時の処理
+        // 新しく追加されたタグがない場合
+        if (empty($addedTagList)) {
             //もともとついていたタグがすべてはずされたか確認
             $isAllDeleted = array_diff($originalTagList,$deletedTagList);
+
             if (empty($isAllDeleted)) {
+                // 紐付けられていたタグすべて削除されたのならtag_id = nullのデータをついか
                 $this->store(
                     tagId:null,
                     bookMarkId:$bookMarkId,
                 );
             }
+        } else {
+            // 新しく追加されたタグがある場合
+            foreach($addedTagList as $tag) {
+                $this->store(
+                    tagId:$tag,
+                    bookMarkId:$bookMarkId,
+                );
+            }
         }
+    }
+
+    // ブックマークに紐付けらているタグを取得
+    public  function getOrignalTag($bookMarkId){
+        // ここDB::にして
+        // convertAssociativeArrayToSimpleArrayを使った方がよいかも
+        $original = DB::table('book_mark_tags')
+        ->select('tag_id')
+        ->where('book_mark_id','=',$bookMarkId)
+        ->get();
+
+        $convertedOriginal = $this->convertAssociativeArrayToSimpleArray($original);
+        if (is_null($convertedOriginal[0])) {return [];}
+        else {return $convertedOriginal;}
+
+        // これで[null]が返されなくなったけど
+        // ProcessingifOriginalHasNoTagsの方で色々やっているから問題ないかな?
     }
 
     //記事に関連付けられたタグの名前とidを取得
     public  function serveTagsRelatedToBookMark($bookMarkId,$userId)
     {
         // 記事についているタグidの名前などをとってくる
-        $relatingTagList = DB::table('book_mark_tags')
-        ->select('tag_id')
-        ->whereNull('deleted_at')
-        ->where('book_mark_id','=',$bookMarkId)
-        ->get();
-
-        // [[tag_id => 1],[tag_id => 2],...]みたいな形になるので
-        // whereInで使うために[1,2,...]みたいな形にする
-        $convertedRelatingTagList = $this->convertAssociativeArrayToSimpleArray($relatingTagList);
-
-        // 何もタグがついてなかったらから配列を返す
-        if (is_null($convertedRelatingTagList[0])) {return [];}
+        $relatingTagList = $this->getOrignalTag($bookMarkId);
 
         // tagテーブルからタグの名前とIdを取ってくる
         $tagList = DB::table('tags')
         ->select('id','name')
-        ->whereNull('deleted_at')
-        ->whereIn('id',$convertedRelatingTagList)
+        ->whereIn('id',$relatingTagList)
         ->orderBy('name')
         ->get();
 
