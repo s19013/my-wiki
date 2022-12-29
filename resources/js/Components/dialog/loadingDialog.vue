@@ -20,6 +20,8 @@ export default{
     props:['loadingFlag'],
     components:{loading},
     watch: {
+        // propsをv-modelに渡しても､propsが変化した時にv-modelの値が変わらないらしい
+        // なのでwatchを使って､コンポーネント内の変数を変化させる方法にした
         flag: function(newValue, oldValue){
             flag = !flag
         }
