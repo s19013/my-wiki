@@ -2,18 +2,15 @@
     <div class="deleteAlertDialog">
      <!-- ダイアログを呼び出すためのボタン -->
 
-    <!-- <v-btn color="error" class="global_css_haveIconButton_Margin"  @click.stop="deleteDialogFlagSwitch()">
+    <v-btn color="error"
+        class="global_css_haveIconButton_Margin"  @click.stop="deleteDialogFlagSwitch()"
+        :disabled="disabledFlag" :loading="disabledFlag"
+    >
         <v-icon>mdi-trash-can</v-icon>
         <p>削除</p>
-    </v-btn> -->
+    </v-btn>
 
         <v-dialog v-model="deleteDialogFlag">
-            <template v-slot:activator="{ props }">
-                <v-btn color="error" class="global_css_haveIconButton_Margin"  v-bind="props" :disabled="disabledFlag" :loading="disabledFlag">
-                    <v-icon>mdi-trash-can</v-icon>
-                    <p>削除</p>
-                </v-btn>
-            </template>
             <section class="global_css_Dialog">
                 <h2>{{text}}</h2>
                 <div class="control">
