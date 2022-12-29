@@ -23,13 +23,13 @@ export default {
     props:['originalArticle','originalCheckedTagList'],
     components:{BaseArticleLayout},
     methods: {
-        submit({
+        async submit({
             articleTitle,
             articleBody,
             tagList,
         }){
             this.$refs.BaseArticleLayout.switchDisabledFlag()
-            axios.put('/api/article/update',{
+            await axios.put('/api/article/update',{
                 articleId   :this.originalArticle.id,
                 articleTitle:articleTitle,
                 articleBody :articleBody,
@@ -39,7 +39,7 @@ export default {
             .then((res)=>{this.$inertia.get('/Article/Search')})
             .catch((errors) => {
                 this.$refs.BaseArticleLayout.switchDisabledFlag()
-                this.$refs.BaseArticleLayout.setErrors(errors.response.data.errors)
+                this.$refs.BaseArticleLayout.setErrors(errors.response)
                 console.log(errors);
             })
         },

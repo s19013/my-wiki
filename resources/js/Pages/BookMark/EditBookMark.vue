@@ -33,31 +33,36 @@ export default {
         BaseBookMarkLayout
     },
     methods: {
-        submit({
+        async submit({
             bookMarkTitle,
             bookMarkUrl,
             tagList,
         }){
             this.$refs.BaseBookMarkLayout.switchDisabledFlag()
-            axios.put('/api/bookmark/update',{
+            await axios.put('/api/bookmark/update',{
                 bookMarkId    :this.originalBookMark.id,
                 bookMarkTitle :bookMarkTitle,
                 bookMarkUrl   :bookMarkUrl,
                 tagList       :tagList,
                 timezone      :Intl.DateTimeFormat().resolvedOptions().timeZone
             })
-            .then((res)=>{this.$inertia.get('/BookMark/Search')})
+            .then((res)=>{
+                this.$refs.BaseBookMarkLayout.switchDisabledFlag()
+                this.$inertia.get('/BookMark/Search')
+            })
             .catch((errors)=>{
                 this.$refs.BaseBookMarkLayout.switchDisabledFlag()
-                this.$refs.BaseBookMarkLayout.setErrors(errors.response.data.errors)
-                console.log(errors);
+                this.$refs.BaseBookMarkLayout.setErrors(errors.response)
             })
         },
         deleteBookMark() {
             // 消す処理
             this.$refs.BaseBookMarkLayout.switchDisabledFlag()
             axios.delete('/api/bookmark/' + this.originalBookMark.id)
-            .then((res)=>{this.$inertia.get('/BookMark/Search')})
+            .then((res)=>{
+                this.$refs.BaseBookMarkLayout.switchDisabledFlag()
+                this.$inertia.get('/BookMark/Search')
+            })
             .catch((errors) => {
                 this.$refs.BaseBookMarkLayout.switchDisabledFlag()
                 console.log(errors);
