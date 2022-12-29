@@ -23,11 +23,21 @@
                 :originalCheckedTagList=originalCheckedTagList
                 :disabledFlag="disabledFlag"
             />
+
+            <p
+                v-show="errorMessages.others.length>0"
+                v-for ="message of errorMessages.others" :key="message"
+                class ="global_css_error"
+            >
+                <v-icon>mdi-alert-circle-outline</v-icon>
+                {{message}}
+            </p>
+
             <v-form v-on:submit.prevent>
                 <!-- タイトル入力欄とボタン2つ -->
                 <p
-                    v-show="errors.articleTitle.length>0"
-                    v-for ="message of errors.articleTitle" :key="message"
+                    v-show="errorMessages.articleTitle.length>0"
+                    v-for ="message of errorMessages.articleTitle" :key="message"
                     class ="global_css_error"
                 >
                     <v-icon>mdi-alert-circle-outline</v-icon>
@@ -37,8 +47,6 @@
                     v-model="articleTitle"
                     label="タイトル"
                     outlined hide-details="false"
-                    :disabled="disabledFlag"
-                    :loading="disabledFlag"
                     @keydown.enter.exact="focusToBody()"
                 />
 
@@ -46,17 +54,17 @@
                 <ArticleBody
                     ref="articleBody"
                     :originalArticleBody="articleBody"
-                    :disabledFlag="disabledFlag"
                 />
 
             </v-form>
         </div>
-
+        <loadingDialog :loadingFlag="disabledFlag"/>
     </BaseLayout>
 </template>
 
 <script>
 import TagDialog from '@/Components/dialog/TagDialog.vue';
+import loadingDialog from '@/Components/dialog/loadingDialog.vue';
 import TagList from '@/Components/TagList.vue';
 import DeleteAlertComponent from '@/Components/dialog/DeleteAlertDialog.vue';
 import BaseLayout from '@/Layouts/BaseLayout.vue'
@@ -73,7 +81,9 @@ export default {
         //loding
         disabledFlag:false,
 
-        errors:{
+        // 初期の読み込みで空配列などが無いとエラーを吐かれる
+        errorMessages:{
+            others:[],//サーバー側のエラー
             articleTitle:[],
         },
 
@@ -81,6 +91,7 @@ export default {
     },
     components:{
         DeleteAlertComponent,
+        loadingDialog,
         TagDialog,
         TagList,
         BaseLayout,
@@ -127,7 +138,15 @@ export default {
         focusToBody(){this.$refs.articleBody.focusToBody()},
         changeTab(){this.$refs.articleBody.changeTab()},
         // エラーを受け取る
-        setErrors(errors){this.errors = errors}
+        setErrors(errors){
+            // サーバー側のエラー(500番台)だったら､もう一度送信するようにユーザーに促す
+            if (String(errors.status)[0] == 5) {
+                this.errorMessages = {
+                    "others" : ["サーバー側でエラーが発生しました｡数秒待って再度送信してください"]
+                }
+            }
+            else { this.errorMessages = errors.data.messages }
+        }
     },
     mounted() {
         //props受け渡し
