@@ -21,39 +21,52 @@ class ArticleTagRepository
     {
         ArticleTag::where('article_id','=',$articleId)
             ->where('tag_id','=',$tagId)
-            ->update(['deleted_at' => Carbon::now()]);
+            ->delete();
     }
 
     //記事に紐付けられているタグを更新
     public  function update($articleId,$updatedTagList)
     {
-        $originalTagList = []; //元データに紐付けられていたタグ
-        $addedTagList    = [];
-        $deletedTagList  = [];
-
-        // 更新前の記事に紐付けられていたタグを取得
+        // 更新前のブックマークに紐付けられていたタグを取得
         $originalTagList = $this->getOrignalTag($articleId);
 
-        //元の記事にタグはついてないし､新しくタグも設定されていない場合
-        // この関数の処理を終わらせる
-        if($this->procesOriginalArticleDoesNotHaveAnyTags($originalTagList,$articleId,$updatedTagList) == true) {return;}
+        // 更新前のブックマークにタグが1つでもついていたかいなかったかで処理を分ける
+        if (empty($originalTagList)) {$this->ProcessingifOriginalHasNoTags($articleId,$updatedTagList,$originalTagList);}
+        else {$this->ProcessingifOriginalHasAnyTags($articleId,$originalTagList,$updatedTagList);}
+    }
 
+    // タグが1つもついてなかった
+    public function ProcessingifOriginalHasNoTags($articleId,$updatedTagList,$originalTagList)
+    {
         // 追加されたタグ
         $addedTagList = array_diff($updatedTagList, $originalTagList);
 
-        // 削除されたタグ
-        // 元データがからではないときのみ動かす
-        if ($originalTagList[0] != null) {$deletedTagList = array_diff($originalTagList, $updatedTagList);}
-
-        //追加
+        // なにか新しくタグが紐づけられていた場合
         if (!empty($addedTagList)) {
+            // 追加
             foreach($addedTagList as $tag) {
                 $this->store(
                     tagId:$tag,
                     articleId:$articleId,
                 );
             }
+
+            // nullの削除
+            $this->delete(
+                tagId:null,
+                articleId:$articleId,
+            );
         }
+    }
+
+    // タグがついていた
+    public function ProcessingifOriginalHasAnyTags($articleId,$originalTagList,$updatedTagList)
+    {
+        // 追加されたタグ
+        $addedTagList = array_diff($updatedTagList, $originalTagList);
+
+        // 削除されたタグ
+        $deletedTagList = array_diff($originalTagList, $updatedTagList);
 
         //削除
         if (!empty($deletedTagList)) {
@@ -65,14 +78,28 @@ class ArticleTagRepository
             }
         }
 
-        // 記事のタグをすべて消した時の処理
-        $this->procesOriginalArticleDeleteAllTags(
-            originalTagList:$originalTagList,
-            deletedTagList :$deletedTagList,
-            isAddedTagListEmpty:empty($addedTagList),
-            articleId:$articleId,
-            );
+        // ブックマークのタグをすべて消した時の処理
+        // 新しく追加されたタグがない場合
+        if (empty($addedTagList)) {
+            //もともとついていたタグがすべてはずされたか確認
+            $isAllDeleted = array_diff($originalTagList,$deletedTagList);
 
+            if (empty($isAllDeleted)) {
+                // 紐付けられていたタグすべて削除されたのならtag_id = nullのデータをついか
+                $this->store(
+                    tagId:null,
+                    articleId:$articleId,
+                );
+            }
+        } else {
+            // 新しく追加されたタグがある場合
+            foreach($addedTagList as $tag) {
+                $this->store(
+                    tagId:$tag,
+                    articleId:$articleId,
+                );
+            }
+        }
     }
 
     // 更新前の記事に紐付けられていたタグを取得
@@ -81,7 +108,6 @@ class ArticleTagRepository
 
         $original = ArticleTag::select('tag_id')
         ->where('article_id','=',$articleId)
-        ->whereNull('deleted_at')
         ->get();
 
         //元のデータに紐付けられているタグを配列に入れる
@@ -90,51 +116,12 @@ class ArticleTagRepository
         return $temp;
     }
 
-    //元の記事にタグがついてない場合の処理
-    public  function procesOriginalArticleDoesNotHaveAnyTags($originalTagList,$articleId,$updatedTagList)
-    {
-        if (is_null($originalTagList[0])) {
-            //元の記事にタグはついてないし､新しくタグも設定されていない場合
-            // この関数の処理を終わらせる
-            if (empty($updatedTagList)) {return true;}
-            else {
-                // 更新前は記事にタグが1つもついていなくて
-                // 更新後にはタグが紐付けられていたら
-                // 更新前の$articleIdのtag_idがnullのデータを論理削除
-                $this->delete(
-                    tagId:null,
-                    articleId:$articleId,
-                );
-            }
-        }
-    }
-
-    //記事のタグをすべて消した時の処理
-    public  function procesOriginalArticleDeleteAllTags($originalTagList,$articleId,$isAddedTagListEmpty,$deletedTagList)
-    {
-        // もともと記事にタグがついていたかと,
-        // 新しく紐付けられたタグが1つもないことを確認
-        if ($originalTagList[0] != null && $isAddedTagListEmpty==true) {
-            //もともとついていたタグがすべてはずされたか確認
-            $isAllDeleted = array_diff($originalTagList,$deletedTagList);
-            // 紐付けられていたタグすべて削除されたのならtag_id = nullのデータをついか
-            if (empty($isAllDeleted)) {
-                $this->store(
-                    tagId:null,
-                    articleId:$articleId,
-                );
-            }
-        }
-    }
-
-
     //記事に関連付けられたタグの名前とidを取得
     public  function serveTagsRelatedToArticle($articleId,$userId)
     {
         // 記事についているタグidの名前などをとってくる
         $relatingTagList = DB::table('article_tags')
         ->select('tag_id')
-        ->whereNull('deleted_at')
         ->where('article_id','=',$articleId)
         ->get();
 
@@ -148,7 +135,6 @@ class ArticleTagRepository
         // tagテーブルからタグの名前とIdを取ってくる
         $tagList = DB::table('tags')
         ->select('id','name')
-        ->whereNull('deleted_at')
         ->whereIn('id',$convertedRelatingTagList)
         ->orderBy('name')
         ->get();

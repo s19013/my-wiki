@@ -20,11 +20,11 @@ class ArticleSeeder extends Seeder
      */
     public function run()
     {
-        $mainArticles = Article::factory()->count(10)->create(['user_id' => 13]);
+        $mainArticles = Article::factory()->count(10)->create(['user_id' => 1]);
         foreach ($mainArticles as $article){
             ArticleTag::factory()->create([
                     "article_id" => $article->id,
-                    "tag_id"     => Tag::factory()->create(['user_id' => 13])->id
+                    "tag_id"     => Tag::factory()->create(['user_id' => 1])->id
             ]);
         }
     }

@@ -18,28 +18,29 @@ export default {
     },
     components:{BaseBookMarkLayout},
     methods: {
-        submit({
+        async submit({
             bookMarkTitle,
             bookMarkUrl,
             tagList,
         }){
             this.$refs.BaseBookMarkLayout.switchDisabledFlag()
-            axios.post('/api/bookmark/store',{
+            await axios.post('/api/bookmark/store',{
                 bookMarkTitle :bookMarkTitle,
                 bookMarkUrl   :bookMarkUrl,
                 tagList       :tagList,
                 timezone      :Intl.DateTimeFormat().resolvedOptions().timeZone
             })
-            .then((res)=>{this.$inertia.get('/BookMark/Search')})
-            .catch((errors) => {
-                // console.log(errors.response);
+            .then((res)=>{
                 this.$refs.BaseBookMarkLayout.switchDisabledFlag()
-                this.$refs.BaseBookMarkLayout.setErrors(errors.response.data.errors)
+                this.$inertia.get('/BookMark/Search')
+            })
+            .catch((errors) => {
+                this.$refs.BaseBookMarkLayout.switchDisabledFlag()
+                this.$refs.BaseBookMarkLayout.setErrors(errors.response)
             })
         },
         deleteBookMark() {
-            //遷移
-            this.$refs.BaseBookMarkLayout.switchDisabledFlag()
+            //遷移だけで良い
             this.$inertia.get('/BookMark/Search')
         },
     },

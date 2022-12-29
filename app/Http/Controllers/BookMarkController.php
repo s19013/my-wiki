@@ -27,17 +27,12 @@ class BookMarkController extends Controller
     private $tagRepository;
     private $nullAvoidanceToolKit;
 
-    public function __construct(
-        BookMarkRepository $bookMarkRepository,
-        BookMarkTagRepository $bookMarkTagRepository,
-        TagRepository        $tagRepository,
-        NullAvoidanceToolKit $nullAvoidanceToolKit
-    )
+    public function __construct()
     {
-        $this->bookMarkRepository    = $bookMarkRepository;
-        $this->bookMarkTagRepository = $bookMarkTagRepository;
-        $this->tagRepository        = $tagRepository;
-        $this->nullAvoidanceToolKit = $nullAvoidanceToolKit;
+        $this->bookMarkRepository    = new BookMarkRepository();
+        $this->bookMarkTagRepository = new BookMarkTagRepository();
+        $this->tagRepository        = new TagRepository();
+        $this->nullAvoidanceToolKit = new nullAvoidanceToolKit();
     }
 
     //新規ブックマーク作成
@@ -50,7 +45,7 @@ class BookMarkController extends Controller
         $isAllreadyExists =$this->bookMarkRepository->isAllreadyExists(Auth::id(),$request->bookMarkUrl);
         if ($isAllreadyExists == true) {
             return response()->json([
-                'errors' => ["bookMarkUrl" => ["そのブックマークは既に保存しています"]],
+                'messages' => ["bookMarkUrl" => ["そのブックマークは既に保存しています"]],
                 ],
                 400);
         }
@@ -98,7 +93,7 @@ class BookMarkController extends Controller
         // 帰り値がnullの場合は無視する(urlを完全に別のものに変更したから,まだ更新するurlが登録されてないから)
         if (!is_null($bookMarkId)&&$request->bookMarkId != $bookMarkId) {
             return response()->json([
-                'errors' => ["bookMarkUrl" => ["そのブックマークは既に保存しています"]],
+                'messages' => ["bookMarkUrl" => ["そのブックマークは既に保存しています"]],
                 ],
                 400);
         }
@@ -170,7 +165,6 @@ class BookMarkController extends Controller
             "searchTarget" => $this->nullAvoidanceToolKit->ifnull($request->searchTarget,"title")
         ];
 
-        // この関数がこれで動くのは､get通信で同じページに表示しているから?
         return Inertia::render('BookMark/SearchBookMark',[
             'result' => $result,
             'old' => $old

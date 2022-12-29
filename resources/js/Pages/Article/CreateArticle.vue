@@ -21,14 +21,14 @@ export default {
     },
     methods: {
         // 本文送信
-        submit({
+        async submit({
             articleTitle,
             articleBody,
             tagList,
         })
         {
             this.$refs.BaseArticleLayout.switchDisabledFlag()
-            axios.post('/api/article/store',{
+            await axios.post('/api/article/store',{
                 articleTitle:articleTitle,
                 articleBody :articleBody,
                 tagList     :tagList,
@@ -37,7 +37,7 @@ export default {
             .then((res)=>{this.$inertia.get('/Article/Search')})
             .catch((errors) => {
                 this.$refs.BaseArticleLayout.switchDisabledFlag()
-                this.$refs.BaseArticleLayout.setErrors(errors.response.data.errors)
+                this.$refs.BaseArticleLayout.setErrors(errors.response)
             })
         },
         deleteArticle() {

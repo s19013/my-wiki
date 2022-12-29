@@ -19,11 +19,31 @@ export default {
             default:''
         },
     },
-    methods: {compileMarkDown(){
-        const sanitized = sanitizeHtml(this.originalMarkDown)
-        const replaced  = sanitized.replace(/\n(?=\n)/g, "\n<br>\n")
+    methods: {
+        compileMarkDown(){
+        // 無毒化
+        const sanitized = sanitizeHtml(this.originalMarkDown,{enforceHtmlBoundary: true})
+        const replaced  = this.replaceMarkDown(sanitized)
         return marked(replaced)
-    }},
+        },
+        replaceMarkDown(arg){
+            // codeタグ内では一部特殊文字をエスケープしない
+            // gmで複数行をまたいだ(改行を無視した)検索になるはずだができてないので[\s|\S]で代用
+            arg = arg.replace(/(?<=`[\s|\S]*)&lt;(?=[\s|\S]*`)/g , "<");
+            arg = arg.replace(/(?<=`[\s|\S]*)&gt;(?=[\s|\S]*`)/g , ">");
+            arg = arg.replace(/(?<=`[\s|\S]*)&amp;(?=[\s|\S]*`)/g , "&");
+
+            // codeタグ以外では \n\n -> \n<br   />\n
+            // 連続改行を実現させるため｡
+            // markedで<br   /> -> <br>に変換される
+            // ユーザーがcodeタグ内で意図的に<br>を書いても消されないようにする
+            arg = arg.replace(/\n(?=\n)/g, "\n<br   />\n")
+
+            // codeタグでは上記の<br   />を消す
+            arg = arg.replace(/(?<=`[\s|\S]*)<br   \/>(?=[\s|\S]*`)/g ,"");
+            return arg;
+        }
+    },
 }
 </script>
 

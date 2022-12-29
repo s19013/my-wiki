@@ -27,17 +27,12 @@ class ArticleController extends Controller
     private $tagRepository;
     private $nullAvoidanceToolKit;
 
-    public function __construct(
-        ArticleRepository    $articleRepository,
-        ArticleTagRepository $articleTagRepository,
-        TagRepository        $tagRepository,
-        NullAvoidanceToolKit $nullAvoidanceToolKit
-    )
+    public function __construct()
     {
-        $this->articleRepository    = $articleRepository;
-        $this->articleTagRepository = $articleTagRepository;
-        $this->tagRepository        = $tagRepository;
-        $this->nullAvoidanceToolKit = $nullAvoidanceToolKit;
+        $this->articleRepository    = new ArticleRepository();
+        $this->articleTagRepository = new ArticleTagRepository();
+        $this->tagRepository        = new TagRepository();
+        $this->nullAvoidanceToolKit = new NullAvoidanceToolKit;
     }
     //新規記事作成
     public function store(ArticleRequest $request)
