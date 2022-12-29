@@ -22,8 +22,9 @@ export default{
     watch: {
         // propsをv-modelに渡しても､propsが変化した時にv-modelの値が変わらないらしい
         // なのでwatchを使って､コンポーネント内の変数を変化させる方法にした
-        flag: function(newValue, oldValue){
-            flag = !flag
+        loadingFlag: function(newValue, oldValue){
+            this.flag = !this.flag
+            console.log(this.flag);
         }
     }
 }
