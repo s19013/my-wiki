@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-dialog
-            v-model="loadingFlag"
+            v-model="flag"
             persistent
         >
             <loading class="global_css_Dialog"></loading>
@@ -12,8 +12,18 @@
 <script>
 import loading from '@/Components/loading/loading.vue'
 export default{
+    data() {
+        return {
+            flag:false
+        }
+    },
     props:['loadingFlag'],
-    components:{loading}
+    components:{loading},
+    watch: {
+        flag: function(newValue, oldValue){
+            flag = !flag
+        }
+    }
 }
 
 </script>
