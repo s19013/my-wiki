@@ -1,12 +1,12 @@
 <template>
     <inertia-head :title="title" />
-    <originalHead :pageTitle="pageTitle"/>
     <v-app>
+        <originalHead :pageTitle="pageTitle"/>
         <v-main>
             <slot />
         </v-main>
+        <originalFooter/>
     </v-app>
-    <originalFooter/>
 
 </template>
 
