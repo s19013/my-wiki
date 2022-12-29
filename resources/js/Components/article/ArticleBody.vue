@@ -18,8 +18,6 @@
                 no-resize
                 rows="20"
                 label="本文 ※マークダウン記法対応"
-                :disabled="disabledFlag"
-                :loading ="disabledFlag"
                 v-model = "body"
             ></v-textarea>
         </div>
@@ -43,10 +41,6 @@ export default {
             type   :String,
             default:''
         },
-        disabledFlag:{
-            type   :Boolean,
-            default:false
-        }
     },
     methods: {
         changeTab(){

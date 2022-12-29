@@ -23,11 +23,20 @@
                 :disabledFlag="disabledFlag"
             />
 
+            <p
+                v-show="errorMessages.others.length>0"
+                v-for ="message of errorMessages.others" :key="message"
+                class ="global_css_error"
+            >
+                <v-icon>mdi-alert-circle-outline</v-icon>
+                {{message}}
+            </p>
+
             <v-form @submit.prevent>
                 <!-- タイトル入力欄とボタン2つ -->
                 <p
-                    v-show="errors.bookMarkTitle.length>0"
-                    v-for ="message of errors.bookMarkTitle" :key="message"
+                    v-show="errorMessages.bookMarkTitle.length>0"
+                    v-for ="message of errorMessages.bookMarkTitle" :key="message"
                     class ="global_css_error"
                 >
                     <v-icon>mdi-alert-circle-outline</v-icon>
@@ -44,8 +53,8 @@
                 />
 
                 <p
-                    v-show="errors.bookMarkUrl.length>0"
-                    v-for ="message of errors.bookMarkUrl" :key="message"
+                    v-show="errorMessages.bookMarkUrl.length>0"
+                    v-for ="message of errorMessages.bookMarkUrl" :key="message"
                     class ="global_css_error"
                 >
                     <v-icon>mdi-alert-circle-outline</v-icon>
@@ -62,11 +71,12 @@
                 ></v-text-field>
             </v-form>
         </div>
-
+        <loadingDialog :loadingFlag="disabledFlag"/>
     </BaseLayout>
 </template>
 
 <script>
+import loadingDialog from '@/Components/dialog/loadingDialog.vue';
 import TagDialog from '@/Components/dialog/TagDialog.vue';
 import TagList from '@/Components/TagList.vue';
 import DeleteAlertComponent from '@/Components/dialog/DeleteAlertDialog.vue';
@@ -81,7 +91,9 @@ export default {
         bookMarkUrl   :this.originalBookMark.url,
         checkedTagList:this.originalCheckedTagList,
 
-        errors:{
+        // 初期の読み込みで空配列などが無いとエラーを吐かれる
+        errorMessages:{
+            others:[],//サーバー側のエラー
             bookMarkTitle:[],
             bookMarkUrl:[],
         },
@@ -92,6 +104,7 @@ export default {
     },
     components:{
         DeleteAlertComponent,
+        loadingDialog,
         TagDialog,
         TagList,
         BaseLayout,
@@ -136,7 +149,15 @@ export default {
         },
         deleteBookMark() {this.$emit('triggerDeleteBookMark')},
         // エラーを受け取る
-        setErrors(errors){this.errors = errors}
+        setErrors(errors){
+            console.log(errors);
+            if (String(errors.status)[0] == 5) {
+                this.errorMessages = {
+                    "others" : ["サーバー側でエラーが発生しました｡数秒待って再度送信してください"]
+                }
+            }
+            else { this.errorMessages = errors.data.messages }
+        }
     },
     mounted() {
         // this.checkedTagList = this.originalCheckedTagList

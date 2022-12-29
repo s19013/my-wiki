@@ -5,8 +5,8 @@
         <v-main>
             <slot />
         </v-main>
+        <originalFooter/>
     </v-app>
-    <originalFooter/>
 
 </template>
 
