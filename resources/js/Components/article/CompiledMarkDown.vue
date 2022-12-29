@@ -21,6 +21,7 @@ export default {
     },
     methods: {
         compileMarkDown(){
+        // 無毒化
         const sanitized = sanitizeHtml(this.originalMarkDown,{enforceHtmlBoundary: true})
         const replaced  = this.replaceMarkDown(sanitized)
         return marked(replaced)
