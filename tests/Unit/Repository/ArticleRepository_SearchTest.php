@@ -132,7 +132,7 @@ class ArticleRepository_SearchTest extends TestCase
 
         //帰ってきたarticleListの数を数える(10個以上あっても一度に10個までしか返さない)
         for ($i=10; $i <20 ; $i++) {
-            $this->assertSame($articleList[$i - 10]['title'],"title ${i}");
+            $this->assertSame($articleList[$i - 10]->title,"title ${i}");
         }
     }
 
@@ -155,10 +155,8 @@ class ArticleRepository_SearchTest extends TestCase
         $articles = Article::factory()->count(20)->create(['user_id' => $this->userId]);
 
         //わざと記事を消す
-        Article::where('id','=',$articles[0]->id)
-        ->update(['deleted_at' => Carbon::now()]);
-        Article::where('id','=',$articles[1]->id)
-        ->update(['deleted_at' => Carbon::now()]);
+        $this->articleRepository->delete($articles[0]->id);
+        $this->articleRepository->delete($articles[1]->id);
 
         // ダミーの記事
         Article::factory()->count(5)->create(['user_id' => $anotherUsers[0]->id]);
@@ -174,13 +172,11 @@ class ArticleRepository_SearchTest extends TestCase
 
         $articleList = $response['data'];
 
-        // dd($articleList);
-
         $idList = [];
-        foreach ($articleList as $data){ array_push($idList,$data['id']); }
+        foreach ($articleList as $data){ array_push($idList,$data->id); }
 
         // 全部指定したユーザーの記事か
-        foreach ($articleList as $data){ $this->assertEquals($data['user_id'],$this->userId); }
+        foreach ($articleList as $data){ $this->assertEquals($data->user_id,$this->userId); }
 
         // 削除した記事は含んでないか
         $this->assertNotContains($articles[0]['id'],$idList);
@@ -225,7 +221,7 @@ class ArticleRepository_SearchTest extends TestCase
         ]);
 
         //わざと記事を消す
-        Article::where('id','=',$deleteArticle->id)->update(['deleted_at' => Carbon::now()]);
+        $this->articleRepository->delete($deleteArticle->id);
 
         // ダミーの記事
         Article::factory()->count(5)->create(['user_id' => $anotherUsers[0]->id]);
@@ -242,11 +238,11 @@ class ArticleRepository_SearchTest extends TestCase
         $articleList = $response['data'];
 
         $idList = [];
-        foreach ($articleList as $data){ array_push($idList,$data['id']); }
+        foreach ($articleList as $data){ array_push($idList,$data->id); }
 
 
         // 全部指定したユーザーの記事か
-        foreach ($articleList as $data){ $this->assertEquals($data['user_id'],$this->userId); }
+        foreach ($articleList as $data){ $this->assertEquals($data->user_id,$this->userId); }
 
         // 削除した記事は含んでないか
         $this->assertNotContains($deleteArticle['id'],$idList);
@@ -330,8 +326,7 @@ class ArticleRepository_SearchTest extends TestCase
         ]);
 
         //わざと記事を消す
-        Article::where('id','=',$deleteArticle->id)
-        ->update(['deleted_at' => Carbon::now()]);
+        $this->articleRepository->delete($deleteArticle->id);
 
         $response = $this->articleRepository->search(
             userId:$this->userId,
@@ -343,13 +338,11 @@ class ArticleRepository_SearchTest extends TestCase
 
         $articleList = $response['data'];
 
-        // dd($articleList[0]->id);
-
         $idList = [];
-        foreach ($articleList as $data){ array_push($idList,$data['id']); }
+        foreach ($articleList as $data){ array_push($idList,$data->id); }
 
         // 全部指定したユーザーの記事か
-        foreach ($articleList as $data){ $this->assertEquals($data['user_id'],$this->userId); }
+        foreach ($articleList as $data){ $this->assertEquals($data->user_id,$this->userId); }
 
         // 削除した記事は含んでないか
         $this->assertNotContains($deleteArticle['id'],$idList);
@@ -458,8 +451,7 @@ class ArticleRepository_SearchTest extends TestCase
 
 
         //わざと記事を消す
-        Article::where('id','=',$deleteArticle->id)
-        ->update(['deleted_at' => Carbon::now()]);
+        $this->articleRepository->delete($deleteArticle->id);
 
         $response = $this->articleRepository->search(
             userId:$this->userId,
@@ -472,10 +464,10 @@ class ArticleRepository_SearchTest extends TestCase
         $articleList = $response['data'];
 
         $idList = [];
-        foreach ($articleList as $data){ array_push($idList,$data['id']); }
+        foreach ($articleList as $data){ array_push($idList,$data->id); }
 
         // 全部指定したユーザーの記事か
-        foreach ($articleList as $data){ $this->assertEquals($data['user_id'],$this->userId); }
+        foreach ($articleList as $data){ $this->assertEquals($data->user_id,$this->userId); }
 
         // 削除した記事は含んでないか
         $this->assertNotContains($deleteArticle->id,$idList);
@@ -503,10 +495,8 @@ class ArticleRepository_SearchTest extends TestCase
         $articles = Article::factory()->count(20)->create(['user_id' => $this->userId]);
 
         //わざと記事を消す
-        Article::where('id','=',$articles[0]->id)
-        ->update(['deleted_at' => Carbon::now()]);
-        Article::where('id','=',$articles[1]->id)
-        ->update(['deleted_at' => Carbon::now()]);
+        $this->articleRepository->delete($articles[0]->id);
+        $this->articleRepository->delete($articles[1]->id);
 
         // ダミーの記事
         Article::factory()->count(5)->create(['user_id' => $anotherUsers[0]->id]);
@@ -523,10 +513,10 @@ class ArticleRepository_SearchTest extends TestCase
         $articleList = $response['data'];
 
         $idList = [];
-        foreach ($articleList as $data){ array_push($idList,$data['id']); }
+        foreach ($articleList as $data){ array_push($idList,$data->id); }
 
         // 全部指定したユーザーの記事か
-        foreach ($articleList as $data){ $this->assertEquals($data['user_id'],$this->userId); }
+        foreach ($articleList as $data){ $this->assertEquals($data->user_id,$this->userId); }
 
         // 削除した記事は含んでないか
         $this->assertNotContains($articles[0]['id'],$idList);
@@ -571,7 +561,7 @@ class ArticleRepository_SearchTest extends TestCase
         ]);
 
         //わざと記事を消す
-        Article::where('id','=',$deleteArticle->id)->update(['deleted_at' => Carbon::now()]);
+        $this->articleRepository->delete($deleteArticle->id);
 
         // ダミーの記事
         Article::factory()->count(5)->create(['user_id' => $anotherUsers[0]->id]);
@@ -588,11 +578,11 @@ class ArticleRepository_SearchTest extends TestCase
         $articleList = $response['data'];
 
         $idList = [];
-        foreach ($articleList as $data){ array_push($idList,$data['id']); }
+        foreach ($articleList as $data){ array_push($idList,$data->id); }
 
 
         // 全部指定したユーザーの記事か
-        foreach ($articleList as $data){ $this->assertEquals($data['user_id'],$this->userId); }
+        foreach ($articleList as $data){ $this->assertEquals($data->user_id,$this->userId); }
 
         // 削除した記事は含んでないか
         $this->assertNotContains($deleteArticle['id'],$idList);
@@ -676,8 +666,7 @@ class ArticleRepository_SearchTest extends TestCase
         ]);
 
         //わざと記事を消す
-        Article::where('id','=',$deleteArticle->id)
-        ->update(['deleted_at' => Carbon::now()]);
+        $this->articleRepository->delete($deleteArticle->id);
 
         $response = $this->articleRepository->search(
             userId:$this->userId,
@@ -690,10 +679,10 @@ class ArticleRepository_SearchTest extends TestCase
         $articleList = $response['data'];
 
         $idList = [];
-        foreach ($articleList as $data){ array_push($idList,$data['id']); }
+        foreach ($articleList as $data){ array_push($idList,$data->id); }
 
         // 全部指定したユーザーの記事か
-        foreach ($articleList as $data){ $this->assertEquals($data['user_id'],$this->userId); }
+        foreach ($articleList as $data){ $this->assertEquals($data->user_id,$this->userId); }
 
         // 削除した記事は含んでないか
         $this->assertNotContains($deleteArticle->id,$idList);
@@ -802,8 +791,7 @@ class ArticleRepository_SearchTest extends TestCase
 
 
         //わざと記事を消す
-        Article::where('id','=',$deleteArticle->id)
-        ->update(['deleted_at' => Carbon::now()]);
+        $this->articleRepository->delete($deleteArticle->id);
 
         $response = $this->articleRepository->search(
             userId:$this->userId,
@@ -816,10 +804,10 @@ class ArticleRepository_SearchTest extends TestCase
         $articleList = $response['data'];
 
         $idList = [];
-        foreach ($articleList as $data){ array_push($idList,$data['id']); }
+        foreach ($articleList as $data){ array_push($idList,$data->id); }
 
         // 全部指定したユーザーの記事か
-        foreach ($articleList as $data){ $this->assertEquals($data['user_id'],$this->userId); }
+        foreach ($articleList as $data){ $this->assertEquals($data->user_id,$this->userId); }
 
         // 削除した記事は含んでないか
         $this->assertNotContains($deleteArticle->id,$idList);
