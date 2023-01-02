@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        // まずは外部キーを一旦削除
+        // user_id
         Schema::table('book_marks', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
             $table->foreign('user_id')
@@ -38,6 +38,7 @@ return new class extends Migration
             ->cascadeOnDelete();
         });
 
+        // ブックマーク
         Schema::table('book_mark_tags', function (Blueprint $table) {
             $table->dropForeign(['book_mark_id']);
             $table->foreign('book_mark_id')
@@ -52,6 +53,7 @@ return new class extends Migration
             ->cascadeOnDelete();
         });
 
+        // 記事
         Schema::table('article_tags', function (Blueprint $table) {
             $table->dropForeign(['article_id']);
             $table->foreign('article_id')
