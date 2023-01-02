@@ -100,13 +100,11 @@ class ArticleControllerTest extends TestCase
         $this->assertDatabaseHas('article_tags',[
             'article_id' => $articleId,
             'tag_id'     => $tags[0]->id,
-            'deleted_at' => null,
         ]);
 
         $this->assertDatabaseHas('article_tags',[
             'article_id' => $articleId,
             'tag_id'     => $tags[1]->id,
-            'deleted_at' => null,
         ]);
 
     }
@@ -159,7 +157,6 @@ class ArticleControllerTest extends TestCase
             $this->assertDatabaseHas('article_tags',[
                 'article_id' => $articleId,
                 'tag_id'     => $tag->id,
-                'deleted_at' => null,
             ]);
         }
     }
@@ -182,7 +179,7 @@ class ArticleControllerTest extends TestCase
         ->post('/api/article/store/',[
             'articleTitle' => "testTitletest_store_タグなし_タイトルあり",
             'articleBody'  => "testBodytest_store_タグなし_タイトルあり" ,
-            'tagList'      => null,
+            'tagList'      => [],
         ]);
 
         // ステータス
@@ -209,7 +206,6 @@ class ArticleControllerTest extends TestCase
         $this->assertDatabaseHas('article_tags',[
             'article_id' => $articleId,
             'tag_id'     => null,
-            'deleted_at' => null,
         ]);
     }
 
@@ -232,7 +228,7 @@ class ArticleControllerTest extends TestCase
         ->post('/api/article/store/',[
             'articleTitle' => "",
             'articleBody'  => "testBodytest_store_タグなし_タイトルなし" ,
-            'tagList'      => null,
+            'tagList'      => [],
         ]);
 
         // ステータス
@@ -259,7 +255,6 @@ class ArticleControllerTest extends TestCase
         $this->assertDatabaseHas('article_tags',[
             'article_id' => $articleId,
             'tag_id'     => null,
-            'deleted_at' => null,
         ]);
     }
 
