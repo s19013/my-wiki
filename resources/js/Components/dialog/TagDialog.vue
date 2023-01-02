@@ -155,7 +155,7 @@ export default{
         localDisableFlag:false,
 
         // errorFlag
-        errorMessages:{tag:[]},
+        errorMessages:{name:[]},
 
         // tagList
         checkedTagList     :[],
@@ -211,7 +211,8 @@ export default{
             })
             .catch((errors) =>{
                 // ダブりエラー
-                this.errorMessagess =errors.response.data.messages
+                this.errorMessages =errors.response.data.messages
+                console.log(this.errorMessages);
             })
             this.localDisableFlag = false
         },
