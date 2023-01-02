@@ -38,6 +38,8 @@ class ArticleController_UpdateTest extends TestCase
         parent::setUp();
         // ユーザーを用意
         $this->user = User::factory()->create();
+        // carbonの時間固定
+        Carbon::setTestNow(Carbon::now());
     }
 
     // 期待
@@ -49,9 +51,6 @@ class ArticleController_UpdateTest extends TestCase
     // * 記事に別のタグを紐づける
     public function test_articleUpdate_タグ総入れ替え()
     {
-        // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
-
         // 記事などを作成
         $article = Article::factory()->create(['user_id' => $this->user->id]);
 
@@ -95,16 +94,14 @@ class ArticleController_UpdateTest extends TestCase
             $this->assertDatabaseHas('article_tags',[
                 'article_id' => $article->id,
                 'tag_id'     => $newTag->id,
-                'deleted_at' => null,
             ]);
         }
 
         //削除したタグ
         foreach ($tags as $tag){
-            $this->assertDatabaseHas('article_tags',[
+            $this->assertDatabaseMissing('article_tags',[
                 'article_id' => $article->id,
                 'tag_id'     => $tag->id,
-                'deleted_at' => Carbon::now(),
             ]);
         }
     }
@@ -159,7 +156,6 @@ class ArticleController_UpdateTest extends TestCase
             $this->assertDatabaseHas('article_tags',[
                 'article_id' => $article->id,
                 'tag_id'     => $newTag->id,
-                'deleted_at' => null,
             ]);
         }
 
@@ -168,7 +164,6 @@ class ArticleController_UpdateTest extends TestCase
             $this->assertDatabaseHas('article_tags',[
                 'article_id' => $article->id,
                 'tag_id'     => $tag->id,
-                'deleted_at' => null,
             ]);
         }
     }
@@ -182,7 +177,7 @@ class ArticleController_UpdateTest extends TestCase
     public function test_articleUpdate_タグの一部を消す()
     {
         // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
+
 
         // 記事などを作成
         $article = Article::factory()->create(['user_id' => $this->user->id]);
@@ -224,26 +219,22 @@ class ArticleController_UpdateTest extends TestCase
         $this->assertDatabaseHas('article_tags',[
             'article_id' => $article->id,
             'tag_id'     => $tags[2]->id,
-            'deleted_at' => null,
         ]);
 
         $this->assertDatabaseHas('article_tags',[
             'article_id' => $article->id,
             'tag_id'     => $tags[3]->id,
-            'deleted_at' => null,
         ]);
 
         //削除したタグ
-        $this->assertDatabaseHas('article_tags',[
+        $this->assertDatabaseMissing('article_tags',[
             'article_id' => $article->id,
             'tag_id'     => $tags[0]->id,
-            'deleted_at' => Carbon::now(),
         ]);
 
-        $this->assertDatabaseHas('article_tags',[
+        $this->assertDatabaseMissing('article_tags',[
             'article_id' => $article->id,
             'tag_id'     => $tags[1]->id,
-            'deleted_at' => Carbon::now(),
         ]);
     }
 
@@ -256,7 +247,7 @@ class ArticleController_UpdateTest extends TestCase
     public function test_articleUpdate_タグがついてなかった記事にタグを付ける()
     {
         // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
+
 
         // 記事などを作成
         $article = Article::factory()->create(['user_id' => $this->user->id]);
@@ -297,15 +288,13 @@ class ArticleController_UpdateTest extends TestCase
             $this->assertDatabaseHas('article_tags',[
                 'article_id' => $article->id,
                 'tag_id'     => $tag->id,
-                'deleted_at' => null,
             ]);
         }
 
         //削除したタグ
-        $this->assertDatabaseHas('article_tags',[
+        $this->assertDatabaseMissing('article_tags',[
             'article_id' => $article->id,
             'tag_id'     => null,
-            'deleted_at' => Carbon::now(),
         ]);
     }
 
@@ -318,7 +307,7 @@ class ArticleController_UpdateTest extends TestCase
     public function test_articleUpdate_タグがついていた記事のタグをすべて消す()
     {
         // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
+
 
         // 記事などを作成
         $article = Article::factory()->create(['user_id' => $this->user->id]);
@@ -352,7 +341,6 @@ class ArticleController_UpdateTest extends TestCase
             'user_id'=> $this->user->id,
             'title'  => "タグがついていた記事のタグをすべて消す",
             'body'    => "タグがついていた記事のタグをすべて消す",
-            'deleted_at' => null,
         ]);
 
         //タグ
@@ -360,15 +348,13 @@ class ArticleController_UpdateTest extends TestCase
         $this->assertDatabaseHas('article_tags',[
             'article_id' => $article->id,
             'tag_id'     => null,
-            'deleted_at' => null,
         ]);
 
         //削除したタグ
         foreach ($tags as $tag){
-            $this->assertDatabaseHas('article_tags',[
+            $this->assertDatabaseMissing('article_tags',[
                 'article_id' => $article->id,
                 'tag_id'     => $tag->id,
-                'deleted_at' => Carbon::now(),
             ]);
         }
     }
@@ -425,14 +411,12 @@ class ArticleController_UpdateTest extends TestCase
             'user_id'=> $this->user->id,
             'title'  => "再度更新",
             'body'    => "再度更新",
-            'deleted_at' => null,
         ]);
 
         //タグ
         $this->assertDatabaseHas('article_tags',[
             'article_id' => $article->id,
             'tag_id'     => null,
-            'deleted_at' => null,
         ]);
     }
 
@@ -499,15 +483,13 @@ class ArticleController_UpdateTest extends TestCase
             $this->assertDatabaseHas('article_tags',[
                 'article_id' => $article->id,
                 'tag_id'     => $tag->id,
-                'deleted_at' => null,
             ]);
         }
 
         //削除したタグ
-        $this->assertDatabaseHas('article_tags',[
+        $this->assertDatabaseMissing('article_tags',[
             'article_id' => $article->id,
             'tag_id'     => null,
-            'deleted_at' => Carbon::now(),
         ]);
     }
 
@@ -573,15 +555,13 @@ class ArticleController_UpdateTest extends TestCase
         $this->assertDatabaseHas('article_tags',[
             'article_id' => $article->id,
             'tag_id'     => null,
-            'deleted_at' => null,
         ]);
 
         //削除したタグ
         foreach ($tags as $tag){
-            $this->assertDatabaseHas('article_tags',[
+            $this->assertDatabaseMissing('article_tags',[
                 'article_id' => $article->id,
                 'tag_id'     => $tag->id,
-                'deleted_at' => Carbon::now(),
             ]);
         }
     }
@@ -648,26 +628,22 @@ class ArticleController_UpdateTest extends TestCase
         $this->assertDatabaseHas('article_tags',[
             'article_id' => $article->id,
             'tag_id'     => $tags[1]->id,
-            'deleted_at' => null,
         ]);
 
         $this->assertDatabaseHas('article_tags',[
             'article_id' => $article->id,
             'tag_id'     => $tags[2]->id,
-            'deleted_at' => null,
         ]);
 
         //削除したタグ
-        $this->assertDatabaseHas('article_tags',[
+        $this->assertDatabaseMissing('article_tags',[
             'article_id' => $article->id,
             'tag_id'     => $tags[0]->id,
-            'deleted_at' => Carbon::now(),
         ]);
 
-        $this->assertDatabaseHas('article_tags',[
+        $this->assertDatabaseMissing('article_tags',[
             'article_id' => $article->id,
             'tag_id'     => null,
-            'deleted_at' => Carbon::now(),
         ]);
     }
 
@@ -733,14 +709,12 @@ class ArticleController_UpdateTest extends TestCase
         $this->assertDatabaseHas('article_tags',[
             'article_id' => $article->id,
             'tag_id'     => null,
-            'deleted_at' => null,
         ]);
 
         // 削除
-        $this->assertDatabaseHas('article_tags',[
+        $this->assertDatabaseMissing('article_tags',[
             'article_id' => $article->id,
             'tag_id'     => $tags[0]->id,
-            'deleted_at' => Carbon::now(),
         ]);
     }
 
@@ -806,20 +780,17 @@ class ArticleController_UpdateTest extends TestCase
         $this->assertDatabaseHas('article_tags',[
             'article_id' => $article->id,
             'tag_id'     => $tags[1]->id,
-            'deleted_at' => null,
         ]);
 
         //削除したタグ
-        $this->assertDatabaseHas('article_tags',[
+        $this->assertDatabaseMissing('article_tags',[
             'article_id' => $article->id,
             'tag_id'     => null,
-            'deleted_at' => Carbon::now(),
         ]);
 
-        $this->assertDatabaseHas('article_tags',[
+        $this->assertDatabaseMissing('article_tags',[
             'article_id' => $article->id,
             'tag_id'     => $tags[0]->id,
-            'deleted_at' => Carbon::now(),
         ]);
     }
 
@@ -885,20 +856,17 @@ class ArticleController_UpdateTest extends TestCase
         $this->assertDatabaseHas('article_tags',[
             'article_id' => $article->id,
             'tag_id'     => null,
-            'deleted_at' => null,
         ]);
 
         //削除したタグ
-        $this->assertDatabaseHas('article_tags',[
+        $this->assertDatabaseMissing('article_tags',[
             'article_id' => $article->id,
             'tag_id'     => $tags[0]->id,
-            'deleted_at' => Carbon::now(),
         ]);
 
-        $this->assertDatabaseHas('article_tags',[
+        $this->assertDatabaseMissing('article_tags',[
             'article_id' => $article->id,
             'tag_id'     => $tags[1]->id,
-            'deleted_at' => Carbon::now(),
         ]);
     }
 
@@ -965,20 +933,17 @@ class ArticleController_UpdateTest extends TestCase
         $this->assertDatabaseHas('article_tags',[
             'article_id' => $article->id,
             'tag_id'     => $tags[2]->id,
-            'deleted_at' => null,
         ]);
 
         //削除したタグ
-        $this->assertDatabaseHas('article_tags',[
+        $this->assertDatabaseMissing('article_tags',[
             'article_id' => $article->id,
             'tag_id'     => $tags[0]->id,
-            'deleted_at' => Carbon::now(),
         ]);
 
-        $this->assertDatabaseHas('article_tags',[
+        $this->assertDatabaseMissing('article_tags',[
             'article_id' => $article->id,
             'tag_id'     => $tags[1]->id,
-            'deleted_at' => Carbon::now(),
         ]);
     }
 }
