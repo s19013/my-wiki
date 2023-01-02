@@ -68,7 +68,7 @@ class ArticleValidationTest extends TestCase
 
         // レスポンス
         $response->assertJson([
-            'errors' => ["articleTitle" => ["126文字以内で入力してください"]],
+            'messages' => ["articleTitle" => ["126文字以内で入力してください"]],
             ]);
     }
 
@@ -97,7 +97,7 @@ class ArticleValidationTest extends TestCase
 
         // レスポンス
         $response->assertJson([
-            'errors' => ["articleTitle" => ["126文字以内で入力してください"]],
+            'messages' => ["articleTitle" => ["126文字以内で入力してください"]],
             ]);
     }
 
