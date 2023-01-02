@@ -32,20 +32,17 @@ class BookMarkTagRepository
         $originalTagList = $this->getOrignalTag($bookMarkId);
 
         // 更新前のブックマークにタグが1つでもついていたかいなかったかで処理を分ける
-        if (empty($originalTagList)) {$this->ProcessingifOriginalHasNoTags($bookMarkId,$updatedTagList,$originalTagList);}
+        if (empty($originalTagList)) {$this->ProcessingifOriginalHasNoTags($bookMarkId,$updatedTagList);}
         else {$this->ProcessingifOriginalHasAnyTags($bookMarkId,$originalTagList,$updatedTagList);}
     }
 
     // タグが1つもついてなかった
-    public function ProcessingifOriginalHasNoTags($bookMarkId,$updatedTagList,$originalTagList)
+    public function ProcessingifOriginalHasNoTags($bookMarkId,$updatedTagList)
     {
-        // 追加されたタグ
-        $addedTagList = array_diff($updatedTagList, $originalTagList);
-
         // なにか新しくタグが紐づけられていた場合
-        if (!empty($addedTagList)) {
+        if (!empty($updatedTagList)) {
             // 追加
-            foreach($addedTagList as $tag) {
+            foreach($updatedTagList as $tag) {
                 $this->store(
                     tagId:$tag,
                     bookMarkId:$bookMarkId,
