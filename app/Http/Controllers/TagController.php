@@ -25,7 +25,7 @@ class TagController extends Controller
     public function store(TagRequest $request)
     {
         // CSRFトークンを再生成して、二重送信対策
-        // $request->session()->regenerateToken();
+        $request->session()->regenerateToken();
 
         // すでに登録してあるった場合は弾く
         if ($this->tagRepository->isAllreadyExists(Auth::id(),$request->name)){
@@ -46,7 +46,7 @@ class TagController extends Controller
     public function update(TagRequest $request)
     {
         // CSRFトークンを再生成して、二重送信対策
-        // $request->session()->regenerateToken();
+        $request->session()->regenerateToken();
 
         //更新しようとしているurlが自分以外にすでに登録されているか確かめる
         $tagId = $this->tagRepository->serveTagId(
