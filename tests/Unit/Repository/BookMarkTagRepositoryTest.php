@@ -27,7 +27,7 @@ class BookMarkTagRepositoryTest extends TestCase
     use RefreshDatabase;
 
     private $bookMarkTagModel;
-    private $bookMarkRepository;
+    private $bookMarkTagRepository;
     private $userId;
     private $bookMarkId;
 
@@ -37,7 +37,7 @@ class BookMarkTagRepositoryTest extends TestCase
     public function setup():void
     {
         parent::setUp();
-        $this->bookMarkRepository = new BookMarkTagRepository();
+        $this->bookMarkTagRepository = new BookMarkTagRepository();
 
         // ユーザーを用意
         $user = User::create([
@@ -81,7 +81,7 @@ class BookMarkTagRepositoryTest extends TestCase
             'name'    => 'bookMarkTagModelStoreTest',
         ]);
 
-        $this->bookMarkRepository->store($tag->id,$this->bookMarkId);
+        $this->bookMarkTagRepository->store($tag->id,$this->bookMarkId);
 
         $this->assertDatabaseHas('book_mark_tags',[
             'book_mark_id' => $this->bookMarkId,
@@ -95,7 +95,7 @@ class BookMarkTagRepositoryTest extends TestCase
     // 引数1にはnullが渡される
     public function test_store_タグをつけなかった場合()
     {
-        $this->bookMarkRepository->store(null,$this->bookMarkId);
+        $this->bookMarkTagRepository->store(null,$this->bookMarkId);
 
         $this->assertDatabaseHas('book_mark_tags',[
             'book_mark_id' => $this->bookMarkId,
@@ -104,24 +104,21 @@ class BookMarkTagRepositoryTest extends TestCase
     }
 
     // 期待
-    // 引数2に指定したブックマークから引数1に指定されたタグを論理削除する
-    public function test_delete_紐づけたタグを論理削除する()
+    // 引数2に指定したブックマークから引数1に指定されたタグを物理削除する
+    public function test_delete_紐づけたタグを物理削除する()
     {
-        Carbon::setTestNow(Carbon::now());
-
         $tag = Tag::create([
             'user_id' => $this->userId,
             'name'    => 'bookMarkTagModelStoreTest',
         ]);
 
-        $this->bookMarkRepository->store($tag->id,$this->bookMarkId);
+        $this->bookMarkTagRepository->store($tag->id,$this->bookMarkId);
 
-        $this->bookMarkRepository->delete($tag->id,$this->bookMarkId);
+        $this->bookMarkTagRepository->delete($tag->id,$this->bookMarkId);
 
-        $this->assertDatabaseHas('book_mark_tags',[
+        $this->assertDatabaseMissing('book_mark_tags',[
             'book_mark_id' => $this->bookMarkId,
             'tag_id'     => $tag->id,
-            'deleted_at' => Carbon::now(),
         ]);
     }
 
@@ -135,10 +132,10 @@ class BookMarkTagRepositoryTest extends TestCase
             'user_id' => $this->userId,
         ]);
 
-        foreach ($tags as $tag) { $this->bookMarkRepository->store($tag->id,$this->bookMarkId); }
+        foreach ($tags as $tag) { $this->bookMarkTagRepository->store($tag->id,$this->bookMarkId); }
 
         // タグを取得
-        $bookMarkTags = $this->bookMarkRepository->serveTagsRelatedToBookMark($this->bookMarkId,$this->userId);
+        $bookMarkTags = $this->bookMarkTagRepository->serveTagsRelatedToBookMark($this->bookMarkId,$this->userId);
 
         //名前とidが一緒かどうか
 
@@ -160,10 +157,10 @@ class BookMarkTagRepositoryTest extends TestCase
     // 登録時に何もタグをつけなかった
     public function test_serveTagsRelatedToBookMark_登録時にタグを紐づけなかった場合()
     {
-        $this->bookMarkRepository->store(null,$this->bookMarkId);
+        $this->bookMarkTagRepository->store(null,$this->bookMarkId);
 
         // タグを取得
-        $bookMarkTags = $this->bookMarkRepository->serveTagsRelatedToBookMark($this->bookMarkId,$this->userId);
+        $bookMarkTags = $this->bookMarkTagRepository->serveTagsRelatedToBookMark($this->bookMarkId,$this->userId);
 
         $this->assertEmpty($bookMarkTags);
     }
@@ -174,13 +171,13 @@ class BookMarkTagRepositoryTest extends TestCase
     public function test_update_ブックマークについていたタグと新規のタグを入れ替える()
     {
         // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
+
 
         //更新前
         $tags = Tag::factory()->count(2)->create(['user_id' => $this->userId]);
 
         // ブックマークに紐づける
-        foreach($tags as $tag){ $this->bookMarkRepository->store($tag->id,$this->bookMarkId); }
+        foreach($tags as $tag){ $this->bookMarkTagRepository->store($tag->id,$this->bookMarkId); }
 
         //----
 
@@ -188,14 +185,13 @@ class BookMarkTagRepositoryTest extends TestCase
         $newTags = Tag::factory()->count(2)->create(['user_id' => $this->userId]);
 
         //更新
-        $this->bookMarkRepository->update($this->bookMarkId,[$newTags[0]->id,$newTags[1]->id]);
+        $this->bookMarkTagRepository->update($this->bookMarkId,[$newTags[0]->id,$newTags[1]->id]);
 
         // 更新前のデータ(ちゃんと消されたか確認する)
         foreach($tags as $tag){
-            $this->assertDatabaseHas('book_mark_tags',[
+            $this->assertDatabaseMissing('book_mark_tags',[
                 'book_mark_id' => $this->bookMarkId,
                 'tag_id'     => $tag->id,
-                'deleted_at' => Carbon::now()
             ]);
         }
 
@@ -204,7 +200,7 @@ class BookMarkTagRepositoryTest extends TestCase
             $this->assertDatabaseHas('book_mark_tags',[
                 'book_mark_id' => $this->bookMarkId,
                 'tag_id'     => $tag->id,
-                'deleted_at' => null
+
             ]);
         }
     }
@@ -215,9 +211,9 @@ class BookMarkTagRepositoryTest extends TestCase
     public function test_update_タグがついていなかったブックマークにタグをつける()
     {
         // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
 
-        $this->bookMarkRepository->store(null,$this->bookMarkId);
+
+        $this->bookMarkTagRepository->store(null,$this->bookMarkId);
 
         //----
 
@@ -225,13 +221,12 @@ class BookMarkTagRepositoryTest extends TestCase
         $newTags = Tag::factory()->count(2)->create(['user_id' => $this->userId]);
 
         //更新
-        $this->bookMarkRepository->update($this->bookMarkId,[$newTags[0]->id,$newTags[1]->id]);
+        $this->bookMarkTagRepository->update($this->bookMarkId,[$newTags[0]->id,$newTags[1]->id]);
 
         // 更新前のデータ(ちゃんと消されたか確認する)
-        $this->assertDatabaseHas('book_mark_tags',[
+        $this->assertDatabaseMissing('book_mark_tags',[
             'book_mark_id' => $this->bookMarkId,
             'tag_id'     => null,
-            'deleted_at' => Carbon::now()
         ]);
 
         // 更新後のデータ
@@ -239,7 +234,7 @@ class BookMarkTagRepositoryTest extends TestCase
             $this->assertDatabaseHas('book_mark_tags',[
                 'book_mark_id' => $this->bookMarkId,
                 'tag_id'     => $tag->id,
-                'deleted_at' => null
+
             ]);
         }
     }
@@ -251,7 +246,7 @@ class BookMarkTagRepositoryTest extends TestCase
         //更新前
         $tags = Tag::factory()->count(2)->create(['user_id' => $this->userId]);
 
-        foreach($tags as $tag){ $this->bookMarkRepository->store($tag->id,$this->bookMarkId); }
+        foreach($tags as $tag){ $this->bookMarkTagRepository->store($tag->id,$this->bookMarkId); }
 
         //----
 
@@ -259,7 +254,7 @@ class BookMarkTagRepositoryTest extends TestCase
         $newTags = Tag::factory()->count(2)->create(['user_id' => $this->userId]);
 
         //更新
-        $this->bookMarkRepository->update($this->bookMarkId,[$newTags[0]->id,$newTags[1]->id,$tags[0]->id,$tags[1]->id]);
+        $this->bookMarkTagRepository->update($this->bookMarkId,[$newTags[0]->id,$newTags[1]->id,$tags[0]->id,$tags[1]->id]);
 
         //取得したタグが新しく作ったタグになっているか確認
         // もともとつけていた部分
@@ -268,7 +263,7 @@ class BookMarkTagRepositoryTest extends TestCase
             $this->assertDatabaseHas('book_mark_tags',[
                 'book_mark_id' => $this->bookMarkId,
                 'tag_id'     => $tag->id,
-                'deleted_at' => null
+
             ]);
         }
 
@@ -277,7 +272,7 @@ class BookMarkTagRepositoryTest extends TestCase
             $this->assertDatabaseHas('book_mark_tags',[
                 'book_mark_id' => $this->bookMarkId,
                 'tag_id'     => $tag->id,
-                'deleted_at' => null
+
             ]);
         }
     }
@@ -288,38 +283,37 @@ class BookMarkTagRepositoryTest extends TestCase
     public function test_update_ブックマークについていたタグの一部を外す()
     {
         // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
+
 
         //更新前
         $tags = Tag::factory()->count(2)->create(['user_id' => $this->userId]);
 
-        foreach($tags as $tag){$this->bookMarkRepository->store($tag->id,$this->bookMarkId);}
+        foreach($tags as $tag){$this->bookMarkTagRepository->store($tag->id,$this->bookMarkId);}
 
         //----
 
         $newTags = Tag::factory()->count(2)->create(['user_id' => $this->userId]);
 
         //更新
-        $this->bookMarkRepository->update($this->bookMarkId,[$tags[1]->id,$newTags[0]->id,$newTags[1]->id]);
+        $this->bookMarkTagRepository->update($this->bookMarkId,[$tags[1]->id,$newTags[0]->id,$newTags[1]->id]);
 
         // けしたやつ
-        $this->assertDatabaseHas('book_mark_tags',[
+        $this->assertDatabaseMissing('book_mark_tags',[
             'book_mark_id' => $this->bookMarkId,
             'tag_id'     => $tags[0]->id,
-            'deleted_at' => Carbon::now()
         ]);
         //残したやつ
         $this->assertDatabaseHas('book_mark_tags',[
             'book_mark_id' => $this->bookMarkId,
             'tag_id'     => $tags[1]->id,
-            'deleted_at' => null
+
         ]);
 
         foreach($newTags as $tag){
             $this->assertDatabaseHas('book_mark_tags',[
                 'book_mark_id' => $this->bookMarkId,
                 'tag_id'     => $tag->id,
-                'deleted_at' => null
+
             ]);
         }
     }
@@ -331,10 +325,10 @@ class BookMarkTagRepositoryTest extends TestCase
         $tags = Tag::factory()->count(4)->create(['user_id' => $this->userId]);
 
         // 登録
-        foreach($tags as $tag){ $this->bookMarkRepository->store($tag->id,$this->bookMarkId); }
+        foreach($tags as $tag){ $this->bookMarkTagRepository->store($tag->id,$this->bookMarkId); }
 
         // 取得
-        $bookMarkTags = $this->bookMarkRepository->getOrignalTag($this->bookMarkId);
+        $bookMarkTags = $this->bookMarkTagRepository->getOrignalTag($this->bookMarkId);
 
         // print_r($bookMarkTags);
 
@@ -345,209 +339,188 @@ class BookMarkTagRepositoryTest extends TestCase
     }
 
     // 期待
-    // procesOriginalBookMarkDoesNotHaveAnyTagsの帰り値がnullである
+    // nullのデータが消されて
+    // 新しいタグのデータが登録されている
     // 元のデータに変化がない
     // 条件
-    // 元のブックマークにタグがついている
-    public function test_procesOriginalBookMarkDoesNotHaveAnyTags_元のブックマークにタグがついている()
-    {
-        $tags = Tag::factory()->count(4)->create(['user_id' => $this->userId]);
+    // 新しくタグがついていた
+    public function test_ProcessingifOriginalHasNoTags_新規タグあり(){
+        // tag_id = nullのデータ作成
+        $this->bookMarkTagRepository->store(null,$this->bookMarkId);
 
-        foreach ($tags as $tag){ $this->bookMarkRepository->store($tag->id,$this->bookMarkId); }
-
-        $returnValue = $this->bookMarkRepository->procesOriginalBookMarkDoesNotHaveAnyTags(
-            originalTagList:$this->bookMarkRepository->getOrignalTag($this->bookMarkId),
-            bookMarkId:$this->bookMarkId,
-            updatedTagList:[$tags[0]->id,$tags[1]->id,$tags[2]->id,$tags[3]->id]
-        );
-
-        // 何もしないのでnullが返される
-        $this->assertNull($returnValue);
-
-        // 登録されているタグに変化がない
-        foreach ($tags as $tag){
-            $this->assertDatabaseHas('book_mark_tags',[
-                'book_mark_id' => $this->bookMarkId,
-                'tag_id'     => $tag->id,
-                'deleted_at' => null
-            ]);
-        }
-        // procesOriginalBookMarkDoesNotHaveAnyTagsでは新規タグの登録はしないからここではテストしない
-
-    }
-
-    // 期待
-    // procesOriginalBookMarkDoesNotHaveAnyTagsの帰り値がnullである
-    // tag_id = nullのデータが論理削除されている
-    // 条件
-    // 元のブックマークにタグがついていない,新しくタグを追加しようとしている
-    public function test_procesOriginalBookMarkDoesNotHaveAnyTags_元のブックマークにタグがついていない_新しくタグを追加()
-    {
-        // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
-
-        $this->bookMarkRepository->store(null,$this->bookMarkId);
-
-        $tags = Tag::factory()->count(2)->create(['user_id' => $this->userId]);
-
-        $returnValue = $this->bookMarkRepository->procesOriginalBookMarkDoesNotHaveAnyTags(
-            originalTagList:$this->bookMarkRepository->getOrignalTag($this->bookMarkId),
-            bookMarkId:$this->bookMarkId,
-            updatedTagList:[$tags[0]->id,$tags[1]->id]
-        );
-
-        $this->assertNull($returnValue);
-
-        //nullのデータが論理削除されている
-        $this->assertDatabaseHas('book_mark_tags',[
-            'book_mark_id' => $this->bookMarkId,
-            'tag_id'     => null,
-            'deleted_at' => Carbon::now()
+        // 適当にタグを作る
+        $tag = Tag::create([
+            'user_id' => $this->userId,
+            'name'    => 'test',
         ]);
 
-        // procesOriginalBookMarkDoesNotHaveAnyTagsでは新規タグの登録はしないからここではテストしない
+        $updateTagList = [$tag->id];
+
+        $this->bookMarkTagRepository->ProcessingifOriginalHasNoTags($this->bookMarkId,$updateTagList);
+
+        // nullのデータが消えているか
+        $this->assertDatabaseMissing('book_mark_tags',[
+            'book_mark_id' => $this->bookMarkId,
+            'tag_id'     => null,
+
+        ]);
+
+        // 新しいタグが登録されているか
+        $this->assertDatabaseHas('book_mark_tags',[
+            'book_mark_id' => $this->bookMarkId,
+            'tag_id'     => $updateTagList[0],
+
+        ]);
     }
 
     // 期待
-    // procesOriginalBookMarkDoesNotHaveAnyTagsの帰り値がTrueである
-    // tag_id = nullのデータが論理削除されている
     // 元のデータに変化がない
     // 条件
-    // 元のブックマークにタグがついていない_タグも追加しない
-    public function test_procesOriginalBookMarkDoesNotHaveAnyTags_元のブックマークにタグがついていない_タグも追加しない()
-    {
-        // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
+    // 新しくタグがついていなかった
+    public function test_ProcessingifOriginalHasNoTags_新規タグなし(){
+        // tag_id = nullのデータ作成
+        $this->bookMarkTagRepository->store(null,$this->bookMarkId);
 
-        $this->bookMarkRepository->store(null,$this->bookMarkId);
+        $this->bookMarkTagRepository->ProcessingifOriginalHasNoTags($this->bookMarkId,[]);
 
-        $returnValue = $this->bookMarkRepository->procesOriginalBookMarkDoesNotHaveAnyTags(
-            originalTagList:$this->bookMarkRepository->getOrignalTag($this->bookMarkId),
-            bookMarkId:$this->bookMarkId,
-            updatedTagList:[]
-        );
-
-        $this->assertTrue($returnValue);
-
-        //元データに変化なし
+        // nullのデータが残っているか
         $this->assertDatabaseHas('book_mark_tags',[
             'book_mark_id' => $this->bookMarkId,
             'tag_id'     => null,
-            'deleted_at' => null
-        ]);
-        // procesOriginalBookMarkDoesNotHaveAnyTagsでは新規タグの登録はしないからここではテストしない
-    }
 
-    // 期待
-    // procesOriginalBookMarkDeleteAllTagsの帰り値がnullである
-    // tag_id = nullのデータが新しく追加されている
-    // 条件
-    // 元のブックマークにタグをすべてけした,追加タグなし
-    public function test_procesOriginalBookMarkDeleteAllTags_追加タグなし_ついてたタグ全部けした()
-    {
-        // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
-
-        $tags = Tag::factory()->count(4)->create(['user_id' => $this->userId]);
-
-        $this->bookMarkRepository->store($tags[0]->id,$this->bookMarkId);
-        $this->bookMarkRepository->store($tags[1]->id,$this->bookMarkId);
-
-        $returnValue = $this->bookMarkRepository->procesOriginalBookMarkDeleteAllTags(
-                originalTagList:$this->bookMarkRepository->getOrignalTag($this->bookMarkId),
-                bookMarkId:$this->bookMarkId,
-                isAddedTagListEmpty:True,
-                deletedTagList:[$tags[0]->id,$tags[1]->id]
-            );
-
-        $this->assertNull($returnValue);
-
-        // もとあったデータの論理削除は別の関数でやるのでここではチェックしない
-
-        // tag_id = nullのデータが追加されているか確認
-        $this->assertDatabaseHas('book_mark_tags',[
-            'book_mark_id' => $this->bookMarkId,
-            'tag_id'     => null,
-            'deleted_at' => null
         ]);
     }
 
-
     // 期待
-    // procesOriginalBookMarkDeleteAllTagsの帰り値がnullである
-    // 条件
-    // 元のブックマークにタグをすべてけした,追加タグあり
-    public function test_procesOriginalBookMarkDeleteAllTags_追加タグあり_ついてたタグ全部けした()
-    {
-
-        $tags = Tag::factory()->count(4)->create(['user_id' => $this->userId]);
-
-        $this->bookMarkRepository->store($tags[0]->id,$this->bookMarkId);
-        $this->bookMarkRepository->store($tags[1]->id,$this->bookMarkId);
-
-        $returnValue = $this->bookMarkRepository->procesOriginalBookMarkDeleteAllTags(
-                originalTagList:$this->bookMarkRepository->getOrignalTag($this->bookMarkId),
-                bookMarkId:$this->bookMarkId,
-                isAddedTagListEmpty:false,
-                deletedTagList:[$tags[0]->id,$tags[1]->id]
-            );
-
-        $this->assertNull($returnValue);
-
-        // もとあったデータの論理削除､新しいデータの追加は別の関数でやるのでここではチェックしない
-    }
-
-    // 期待
-    // procesOriginalBookMarkDeleteAllTagsの帰り値がnullである
+    // 新しく追加されたタグのデータがある
     // 元のデータに変化がない
     // 条件
-    // 元のブックマークにタグがついてない,追加タグなし
-    public function test_procesOriginalBookMarkDeleteAllTags_追加タグなし_タグついてない()
+    // 削除されたタグなし
+    // 新しく追加されたタグあり
+    public function test_ProcessingifOriginalHasAnyTags_削除されたタグなし_新しく追加されたタグあり()
     {
-        $this->bookMarkRepository->store(null,$this->bookMarkId);
+        // もともとついていたタグ
+        $oldTag = Tag::factory()->create(['user_id' => $this->userId]);
 
-        $returnValue = $this->bookMarkRepository->procesOriginalBookMarkDeleteAllTags(
-                originalTagList:$this->bookMarkRepository->getOrignalTag($this->bookMarkId),
-                bookMarkId:$this->bookMarkId,
-                isAddedTagListEmpty:true,
-                deletedTagList:[]
-            );
 
-        $this->assertNull($returnValue);
+        BookMarkTag::create([
+            'book_mark_id' => $this->bookMarkId,
+            'tag_id'     => $oldTag->id
+        ]);
 
-        // 元のデータに変化がない
+        // 新しくつけるタグ
+        $newTag = Tag::factory()->create(['user_id' => $this->userId]);
+
+        $this->bookMarkTagRepository->ProcessingifOriginalHasAnyTags($this->bookMarkId,[$oldTag->id],[$oldTag->id,$newTag->id]);
+
+        // 古いデータが残っている
         $this->assertDatabaseHas('book_mark_tags',[
             'book_mark_id' => $this->bookMarkId,
-            'tag_id'     => null,
-            'deleted_at' => null
+            'tag_id'     => $oldTag->id,
+
+        ]);
+
+        // 新しいデータが登録されている
+        $this->assertDatabaseHas('book_mark_tags',[
+            'book_mark_id' => $this->bookMarkId,
+            'tag_id'     => $newTag->id,
+
         ]);
     }
 
     // 期待
-    // procesOriginalBookMarkDeleteAllTagsの帰り値がnullである
     // 元のデータに変化がない
     // 条件
-    // 元のブックマークにタグがついてない,追加タグなし
-    public function test_procesOriginalBookMarkDeleteAllTags_追加タグあり_タグついてない()
+    // 削除されたタグなし
+    // 新しく追加されたタグなし
+    public function test_ProcessingifOriginalHasAnyTags_削除されたタグなし_新しく追加されたタグなし()
     {
-        $this->bookMarkRepository->store(null,$this->bookMarkId);
+        // もともとついていたタグ
+        $oldTag = Tag::factory()->create(['user_id' => $this->userId]);
 
-        $returnValue = $this->bookMarkRepository->procesOriginalBookMarkDeleteAllTags(
-                originalTagList:$this->bookMarkRepository->getOrignalTag($this->bookMarkId),
-                bookMarkId:$this->bookMarkId,
-                isAddedTagListEmpty:false,
-                deletedTagList:[]
-            );
 
-        $this->assertNull($returnValue);
+        BookMarkTag::create([
+            'book_mark_id' => $this->bookMarkId,
+            'tag_id'     => $oldTag->id
+        ]);
 
-        // 元のデータに変化がない
+        $this->bookMarkTagRepository->ProcessingifOriginalHasAnyTags($this->bookMarkId,[$oldTag->id],[$oldTag->id]);
+
+        // 古いデータが残っている
+        $this->assertDatabaseHas('book_mark_tags',[
+            'book_mark_id' => $this->bookMarkId,
+            'tag_id'     => $oldTag->id,
+
+        ]);
+    }
+
+    // 期待
+    // もともとついていたタグのデータが削除されれる
+    // 新しく追加されたタグのデータがある
+    // 条件
+    // 削除されたタグあり
+    // 新しく追加されたタグあり
+    public function test_ProcessingifOriginalHasAnyTags_削除されたタグあり_新しく追加されたタグあり()
+    {
+        // もともとついていたタグ
+        $oldTag = Tag::factory()->create(['user_id' => $this->userId]);
+
+        BookMarkTag::create([
+            'book_mark_id' => $this->bookMarkId,
+            'tag_id'     => $oldTag->id
+        ]);
+
+        // 新しくつけるタグ
+        $newTag = Tag::factory()->create(['user_id' => $this->userId]);
+
+        $this->bookMarkTagRepository->ProcessingifOriginalHasAnyTags($this->bookMarkId,[$oldTag->id],[$newTag->id]);
+
+        // 古いデータが消えているか
+        $this->assertDatabaseMissing('book_mark_tags',[
+            'book_mark_id' => $this->bookMarkId,
+            'tag_id'     => $oldTag->id,
+
+        ]);
+
+        // 新しいデータが登録されている
+        $this->assertDatabaseHas('book_mark_tags',[
+            'book_mark_id' => $this->bookMarkId,
+            'tag_id'     => $newTag->id,
+
+        ]);
+    }
+
+    // 期待
+    // もともとついていたタグのデータが削除されれる
+    // 何もタグがついていないというデータが追加される
+    // 条件
+    // 削除されたタグあり
+    // 新しく追加されたタグなし
+    public function test_ProcessingifOriginalHasAnyTags_削除されたタグあり_新しく追加されたタグなし()
+    {
+        // もともとついていたタグ
+        $oldTag = Tag::factory()->create(['user_id' => $this->userId]);
+
+        BookMarkTag::create([
+            'book_mark_id' => $this->bookMarkId,
+            'tag_id'     => $oldTag->id
+        ]);
+
+        $this->bookMarkTagRepository->ProcessingifOriginalHasAnyTags($this->bookMarkId,[$oldTag->id],[]);
+
+        // 古いデータが消えているか
+        $this->assertDatabaseMissing('book_mark_tags',[
+            'book_mark_id' => $this->bookMarkId,
+            'tag_id'     => $oldTag->id,
+
+        ]);
+
+        // 何もタグがついていないというデータが追加される
         $this->assertDatabaseHas('book_mark_tags',[
             'book_mark_id' => $this->bookMarkId,
             'tag_id'     => null,
-            'deleted_at' => null
+
         ]);
-        // 新しいデータの追加は別の関数でやるのでここではチェックしない
     }
 }
 
