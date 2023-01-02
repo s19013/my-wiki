@@ -41,7 +41,7 @@ class TagRequest extends FormRequest
     protected function failedValidation(Validator $validator)
     {
         $res = response()->json([
-            'errors' => $validator->errors(),
+            'messages' => $validator->errors(),
             ],
             400);
         throw new HttpResponseException($res);

@@ -30,7 +30,7 @@ class TagController extends Controller
         // すでに登録してあるった場合は弾く
         if ($this->tagRepository->isAllreadyExists(Auth::id(),$request->name)){
             return response()->json(
-                ['errors' => ["tag" => ["そのタグは既に保存しています"]]],
+                ['messages' => ["name" => ["そのタグは既に保存しています"]]],
                 400
             );
         }
@@ -57,7 +57,7 @@ class TagController extends Controller
         // 帰り値がnullの場合は無視する(urlを完全に別のものに変更したから,まだ更新するurlが登録されてないから)
         if (!is_null($tagId)&&$request->name != $tagId) {
             return response()->json([
-                'errors' => ["tag" => ["そのタグは既に保存しています"]],
+                'messages' => ["name" => ["そのタグは既に保存しています"]],
                 ],
                 400);
         }

@@ -95,16 +95,14 @@ class BookMarkController_UpdateTest extends TestCase
             $this->assertDatabaseHas('book_mark_tags',[
                 'book_mark_id' => $bookMark->id,
                 'tag_id'     => $newTag->id,
-                'deleted_at' => null,
             ]);
         }
 
         //削除したタグ
         foreach ($tags as $tag){
-            $this->assertDatabaseHas('book_mark_tags',[
+            $this->assertDatabaseMissing('book_mark_tags',[
                 'book_mark_id' => $bookMark->id,
                 'tag_id'     => $tag->id,
-                'deleted_at' => Carbon::now(),
             ]);
         }
     }
@@ -158,8 +156,7 @@ class BookMarkController_UpdateTest extends TestCase
         foreach ($newTags as $newTag){
             $this->assertDatabaseHas('book_mark_tags',[
                 'book_mark_id' => $bookMark->id,
-                'tag_id'     => $newTag->id,
-                'deleted_at' => null,
+                'tag_id'       => $newTag->id,
             ]);
         }
 
@@ -167,8 +164,7 @@ class BookMarkController_UpdateTest extends TestCase
         foreach ($tags as $tag){
             $this->assertDatabaseHas('book_mark_tags',[
                 'book_mark_id' => $bookMark->id,
-                'tag_id'     => $tag->id,
-                'deleted_at' => null,
+                'tag_id'       => $tag->id,
             ]);
         }
     }
@@ -224,26 +220,22 @@ class BookMarkController_UpdateTest extends TestCase
         $this->assertDatabaseHas('book_mark_tags',[
             'book_mark_id' => $bookMark->id,
             'tag_id'     => $tags[2]->id,
-            'deleted_at' => null,
         ]);
 
         $this->assertDatabaseHas('book_mark_tags',[
             'book_mark_id' => $bookMark->id,
             'tag_id'     => $tags[3]->id,
-            'deleted_at' => null,
         ]);
 
         //削除したタグ
-        $this->assertDatabaseHas('book_mark_tags',[
+        $this->assertDatabaseMissing('book_mark_tags',[
             'book_mark_id' => $bookMark->id,
             'tag_id'     => $tags[0]->id,
-            'deleted_at' => Carbon::now(),
         ]);
 
-        $this->assertDatabaseHas('book_mark_tags',[
+        $this->assertDatabaseMissing('book_mark_tags',[
             'book_mark_id' => $bookMark->id,
             'tag_id'     => $tags[1]->id,
-            'deleted_at' => Carbon::now(),
         ]);
     }
 
@@ -297,15 +289,13 @@ class BookMarkController_UpdateTest extends TestCase
             $this->assertDatabaseHas('book_mark_tags',[
                 'book_mark_id' => $bookMark->id,
                 'tag_id'     => $tag->id,
-                'deleted_at' => null,
             ]);
         }
 
         //削除したタグ
-        $this->assertDatabaseHas('book_mark_tags',[
+        $this->assertDatabaseMissing('book_mark_tags',[
             'book_mark_id' => $bookMark->id,
             'tag_id'     => null,
-            'deleted_at' => Carbon::now(),
         ]);
     }
 
@@ -360,15 +350,13 @@ class BookMarkController_UpdateTest extends TestCase
         $this->assertDatabaseHas('book_mark_tags',[
             'book_mark_id' => $bookMark->id,
             'tag_id'     => null,
-            'deleted_at' => null,
         ]);
 
         //削除したタグ
         foreach ($tags as $tag){
-            $this->assertDatabaseHas('book_mark_tags',[
+            $this->assertDatabaseMissing('book_mark_tags',[
                 'book_mark_id' => $bookMark->id,
                 'tag_id'     => $tag->id,
-                'deleted_at' => Carbon::now(),
             ]);
         }
     }
@@ -432,7 +420,6 @@ class BookMarkController_UpdateTest extends TestCase
         $this->assertDatabaseHas('book_mark_tags',[
             'book_mark_id' => $bookMark->id,
             'tag_id'     => null,
-            'deleted_at' => null,
         ]);
     }
 
@@ -499,15 +486,13 @@ class BookMarkController_UpdateTest extends TestCase
             $this->assertDatabaseHas('book_mark_tags',[
                 'book_mark_id' => $bookMark->id,
                 'tag_id'     => $tag->id,
-                'deleted_at' => null,
             ]);
         }
 
         //削除したタグ
-        $this->assertDatabaseHas('book_mark_tags',[
+        $this->assertDatabaseMissing('book_mark_tags',[
             'book_mark_id' => $bookMark->id,
             'tag_id'     => null,
-            'deleted_at' => Carbon::now(),
         ]);
     }
 
@@ -573,15 +558,13 @@ class BookMarkController_UpdateTest extends TestCase
         $this->assertDatabaseHas('book_mark_tags',[
             'book_mark_id' => $bookMark->id,
             'tag_id'     => null,
-            'deleted_at' => null,
         ]);
 
         //削除したタグ
         foreach ($tags as $tag){
-            $this->assertDatabaseHas('book_mark_tags',[
+            $this->assertDatabaseMissing('book_mark_tags',[
                 'book_mark_id' => $bookMark->id,
                 'tag_id'     => $tag->id,
-                'deleted_at' => Carbon::now(),
             ]);
         }
     }
@@ -648,26 +631,22 @@ class BookMarkController_UpdateTest extends TestCase
         $this->assertDatabaseHas('book_mark_tags',[
             'book_mark_id' => $bookMark->id,
             'tag_id'     => $tags[1]->id,
-            'deleted_at' => null,
         ]);
 
         $this->assertDatabaseHas('book_mark_tags',[
             'book_mark_id' => $bookMark->id,
             'tag_id'     => $tags[2]->id,
-            'deleted_at' => null,
         ]);
 
         //削除したタグ
-        $this->assertDatabaseHas('book_mark_tags',[
+        $this->assertDatabaseMissing('book_mark_tags',[
             'book_mark_id' => $bookMark->id,
             'tag_id'     => $tags[0]->id,
-            'deleted_at' => Carbon::now(),
         ]);
 
-        $this->assertDatabaseHas('book_mark_tags',[
+        $this->assertDatabaseMissing('book_mark_tags',[
             'book_mark_id' => $bookMark->id,
             'tag_id'     => null,
-            'deleted_at' => Carbon::now(),
         ]);
     }
 
@@ -733,14 +712,12 @@ class BookMarkController_UpdateTest extends TestCase
         $this->assertDatabaseHas('book_mark_tags',[
             'book_mark_id' => $bookMark->id,
             'tag_id'     => null,
-            'deleted_at' => null,
         ]);
 
         // 削除
-        $this->assertDatabaseHas('book_mark_tags',[
+        $this->assertDatabaseMissing('book_mark_tags',[
             'book_mark_id' => $bookMark->id,
             'tag_id'     => $tags[0]->id,
-            'deleted_at' => Carbon::now(),
         ]);
     }
 
@@ -806,20 +783,17 @@ class BookMarkController_UpdateTest extends TestCase
         $this->assertDatabaseHas('book_mark_tags',[
             'book_mark_id' => $bookMark->id,
             'tag_id'     => $tags[1]->id,
-            'deleted_at' => null,
         ]);
 
         //削除したタグ
-        $this->assertDatabaseHas('book_mark_tags',[
+        $this->assertDatabaseMissing('book_mark_tags',[
             'book_mark_id' => $bookMark->id,
             'tag_id'     => null,
-            'deleted_at' => Carbon::now(),
         ]);
 
-        $this->assertDatabaseHas('book_mark_tags',[
+        $this->assertDatabaseMissing('book_mark_tags',[
             'book_mark_id' => $bookMark->id,
             'tag_id'     => $tags[0]->id,
-            'deleted_at' => Carbon::now(),
         ]);
     }
 
@@ -885,20 +859,17 @@ class BookMarkController_UpdateTest extends TestCase
         $this->assertDatabaseHas('book_mark_tags',[
             'book_mark_id' => $bookMark->id,
             'tag_id'     => null,
-            'deleted_at' => null,
         ]);
 
         //削除したタグ
-        $this->assertDatabaseHas('book_mark_tags',[
+        $this->assertDatabaseMissing('book_mark_tags',[
             'book_mark_id' => $bookMark->id,
             'tag_id'     => $tags[0]->id,
-            'deleted_at' => Carbon::now(),
         ]);
 
-        $this->assertDatabaseHas('book_mark_tags',[
+        $this->assertDatabaseMissing('book_mark_tags',[
             'book_mark_id' => $bookMark->id,
             'tag_id'     => $tags[1]->id,
-            'deleted_at' => Carbon::now(),
         ]);
     }
 
@@ -965,20 +936,17 @@ class BookMarkController_UpdateTest extends TestCase
         $this->assertDatabaseHas('book_mark_tags',[
             'book_mark_id' => $bookMark->id,
             'tag_id'     => $tags[2]->id,
-            'deleted_at' => null,
         ]);
 
         //削除したタグ
-        $this->assertDatabaseHas('book_mark_tags',[
+        $this->assertDatabaseMissing('book_mark_tags',[
             'book_mark_id' => $bookMark->id,
             'tag_id'     => $tags[0]->id,
-            'deleted_at' => Carbon::now(),
         ]);
 
-        $this->assertDatabaseHas('book_mark_tags',[
+        $this->assertDatabaseMissing('book_mark_tags',[
             'book_mark_id' => $bookMark->id,
             'tag_id'     => $tags[1]->id,
-            'deleted_at' => Carbon::now(),
         ]);
     }
 
@@ -1018,7 +986,7 @@ class BookMarkController_UpdateTest extends TestCase
 
         // データベース
         $response->assertJson([
-            'errors' => ["bookMarkUrl" => ["そのブックマークは既に保存しています"]],
+            'messages' => ["bookMarkUrl" => ["そのブックマークは既に保存しています"]],
             ]);
     }
 }

@@ -83,13 +83,11 @@ class BookMarkControllerTest extends TestCase
         $this->assertDatabaseHas('book_mark_tags',[
             'book_mark_id' => $bookMarkId,
             'tag_id'     => $tags[0]->id,
-            'deleted_at' => null,
         ]);
 
         $this->assertDatabaseHas('book_mark_tags',[
             'book_mark_id' => $bookMarkId,
             'tag_id'     => $tags[1]->id,
-            'deleted_at' => null,
         ]);
 
     }
@@ -142,7 +140,6 @@ class BookMarkControllerTest extends TestCase
             $this->assertDatabaseHas('book_mark_tags',[
                 'book_mark_id' => $bookMarkId,
                 'tag_id'     => $tag->id,
-                'deleted_at' => null,
             ]);
         }
     }
@@ -162,7 +159,7 @@ class BookMarkControllerTest extends TestCase
         ->post('/api/bookmark/store/',[
             'bookMarkTitle' => "testTitletest_bookMarkStore_タグなし_タイトルあり",
             'bookMarkUrl'   => "http://hide-no-server.com/タグなし_タイトルあり" ,
-            'tagList'       => null,
+            'tagList'       => [],
         ]);
 
         // ステータス
@@ -189,7 +186,6 @@ class BookMarkControllerTest extends TestCase
         $this->assertDatabaseHas('book_mark_tags',[
             'book_mark_id' => $bookMarkId,
             'tag_id'     => null,
-            'deleted_at' => null,
         ]);
     }
 
@@ -211,7 +207,7 @@ class BookMarkControllerTest extends TestCase
         ->post('/api/bookmark/store/',[
             'bookMarkTitle' => "",
             'bookMarkUrl'   => "http://hide-no-server.com/タグなし_タイトルなし" ,
-            'tagList'       => null,
+            'tagList'       => [],
         ]);
 
         // ステータス
@@ -238,7 +234,6 @@ class BookMarkControllerTest extends TestCase
         $this->assertDatabaseHas('book_mark_tags',[
             'book_mark_id' => $bookMarkId,
             'tag_id'     => null,
-            'deleted_at' => null,
         ]);
     }
 
@@ -271,7 +266,7 @@ class BookMarkControllerTest extends TestCase
 
         // データベース
         $response->assertJson([
-            'errors' => ["bookMarkUrl" => ["そのブックマークは既に保存しています"]],
+            'messages' => ["bookMarkUrl" => ["そのブックマークは既に保存しています"]],
             ]);
     }
 
