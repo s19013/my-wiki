@@ -47,8 +47,7 @@ class ArticleRepository
     public function delete($articleId)
     {
         // 論理削除
-        Article::where('id','=',$articleId)
-        ->update(['deleted_at' => Carbon::now()]);
+        Article::where('id','=',$articleId)->delete();
     }
 
     //指定された記事だけを取ってくる

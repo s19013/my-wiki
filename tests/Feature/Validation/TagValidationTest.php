@@ -48,7 +48,7 @@ class TagValidationTest extends TestCase
 
         // json
         $response->assertJson([
-            'errors' => ["name" => ["新しいタグ名を入力してください"]],
+            'messages' => ["name" => ["新しいタグ名を入力してください"]],
             ]);
 
     }
@@ -67,7 +67,7 @@ class TagValidationTest extends TestCase
 
         // json
         $response->assertJson([
-            'errors' => ["name" => ["126文字以内で入力してください"]],
+            'messages' => ["name" => ["126文字以内で入力してください"]],
             ]);
 
     }
