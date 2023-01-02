@@ -135,7 +135,7 @@ class BookMarkRepository_SearchTest extends TestCase
 
         //帰ってきたbookMarkListの数を数える(10個以上あっても一度に10個までしか返さない)
         for ($i=10; $i <20 ; $i++) {
-            $this->assertSame($bookMarkList[$i - 10]['title'],"title ${i}");
+            $this->assertSame($bookMarkList[$i - 10]->title,"title ${i}");
         }
     }
 
@@ -177,17 +177,15 @@ class BookMarkRepository_SearchTest extends TestCase
 
         $bookMarkList = $response['data'];
 
-        // dd($bookMarkList);
-
         $idList = [];
-        foreach ($bookMarkList as $data){ array_push($idList,$data['id']); }
+        foreach ($bookMarkList as $data){ array_push($idList,$data->id); }
 
         // 全部指定したユーザーのブックマークか
-        foreach ($bookMarkList as $data){ $this->assertEquals($data['user_id'],$this->userId); }
+        foreach ($bookMarkList as $data){ $this->assertEquals($data->user_id,$this->userId); }
 
         // 削除したブックマークは含んでないか
-        $this->assertNotContains($bookMarks[0]['id'],$idList);
-        $this->assertNotContains($bookMarks[1]['id'],$idList);
+        $this->assertNotContains($bookMarks[0]->id,$idList);
+        $this->assertNotContains($bookMarks[1]->id,$idList);
     }
 
     // 期待
@@ -245,18 +243,18 @@ class BookMarkRepository_SearchTest extends TestCase
         $bookMarkList = $response['data'];
 
         $idList = [];
-        foreach ($bookMarkList as $data){ array_push($idList,$data['id']); }
+        foreach ($bookMarkList as $data){ array_push($idList,$data->id); }
 
 
         // 全部指定したユーザーのブックマークか
-        foreach ($bookMarkList as $data){ $this->assertEquals($data['user_id'],$this->userId); }
+        foreach ($bookMarkList as $data){ $this->assertEquals($data->user_id,$this->userId); }
 
         // 削除したブックマークは含んでないか
-        $this->assertNotContains($deleteBookMark['id'],$idList);
+        $this->assertNotContains($deleteBookMark->id,$idList);
 
         // ヒットするはずのブックマークを取ってきているか
-        $this->assertContains($hitBookMark1['id'], $idList);
-        $this->assertContains($hitBookMark2['id'], $idList);
+        $this->assertContains($hitBookMark1->id, $idList);
+        $this->assertContains($hitBookMark2->id, $idList);
 
     }
 
@@ -347,16 +345,16 @@ class BookMarkRepository_SearchTest extends TestCase
         $bookMarkList = $response['data'];
 
         $idList = [];
-        foreach ($bookMarkList as $data){ array_push($idList,$data['id']); }
+        foreach ($bookMarkList as $data){ array_push($idList,$data->id); }
 
         // 全部指定したユーザーのブックマークか
-        foreach ($bookMarkList as $data){ $this->assertEquals($data['user_id'],$this->userId); }
+        foreach ($bookMarkList as $data){ $this->assertEquals($data->user_id,$this->userId); }
 
         // 削除したブックマークは含んでないか
-        $this->assertNotContains($deleteBookMark['id'],$idList);
+        $this->assertNotContains($deleteBookMark->id,$idList);
 
         // ヒットするはずのブックマークを取ってきているか
-        $this->assertContains($hitBookMark1['id'], $idList);
+        $this->assertContains($hitBookMark1->id, $idList);
     }
 
     // 期待
@@ -473,10 +471,10 @@ class BookMarkRepository_SearchTest extends TestCase
         $bookMarkList = $response['data'];
 
         $idList = [];
-        foreach ($bookMarkList as $data){ array_push($idList,$data['id']); }
+        foreach ($bookMarkList as $data){ array_push($idList,$data->id); }
 
         // 全部指定したユーザーのブックマークか
-        foreach ($bookMarkList as $data){ $this->assertEquals($data['user_id'],$this->userId); }
+        foreach ($bookMarkList as $data){ $this->assertEquals($data->user_id,$this->userId); }
 
         // 削除したブックマークは含んでないか
         $this->assertNotContains($deleteBookMark->id,$idList);
@@ -524,14 +522,14 @@ class BookMarkRepository_SearchTest extends TestCase
         $bookMarkList = $response['data'];
 
         $idList = [];
-        foreach ($bookMarkList as $data){ array_push($idList,$data['id']); }
+        foreach ($bookMarkList as $data){ array_push($idList,$data->id); }
 
         // 全部指定したユーザーのブックマークか
-        foreach ($bookMarkList as $data){ $this->assertEquals($data['user_id'],$this->userId); }
+        foreach ($bookMarkList as $data){ $this->assertEquals($data->user_id,$this->userId); }
 
         // 削除したブックマークは含んでないか
-        $this->assertNotContains($bookMarks[0]['id'],$idList);
-        $this->assertNotContains($bookMarks[1]['id'],$idList);
+        $this->assertNotContains($bookMarks[0]->id,$idList);
+        $this->assertNotContains($bookMarks[1]->id,$idList);
     }
 
     // 期待
@@ -589,18 +587,18 @@ class BookMarkRepository_SearchTest extends TestCase
         $bookMarkList = $response['data'];
 
         $idList = [];
-        foreach ($bookMarkList as $data){ array_push($idList,$data['id']); }
+        foreach ($bookMarkList as $data){ array_push($idList,$data->id); }
 
 
         // 全部指定したユーザーのブックマークか
-        foreach ($bookMarkList as $data){ $this->assertEquals($data['user_id'],$this->userId); }
+        foreach ($bookMarkList as $data){ $this->assertEquals($data->user_id,$this->userId); }
 
         // 削除したブックマークは含んでないか
-        $this->assertNotContains($deleteBookMark['id'],$idList);
+        $this->assertNotContains($deleteBookMark->id,$idList);
 
         // ヒットするはずのブックマークを取ってきているか
-        $this->assertContains($hitBookMark1['id'], $idList);
-        $this->assertContains($hitBookMark2['id'], $idList);
+        $this->assertContains($hitBookMark1->id, $idList);
+        $this->assertContains($hitBookMark2->id, $idList);
 
     }
 
@@ -691,10 +689,10 @@ class BookMarkRepository_SearchTest extends TestCase
         $bookMarkList = $response['data'];
 
         $idList = [];
-        foreach ($bookMarkList as $data){ array_push($idList,$data['id']); }
+        foreach ($bookMarkList as $data){ array_push($idList,$data->id); }
 
         // 全部指定したユーザーのブックマークか
-        foreach ($bookMarkList as $data){ $this->assertEquals($data['user_id'],$this->userId); }
+        foreach ($bookMarkList as $data){ $this->assertEquals($data->user_id,$this->userId); }
 
         // 削除したブックマークは含んでないか
         $this->assertNotContains($deleteBookMark->id,$idList);
@@ -817,10 +815,10 @@ class BookMarkRepository_SearchTest extends TestCase
         $bookMarkList = $response['data'];
 
         $idList = [];
-        foreach ($bookMarkList as $data){ array_push($idList,$data['id']); }
+        foreach ($bookMarkList as $data){ array_push($idList,$data->id); }
 
         // 全部指定したユーザーのブックマークか
-        foreach ($bookMarkList as $data){ $this->assertEquals($data['user_id'],$this->userId); }
+        foreach ($bookMarkList as $data){ $this->assertEquals($data->user_id,$this->userId); }
 
         // 削除したブックマークは含んでないか
         $this->assertNotContains($deleteBookMark->id,$idList);
