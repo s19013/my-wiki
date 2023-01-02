@@ -104,8 +104,8 @@ class ArticleTagRepositoryTest extends TestCase
     }
 
     // 期待
-    // 引数2に指定した記事から引数1に指定されたタグを論理削除する
-    public function test_delete_紐づけたタグを論理削除する()
+    // 引数2に指定した記事から引数1に指定されたタグを物理削除する
+    public function test_delete_紐づけたタグを物理削除する()
     {
         Carbon::setTestNow(Carbon::now());
 
@@ -118,10 +118,9 @@ class ArticleTagRepositoryTest extends TestCase
 
         $this->articleTagRepository->delete($tag->id,$this->articleId);
 
-        $this->assertDatabaseHas('article_tags',[
+        $this->assertDatabaseMissing('article_tags',[
             'article_id' => $this->articleId,
             'tag_id'     => $tag->id,
-            'deleted_at' => Carbon::now(),
         ]);
     }
 
@@ -194,10 +193,9 @@ class ArticleTagRepositoryTest extends TestCase
 
         // 更新前のデータ(ちゃんと消されたか確認する)
         foreach($tags as $tag){
-            $this->assertDatabaseHas('article_tags',[
+            $this->assertDatabaseMissing('article_tags',[
                 'article_id' => $this->articleId,
                 'tag_id'     => $tag->id,
-                'deleted_at' => Carbon::now()
             ]);
         }
 
@@ -206,7 +204,6 @@ class ArticleTagRepositoryTest extends TestCase
             $this->assertDatabaseHas('article_tags',[
                 'article_id' => $this->articleId,
                 'tag_id'     => $tag->id,
-                'deleted_at' => null
             ]);
         }
     }
@@ -230,10 +227,9 @@ class ArticleTagRepositoryTest extends TestCase
         $this->articleTagRepository->update($this->articleId,[$newTags[0]->id,$newTags[1]->id]);
 
         // 更新前のデータ(ちゃんと消されたか確認する)
-        $this->assertDatabaseHas('article_tags',[
+        $this->assertDatabaseMissing('article_tags',[
             'article_id' => $this->articleId,
             'tag_id'     => null,
-            'deleted_at' => Carbon::now()
         ]);
 
         // 更新後のデータ
@@ -241,7 +237,6 @@ class ArticleTagRepositoryTest extends TestCase
             $this->assertDatabaseHas('article_tags',[
                 'article_id' => $this->articleId,
                 'tag_id'     => $tag->id,
-                'deleted_at' => null
             ]);
         }
     }
@@ -270,7 +265,6 @@ class ArticleTagRepositoryTest extends TestCase
             $this->assertDatabaseHas('article_tags',[
                 'article_id' => $this->articleId,
                 'tag_id'     => $tag->id,
-                'deleted_at' => null
             ]);
         }
 
@@ -279,7 +273,7 @@ class ArticleTagRepositoryTest extends TestCase
             $this->assertDatabaseHas('article_tags',[
                 'article_id' => $this->articleId,
                 'tag_id'     => $tag->id,
-                'deleted_at' => null
+
             ]);
         }
     }
@@ -305,23 +299,22 @@ class ArticleTagRepositoryTest extends TestCase
         $this->articleTagRepository->update($this->articleId,[$tags[1]->id,$newTags[0]->id,$newTags[1]->id]);
 
         // けしたやつ
-        $this->assertDatabaseHas('article_tags',[
+        $this->assertDatabaseMissing('article_tags',[
             'article_id' => $this->articleId,
             'tag_id'     => $tags[0]->id,
-            'deleted_at' => Carbon::now()
         ]);
         //残したやつ
         $this->assertDatabaseHas('article_tags',[
             'article_id' => $this->articleId,
             'tag_id'     => $tags[1]->id,
-            'deleted_at' => null
+
         ]);
 
         foreach($newTags as $tag){
             $this->assertDatabaseHas('article_tags',[
                 'article_id' => $this->articleId,
                 'tag_id'     => $tag->id,
-                'deleted_at' => null
+
             ]);
         }
     }
@@ -347,209 +340,188 @@ class ArticleTagRepositoryTest extends TestCase
     }
 
     // 期待
-    // procesOriginalArticleDoesNotHaveAnyTagsの帰り値がnullである
+    // nullのデータが消されて
+    // 新しいタグのデータが登録されている
     // 元のデータに変化がない
     // 条件
-    // 元の記事にタグがついている
-    public function test_procesOriginalArticleDoesNotHaveAnyTags_元の記事にタグがついている()
-    {
-        $tags = Tag::factory()->count(4)->create(['user_id' => $this->userId]);
-
-        foreach ($tags as $tag){ $this->articleTagRepository->store($tag->id,$this->articleId); }
-
-        $returnValue = $this->articleTagRepository->procesOriginalArticleDoesNotHaveAnyTags(
-            originalTagList:$this->articleTagRepository->getOrignalTag($this->articleId),
-            articleId:$this->articleId,
-            updatedTagList:[$tags[0]->id,$tags[1]->id,$tags[2]->id,$tags[3]->id]
-        );
-
-        // 何もしないのでnullが返される
-        $this->assertNull($returnValue);
-
-        // 登録されているタグに変化がない
-        foreach ($tags as $tag){
-            $this->assertDatabaseHas('article_tags',[
-                'article_id' => $this->articleId,
-                'tag_id'     => $tag->id,
-                'deleted_at' => null
-            ]);
-        }
-        // procesOriginalArticleDoesNotHaveAnyTagsでは新規タグの登録はしないからここではテストしない
-
-    }
-
-    // 期待
-    // procesOriginalArticleDoesNotHaveAnyTagsの帰り値がnullである
-    // tag_id = nullのデータが論理削除されている
-    // 条件
-    // 元の記事にタグがついていない,新しくタグを追加しようとしている
-    public function test_procesOriginalArticleDoesNotHaveAnyTags_元の記事にタグがついていない_新しくタグを追加()
-    {
-        // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
-
+    // 新しくタグがついていた
+    public function test_ProcessingifOriginalHasNoTags_新規タグあり(){
+        // tag_id = nullのデータ作成
         $this->articleTagRepository->store(null,$this->articleId);
 
-        $tags = Tag::factory()->count(2)->create(['user_id' => $this->userId]);
-
-        $returnValue = $this->articleTagRepository->procesOriginalArticleDoesNotHaveAnyTags(
-            originalTagList:$this->articleTagRepository->getOrignalTag($this->articleId),
-            articleId:$this->articleId,
-            updatedTagList:[$tags[0]->id,$tags[1]->id]
-        );
-
-        $this->assertNull($returnValue);
-
-        //nullのデータが論理削除されている
-        $this->assertDatabaseHas('article_tags',[
-            'article_id' => $this->articleId,
-            'tag_id'     => null,
-            'deleted_at' => Carbon::now()
+        // 適当にタグを作る
+        $tag = Tag::create([
+            'user_id' => $this->userId,
+            'name'    => 'test',
         ]);
 
-        // procesOriginalArticleDoesNotHaveAnyTagsでは新規タグの登録はしないからここではテストしない
+        $updateTagList = [$tag->id];
+
+        $this->articleTagRepository->ProcessingifOriginalHasNoTags($this->articleId,$updateTagList);
+
+        // nullのデータが消えているか
+        $this->assertDatabaseMissing('article_tags',[
+            'article_id' => $this->articleId,
+            'tag_id'     => null,
+
+        ]);
+
+        // 新しいタグが登録されているか
+        $this->assertDatabaseHas('article_tags',[
+            'article_id' => $this->articleId,
+            'tag_id'     => $updateTagList[0],
+
+        ]);
     }
 
     // 期待
-    // procesOriginalArticleDoesNotHaveAnyTagsの帰り値がTrueである
-    // tag_id = nullのデータが論理削除されている
     // 元のデータに変化がない
     // 条件
-    // 元の記事にタグがついていない_タグも追加しない
-    public function test_procesOriginalArticleDoesNotHaveAnyTags_元の記事にタグがついていない_タグも追加しない()
-    {
-        // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
-
+    // 新しくタグがついていなかった
+    public function test_ProcessingifOriginalHasNoTags_新規タグなし(){
+        // tag_id = nullのデータ作成
         $this->articleTagRepository->store(null,$this->articleId);
 
-        $returnValue = $this->articleTagRepository->procesOriginalArticleDoesNotHaveAnyTags(
-            originalTagList:$this->articleTagRepository->getOrignalTag($this->articleId),
-            articleId:$this->articleId,
-            updatedTagList:[]
-        );
+        $this->articleTagRepository->ProcessingifOriginalHasNoTags($this->articleId,[]);
 
-        $this->assertTrue($returnValue);
-
-        //元データに変化なし
+        // nullのデータが残っているか
         $this->assertDatabaseHas('article_tags',[
             'article_id' => $this->articleId,
             'tag_id'     => null,
-            'deleted_at' => null
-        ]);
-        // procesOriginalArticleDoesNotHaveAnyTagsでは新規タグの登録はしないからここではテストしない
-    }
 
-    // 期待
-    // procesOriginalArticleDeleteAllTagsの帰り値がnullである
-    // tag_id = nullのデータが新しく追加されている
-    // 条件
-    // 元の記事にタグをすべてけした,追加タグなし
-    public function test_procesOriginalArticleDeleteAllTags_追加タグなし_ついてたタグ全部けした()
-    {
-        // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
-
-        $tags = Tag::factory()->count(4)->create(['user_id' => $this->userId]);
-
-        $this->articleTagRepository->store($tags[0]->id,$this->articleId);
-        $this->articleTagRepository->store($tags[1]->id,$this->articleId);
-
-        $returnValue = $this->articleTagRepository->procesOriginalArticleDeleteAllTags(
-                originalTagList:$this->articleTagRepository->getOrignalTag($this->articleId),
-                articleId:$this->articleId,
-                isAddedTagListEmpty:True,
-                deletedTagList:[$tags[0]->id,$tags[1]->id]
-            );
-
-        $this->assertNull($returnValue);
-
-        // もとあったデータの論理削除は別の関数でやるのでここではチェックしない
-
-        // tag_id = nullのデータが追加されているか確認
-        $this->assertDatabaseHas('article_tags',[
-            'article_id' => $this->articleId,
-            'tag_id'     => null,
-            'deleted_at' => null
         ]);
     }
 
-
     // 期待
-    // procesOriginalArticleDeleteAllTagsの帰り値がnullである
-    // 条件
-    // 元の記事にタグをすべてけした,追加タグあり
-    public function test_procesOriginalArticleDeleteAllTags_追加タグあり_ついてたタグ全部けした()
-    {
-
-        $tags = Tag::factory()->count(4)->create(['user_id' => $this->userId]);
-
-        $this->articleTagRepository->store($tags[0]->id,$this->articleId);
-        $this->articleTagRepository->store($tags[1]->id,$this->articleId);
-
-        $returnValue = $this->articleTagRepository->procesOriginalArticleDeleteAllTags(
-                originalTagList:$this->articleTagRepository->getOrignalTag($this->articleId),
-                articleId:$this->articleId,
-                isAddedTagListEmpty:false,
-                deletedTagList:[$tags[0]->id,$tags[1]->id]
-            );
-
-        $this->assertNull($returnValue);
-
-        // もとあったデータの論理削除､新しいデータの追加は別の関数でやるのでここではチェックしない
-    }
-
-    // 期待
-    // procesOriginalArticleDeleteAllTagsの帰り値がnullである
+    // 新しく追加されたタグのデータがある
     // 元のデータに変化がない
     // 条件
-    // 元の記事にタグがついてない,追加タグなし
-    public function test_procesOriginalArticleDeleteAllTags_追加タグなし_タグついてない()
+    // 削除されたタグなし
+    // 新しく追加されたタグあり
+    public function test_ProcessingifOriginalHasAnyTags_削除されたタグなし_新しく追加されたタグあり()
     {
-        $this->articleTagRepository->store(null,$this->articleId);
+        // もともとついていたタグ
+        $oldTag = Tag::factory()->create(['user_id' => $this->userId]);
 
-        $returnValue = $this->articleTagRepository->procesOriginalArticleDeleteAllTags(
-                originalTagList:$this->articleTagRepository->getOrignalTag($this->articleId),
-                articleId:$this->articleId,
-                isAddedTagListEmpty:true,
-                deletedTagList:[]
-            );
 
-        $this->assertNull($returnValue);
+        ArticleTag::create([
+            'article_id' => $this->articleId,
+            'tag_id'     => $oldTag->id
+        ]);
 
-        // 元のデータに変化がない
+        // 新しくつけるタグ
+        $newTag = Tag::factory()->create(['user_id' => $this->userId]);
+
+        $this->articleTagRepository->ProcessingifOriginalHasAnyTags($this->articleId,[$oldTag->id],[$oldTag->id,$newTag->id]);
+
+        // 古いデータが残っている
         $this->assertDatabaseHas('article_tags',[
             'article_id' => $this->articleId,
-            'tag_id'     => null,
-            'deleted_at' => null
+            'tag_id'     => $oldTag->id,
+
+        ]);
+
+        // 新しいデータが登録されている
+        $this->assertDatabaseHas('article_tags',[
+            'article_id' => $this->articleId,
+            'tag_id'     => $newTag->id,
+
         ]);
     }
 
     // 期待
-    // procesOriginalArticleDeleteAllTagsの帰り値がnullである
     // 元のデータに変化がない
     // 条件
-    // 元の記事にタグがついてない,追加タグなし
-    public function test_procesOriginalArticleDeleteAllTags_追加タグあり_タグついてない()
+    // 削除されたタグなし
+    // 新しく追加されたタグなし
+    public function test_ProcessingifOriginalHasAnyTags_削除されたタグなし_新しく追加されたタグなし()
     {
-        $this->articleTagRepository->store(null,$this->articleId);
+        // もともとついていたタグ
+        $oldTag = Tag::factory()->create(['user_id' => $this->userId]);
 
-        $returnValue = $this->articleTagRepository->procesOriginalArticleDeleteAllTags(
-                originalTagList:$this->articleTagRepository->getOrignalTag($this->articleId),
-                articleId:$this->articleId,
-                isAddedTagListEmpty:false,
-                deletedTagList:[]
-            );
 
-        $this->assertNull($returnValue);
+        ArticleTag::create([
+            'article_id' => $this->articleId,
+            'tag_id'     => $oldTag->id
+        ]);
 
-        // 元のデータに変化がない
+        $this->articleTagRepository->ProcessingifOriginalHasAnyTags($this->articleId,[$oldTag->id],[$oldTag->id]);
+
+        // 古いデータが残っている
+        $this->assertDatabaseHas('article_tags',[
+            'article_id' => $this->articleId,
+            'tag_id'     => $oldTag->id,
+
+        ]);
+    }
+
+    // 期待
+    // もともとついていたタグのデータが削除されれる
+    // 新しく追加されたタグのデータがある
+    // 条件
+    // 削除されたタグあり
+    // 新しく追加されたタグあり
+    public function test_ProcessingifOriginalHasAnyTags_削除されたタグあり_新しく追加されたタグあり()
+    {
+        // もともとついていたタグ
+        $oldTag = Tag::factory()->create(['user_id' => $this->userId]);
+
+        ArticleTag::create([
+            'article_id' => $this->articleId,
+            'tag_id'     => $oldTag->id
+        ]);
+
+        // 新しくつけるタグ
+        $newTag = Tag::factory()->create(['user_id' => $this->userId]);
+
+        $this->articleTagRepository->ProcessingifOriginalHasAnyTags($this->articleId,[$oldTag->id],[$newTag->id]);
+
+        // 古いデータが消えているか
+        $this->assertDatabaseMissing('article_tags',[
+            'article_id' => $this->articleId,
+            'tag_id'     => $oldTag->id,
+
+        ]);
+
+        // 新しいデータが登録されている
+        $this->assertDatabaseHas('article_tags',[
+            'article_id' => $this->articleId,
+            'tag_id'     => $newTag->id,
+
+        ]);
+    }
+
+    // 期待
+    // もともとついていたタグのデータが削除されれる
+    // 何もタグがついていないというデータが追加される
+    // 条件
+    // 削除されたタグあり
+    // 新しく追加されたタグなし
+    public function test_ProcessingifOriginalHasAnyTags_削除されたタグあり_新しく追加されたタグなし()
+    {
+        // もともとついていたタグ
+        $oldTag = Tag::factory()->create(['user_id' => $this->userId]);
+
+        ArticleTag::create([
+            'article_id' => $this->articleId,
+            'tag_id'     => $oldTag->id
+        ]);
+
+        $this->articleTagRepository->ProcessingifOriginalHasAnyTags($this->articleId,[$oldTag->id],[]);
+
+        // 古いデータが消えているか
+        $this->assertDatabaseMissing('article_tags',[
+            'article_id' => $this->articleId,
+            'tag_id'     => $oldTag->id,
+
+        ]);
+
+        // 何もタグがついていないというデータが追加される
         $this->assertDatabaseHas('article_tags',[
             'article_id' => $this->articleId,
             'tag_id'     => null,
-            'deleted_at' => null
+
         ]);
-        // 新しいデータの追加は別の関数でやるのでここではチェックしない
     }
 }
 
