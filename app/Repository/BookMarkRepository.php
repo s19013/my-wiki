@@ -45,8 +45,7 @@ class BookMarkRepository
     public  function delete($bookMarkId)
     {
         // 論理削除
-        BookMark::where('id','=',$bookMarkId)
-        ->update(['deleted_at' => Carbon::now()]);
+        BookMark::where('id','=',$bookMarkId)->delete();
     }
 
     //指定された記事だけを取ってくる
