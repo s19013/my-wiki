@@ -13,7 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        // まずは外部キーを一旦削除
+        // ユーザーが退会したら
+        // そのユーザーが作ったブックマーク､記事､タグが消えるようにする
         Schema::table('book_marks', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
             $table->foreign('user_id')
@@ -38,6 +39,8 @@ return new class extends Migration
             ->cascadeOnDelete();
         });
 
+        // ブックマークが物理削除されたら
+        // 中間テーブルからそのブックマークに関係があるデータを消す
         Schema::table('book_mark_tags', function (Blueprint $table) {
             $table->dropForeign(['book_mark_id']);
             $table->foreign('book_mark_id')
@@ -52,6 +55,8 @@ return new class extends Migration
             ->cascadeOnDelete();
         });
 
+        // 記事が物理削除されたら
+        // 中間テーブルからその記事に関係があるデータを消す
         Schema::table('article_tags', function (Blueprint $table) {
             $table->dropForeign(['article_id']);
             $table->foreign('article_id')

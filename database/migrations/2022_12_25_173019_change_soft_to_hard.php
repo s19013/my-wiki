@@ -40,6 +40,7 @@ return new class extends Migration
         }
 
 
+        // 物理削除に変更する
         Schema::table('article_tags', function (Blueprint $table) {
             $table->dropColumn('deleted_at');
         });
