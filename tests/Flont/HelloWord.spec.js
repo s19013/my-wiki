@@ -3,7 +3,7 @@ import HelloWorld from '../../resources/js/Pages/test.vue' //jsconfig.jsonの`@/
 import { test, expect } from 'vitest'
 
 
-test('初期表示', () => {
+test('テストのテスト', () => {
   const wrapper = mount(HelloWorld, {
     props: {
     //   msg: 'hello',
