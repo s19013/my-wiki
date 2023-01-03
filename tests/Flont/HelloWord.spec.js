@@ -10,5 +10,5 @@ test('テストのテスト', () => {
     },
   })
 
-  expect(wrapper.text()).toContain('aaa')
+  expect(wrapper.html()).toContain('aaa')
 })
