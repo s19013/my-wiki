@@ -2,6 +2,7 @@
 
 import { defineConfig } from 'vite'
 import Vue from '@vitejs/plugin-vue'
+import path from 'path'
 
 export default defineConfig({
   plugins: [
@@ -10,5 +11,10 @@ export default defineConfig({
   test: {
     global: true,
     environment: 'happy-dom',
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, "resources/js/")
+    },
   },
 })
