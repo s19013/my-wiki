@@ -57,7 +57,7 @@ class BookMarkValidationTest extends TestCase
 
         // json
         $response->assertJson([
-            'errors' => ["bookMarkUrl" => ["urlを入力してください"]],
+            'messages' => ["bookMarkUrl" => ["urlを入力してください"]],
             ]);
 
     }
@@ -79,7 +79,7 @@ class BookMarkValidationTest extends TestCase
 
         // json
         $response->assertJson([
-            'errors' => ["bookMarkUrl" => ["url形式で入力してください"]],
+            'messages' => ["bookMarkUrl" => ["url形式で入力してください"]],
             ]);
 
     }
@@ -101,7 +101,7 @@ class BookMarkValidationTest extends TestCase
 
         // json
         $response->assertJson([
-            'errors' => ["bookMarkTitle" => ["126文字以内で入力してください"]],
+            'messages' => ["bookMarkTitle" => ["126文字以内で入力してください"]],
             ]);
 
     }
@@ -123,7 +123,7 @@ class BookMarkValidationTest extends TestCase
 
         // json
         $response->assertJson([
-            'errors' => ["bookMarkUrl" => ["urlを入力してください"]],
+            'messages' => ["bookMarkUrl" => ["urlを入力してください"]],
             ]);
 
     }
@@ -145,7 +145,7 @@ class BookMarkValidationTest extends TestCase
 
         // json
         $response->assertJson([
-            'errors' => ["bookMarkUrl" => ["url形式で入力してください"]],
+            'messages' => ["bookMarkUrl" => ["url形式で入力してください"]],
             ]);
 
     }
@@ -167,7 +167,7 @@ class BookMarkValidationTest extends TestCase
 
         // json
         $response->assertJson([
-            'errors' => ["bookMarkTitle" => ["126文字以内で入力してください"]],
+            'messages' => ["bookMarkTitle" => ["126文字以内で入力してください"]],
             ]);
 
     }

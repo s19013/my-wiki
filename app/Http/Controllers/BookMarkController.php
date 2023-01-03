@@ -117,9 +117,7 @@ class BookMarkController extends Controller
 
     public function delete($bookMarkId)
     {
-        // CSRFトークンを再生成して、二重送信対策
-        // deleteリクエストならここの部分が必要ない?
-        // $request->session()->regenerateToken();
+        // deleteリクエストならCSRFトークンを再生成して、二重送信対策の部分が必要ない?
 
         // 消そうとしてるブックマークを登録したユーザーのidと
         // 処理を実行しようとしているユーザーが同じか確かめる

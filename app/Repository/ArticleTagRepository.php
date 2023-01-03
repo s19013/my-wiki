@@ -31,20 +31,17 @@ class ArticleTagRepository
         $originalTagList = $this->getOrignalTag($articleId);
 
         // 更新前のブックマークにタグが1つでもついていたかいなかったかで処理を分ける
-        if (empty($originalTagList)) {$this->ProcessingifOriginalHasNoTags($articleId,$updatedTagList,$originalTagList);}
+        if (empty($originalTagList)) {$this->ProcessingifOriginalHasNoTags($articleId,$updatedTagList);}
         else {$this->ProcessingifOriginalHasAnyTags($articleId,$originalTagList,$updatedTagList);}
     }
 
-    // タグが1つもついてなかった
-    public function ProcessingifOriginalHasNoTags($articleId,$updatedTagList,$originalTagList)
+    // 元のデータにタグが1つもついてなかった
+    public function ProcessingifOriginalHasNoTags($articleId,$updatedTagList)
     {
-        // 追加されたタグ
-        $addedTagList = array_diff($updatedTagList, $originalTagList);
-
         // なにか新しくタグが紐づけられていた場合
-        if (!empty($addedTagList)) {
+        if (!empty($updatedTagList)) {
             // 追加
-            foreach($addedTagList as $tag) {
+            foreach($updatedTagList as $tag) {
                 $this->store(
                     tagId:$tag,
                     articleId:$articleId,

@@ -95,8 +95,8 @@
                     <!-- 新規タグ作成 -->
                     <div class="areaCreateNewTag" v-show="createNewTagFlag">
                         <p
-                            v-show="errors.name.length>0"
-                            v-for ="message of errors.name" :key="message"
+                            v-show="errorMessages.name.length>0"
+                            v-for ="message of errorMessages.name" :key="message"
                             class ="global_css_error"
                         >
                             <v-icon>mdi-alert-circle-outline</v-icon>
@@ -155,7 +155,7 @@ export default{
         localDisableFlag:false,
 
         // errorFlag
-        errors:{tag:[]},
+        errorMessages:{name:[]},
 
         // tagList
         checkedTagList     :[],
@@ -211,8 +211,8 @@ export default{
             })
             .catch((errors) =>{
                 // ダブりエラー
-                this.errors =errors.response.data.errors
-                console.log(errors.response)
+                this.errorMessages =errors.response.data.messages
+                console.log(this.errorMessages);
             })
             this.localDisableFlag = false
         },

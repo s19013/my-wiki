@@ -28,7 +28,7 @@ class TagRepository
     // delete
     public function delete($tagId)
     {
-        Tag::where('id','=',$tagId)->update(['deleted_at' => Carbon::now()]);
+        Tag::where('id','=',$tagId)->delete();
     }
 
     //タグを検索する
