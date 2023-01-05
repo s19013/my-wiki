@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div class="TagDialog">
         <!-- ダイアログを呼び出すためのボタン -->
-        <div class="dialogAndList">
+        <div class="buttonAndList">
             <v-btn color="submit"
                 size="small"
                 class="global_css_haveIconButton_Margin"
@@ -397,11 +397,10 @@ export default{
             grid-column:3/4
         }
     }
-    .dialogAndList{
+    .buttonAndList{
         display:grid;
         grid-template-rows:auto auto;
         grid-template-columns:5fr 1fr;
-        margin:1.2rem 0;
         .tagList{
             grid-row: 1/3;
             grid-column: 1/2;
@@ -415,10 +414,9 @@ export default{
 
 @media (max-width: 600px){
 .tagDialog{label{font-size: 1.2rem;}}
-.dialogAndList{
+.buttonAndList{
         display:grid;
         grid-template-rows:auto auto;
-        margin:1.2rem 0;
         .tagList{
             grid-row: 2/3;
         }
