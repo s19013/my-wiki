@@ -44,21 +44,22 @@
 
                 <!-- 操作ボタン -->
                 <div class="control">
+                    <div class="existCheckbox">
+                        <!-- この部分を既存チェックボックスという -->
+                        <input type="checkbox" id="checked" v-model="onlyCheckedFlag">
+                        <label for="checked">チェックがついているタグだけを表示</label>
+                    </div>
                     <v-btn
                         variant="outlined"
                         color="primary"
                         size="small"
+                        v-show="onlyCheckedFlag"
                         :disabled = "localDisableFlag"
                         :loading  = "localDisableFlag"
                         @click.stop="clearAllCheck"
                         >
                             チェックをすべて外す
                     </v-btn>
-                    <div class="existCheckbox">
-                        <!-- この部分を既存チェックボックスという -->
-                        <input type="checkbox" id="checked" v-model="onlyCheckedFlag">
-                        <label for="checked">チェックがついているタグだけを表示</label>
-                    </div>
                 </div>
 
                 <!-- loadingアニメ -->
@@ -375,36 +376,40 @@ export default{
 
 <style lang="scss" scoped>
 .tagDialog{
-    .v-list{
-        padding:0;
-        .v-list-item{padding:0 1rem;}
-    }
     label{
-        font-size: 1.5rem;
-        padding-left: 0.5rem;
-        width:100%;
-    }
-    .areaCreateNewTag{
-        margin:1rem 0 0.5rem 0;
-        button{margin-top: 0.8rem;}
+        margin-left:0.5rem;
+        width:100%
     }
     .clooseButton{margin-bottom: 0.5rem;}
     .existCheckbox{
         label{font-size: 1.1rem;}
         margin:0.5rem 0;
     }
+    .v-list{
+        padding:0;
+        .v-list-item{padding:0 0.5rem;}
+    }
+    .areaCreateNewTag{
+        margin:1rem 0 0.5rem 0;
+        button{margin-top: 0.8rem;}
+    }
 }
 
 @media (min-width: 601px){
     .control{
         display:grid;
-        grid-template-columns:0.6fr 0.1fr 1fr;
-        .v-btn{grid-column:1/2}
+        grid-template-rows:1fr;
+        grid-template-columns:1fr 0.1fr 1fr;
         .existCheckbox{
-            text-align: right;
-            grid-column:3/4
+            grid-row:1;
+            grid-column:1/2;
+        }
+        .v-btn{
+            grid-row:1;
+            grid-column:3/4;
         }
     }
+    .v-list-item{ font-size: 1.2rem; }
     .buttonAndList{
         display:grid;
         grid-template-rows:auto auto;
@@ -421,7 +426,10 @@ export default{
 }
 
 @media (max-width: 600px){
-.tagDialog{label{font-size: 1.2rem;}}
+.tagDialog{
+    .control .v-btn{ margin:0.5rem 0 }
+    .v-list-item{ font-size: 1.4rem; }
+}
 .buttonAndList{
         display:grid;
         grid-template-rows:auto auto;
