@@ -18,7 +18,6 @@
 
             <TagDialog
                 ref="tagDialog"
-                class="mb-10"
                 text = "検索するタグ"
                 :originalCheckedTagList="old.tagList"
                 :searchOnly="true"/>
@@ -130,5 +129,6 @@ export default{
 
 <style lang="scss" scoped>
 .content{margin-bottom: 1.2rem;}
-details{margin-bottom: 0.5rem;}
+.TagDialog{margin:1rem 0;}
+.DetailComponent{margin:1rem 0 ;}
 </style>
