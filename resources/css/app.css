@@ -25,7 +25,8 @@ body{
 
 .global_css_Dialog{
     background: #e1e1e1;
-    max-height: 95vh;
+    min-height: 80vh;
+    max-height: 100vh;
     width: 50vw;
     padding: 10px;
 }
@@ -37,13 +38,15 @@ body{
 @media (max-width: 960px){
     .Dialog{
         background: #e1e1e1;
-        max-height: 95vh;
+        min-height: 80vh;
+        max-height: 100vh;
         width: 85vw;
         padding: 10px;
     }
     .global_css_Dialog{
         background: #e1e1e1;
-        max-height: 95vh;
+        min-height: 80vh;
+        max-height: 100vh;
         width: 85vw;
         padding: 10px;
     }
