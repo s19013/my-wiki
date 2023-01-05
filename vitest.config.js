@@ -11,10 +11,12 @@ export default defineConfig({
   test: {
     global: true,
     environment: 'happy-dom',
+    setupFiles: ['./tests/Flont/setup.js'],
   },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, "resources/js/")
     },
   },
+  css: false,
 })
