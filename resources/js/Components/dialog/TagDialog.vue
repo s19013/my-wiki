@@ -84,6 +84,7 @@
                     <v-btn
                         class="global_css_haveIconButton_Margin my-4 global_css_longButton"
                         color="submit"
+                        size="small"
                         v-show="!createNewTagFlag"
                         :disabled="localDisableFlag"
                         :loading ="localDisableFlag"
@@ -117,6 +118,7 @@
                         <v-btn
                             class="global_css_haveIconButton_Margin global_css_longButton"
                             color="#BBDEFB"
+                            size="small"
                             elevation="2"
                             :disabled="localDisableFlag"
                             :loading ="localDisableFlag"
@@ -200,6 +202,9 @@ export default{
             .then((res)=>{
                 //検索欄をリセット
                 this.$refs.SearchField.resetKeyword()
+
+                // エラーをリセット
+                this.errorMessages={name:[]}
 
                 // 読み込み直し
                 this.isFirstSearchFlag = true
@@ -313,6 +318,9 @@ export default{
             // チェックをつけたタグをソード
             this.checkedTagList = this.checkedTagList.sort(this.sortArrayByName)
 
+            // エラーをリセット
+            this.errorMessages={name:[]}
+
             this.$emit('closedTagDialog',this.checkedTagList)
         },
         //タグを名前順でソート
@@ -377,7 +385,7 @@ export default{
         width:100%;
     }
     .areaCreateNewTag{
-        margin:1rem 0;
+        margin:1rem 0 0.5rem 0;
         button{margin-top: 0.8rem;}
     }
     .clooseButton{margin-bottom: 0.5rem;}
