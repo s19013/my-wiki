@@ -13,8 +13,6 @@
                     </div>
                 </template>
             </div>
-            <!-- <input type="radio" id="option3" value="titleAndBody" v-model="checked" />
-            <label for="option3">タイトルまたは本文(低速)</label> -->
         </details>
     </div>
 </template>
@@ -62,10 +60,14 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.options{
+details{
+    text-align: right;
+    .options{
         display: flex;
+        justify-content: flex-end;
         gap:1rem;
         .option{width:fit-content}
     }
+}
 input,label,summary{ cursor: pointer; }
 </style>
