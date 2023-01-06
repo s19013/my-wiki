@@ -113,30 +113,47 @@ class ArticleTagRepositoryTest extends TestCase
     // 引数1に指定した記事に紐付けられたタグの名前とタグのidを取得
     // 条件
     // 登録時に何かしらのタグを紐づけた
+    // 削除したタグを取ってこない
     public function test_serveTagsRelatedToArticle_登録時にタグを紐づけた場合()
     {
         $tags =Tag::factory()->count(5)->create([
             'user_id' => $this->userId,
         ]);
 
+        $deletedTags =Tag::factory()->count(3)->create([
+            'user_id' => $this->userId,
+        ]);
+
+        // 登録
         foreach ($tags as $tag) { $this->articleTagRepository->store($tag->id,$this->articleId); }
+        foreach ($deletedTags as $tag) { $this->articleTagRepository->store($tag->id,$this->articleId); }
+
+        // 削除
+        foreach ($deletedTags as $tag) { $this->articleTagRepository->delete($tag->id,$this->articleId); }
 
         // タグを取得
         $articleTags = $this->articleTagRepository->serveTagsRelatedToArticle($this->articleId,$this->userId);
 
         //名前とidが一緒かどうか
-
         $IdList = [];
-
-        foreach ($articleTags as $articleTag){
-            array_push($IdList,$articleTag->id);
-        }
+        foreach ($articleTags as $articleTag){array_push($IdList,$articleTag->id);}
 
         $nameList = [];
         foreach ($articleTags as $articleTag){ array_push($nameList,$articleTag->name);}
+
+        // 個数確認
+        $this->assertSame(count($tags),count($IdList));
+        $this->assertSame(count($tags),count($nameList));
+
+        //
         foreach ($tags as $tag){
             $this->assertContains($tag->id,$IdList);
             $this->assertContains($tag->name,$nameList);
+        }
+
+        foreach ($deletedTags as $tag){
+            $this->assertNotContains($tag->id,$IdList);
+            $this->assertNotContains($tag->name,$nameList);
         }
     }
 

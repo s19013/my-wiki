@@ -116,8 +116,16 @@ class BookMarkTagRepositoryTest extends TestCase
         $tags =Tag::factory()->count(5)->create([
             'user_id' => $this->userId,
         ]);
+        $deletedTags =Tag::factory()->count(3)->create([
+            'user_id' => $this->userId,
+        ]);
 
+        // 登録
         foreach ($tags as $tag) { $this->bookMarkTagRepository->store($tag->id,$this->bookMarkId); }
+        foreach ($deletedTags as $tag) { $this->bookMarkTagRepository->store($tag->id,$this->bookMarkId); }
+
+        //
+        foreach ($deletedTags as $tag) { $this->bookMarkTagRepository->delete($tag->id,$this->bookMarkId); }
 
         // タグを取得
         $bookMarkTags = $this->bookMarkTagRepository->serveTagsRelatedToBookMark($this->bookMarkId,$this->userId);
@@ -130,9 +138,19 @@ class BookMarkTagRepositoryTest extends TestCase
 
         $nameList = [];
         foreach ($bookMarkTags as $bookMarkTag){ array_push($nameList,$bookMarkTag->name);}
+
+        // 個数確認
+        $this->assertSame(count($tags),count($IdList));
+        $this->assertSame(count($tags),count($nameList));
+
         foreach ($tags as $tag){
             $this->assertContains($tag->id,$IdList);
             $this->assertContains($tag->name,$nameList);
+        }
+
+        foreach ($deletedTags as $tag){
+            $this->assertNotContains($tag->id,$IdList);
+            $this->assertNotContains($tag->name,$nameList);
         }
     }
 
