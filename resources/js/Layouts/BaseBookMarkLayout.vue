@@ -137,7 +137,6 @@ export default {
         },
     },
     methods: {
-        switchAlreadyExistErrorFlag(){this.alreadyExistErrorFlag = !this.alreadyExistErrorFlag},
         switchDisabledFlag(){this.disabledFlag = !this.disabledFlag},
         // 本文送信
         submit(){
