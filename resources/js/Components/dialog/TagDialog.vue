@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div class="TagDialog">
         <!-- ダイアログを呼び出すためのボタン -->
-        <div class="dialogAndList">
+        <div class="buttonAndList">
             <v-btn color="submit"
                 size="small"
                 class="global_css_haveIconButton_Margin"
@@ -44,21 +44,22 @@
 
                 <!-- 操作ボタン -->
                 <div class="control">
+                    <div class="existCheckbox">
+                        <!-- この部分を既存チェックボックスという -->
+                        <input type="checkbox" id="checked" v-model="onlyCheckedFlag">
+                        <label for="checked">チェックがついているタグだけを表示</label>
+                    </div>
                     <v-btn
                         variant="outlined"
                         color="primary"
                         size="small"
+                        v-show="onlyCheckedFlag"
                         :disabled = "localDisableFlag"
                         :loading  = "localDisableFlag"
                         @click.stop="clearAllCheck"
                         >
                             チェックをすべて外す
                     </v-btn>
-                    <div class="existCheckbox">
-                        <!-- この部分を既存チェックボックスという -->
-                        <input type="checkbox" id="checked" v-model="onlyCheckedFlag">
-                        <label for="checked">チェックがついているタグだけを表示</label>
-                    </div>
                 </div>
 
                 <!-- loadingアニメ -->
@@ -84,6 +85,7 @@
                     <v-btn
                         class="global_css_haveIconButton_Margin my-4 global_css_longButton"
                         color="submit"
+                        size="small"
                         v-show="!createNewTagFlag"
                         :disabled="localDisableFlag"
                         :loading ="localDisableFlag"
@@ -117,6 +119,7 @@
                         <v-btn
                             class="global_css_haveIconButton_Margin global_css_longButton"
                             color="#BBDEFB"
+                            size="small"
                             elevation="2"
                             :disabled="localDisableFlag"
                             :loading ="localDisableFlag"
@@ -200,6 +203,9 @@ export default{
             .then((res)=>{
                 //検索欄をリセット
                 this.$refs.SearchField.resetKeyword()
+
+                // エラーをリセット
+                this.errorMessages={name:[]}
 
                 // 読み込み直し
                 this.isFirstSearchFlag = true
@@ -313,6 +319,9 @@ export default{
             // チェックをつけたタグをソード
             this.checkedTagList = this.checkedTagList.sort(this.sortArrayByName)
 
+            // エラーをリセット
+            this.errorMessages={name:[]}
+
             this.$emit('closedTagDialog',this.checkedTagList)
         },
         //タグを名前順でソート
@@ -367,41 +376,44 @@ export default{
 
 <style lang="scss" scoped>
 .tagDialog{
-    .v-list{
-        padding:0;
-        .v-list-item{padding:0 1rem;}
-    }
     label{
-        font-size: 1.5rem;
-        padding-left: 0.5rem;
-        width:100%;
-    }
-    .areaCreateNewTag{
-        margin:1rem 0;
-        button{margin-top: 0.8rem;}
+        margin-left:0.5rem;
+        width:100%
     }
     .clooseButton{margin-bottom: 0.5rem;}
     .existCheckbox{
         label{font-size: 1.1rem;}
         margin:0.5rem 0;
     }
+    .v-list{
+        padding:0;
+        .v-list-item{padding:0 0.5rem;}
+    }
+    .areaCreateNewTag{
+        margin:1rem 0 0.5rem 0;
+        button{margin-top: 0.8rem;}
+    }
 }
 
 @media (min-width: 601px){
     .control{
         display:grid;
-        grid-template-columns:0.6fr 0.1fr 1fr;
-        .v-btn{grid-column:1/2}
+        grid-template-rows:1fr;
+        grid-template-columns:1fr 0.1fr 1fr;
         .existCheckbox{
-            text-align: right;
-            grid-column:3/4
+            grid-row:1;
+            grid-column:1/2;
+        }
+        .v-btn{
+            grid-row:1;
+            grid-column:3/4;
         }
     }
-    .dialogAndList{
+    .v-list-item{ font-size: 1.2rem; }
+    .buttonAndList{
         display:grid;
         grid-template-rows:auto auto;
         grid-template-columns:5fr 1fr;
-        margin:1.2rem 0;
         .tagList{
             grid-row: 1/3;
             grid-column: 1/2;
@@ -414,11 +426,13 @@ export default{
 }
 
 @media (max-width: 600px){
-.tagDialog{label{font-size: 1.2rem;}}
-.dialogAndList{
+.tagDialog{
+    .control .v-btn{ margin:0.5rem 0 }
+    .v-list-item{ font-size: 1.4rem; }
+}
+.buttonAndList{
         display:grid;
         grid-template-rows:auto auto;
-        margin:1.2rem 0;
         .tagList{
             grid-row: 2/3;
         }

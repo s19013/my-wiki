@@ -58,10 +58,10 @@ form{
     grid-template-columns:5fr 1fr;
     margin-top: 10px;
     margin-bottom: 20px;
+    gap:1rem;
     .v-input{grid-column: 1/2;}
     .v-btn  {
         grid-column: 2/3;
-        margin:0 1rem;
         width:90%;
     }
 }

@@ -198,4 +198,5 @@ export default {
     margin: 0.5rem 0;
     justify-content: flex-start;
 }
+.TagDialog{margin:1rem 0;}
 </style>

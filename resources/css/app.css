@@ -15,7 +15,7 @@ body{
 /* .global_css_haveIconButton_Margin { margin-top:0.5rem ; } */
 
 /* アイコンありのボタンの文字の左にマージンを足す */
-.global_css_haveIconButton_Margin p{margin-left: 0.5rem;}
+.global_css_haveIconButton_Margin p{margin-left: 0.4rem;}
 
 .global_css_error{
     font-size: 1.2rem;
@@ -25,7 +25,8 @@ body{
 
 .global_css_Dialog{
     background: #e1e1e1;
-    max-height: 95vh;
+    min-height: 60vh;
+    max-height: 100vh;
     width: 50vw;
     padding: 10px;
 }
@@ -36,15 +37,10 @@ body{
 
 @media (max-width: 960px){
     .Dialog{
-        background: #e1e1e1;
-        max-height: 95vh;
+        min-height: 80vh;
         width: 85vw;
-        padding: 10px;
     }
     .global_css_Dialog{
-        background: #e1e1e1;
-        max-height: 95vh;
         width: 85vw;
-        padding: 10px;
     }
 }
