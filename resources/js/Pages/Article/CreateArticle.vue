@@ -27,14 +27,16 @@ export default {
             tagList,
         })
         {
-            this.$refs.BaseArticleLayout.switchDisabledFlag()
             await axios.post('/api/article/store',{
                 articleTitle:articleTitle,
                 articleBody :articleBody,
                 tagList     :tagList,
                 timezone    :Intl.DateTimeFormat().resolvedOptions().timeZone
             })
-            .then((res)=>{this.$inertia.get('/Article/Search')})
+            .then((res)=>{
+                this.$refs.BaseArticleLayout.switchDisabledFlag()
+                this.$inertia.get('/Article/Search')
+            })
             .catch((errors) => {
                 this.$refs.BaseArticleLayout.switchDisabledFlag()
                 this.$refs.BaseArticleLayout.setErrors(errors.response)

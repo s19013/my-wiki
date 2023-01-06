@@ -38,7 +38,6 @@ export default {
             bookMarkUrl,
             tagList,
         }){
-            this.$refs.BaseBookMarkLayout.switchDisabledFlag()
             await axios.put('/api/bookmark/update',{
                 bookMarkId    :this.originalBookMark.id,
                 bookMarkTitle :bookMarkTitle,
@@ -57,7 +56,6 @@ export default {
         },
         deleteBookMark() {
             // 消す処理
-            this.$refs.BaseBookMarkLayout.switchDisabledFlag()
             axios.delete('/api/bookmark/' + this.originalBookMark.id)
             .then((res)=>{
                 this.$refs.BaseBookMarkLayout.switchDisabledFlag()

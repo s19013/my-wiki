@@ -28,7 +28,6 @@ export default {
             articleBody,
             tagList,
         }){
-            this.$refs.BaseArticleLayout.switchDisabledFlag()
             await axios.put('/api/article/update',{
                 articleId   :this.originalArticle.id,
                 articleTitle:articleTitle,
@@ -36,7 +35,10 @@ export default {
                 tagList     :tagList,
                 timezone    :Intl.DateTimeFormat().resolvedOptions().timeZone
             })
-            .then((res)=>{this.$inertia.get('/Article/Search')})
+            .then((res)=>{
+                this.$refs.BaseArticleLayout.switchDisabledFlag()
+                this.$inertia.get('/Article/Search')
+            })
             .catch((errors) => {
                 this.$refs.BaseArticleLayout.switchDisabledFlag()
                 this.$refs.BaseArticleLayout.setErrors(errors.response)
@@ -44,10 +46,12 @@ export default {
             })
         },
         deleteArticle() {
-            this.$refs.BaseArticleLayout.switchDisabledFlag()
             // 消す処理
             axios.delete('/api/article/' + this.originalArticle.id)
-            .then((res)=>{this.$inertia.get('/Article/Search')})
+            .then((res)=>{
+                this.$refs.BaseArticleLayout.switchDisabledFlag()
+                this.$inertia.get('/Article/Search')
+            })
             .catch((errors) => {
                 this.$refs.BaseArticleLayout.switchDisabledFlag()
                 console.log(errors);
