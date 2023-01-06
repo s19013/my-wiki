@@ -128,13 +128,17 @@ export default {
         switchDisabledFlag(){this.disabledFlag = !this.disabledFlag},
         // 本文送信
         submit(){
+            this.disabledFlag = true
             this.$emit('triggerSubmit',{
                 articleTitle:this.articleTitle,
                 articleBody :this.$refs.articleBody.serveBody(),
                 tagList     :this.$refs.tagDialog.serveCheckedTagList()
             })
         },
-        deleteArticle() { this.$emit('triggerDeleteArticle') },
+        deleteArticle() {
+            this.disabledFlag = true
+            this.$emit('triggerDeleteArticle')
+        },
         focusToBody(){this.$refs.articleBody.focusToBody()},
         changeTab(){this.$refs.articleBody.changeTab()},
         // エラーを受け取る

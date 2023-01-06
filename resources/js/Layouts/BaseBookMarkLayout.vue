@@ -140,13 +140,17 @@ export default {
         switchDisabledFlag(){this.disabledFlag = !this.disabledFlag},
         // 本文送信
         submit(){
+            this.disabledFlag = true
             this.$emit('triggerSubmit',{
                 bookMarkTitle:this.bookMarkTitle,
                 bookMarkUrl  :this.bookMarkUrl,
                 tagList      :this.$refs.tagDialog.serveCheckedTagList()
             })
         },
-        deleteBookMark() {this.$emit('triggerDeleteBookMark')},
+        deleteBookMark() {
+            this.disabledFlag = true
+            this.$emit('triggerDeleteBookMark')
+        },
         // エラーを受け取る
         setErrors(errors){
             console.log(errors);
