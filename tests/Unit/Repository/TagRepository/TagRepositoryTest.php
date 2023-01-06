@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Repository;
+namespace Tests\Unit\Repository\TagRepository;
 
 use Tests\TestCase;
 

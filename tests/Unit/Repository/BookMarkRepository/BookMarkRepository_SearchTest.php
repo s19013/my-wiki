@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Repository;
+namespace Tests\Unit\Repository\BookMarkRepository;
 
 use Tests\TestCase;
 use App\Models\BookMark;

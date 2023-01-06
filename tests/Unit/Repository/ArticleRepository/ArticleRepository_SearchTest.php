@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Repository;
+namespace Tests\Unit\Repository\ArticleRepository;
 
 use Tests\TestCase;
 use App\Models\Article;
