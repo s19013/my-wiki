@@ -38,7 +38,6 @@ export default {
             bookMarkUrl,
             tagList,
         }){
-            this.$refs.BaseBookMarkLayout.switchDisabledFlag()
             await axios.put('/api/bookmark/update',{
                 bookMarkId    :this.originalBookMark.id,
                 bookMarkTitle :bookMarkTitle,
@@ -47,7 +46,6 @@ export default {
                 timezone      :Intl.DateTimeFormat().resolvedOptions().timeZone
             })
             .then((res)=>{
-                this.$refs.BaseBookMarkLayout.switchDisabledFlag()
                 this.$inertia.get('/BookMark/Search')
             })
             .catch((errors)=>{
@@ -57,10 +55,8 @@ export default {
         },
         deleteBookMark() {
             // 消す処理
-            this.$refs.BaseBookMarkLayout.switchDisabledFlag()
             axios.delete('/api/bookmark/' + this.originalBookMark.id)
             .then((res)=>{
-                this.$refs.BaseBookMarkLayout.switchDisabledFlag()
                 this.$inertia.get('/BookMark/Search')
             })
             .catch((errors) => {

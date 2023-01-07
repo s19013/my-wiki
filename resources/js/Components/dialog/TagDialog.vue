@@ -1,11 +1,10 @@
 <template>
-    <div>
+    <div class="TagDialog">
         <!-- ダイアログを呼び出すためのボタン -->
-        <div class="dialogAndList">
+        <div class="buttonAndList">
             <v-btn color="submit"
                 size="small"
                 class="global_css_haveIconButton_Margin"
-                :disabled="disabledFlag" :loading="disabledFlag"
                 @click.stop="openTagDialog()">
                 <v-icon>mdi-tag</v-icon>
                 <p>タグ</p>
@@ -24,8 +23,8 @@
                     <v-btn
                         color="#E57373"
                         size="small"
-                        :disabled = "localDisableFlag"
-                        :loading  = "localDisableFlag"
+                        :disabled = "disableFlag"
+                        :loading  = "disableFlag"
                         elevation="2"
                         @click.stop="closeTagDialog()">
                         <v-icon
@@ -36,39 +35,40 @@
                 <SearchField
                     ref = "SearchField"
                     searchLabel="タグ検索"
-                    :disabled    = "localDisableFlag"
-                    :loadingFlag = "localDisableFlag"
+                    :disabled    = "disableFlag"
+                    :loadingFlag = "disableFlag"
                     @triggerSearch="searchBranch"
                 >
                 </SearchField>
 
                 <!-- 操作ボタン -->
                 <div class="control">
-                    <v-btn
-                        variant="outlined"
-                        color="primary"
-                        size="small"
-                        :disabled = "localDisableFlag"
-                        :loading  = "localDisableFlag"
-                        @click.stop="clearAllCheck"
-                        >
-                            チェックをすべて外す
-                    </v-btn>
                     <div class="existCheckbox">
                         <!-- この部分を既存チェックボックスという -->
                         <input type="checkbox" id="checked" v-model="onlyCheckedFlag">
                         <label for="checked">チェックがついているタグだけを表示</label>
                     </div>
+                    <v-btn
+                        variant="outlined"
+                        color="primary"
+                        size="small"
+                        v-show="onlyCheckedFlag"
+                        :disabled = "disableFlag"
+                        :loading  = "disableFlag"
+                        @click.stop="clearAllCheck"
+                        >
+                            チェックをすべて外す
+                    </v-btn>
                 </div>
 
                 <!-- loadingアニメ -->
-                <loading v-show="localDisableFlag"></loading>
+                <loading v-show="disableFlag"></loading>
 
                 <!-- タグ一覧 -->
                 <v-list
                     class="overflow-y-auto mx-auto"
                     width="100%"
-                    v-show="!localDisableFlag"
+                    v-show="!disableFlag"
                     max-height="45vh">
 
                     <v-list-item v-for="tag of tagSearchResultList" :key="tag.id">
@@ -84,9 +84,10 @@
                     <v-btn
                         class="global_css_haveIconButton_Margin my-4 global_css_longButton"
                         color="submit"
+                        size="small"
                         v-show="!createNewTagFlag"
-                        :disabled="localDisableFlag"
-                        :loading ="localDisableFlag"
+                        :disabled="disableFlag"
+                        :loading ="disableFlag"
                         @click.stop="createNewTagFlagSwitch">
                         <v-icon>mdi-tag-plus</v-icon>
                         <p>新規作成</p>
@@ -108,8 +109,8 @@
                                 v-model="newTag"
                                 label="新しいタグ"
                                 outlined hide-details="false"
-                                :disabled="localDisableFlag"
-                                :loading ="localDisableFlag"
+                                :disabled="disableFlag"
+                                :loading ="disableFlag"
                             >
                             </v-text-field>
                         </v-form>
@@ -117,9 +118,10 @@
                         <v-btn
                             class="global_css_haveIconButton_Margin global_css_longButton"
                             color="#BBDEFB"
+                            size="small"
                             elevation="2"
-                            :disabled="localDisableFlag"
-                            :loading ="localDisableFlag"
+                            :disabled="disableFlag"
+                            :loading ="disableFlag"
                             @click.stop="createNewTag()">
                             <v-icon>mdi-content-save</v-icon>
                             <p>作成</p>
@@ -152,7 +154,7 @@ export default{
         isFirstSearchFlag:true,
 
         //loding
-        localDisableFlag:false,
+        disableFlag:false,
 
         // errorFlag
         errorMessages:{name:[]},
@@ -179,10 +181,6 @@ export default{
             type:String,
             default:"つけたタグ"
         },
-        disabledFlag:{
-            type   :Boolean,
-            default:false
-        }
     },
     components:{
         loading,
@@ -193,13 +191,16 @@ export default{
         // 新規タグ作成
         async createNewTag(){
             //ローディングアニメ開始
-            this.localDisableFlag = true
+            this.disableFlag = true
             await axios.post('/api/tag/store',{
                 name:this.newTag
             })
             .then((res)=>{
                 //検索欄をリセット
                 this.$refs.SearchField.resetKeyword()
+
+                // エラーをリセット
+                this.errorMessages={name:[]}
 
                 // 読み込み直し
                 this.isFirstSearchFlag = true
@@ -214,7 +215,7 @@ export default{
                 this.errorMessages =errors.response.data.messages
                 console.log(this.errorMessages);
             })
-            this.localDisableFlag = false
+            this.disableFlag = false
         },
         // タグ検索
         searchBranch:_.debounce(_.throttle(function(){
@@ -233,7 +234,7 @@ export default{
         // 全件検索
         async searchAllTag(){
             //ローディングアニメ開始
-            this.localDisableFlag = true
+            this.disableFlag = true
 
             //既存チェックボックスのチェックを外す
             this.onlyCheckedFlag = false
@@ -257,7 +258,7 @@ export default{
             .catch((err)=>{console.log(err);})
 
             //ローディングアニメ解除
-            this.localDisableFlag = false
+            this.disableFlag = false
 
             //初期ローディングフラグを切る
             this.isFirstSearchFlag = false
@@ -265,7 +266,7 @@ export default{
         // タグ検索
         async searchTag(){
             //ローディングアニメ開始
-            this.localDisableFlag = true
+            this.disableFlag = true
 
             //既存チェックボックスのチェックを外す
             this.onlyCheckedFlag = false
@@ -289,7 +290,7 @@ export default{
             .catch((err)=>{console.log(err);})
 
             //ローディングアニメ解除
-            this.localDisableFlag = false
+            this.disableFlag = false
         },
         //チェック全消し
         clearAllCheck(){this.checkedTagList = []},
@@ -312,6 +313,9 @@ export default{
 
             // チェックをつけたタグをソード
             this.checkedTagList = this.checkedTagList.sort(this.sortArrayByName)
+
+            // エラーをリセット
+            this.errorMessages={name:[]}
 
             this.$emit('closedTagDialog',this.checkedTagList)
         },
@@ -367,41 +371,44 @@ export default{
 
 <style lang="scss" scoped>
 .tagDialog{
-    .v-list{
-        padding:0;
-        .v-list-item{padding:0 1rem;}
-    }
     label{
-        font-size: 1.5rem;
-        padding-left: 0.5rem;
-        width:100%;
-    }
-    .areaCreateNewTag{
-        margin:1rem 0;
-        button{margin-top: 0.8rem;}
+        margin-left:0.5rem;
+        width:100%
     }
     .clooseButton{margin-bottom: 0.5rem;}
     .existCheckbox{
         label{font-size: 1.1rem;}
         margin:0.5rem 0;
     }
+    .v-list{
+        padding:0;
+        .v-list-item{padding:0 0.5rem;}
+    }
+    .areaCreateNewTag{
+        margin:1rem 0 0.5rem 0;
+        button{margin-top: 0.8rem;}
+    }
 }
 
 @media (min-width: 601px){
     .control{
         display:grid;
-        grid-template-columns:0.6fr 0.1fr 1fr;
-        .v-btn{grid-column:1/2}
+        grid-template-rows:1fr;
+        grid-template-columns:1fr 0.1fr 1fr;
         .existCheckbox{
-            text-align: right;
-            grid-column:3/4
+            grid-row:1;
+            grid-column:1/2;
+        }
+        .v-btn{
+            grid-row:1;
+            grid-column:3/4;
         }
     }
-    .dialogAndList{
+    .v-list-item{ font-size: 1.2rem; }
+    .buttonAndList{
         display:grid;
         grid-template-rows:auto auto;
         grid-template-columns:5fr 1fr;
-        margin:1.2rem 0;
         .tagList{
             grid-row: 1/3;
             grid-column: 1/2;
@@ -414,11 +421,13 @@ export default{
 }
 
 @media (max-width: 600px){
-.tagDialog{label{font-size: 1.2rem;}}
-.dialogAndList{
+.tagDialog{
+    .control .v-btn{ margin:0.5rem 0 }
+    .v-list-item{ font-size: 1.4rem; }
+}
+.buttonAndList{
         display:grid;
         grid-template-rows:auto auto;
-        margin:1.2rem 0;
         .tagList{
             grid-row: 2/3;
         }

@@ -4,7 +4,6 @@
 
     <v-btn color="error"
         class="global_css_haveIconButton_Margin"  @click.stop="deleteDialogFlagSwitch()"
-        :disabled="disabledFlag" :loading="disabledFlag"
     >
         <v-icon>mdi-trash-can</v-icon>
         <p>削除</p>
@@ -14,11 +13,11 @@
             <section class="global_css_Dialog">
                 <h2>{{text}}</h2>
                 <div class="control">
-                    <v-btn class="back" :disabled="disabledFlag" :loading="disabledFlag" @click.stop="deleteDialogFlagSwitch()">
+                    <v-btn class="back" @click.stop="deleteDialogFlagSwitch()">
                         <p>もどる</p>
                     </v-btn>
 
-                    <v-btn class="delete" color="error" :disabled="disabledFlag" :loading="disabledFlag" @click.stop="deleteTrigger()">
+                    <v-btn class="delete" color="error" @click.stop="deleteTrigger()">
                         <p>削除する</p>
                     </v-btn>
                 </div>
@@ -40,10 +39,6 @@ export default {
             type   :String,
             default:"article"
         },
-        disabledFlag:{
-            type   :Boolean,
-            default:false
-        }
     },
     methods: {
         //切り替え
