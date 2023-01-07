@@ -90,7 +90,7 @@ class BookMarkController extends Controller
             userId:Auth::id()
         );
 
-        // 帰り値がnullの場合は無視する(urlを完全に別のものに変更したから,まだ更新するurlが登録されてないから)
+        // 帰り値がnullの場合は無視する(urlを完全に別のものに変更したから,更新するurlがまだ登録されてないから)
         if (!is_null($bookMarkId)&&$request->bookMarkId != $bookMarkId) {
             return response()->json([
                 'messages' => ["bookMarkUrl" => ["そのブックマークは既に保存しています"]],

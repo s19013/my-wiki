@@ -4,12 +4,11 @@
             <div class="head">
                 <DeleteAlertComponent
                     ref="deleteAlert"
-                    :disabledFlag="disabledFlag"
                     @deleteTrigger="deleteArticle"
                 />
                 <v-btn
                     color="#BBDEFB" class="global_css_haveIconButton_Margin"
-                    @click="submit()" :disabled="disabledFlag" :loading="disabledFlag">
+                    @click="submit()">
                     <v-icon>mdi-content-save</v-icon>
                     <p>保存</p>
                 </v-btn>
@@ -21,7 +20,6 @@
                 ref="tagDialog"
                 text = "つけたタグ"
                 :originalCheckedTagList=originalCheckedTagList
-                :disabledFlag="disabledFlag"
             />
 
             <p
@@ -128,13 +126,17 @@ export default {
         switchDisabledFlag(){this.disabledFlag = !this.disabledFlag},
         // 本文送信
         submit(){
+            this.disabledFlag = true
             this.$emit('triggerSubmit',{
                 articleTitle:this.articleTitle,
                 articleBody :this.$refs.articleBody.serveBody(),
                 tagList     :this.$refs.tagDialog.serveCheckedTagList()
             })
         },
-        deleteArticle() { this.$emit('triggerDeleteArticle') },
+        deleteArticle() {
+            this.disabledFlag = true
+            this.$emit('triggerDeleteArticle')
+        },
         focusToBody(){this.$refs.articleBody.focusToBody()},
         changeTab(){this.$refs.articleBody.changeTab()},
         // エラーを受け取る

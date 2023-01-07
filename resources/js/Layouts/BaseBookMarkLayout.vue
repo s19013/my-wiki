@@ -5,10 +5,9 @@
                 <DeleteAlertComponent
                     type="bookmark"
                     ref ="deleteAlert"
-                    :disabledFlag="disabledFlag"
                     @deleteTrigger="deleteBookMark"
                 />
-                <v-btn color="#BBDEFB" class="global_css_haveIconButton_Margin" @click="submit()" :disabled="disabledFlag" :loading="disabledFlag">
+                <v-btn color="#BBDEFB" class="global_css_haveIconButton_Margin" @click="submit()" >
                     <v-icon>mdi-content-save</v-icon>
                     <p>保存</p>
                 </v-btn>
@@ -20,7 +19,6 @@
                 ref="tagDialog"
                 text = "つけたタグ"
                 :originalCheckedTagList=originalCheckedTagList
-                :disabledFlag="disabledFlag"
             />
 
             <p
@@ -47,8 +45,6 @@
                     v-model="bookMarkTitle"
                     label="タイトル"
                     outlined hide-details="false"
-                    :disabled="disabledFlag"
-                    :loading="disabledFlag"
                     @keydown.enter.exact="this.$refs.url.focus()"
                 />
 
@@ -65,8 +61,6 @@
                     ref="url"
                     label="url [必須]"
                     v-model   = "bookMarkUrl"
-                    :disabled ="disabledFlag"
-                    :loading  ="disabledFlag"
                     @keydown.enter.exact="this.submit()"
                 ></v-text-field>
             </v-form>
@@ -137,17 +131,20 @@ export default {
         },
     },
     methods: {
-        switchAlreadyExistErrorFlag(){this.alreadyExistErrorFlag = !this.alreadyExistErrorFlag},
         switchDisabledFlag(){this.disabledFlag = !this.disabledFlag},
         // 本文送信
         submit(){
+            this.disabledFlag = true
             this.$emit('triggerSubmit',{
                 bookMarkTitle:this.bookMarkTitle,
                 bookMarkUrl  :this.bookMarkUrl,
                 tagList      :this.$refs.tagDialog.serveCheckedTagList()
             })
         },
-        deleteBookMark() {this.$emit('triggerDeleteBookMark')},
+        deleteBookMark() {
+            this.disabledFlag = true
+            this.$emit('triggerDeleteBookMark')
+        },
         // エラーを受け取る
         setErrors(errors){
             console.log(errors);

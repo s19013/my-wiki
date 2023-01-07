@@ -5,7 +5,6 @@
             <v-btn color="submit"
                 size="small"
                 class="global_css_haveIconButton_Margin"
-                :disabled="disabledFlag" :loading="disabledFlag"
                 @click.stop="openTagDialog()">
                 <v-icon>mdi-tag</v-icon>
                 <p>タグ</p>
@@ -24,8 +23,8 @@
                     <v-btn
                         color="#E57373"
                         size="small"
-                        :disabled = "localDisableFlag"
-                        :loading  = "localDisableFlag"
+                        :disabled = "disableFlag"
+                        :loading  = "disableFlag"
                         elevation="2"
                         @click.stop="closeTagDialog()">
                         <v-icon
@@ -36,8 +35,8 @@
                 <SearchField
                     ref = "SearchField"
                     searchLabel="タグ検索"
-                    :disabled    = "localDisableFlag"
-                    :loadingFlag = "localDisableFlag"
+                    :disabled    = "disableFlag"
+                    :loadingFlag = "disableFlag"
                     @triggerSearch="searchBranch"
                 >
                 </SearchField>
@@ -54,8 +53,8 @@
                         color="primary"
                         size="small"
                         v-show="onlyCheckedFlag"
-                        :disabled = "localDisableFlag"
-                        :loading  = "localDisableFlag"
+                        :disabled = "disableFlag"
+                        :loading  = "disableFlag"
                         @click.stop="clearAllCheck"
                         >
                             チェックをすべて外す
@@ -63,13 +62,13 @@
                 </div>
 
                 <!-- loadingアニメ -->
-                <loading v-show="localDisableFlag"></loading>
+                <loading v-show="disableFlag"></loading>
 
                 <!-- タグ一覧 -->
                 <v-list
                     class="overflow-y-auto mx-auto"
                     width="100%"
-                    v-show="!localDisableFlag"
+                    v-show="!disableFlag"
                     max-height="45vh">
 
                     <v-list-item v-for="tag of tagSearchResultList" :key="tag.id">
@@ -87,8 +86,8 @@
                         color="submit"
                         size="small"
                         v-show="!createNewTagFlag"
-                        :disabled="localDisableFlag"
-                        :loading ="localDisableFlag"
+                        :disabled="disableFlag"
+                        :loading ="disableFlag"
                         @click.stop="createNewTagFlagSwitch">
                         <v-icon>mdi-tag-plus</v-icon>
                         <p>新規作成</p>
@@ -110,8 +109,8 @@
                                 v-model="newTag"
                                 label="新しいタグ"
                                 outlined hide-details="false"
-                                :disabled="localDisableFlag"
-                                :loading ="localDisableFlag"
+                                :disabled="disableFlag"
+                                :loading ="disableFlag"
                             >
                             </v-text-field>
                         </v-form>
@@ -121,8 +120,8 @@
                             color="#BBDEFB"
                             size="small"
                             elevation="2"
-                            :disabled="localDisableFlag"
-                            :loading ="localDisableFlag"
+                            :disabled="disableFlag"
+                            :loading ="disableFlag"
                             @click.stop="createNewTag()">
                             <v-icon>mdi-content-save</v-icon>
                             <p>作成</p>
@@ -155,7 +154,7 @@ export default{
         isFirstSearchFlag:true,
 
         //loding
-        localDisableFlag:false,
+        disableFlag:false,
 
         // errorFlag
         errorMessages:{name:[]},
@@ -182,10 +181,6 @@ export default{
             type:String,
             default:"つけたタグ"
         },
-        disabledFlag:{
-            type   :Boolean,
-            default:false
-        }
     },
     components:{
         loading,
@@ -196,7 +191,7 @@ export default{
         // 新規タグ作成
         async createNewTag(){
             //ローディングアニメ開始
-            this.localDisableFlag = true
+            this.disableFlag = true
             await axios.post('/api/tag/store',{
                 name:this.newTag
             })
@@ -220,7 +215,7 @@ export default{
                 this.errorMessages =errors.response.data.messages
                 console.log(this.errorMessages);
             })
-            this.localDisableFlag = false
+            this.disableFlag = false
         },
         // タグ検索
         searchBranch:_.debounce(_.throttle(function(){
@@ -239,7 +234,7 @@ export default{
         // 全件検索
         async searchAllTag(){
             //ローディングアニメ開始
-            this.localDisableFlag = true
+            this.disableFlag = true
 
             //既存チェックボックスのチェックを外す
             this.onlyCheckedFlag = false
@@ -263,7 +258,7 @@ export default{
             .catch((err)=>{console.log(err);})
 
             //ローディングアニメ解除
-            this.localDisableFlag = false
+            this.disableFlag = false
 
             //初期ローディングフラグを切る
             this.isFirstSearchFlag = false
@@ -271,7 +266,7 @@ export default{
         // タグ検索
         async searchTag(){
             //ローディングアニメ開始
-            this.localDisableFlag = true
+            this.disableFlag = true
 
             //既存チェックボックスのチェックを外す
             this.onlyCheckedFlag = false
@@ -295,7 +290,7 @@ export default{
             .catch((err)=>{console.log(err);})
 
             //ローディングアニメ解除
-            this.localDisableFlag = false
+            this.disableFlag = false
         },
         //チェック全消し
         clearAllCheck(){this.checkedTagList = []},
