@@ -1,14 +1,8 @@
--- 一意のidを参照している場合
--- 参照先を消してから参照元を消さないとエラーがでる
--- だからこの順番
+-- 論理削除してから3ヶ月たったデータを消す
 
--- article_tags
-DELETE FROM `article_tags` WHERE article_id in (SELECT id FROM `articles` WHERE `deleted_at` is NOT null);
 -- articles
-DELETE FROM `articles` WHERE deleted_at is not null;
--- book_mark_tags
-DELETE FROM `book_mark_tags` WHERE book_mark_id in (SELECT id FROM `book_marks` WHERE `deleted_at` is NOT null);
+DELETE FROM `articles` WHERE `deleted_at` > (now() - INTERVAL 3 month);
 -- book_marks
-DELETE FROM `book_marks` WHERE deleted_at is not null;
+DELETE FROM `book_marks` WHERE `deleted_at` > (now() - INTERVAL 3 month);
 -- tags
-DELETE FROM `tags` WHERE deleted_at is not null;
+DELETE FROM `tags` WHERE `deleted_at` > (now() - INTERVAL 3 month);;
