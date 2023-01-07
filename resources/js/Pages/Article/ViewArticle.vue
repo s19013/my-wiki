@@ -9,7 +9,7 @@
                         @deleteTrigger="deleteArticle"
                     />
                     <Link :href="'/Article/Edit/' + article.id">
-                        <v-btn class="editButton global_css_haveIconButton_Margin" color="#BBDEFB">
+                        <v-btn class="editButton global_css_haveIconButton_Margin" color="#BBDEFB" @click="this.disabledFlag = true">
                             <v-icon>mdi-pencil-plus</v-icon>
                             <p>編集</p>
                         </v-btn>
@@ -24,6 +24,8 @@
 
                 <!-- md表示 -->
                 <CompiledMarkDown :originalMarkDown="article.body"/>
+
+                <loadingDialog :loadingFlag="disabledFlag"/>
         </div>
     </BaseLayout>
 </template>
@@ -33,6 +35,7 @@ import DeleteAlertComponent from '@/Components/dialog/DeleteAlertDialog.vue';
 import CompiledMarkDown from '@/Components/article/CompiledMarkDown.vue';
 import TagList from '@/Components/TagList.vue';
 import DateLabel from '@/Components/DateLabel.vue';
+import loadingDialog from '@/Components/dialog/loadingDialog.vue';
 import BaseLayout from '@/Layouts/BaseLayout.vue'
 import { Link } from '@inertiajs/inertia-vue3';
 import axios from 'axios'
@@ -49,10 +52,11 @@ export default{
     components:{
         DeleteAlertComponent,
         TagList,
-        BaseLayout,
-        Link,
         DateLabel,
         CompiledMarkDown,
+        loadingDialog,
+        BaseLayout,
+        Link,
     },
     methods: {
         deleteArticle() {
@@ -61,7 +65,7 @@ export default{
             axios.delete('/api/article/' + this.article.id)
             .then((res)=>{this.$inertia.get('/Article/Search')})
             .catch((errors) => {
-                this.$refs.BaseArticleLayout.switchDisabledFlag()
+                this.disabledFlag = false
                 console.log(errors);
             })
         },
