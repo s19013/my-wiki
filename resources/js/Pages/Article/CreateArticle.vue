@@ -34,7 +34,6 @@ export default {
                 timezone    :Intl.DateTimeFormat().resolvedOptions().timeZone
             })
             .then((res)=>{
-                this.$refs.BaseArticleLayout.switchDisabledFlag()
                 this.$inertia.get('/Article/Search')
             })
             .catch((errors) => {
@@ -44,7 +43,6 @@ export default {
         },
         deleteArticle() {
             //遷移
-            this.$refs.BaseArticleLayout.switchDisabledFlag()
             this.$inertia.get('/Article/Search')
         },
     },

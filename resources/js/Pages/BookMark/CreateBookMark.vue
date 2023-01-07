@@ -30,7 +30,6 @@ export default {
                 timezone      :Intl.DateTimeFormat().resolvedOptions().timeZone
             })
             .then((res)=>{
-                this.$refs.BaseBookMarkLayout.switchDisabledFlag()
                 this.$inertia.get('/BookMark/Search')
             })
             .catch((errors) => {
@@ -40,7 +39,6 @@ export default {
         },
         deleteBookMark() {
             //遷移だけで良い
-            this.$refs.BaseBookMarkLayout.switchDisabledFlag()
             this.$inertia.get('/BookMark/Search')
         },
     },
