@@ -63,9 +63,19 @@ HAVING COUNT(*) = 2
 # ブックマーク､記事両方のtag_idを数える
 SELECT tag_id from article_tags 
 WHERE tag_id is not null 
+AND tag_id IN (
+    SELECT id
+    FROM tags
+    WHERE user_id = 1
+)
 UNION ALL
 SELECT tag_id from book_mark_tags 
 WHERE tag_id is not null 
+AND tag_id IN (
+    SELECT id
+    FROM tags
+    WHERE user_id = 1
+)
 
 
 ### 例
@@ -135,6 +145,7 @@ from (
 JOIN tags 
 on UNIONED.tag_id = tags.id 
 GROUP by UNIONED.tag_id;
+whre tags.user_id =   ;
 
 2つの表をまとめるのは上記参照
 
