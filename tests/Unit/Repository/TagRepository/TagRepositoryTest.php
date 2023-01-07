@@ -218,6 +218,33 @@ class TagRepositoryTest extends TestCase
     }
 
     // 期待
+    // データが更新されたデータをもう一度更新する
+    public function test_update_再度アップデート()
+    {
+        $tag = Tag::create([
+            'name'    => 'beforeUpdate',
+            'user_id' => $this->userId
+        ]);
+
+        $this->tagRepository->update($this->userId,$tag->id,'afterUpdate');
+
+        $this->assertDatabaseHas('tags',[
+            'name'       => 'afterUpdate',
+            'user_id'    => $this->userId,
+            'deleted_at' => null
+        ]);
+
+        $this->tagRepository->update($this->userId,$tag->id,'onemoreUpdate');
+
+        $this->assertDatabaseHas('tags',[
+            'name'       => 'onemoreUpdate',
+            'user_id'    => $this->userId,
+            'deleted_at' => null
+        ]);
+
+    }
+
+    // 期待
     // 指定したidのタグが論理削除される
     public function test_delete()
     {
