@@ -59,3 +59,106 @@ and (book_mark_tags.tag_id = 4
     OR book_mark_tags.tag_id = 5)  
 GROUP BY book_mark_id  
 HAVING COUNT(*) = 2  
+
+# ブックマーク､記事両方のtag_idを数える
+SELECT tag_id from article_tags 
+WHERE tag_id is not null 
+UNION ALL
+SELECT tag_id from book_mark_tags 
+WHERE tag_id is not null 
+
+
+### 例
+|article_id|tag_id|
+|--|--|
+|1|1|
+|1|2|
+|1|3|
+|2|1|
+|2|2|
+|3|1|
+
+|book_mark_id|tag_id|
+|--|--|
+|1|1|
+|1|2|
+|1|3|
+|2|1|
+|2|2|
+|3|1|
+
+↓tag_idでunionする
+|tag_id|
+|--|
+|1|
+|2|
+|3|
+|1|
+|2|
+|1|
+|1|
+|2|
+|3|
+|1|
+|2|
+|1|
+
+#### わかりにくいようにソート
+|tag_id|
+|--|
+|1|
+|1|
+|1|
+|1|
+|1|
+|1|
+|2|
+|2|
+|2|
+|2|
+|3|
+|3|
+
+
+
+
+
+# ブックマーク､記事両方のtag_idを数えてid,nameも表示させる
+SELECT UNIONED.tag_id,tags.name,COUNT(*) 
+from ( 
+    SELECT tag_id from article_tags 
+    WHERE tag_id is not null 
+    UNION ALL
+    SELECT tag_id from book_mark_tags 
+    WHERE tag_id is not null 
+) UNIONED 
+JOIN tags 
+on UNIONED.tag_id = tags.id 
+GROUP by UNIONED.tag_id;
+
+2つの表をまとめるのは上記参照
+
+#### group byでまとめて数える
+|6|4|2|
+|--|--|--|
+|1|2|3|
+|1|2|3|
+|1|2||
+|1|2||
+|1|||
+|1|||
+
+#### tagsと関連づける
+|id|name|
+|--|--|
+|1|aaa|
+|2|bbb|
+|3|ccc|
+
+
+
+|tags.id|tags.name|count(*)|
+|--|--|--|
+|1|aaa|6|
+|2|bbb|4|
+|3|ccc|2|
