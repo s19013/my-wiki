@@ -4,12 +4,11 @@
             <div class="head">
                 <DeleteAlertComponent
                     ref="deleteAlert"
-                    :disabledFlag="disabledFlag"
                     @deleteTrigger="deleteArticle"
                 />
                 <v-btn
                     color="#BBDEFB" class="global_css_haveIconButton_Margin"
-                    @click="submit()" :disabled="disabledFlag" :loading="disabledFlag">
+                    @click="submit()">
                     <v-icon>mdi-content-save</v-icon>
                     <p>保存</p>
                 </v-btn>
@@ -21,7 +20,6 @@
                 ref="tagDialog"
                 text = "つけたタグ"
                 :originalCheckedTagList=originalCheckedTagList
-                :disabledFlag="disabledFlag"
             />
 
             <p
