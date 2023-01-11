@@ -134,18 +134,22 @@ AND tag_id IN (
 
 
 # ブックマーク､記事両方のtag_idを数えてid,nameも表示させる
-SELECT UNIONED.tag_id,tags.name,COUNT(*) 
-from ( 
-    SELECT tag_id from article_tags 
-    WHERE tag_id is not null 
-    UNION ALL
-    SELECT tag_id from book_mark_tags 
-    WHERE tag_id is not null 
-) UNIONED 
-JOIN tags 
-on UNIONED.tag_id = tags.id 
-GROUP by UNIONED.tag_id;
-whre tags.user_id =   ;
+select `tags`.* , IFnull(`counted`.`count`,0) AS COUNT
+from `tags` 
+left join (
+     SELECT `unioned`.`tag_id`,COUNT(*) as count
+     from (
+             select `tag_id` 
+             from `book_mark_tags`
+             union all 
+             select `tag_id` 
+             from `article_tags` 
+     ) AS unioned
+    GROUP BY unioned.tag_id
+) as `counted` 
+on `tags`.`id` = `counted`.`tag_id` 
+WHERE `tags`.`user_id` = 1
+and `tags`.`deleted_at` is null
 
 2つの表をまとめるのは上記参照
 
