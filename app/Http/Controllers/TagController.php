@@ -92,4 +92,24 @@ class TagController extends Controller
             keyword:$request->keyword
         );
     }
+
+    public function transitionToEdit(Request $request)
+    {
+        $tool = new NullAvoidanceToolKit();
+
+        $result = $this->tagRepository->searchInEdit(
+            userId :Auth::id(),
+            keyword:$request->keyword,
+            page   :$this->nullAvoidanceToolKit->ifnull($request->page,1),
+        );
+
+        $old = [
+            "keyword" => $this->nullAvoidanceToolKit->ifnull($request->keyword,""),
+        ];
+
+        return Inertia::render('Article/SearchArticle',[
+            'result' => $result,
+            'old' => $old
+        ]);
+    }
 }
