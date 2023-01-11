@@ -61,7 +61,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/Edit/{bookMarkId}', [BookMarkTransitionController::class,'transitionToEditBookMark'])->name('EditBookMark');
 
         Route::get('/Search' , [BookMarkController::class,'search'])->name('SearchBookMark');
+    });
 
+    Route::prefix('Tag')->group(function () {
+        // 編集画面での検索
+        Route::get('/Edit/Search' , [TagController::class,'searchInEdit'])->name('searchInEditTag');
     });
 
     Route::prefix('User')->group(function () {
