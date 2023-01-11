@@ -60,6 +60,54 @@ class TagRepository
         return $query->get();
     }
 
+    //タグを検索する
+    public function searchInEdit($userId,$keyword)
+    {
+        // ツールを実体化
+        $searchToolKit = new searchToolKit();
+
+        // %と_をエスケープ
+        $escaped = $searchToolKit->sqlEscape($keyword);
+
+        //and検索のために空白区切りでつくった配列を用意
+        $wordListToSearch = $searchToolKit->preparationToAndSearch($escaped);
+
+
+        // article,bookmarkで使われているタグのid
+        $artilceTags = DB::table('article_tags')
+        ->select('tag_id')
+        ->whereNotNull('tag_id');
+
+        $bookMarkTags = DB::table('book_mark_tags')
+        ->select('tag_id')
+        ->whereNotNull('tag_id');
+
+        // 合体
+        $unioned = $bookMarkTags->unionAll($artilceTags)->toSql();
+
+        // タグの数を数える
+        $counted = DB::table(DB::raw('('.$unioned.') AS unioned'))
+        ->select('unioned.tag_id',DB::raw('count(*) as count'))
+        ->groupBy('unioned.tag_id');
+
+        // tagsと合体
+        $query = Tag::select('tags.*',DB::raw("ifnull(counted.count,0) as count"))
+        ->leftJoinSub($counted, 'counted', function ($join) {
+            $join->on('tags.id', '=', 'counted.tag_id');
+        })
+        ->where('tags.user_id','=',$userId)
+        ->whereNull('tags.deleted_at');
+
+        // tag名をlikeけんさく
+        foreach($wordListToSearch as $word){
+            $query->where('tags.name','like',"%$word%");
+        }
+
+        $query->orderBy('tags.name');
+
+        return $query->get();
+    }
+
     // urlとユーザーからidを探す
     // 更新でurlを変更した時に使う
     public  function serveTagId($name,$userId)
