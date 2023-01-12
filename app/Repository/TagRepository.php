@@ -60,7 +60,7 @@ class TagRepository
         return $query->get();
     }
 
-    //タグを検索する
+    //タグを検索する 検索系に初期値設定しとく?
     public function searchInEdit($userId,$keyword,$page)
     {
         // ツールを実体化
