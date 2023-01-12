@@ -61,6 +61,24 @@
                     </li>
 
                     <li>
+                        <menuLabel
+                            backgroundColor='#5ac287'
+                            textColor='#fafafa'
+                            text="タグ"
+                            icon="mdi-tag"
+                        />
+                    </li>
+
+                    <li>
+                        <menuButton
+                            text="編集 削除"
+                            icon="mdi-pencil-plus"
+                            :path="route('searchInEditTag')"
+                        />
+                    </li>
+
+
+                    <li>
                         <menuButton
                             textColor="#f0f8ff"
                             backgroundColor="#a80000"
@@ -100,7 +118,7 @@ nav {
     background: rgb(234, 234, 234);
     z-index : 10;//これで10前のレイヤーへ
     height  : 100vh;
-    width   : 40vw;
+    width   : 45vw;
     position: fixed; /* ウィンドウを基準に画面に固定 */
     right   : 0;// 強制的に右端に置く
     top     :0;//ボタンと被らないように頭の位置を下げる
@@ -111,39 +129,49 @@ nav {
     }
 
     ol{
-        height: 100%;
+        .menuButton{ margin-bottom: 0.5rem;}
+        height: 100vh;
+        overflow-y: auto;
         list-style-type:none;
         display: grid;
         grid-template-rows:
         auto
-        2fr
+        1fr
+        auto
         auto
         auto
         1fr
         auto
-        2fr
         auto
         auto
         1fr
         auto
-        20fr
+        auto
+        4fr
         auto
         ;
         li:nth-child(1){grid-row: 1/2; }
 
         li:nth-child(2){grid-row: 3/4; }
         li:nth-child(3){grid-row: 4/5; }
-        li:nth-child(4){grid-row: 6/7; }
+        li:nth-child(4){grid-row: 5/6; }
 
-        li:nth-child(5){grid-row: 8/9; }
-        li:nth-child(6){grid-row: 9/10; }
-        li:nth-child(7){grid-row: 11/12; }
+        li:nth-child(5){grid-row: 7/8; }
+        li:nth-child(6){grid-row: 8/9; }
+        li:nth-child(7){grid-row: 9/10; }
 
-        li:nth-child(8){grid-row: 13/14; }
+        li:nth-child(8){grid-row: 11/12; }
+        li:nth-child(9){grid-row: 12/13; }
+
+        li:nth-child(10){
+            grid-row: 16/17;
+            // ここだけマージンを消す
+            .menuButton{ margin-bottom: 0;}
+        }
     }
     .closeButton{
-        background-color: hsl(0, 0%, 83%);
-        padding:5px 0;
+        background-color: hsl(0, 0%, 78%);
+        padding:0.5rem 0;
         width: 100%;
         display: grid;
         grid-template-columns:2fr 1fr 4fr 2fr;
