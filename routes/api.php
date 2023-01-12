@@ -34,7 +34,7 @@ Route::middleware('auth:sanctum', 'throttle:60,1')->group(function () {
     Route::prefix('/tag')->group(function () {
         Route::delete('/{tagId}' , [TagController::class,'delete'])->name('api.tag.delete');
         Route::post('/store'  , [TagController::class,'store']);
-        Route::post('/update' , [TagController::class,'update']);
+        Route::put('/update' , [TagController::class,'update']);
         // ダイアログ内の検索
         // 自分でもなんでpostにしてしまったのかわすれたけど､特に困ってないから放置でいいや
         Route::post('/search' , [TagController::class,'search']);
