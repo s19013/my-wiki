@@ -29,7 +29,7 @@ class BookMarkTagRepository
     public  function update($bookMarkId,$updatedTagList)
     {
         // 更新前のブックマークに紐付けられていたタグを取得
-        $originalTagList = $this->getOrignalTag($bookMarkId);
+        $originalTagList = $this->getOrignalTagId($bookMarkId);
 
         // 更新前のブックマークにタグが1つでもついていたかいなかったかで処理を分ける
         if (empty($originalTagList)) {$this->ProcessingifOriginalHasNoTags($bookMarkId,$updatedTagList);}
@@ -101,7 +101,7 @@ class BookMarkTagRepository
     }
 
     // ブックマークに紐付けらているタグを取得
-    public  function getOrignalTag($bookMarkId){
+    public  function getOrignalTagId($bookMarkId){
         // ここDB::にして
         // convertAssociativeArrayToSimpleArrayを使った方がよいかも
         $original = DB::table('book_mark_tags')
@@ -117,15 +117,16 @@ class BookMarkTagRepository
         // ProcessingifOriginalHasNoTagsの方で色々やっているから問題ないかな?
     }
 
-    //記事に関連付けられたタグの名前とidを取得
+    //ブックマークに関連付けられたタグの名前とidを取得
     public  function serveTagsRelatedToBookMark($bookMarkId,$userId)
     {
-        // 記事についているタグidの名前などをとってくる
-        $relatingTagList = $this->getOrignalTag($bookMarkId);
+        // ブックマークについているタグidの名前などをとってくる
+        $relatingTagList = $this->getOrignalTagId($bookMarkId);
 
         // tagテーブルからタグの名前とIdを取ってくる
         $tagList = DB::table('tags')
         ->select('id','name')
+        ->whereNull('deleted_at')
         ->whereIn('id',$relatingTagList)
         ->orderBy('name')
         ->get();

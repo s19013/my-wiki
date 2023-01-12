@@ -2,23 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
+
 use Illuminate\Http\Request;
 
 use App\Models\Tag;
 use App\Repository\TagRepository;
-use Auth;
-use DB;
+
 
 use App\Http\Requests\TagRequest;
+
+use App\Tools\NullAvoidanceToolKit;
+use Auth;
+use DB;
 
 class TagController extends Controller
 {
 
-    private $TagRepository;
+    private $tagRepository;
+    private $nullAvoidanceToolKit;
 
-    public function __construct(TagRepository $tagRepository)
+    public function __construct()
     {
-        $this->tagRepository = $tagRepository;
+        $this->tagRepository        = new TagRepository();
+        $this->nullAvoidanceToolKit = new NullAvoidanceToolKit();
     }
 
     //新規タグ登録
@@ -91,5 +98,24 @@ class TagController extends Controller
             userId :Auth::id(),
             keyword:$request->keyword
         );
+    }
+
+    public function transitionToEdit(Request $request)
+    {
+
+        $result = $this->tagRepository->searchInEdit(
+            userId :Auth::id(),
+            keyword:$request->keyword,
+            page   :$this->nullAvoidanceToolKit->ifnull($request->page,1),
+        );
+
+        $old = [
+            "keyword" => $this->nullAvoidanceToolKit->ifnull($request->keyword,""),
+        ];
+
+        return Inertia::render('TagEdit',[
+            'result' => $result,
+            'old' => $old
+        ]);
     }
 }

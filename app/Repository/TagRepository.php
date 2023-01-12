@@ -60,18 +60,20 @@ class TagRepository
         return $query->get();
     }
 
-    //タグを検索する
-    public function searchInEdit($userId,$keyword)
+    //タグを検索する 検索系に初期値設定しとく?
+    public function searchInEdit($userId,$keyword,$page)
     {
         // ツールを実体化
         $searchToolKit = new searchToolKit();
+
+        //一度にとってくる数
+        $parPage = (int)config('app.parPage');
 
         // %と_をエスケープ
         $escaped = $searchToolKit->sqlEscape($keyword);
 
         //and検索のために空白区切りでつくった配列を用意
         $wordListToSearch = $searchToolKit->preparationToAndSearch($escaped);
-
 
         // article,bookmarkで使われているタグのid
         $artilceTags = DB::table('article_tags')
@@ -103,9 +105,25 @@ class TagRepository
             $query->where('tags.name','like',"%$word%");
         }
 
+        //ヒット件数取得
+        $total = (int)$query->count();
+
+        //ページ数計算(最後は何ページ目か)
+        $lastPage = (int)ceil($total / $parPage);
+
+        // 一度にいくつ取ってくるか
+        $query->limit($parPage);
+
+        //何件目から取得するか
+        $query->offset($parPage*($page-1));
+
         $query->orderBy('tags.name');
 
-        return $query->get();
+        return [
+            'data' => $query->get(),
+            'current_page'=> (int)$page,
+            'last_page'   => $lastPage
+        ];
     }
 
     // urlとユーザーからidを探す

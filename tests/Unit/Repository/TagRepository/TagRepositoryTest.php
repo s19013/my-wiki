@@ -320,7 +320,7 @@ class TagRepositoryTest extends TestCase
             ]);
         }
 
-        $receivedTags = $this->tagRepository->searchInEdit($this->userId,"");
+        $receivedTags = ($this->tagRepository->searchInEdit($this->userId,"",1))['data'];
 
         // すべて2つずつ紐づけさせたので
         // すべてのcountが2になっている
@@ -365,7 +365,7 @@ class TagRepositoryTest extends TestCase
             ]);
         }
 
-        $receivedTags = $this->tagRepository->searchInEdit($this->userId,"");
+        $receivedTags = ($this->tagRepository->searchInEdit($this->userId,"",1))['data'];
 
         // すべて指定したユーザーのidか
         foreach ($receivedTags->toArray() as $tag) {
@@ -397,7 +397,7 @@ class TagRepositoryTest extends TestCase
         // 1つ消す
         Tag::where('id','=',$tags[0]->id)->delete();
 
-        $receivedTags = $this->tagRepository->searchInEdit($this->userId,"");
+        $receivedTags = ($this->tagRepository->searchInEdit($this->userId,"",1))['data'];
 
         // 使うタグが1つ減ったので､1つのタグしか帰って来ないはず
         $this->assertSame(count($receivedTags->toArray()),1);
@@ -432,7 +432,7 @@ class TagRepositoryTest extends TestCase
             ]);
         }
 
-        $receivedTags = $this->tagRepository->search($this->userId,"TestTag");
+        $receivedTags = ($this->tagRepository->searchInEdit($this->userId,"TestTag",1))['data'];
 
         //名前とidが一緒かどうか
         $IdList = [];
