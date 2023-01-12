@@ -124,7 +124,7 @@ class BookMarkTagRepositoryTest extends TestCase
         foreach ($tags as $tag) { $this->bookMarkTagRepository->store($tag->id,$this->bookMarkId); }
         foreach ($deletedTags as $tag) { $this->bookMarkTagRepository->store($tag->id,$this->bookMarkId); }
 
-        //
+        // 削除
         foreach ($deletedTags as $tag) { $this->bookMarkTagRepository->delete($tag->id,$this->bookMarkId); }
 
         // タグを取得
@@ -143,11 +143,13 @@ class BookMarkTagRepositoryTest extends TestCase
         $this->assertSame(count($tags),count($IdList));
         $this->assertSame(count($tags),count($nameList));
 
+        // ついてないタグ
         foreach ($tags as $tag){
             $this->assertContains($tag->id,$IdList);
             $this->assertContains($tag->name,$nameList);
         }
 
+        // ついてないタグ
         foreach ($deletedTags as $tag){
             $this->assertNotContains($tag->id,$IdList);
             $this->assertNotContains($tag->name,$nameList);
@@ -170,7 +172,7 @@ class BookMarkTagRepositoryTest extends TestCase
 
     // 期待
     // 指定したブックマークについてあるすべてのタグのidを配列形式で取ってくる
-    public function test_getOrignalTag()
+    public function test_getOrignalTagId()
     {
         $tags = Tag::factory()->count(4)->create(['user_id' => $this->userId]);
 
@@ -178,7 +180,7 @@ class BookMarkTagRepositoryTest extends TestCase
         foreach($tags as $tag){ $this->bookMarkTagRepository->store($tag->id,$this->bookMarkId); }
 
         // 取得
-        $bookMarkTags = $this->bookMarkTagRepository->getOrignalTag($this->bookMarkId);
+        $bookMarkTags = $this->bookMarkTagRepository->getOrignalTagId($this->bookMarkId);
 
         // print_r($bookMarkTags);
 
