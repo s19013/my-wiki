@@ -9,6 +9,7 @@ use App\Http\Controllers\ArticleTransitionController;
 use App\Http\Controllers\BookMarkController;
 use App\Http\Controllers\BookMarkTransitionController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\TagController;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,7 +66,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::prefix('Tag')->group(function () {
         // 編集画面での検索
-        Route::get('/Edit/Search' , [TagController::class,'searchInEdit'])->name('searchInEditTag');
+        Route::get('/Edit/Search' , [TagController::class,'transitionToEdit'])->name('searchInEditTag');
     });
 
     Route::prefix('User')->group(function () {
