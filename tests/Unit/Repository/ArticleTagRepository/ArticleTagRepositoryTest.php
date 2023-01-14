@@ -145,12 +145,13 @@ class ArticleTagRepositoryTest extends TestCase
         $this->assertSame(count($tags),count($IdList));
         $this->assertSame(count($tags),count($nameList));
 
-        //
+        //付いているタグ
         foreach ($tags as $tag){
             $this->assertContains($tag->id,$IdList);
             $this->assertContains($tag->name,$nameList);
         }
 
+        // ついてないタグ
         foreach ($deletedTags as $tag){
             $this->assertNotContains($tag->id,$IdList);
             $this->assertNotContains($tag->name,$nameList);
@@ -173,7 +174,7 @@ class ArticleTagRepositoryTest extends TestCase
 
     // 期待
     // 指定した記事についてあるすべてのタグのidを配列形式で取ってくる
-    public function test_getOrignalTag()
+    public function test_getOrignalTagId()
     {
         $tags = Tag::factory()->count(4)->create(['user_id' => $this->userId]);
 
@@ -181,7 +182,7 @@ class ArticleTagRepositoryTest extends TestCase
         foreach($tags as $tag){ $this->articleTagRepository->store($tag->id,$this->articleId); }
 
         // 取得
-        $articleTags = $this->articleTagRepository->getOrignalTag($this->articleId);
+        $articleTags = $this->articleTagRepository->getOrignalTagId($this->articleId);
 
         // print_r($articleTags);
 

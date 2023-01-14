@@ -2,23 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
+
 use Illuminate\Http\Request;
 
 use App\Models\Tag;
 use App\Repository\TagRepository;
-use Auth;
-use DB;
+
 
 use App\Http\Requests\TagRequest;
+
+use App\Tools\NullAvoidanceToolKit;
+use Auth;
+use DB;
 
 class TagController extends Controller
 {
 
-    private $TagRepository;
+    private $tagRepository;
+    private $nullAvoidanceToolKit;
 
-    public function __construct(TagRepository $tagRepository)
+    public function __construct()
     {
-        $this->tagRepository = $tagRepository;
+        $this->tagRepository        = new TagRepository();
+        $this->nullAvoidanceToolKit = new NullAvoidanceToolKit();
     }
 
     //新規タグ登録
@@ -48,6 +55,12 @@ class TagController extends Controller
         // CSRFトークンを再生成して、二重送信対策
         $request->session()->regenerateToken();
 
+        $isSameUser = $this->tagRepository->isSameUser(
+            tagId:$request->id,
+            userId:Auth::id());
+
+        if (!$isSameUser) {return response('',401);}
+
         //更新しようとしているurlが自分以外にすでに登録されているか確かめる
         $tagId = $this->tagRepository->serveTagId(
             name  :$request->name,
@@ -74,11 +87,15 @@ class TagController extends Controller
 
     public function delete($tagId)
     {
+        $isSameUser = $this->tagRepository->isSameUser(
+            tagId:$tagId,
+            userId:Auth::id());
+
+        if (!$isSameUser) {return response('',401);}
+
         DB::transaction(function () use($tagId){
-            if ($this->tagRepository->isSameUser(
-                tagId:$tagId,
-                userId:Auth::id()))
-            {$this->tagRepository->delete($tagId);}
+            $this->tagRepository->delete($tagId);
+
         });
     }
 
@@ -91,5 +108,24 @@ class TagController extends Controller
             userId :Auth::id(),
             keyword:$request->keyword
         );
+    }
+
+    public function transitionToEdit(Request $request)
+    {
+
+        $result = $this->tagRepository->searchInEdit(
+            userId :Auth::id(),
+            keyword:$request->keyword,
+            page   :$this->nullAvoidanceToolKit->ifnull($request->page,1),
+        );
+
+        $old = [
+            "keyword" => $this->nullAvoidanceToolKit->ifnull($request->keyword,""),
+        ];
+
+        return Inertia::render('TagEdit',[
+            'result' => $result,
+            'old' => $old
+        ]);
     }
 }

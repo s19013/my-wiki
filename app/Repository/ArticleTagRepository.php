@@ -28,7 +28,7 @@ class ArticleTagRepository
     public  function update($articleId,$updatedTagList)
     {
         // 更新前のブックマークに紐付けられていたタグを取得
-        $originalTagList = $this->getOrignalTag($articleId);
+        $originalTagList = $this->getOrignalTagId($articleId);
 
         // 更新前のブックマークにタグが1つでもついていたかいなかったかで処理を分ける
         if (empty($originalTagList)) {$this->ProcessingifOriginalHasNoTags($articleId,$updatedTagList);}
@@ -100,39 +100,29 @@ class ArticleTagRepository
     }
 
     // 更新前の記事に紐付けられていたタグを取得
-    public  function getOrignalTag($articleId){
-        $temp = [];
-
-        $original = ArticleTag::select('tag_id')
+    public  function getOrignalTagId($articleId){
+        $original = DB::table('article_tags')
+        ->select('tag_id')
         ->where('article_id','=',$articleId)
         ->get();
 
         //元のデータに紐付けられているタグを配列に入れる
-        foreach ($original as $tag){array_push($temp,$tag->tag_id);}
-
-        return $temp;
+        $convertedOriginal = $this->convertAssociativeArrayToSimpleArray($original);
+        if (is_null($convertedOriginal[0])) {return [];}
+        else {return $convertedOriginal;}
     }
 
     //記事に関連付けられたタグの名前とidを取得
     public  function serveTagsRelatedToArticle($articleId,$userId)
     {
         // 記事についているタグidの名前などをとってくる
-        $relatingTagList = DB::table('article_tags')
-        ->select('tag_id')
-        ->where('article_id','=',$articleId)
-        ->get();
-
-        // [[tag_id => 1],[tag_id => 2],...]みたいな形になるので
-        // whereInで使うために[1,2,...]みたいな形にする
-        $convertedRelatingTagList = $this->convertAssociativeArrayToSimpleArray($relatingTagList);
-
-        // 何もタグがついてなかったらから配列を返す
-        if (is_null($convertedRelatingTagList[0])) {return [];}
+        $relatingTagList = $this->getOrignalTagId($articleId);
 
         // tagテーブルからタグの名前とIdを取ってくる
         $tagList = DB::table('tags')
         ->select('id','name')
-        ->whereIn('id',$convertedRelatingTagList)
+        ->whereNull('deleted_at')
+        ->whereIn('id',$relatingTagList)
         ->orderBy('name')
         ->get();
 

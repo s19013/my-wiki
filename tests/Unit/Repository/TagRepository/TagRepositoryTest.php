@@ -6,6 +6,10 @@ use Tests\TestCase;
 
 use App\Models\User;
 use App\Models\Tag;
+use App\Models\Article;
+use App\Models\BookMark;
+use App\Models\ArticleTag;
+use App\Models\BookMarkTag;
 use Illuminate\Support\Facades\DB;
 
 // データベース関係で使う
@@ -115,6 +119,19 @@ class TagRepositoryTest extends TestCase
         foreach ($receivedTags as $tag){ array_push($nameList,$tag->name);}
 
         $this->assertContains("TestTag",$nameList);
+    }
+
+
+    //
+    //
+    public function test_search_キーワードなし()
+    {
+        Tag::factory()->count(5)->create( ["user_id" => $this->userId] );
+
+        $receivedTags = $this->tagRepository->search($this->userId,"");
+
+        // 数が一緒か
+        $this->assertSame(5,count($receivedTags->toArray()));
     }
 
     // 期待
@@ -281,4 +298,151 @@ class TagRepositoryTest extends TestCase
     {
         $this->assertFalse($this->tagRepository->isAllreadyExists($this->userId,"isAllreadyExistsTestTag"));
     }
+
+    // 期待
+    // タグの名前,タグのid,紐づけられている数を取得
+    public function test_searchInEdit_カウントテスト()
+    {
+        $tags = Tag::factory()->count(2)->create( ["user_id" => $this->userId] );
+        $article = Article::factory()->create( ["user_id" => $this->userId] );
+        $bookMark = BookMark::factory()->create( ["user_id" => $this->userId] );
+
+        // 1つの記事に全部のタグを登録して見る
+        // 1つのブックマークに全部のタグを登録して見る
+        foreach ($tags as $tag) {
+            ArticleTag::factory()->create([
+                "article_id" => $article->id,
+                'tag_id'     => $tag->id
+            ]);
+            BookMarkTag::factory()->create([
+                "book_mark_id" => $bookMark->id,
+                'tag_id'     => $tag->id
+            ]);
+        }
+
+        $receivedTags = ($this->tagRepository->searchInEdit($this->userId,"",1))['data'];
+
+        // すべて2つずつ紐づけさせたので
+        // すべてのcountが2になっている
+        foreach ($receivedTags as $tag) {
+            $this->assertSame(2,$tag->count);
+        }
+    }
+
+    // 期待
+    // タグの名前,タグのid,紐づけられている数を取得
+    // 指定したユーザーの情報だけ取ってくる
+    public function test_searchInEdit_指定したユーザー(Type $var = null)
+    {
+        $tags = Tag::factory()->count(2)->create( ["user_id" => $this->userId] );
+        $article = Article::factory()->create( ["user_id" => $this->userId] );
+        $bookMark = BookMark::factory()->create( ["user_id" => $this->userId] );
+
+        $dammyUser = User::factory()->create();
+        $dammyTags = Tag::factory()->count(2)->create( ["user_id" => $dammyUser->id] );
+        $dammyArticle = Article::factory()->create( ["user_id" => $dammyUser->id] );
+        $dammyBookMark = BookMark::factory()->create( ["user_id" => $dammyUser->id] );
+
+        foreach ($tags as $tag) {
+            ArticleTag::factory()->create([
+                "article_id" => $article->id,
+                'tag_id'     => $tag->id
+            ]);
+            BookMarkTag::factory()->create([
+                "book_mark_id" => $bookMark->id,
+                'tag_id'     => $tag->id
+            ]);
+        }
+
+        foreach ($dammyTags as $tag) {
+            ArticleTag::factory()->create([
+                "article_id" => $dammyArticle->id,
+                'tag_id'     => $tag->id
+            ]);
+            BookMarkTag::factory()->create([
+                "book_mark_id" => $dammyBookMark->id,
+                'tag_id'       => $tag->id
+            ]);
+        }
+
+        $receivedTags = ($this->tagRepository->searchInEdit($this->userId,"",1))['data'];
+
+        // すべて指定したユーザーのidか
+        foreach ($receivedTags->toArray() as $tag) {
+            $this->assertSame($this->userId,$tag['user_id']);
+        }
+    }
+
+    // 期待
+    // 削除したタグの情報は取ってこない
+    public function test_searchInEdit_削除済みテスト()
+    {
+        $tags = Tag::factory()->count(2)->create( ["user_id" => $this->userId] );
+        $article = Article::factory()->create( ["user_id" => $this->userId] );
+        $bookMark = BookMark::factory()->create( ["user_id" => $this->userId] );
+
+        // 1つの記事に全部のタグを登録して見る
+        // 1つのブックマークに全部のタグを登録して見る
+        foreach ($tags as $tag) {
+            ArticleTag::factory()->create([
+                "article_id" => $article->id,
+                'tag_id'     => $tag->id
+            ]);
+            BookMarkTag::factory()->create([
+                "book_mark_id" => $bookMark->id,
+                'tag_id'     => $tag->id
+            ]);
+        }
+
+        // 1つ消す
+        Tag::where('id','=',$tags[0]->id)->delete();
+
+        $receivedTags = ($this->tagRepository->searchInEdit($this->userId,"",1))['data'];
+
+        // 使うタグが1つ減ったので､1つのタグしか帰って来ないはず
+        $this->assertSame(count($receivedTags->toArray()),1);
+    }
+
+    public function test_searchInEdit_キーワード指定()
+    {
+        // 検索にかかるタグ
+        $hitTag = Tag::factory()->create( [
+            "name"    => "TestTag",
+            "user_id" => $this->userId
+        ] );
+        $tags = Tag::factory()->count(5)->create( ["user_id" => $this->userId] );
+        $article = Article::factory()->create( ["user_id" => $this->userId] );
+        $bookMark = BookMark::factory()->create( ["user_id" => $this->userId] );
+
+        // ヒットするタグは1つだけ登録する
+        ArticleTag::factory()->create([
+            "article_id" => $article->id,
+            'tag_id'     => $hitTag->id
+        ]);
+
+        // 他のタグを登録
+        foreach ($tags as $tag) {
+            ArticleTag::factory()->create([
+                "article_id" => $article->id,
+                'tag_id'     => $tag->id
+            ]);
+            BookMarkTag::factory()->create([
+                "book_mark_id" => $bookMark->id,
+                'tag_id'     => $tag->id
+            ]);
+        }
+
+        $receivedTags = ($this->tagRepository->searchInEdit($this->userId,"TestTag",1))['data'];
+
+        //名前とidが一緒かどうか
+        $IdList = [];
+        foreach ($receivedTags as $tag){array_push($IdList,$tag->id);}
+
+        $nameList = [];
+        foreach ($receivedTags as $tag){ array_push($nameList,$tag->name);}
+
+        // 検索したタグが含まれているか｡
+        $this->assertContains("TestTag",$nameList);
+    }
 }
+

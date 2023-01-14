@@ -989,4 +989,38 @@ class BookMarkController_UpdateTest extends TestCase
             'messages' => ["bookMarkUrl" => ["そのブックマークは既に保存しています"]],
             ]);
     }
+
+    // 期待
+    // * 401が帰ってくる
+    public function test_bookMarkUpdate_他人のブックマークを編集しようとしたら防がれる()
+    {
+        // ブックマークなどを作成
+        $bookMark = BookMark::factory()->create(['user_id' => $this->user->id]);
+
+        // タグ
+        $tags    = Tag::factory()->count(4)->create(['user_id' => $this->user->id]);
+
+        BookMarkTag::create([
+            "book_mark_id" => $bookMark->id,
+            "tag_id"     => $tags[0]->id
+        ]);
+
+
+        $otherUser = User::factory()->create();
+
+        // 更新
+        $response = $this
+        ->actingAs($otherUser)
+        ->withSession(['test' => 'test'])
+        ->put('/api/bookmark/update/',[
+            'bookMarkId'     => $bookMark->id,
+            'bookMarkTitle'  => "http://hide-no-server.com/更新",
+            'bookMarkUrl'    => "http://hide-no-server.com/更新" ,
+            'tagList' => [$tags[1]->id],
+        ]);
+
+        // ステータス
+        $response->assertStatus(401);
+    }
+
 }

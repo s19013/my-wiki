@@ -96,7 +96,7 @@ class TagControllerTest extends TestCase
         $response = $this
         ->actingAs($this->user)
         ->withSession(['test' => 'test'])
-        ->post('/api/tag/update/',[
+        ->put('/api/tag/update/',[
             'id'   => $tag->id,
             'name' => 'update'
         ]);
@@ -133,7 +133,7 @@ class TagControllerTest extends TestCase
         $response = $this
         ->actingAs($this->user)
         ->withSession(['test' => 'test'])
-        ->post('/api/tag/update/',[
+        ->put('/api/tag/update/',[
             'id'   => $tag->id,
             'name' => 'allready'
         ]);
@@ -141,6 +141,29 @@ class TagControllerTest extends TestCase
         // ステータス
         $response->assertStatus(400);
         $response->assertJson(['messages' => ["name" => ["そのタグは既に保存しています"]]]);
+    }
+
+    // 期待
+    // 他人のタグを編集しようとしたらブロックされる
+    // 401番エラーが返された
+    // 条件
+    // 変更したタグ名が他のタグとかぶった
+    public function test_update_他人のタグを編集しようとしたらブロックされる()
+    {
+        $tag = Tag::factory()->create(['user_id' => $this->user->id]);
+
+        $otherUser = User::factory()->create();
+
+        $response = $this
+        ->actingAs($otherUser)
+        ->withSession(['test' => 'test'])
+        ->put('/api/tag/update/',[
+            'id'   => $tag->id,
+            'name' => 'allready'
+        ]);
+
+        // ステータス
+        $response->assertStatus(401);
     }
 
     // 期待
@@ -275,6 +298,7 @@ class TagControllerTest extends TestCase
 
     // 期待
     // * 他人のタグを消そうとするがシステムに防がれる
+    // * 401が返される
     // 条件
     public function test_delete_他人のタグを消そうとするがシステムに防がれる(){
 
@@ -290,7 +314,7 @@ class TagControllerTest extends TestCase
         ])
         ->delete('/api/tag/'.$tag->id);
 
-        $response->assertStatus(200);
+        $response->assertStatus(401);
 
         //
         $this->assertDatabaseHas('tags',[

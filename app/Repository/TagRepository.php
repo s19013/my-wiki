@@ -60,6 +60,72 @@ class TagRepository
         return $query->get();
     }
 
+    //タグを検索する 検索系に初期値設定しとく?
+    public function searchInEdit($userId,$keyword,$page)
+    {
+        // ツールを実体化
+        $searchToolKit = new searchToolKit();
+
+        //一度にとってくる数
+        $parPage = (int)config('app.parPage');
+
+        // %と_をエスケープ
+        $escaped = $searchToolKit->sqlEscape($keyword);
+
+        //and検索のために空白区切りでつくった配列を用意
+        $wordListToSearch = $searchToolKit->preparationToAndSearch($escaped);
+
+        // article,bookmarkで使われているタグのid
+        $artilceTags = DB::table('article_tags')
+        ->select('tag_id')
+        ->whereNotNull('tag_id');
+
+        $bookMarkTags = DB::table('book_mark_tags')
+        ->select('tag_id')
+        ->whereNotNull('tag_id');
+
+        // 合体
+        $unioned = $bookMarkTags->unionAll($artilceTags)->toSql();
+
+        // タグの数を数える
+        $counted = DB::table(DB::raw('('.$unioned.') AS unioned'))
+        ->select('unioned.tag_id',DB::raw('count(*) as count'))
+        ->groupBy('unioned.tag_id');
+
+        // tagsと合体
+        $query = Tag::select('tags.*',DB::raw("ifnull(counted.count,0) as count"))
+        ->leftJoinSub($counted, 'counted', function ($join) {
+            $join->on('tags.id', '=', 'counted.tag_id');
+        })
+        ->where('tags.user_id','=',$userId)
+        ->whereNull('tags.deleted_at');
+
+        // tag名をlikeけんさく
+        foreach($wordListToSearch as $word){
+            $query->where('tags.name','like',"%$word%");
+        }
+
+        //ヒット件数取得
+        $total = (int)$query->count();
+
+        //ページ数計算(最後は何ページ目か)
+        $lastPage = (int)ceil($total / $parPage);
+
+        // 一度にいくつ取ってくるか
+        $query->limit($parPage);
+
+        //何件目から取得するか
+        $query->offset($parPage*($page-1));
+
+        $query->orderBy('tags.name');
+
+        return [
+            'data' => $query->get(),
+            'current_page'=> (int)$page,
+            'last_page'   => $lastPage
+        ];
+    }
+
     // urlとユーザーからidを探す
     // 更新でurlを変更した時に使う
     public  function serveTagId($name,$userId)
