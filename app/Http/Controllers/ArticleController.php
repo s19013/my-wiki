@@ -75,22 +75,29 @@ class ArticleController extends Controller
         // CSRFトークンを再生成して、二重送信対策
         $request->session()->regenerateToken();
 
+        // 同一人物か確認
+        $isSameUser = $this->articleRepository->isSameUser(
+            articleId:$request->articleId,
+            userId:Auth::id());
+
+        if (!$isSameUser) {return response('',401);}
+
         DB::transaction(function () use($request){
-           // 記事更新
-            $this->articleRepository->update(
-                articleId:$request->articleId,
-                timezone :$request->timezone,
-                title:$request->articleTitle,
-                body :$request->articleBody,
+            // 記事更新
+             $this->articleRepository->update(
+                 articleId:$request->articleId,
+                 timezone :$request->timezone,
+                 title:$request->articleTitle,
+                 body :$request->articleBody,
 
-            );
+             );
 
-            //タグ更新
-            $this->articleTagRepository->update(
-                articleId     :$request->articleId,
-                updatedTagList:$request->tagList,
-            );
-        });
+             //タグ更新
+             $this->articleTagRepository->update(
+                 articleId     :$request->articleId,
+                 updatedTagList:$request->tagList,
+             );
+         });
     }
 
     //記事削除
@@ -101,12 +108,15 @@ class ArticleController extends Controller
         // 消そうとしてるブックマークを登録したユーザーのidと
         // 処理を実行しようとしているユーザーが同じか確かめる
         // ->他の人がかってに他の人のブックマークを消せないようにするため
+        // 同一人物か確認
+        $isSameUser = $this->articleRepository->isSameUser(
+            articleId:$articleId,
+            userId:Auth::id());
+
+        if (!$isSameUser) {return response('',401);}
 
         DB::transaction(function () use($articleId){
-            if ($this->articleRepository->isSameUser(
-                articleId:$articleId,
-                userId:Auth::id()))
-            {$this->articleRepository->delete(articleId:$articleId);}
+            $this->articleRepository->delete(articleId:$articleId);
         });
     }
 

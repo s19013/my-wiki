@@ -84,6 +84,12 @@ class BookMarkController extends Controller
         // CSRFトークンを再生成して、二重送信対策
         $request->session()->regenerateToken();
 
+        $isSameUser = $this->bookMarkRepository->isSameUser(
+            bookMarkId:$request->bookMarkId,
+            userId:Auth::id());
+
+        if (!$isSameUser) {return response('',401);}
+
         //更新しようとしているurlが自分以外にすでに登録されているか確かめる
         $bookMarkId = $this->bookMarkRepository->serveBookMarkId(
             url:$request->bookMarkUrl,
@@ -122,11 +128,15 @@ class BookMarkController extends Controller
         // 消そうとしてるブックマークを登録したユーザーのidと
         // 処理を実行しようとしているユーザーが同じか確かめる
         // ->他の人がかってに他の人のブックマークを消せないようにするため
+
+        $isSameUser = $this->bookMarkRepository->isSameUser(
+            bookMarkId:$bookMarkId,
+            userId:Auth::id());
+
+        if (!$isSameUser) {return response('',401);}
+
         DB::transaction(function () use($bookMarkId){
-            if ($this->bookMarkRepository->isSameUser(
-                bookMarkId:$bookMarkId,
-                userId:Auth::id()))
-            {$this->bookMarkRepository->delete(bookMarkId:$bookMarkId);}
+            $this->bookMarkRepository->delete(bookMarkId:$bookMarkId);
         });
     }
 
