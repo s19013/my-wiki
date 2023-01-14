@@ -55,6 +55,12 @@ class TagController extends Controller
         // CSRFトークンを再生成して、二重送信対策
         $request->session()->regenerateToken();
 
+        $isSameUser = $this->tagRepository->isSameUser(
+            tagId:$request->id,
+            userId:Auth::id());
+
+        if (!$isSameUser) {return response('',401);}
+
         //更新しようとしているurlが自分以外にすでに登録されているか確かめる
         $tagId = $this->tagRepository->serveTagId(
             name  :$request->name,
@@ -81,11 +87,15 @@ class TagController extends Controller
 
     public function delete($tagId)
     {
+        $isSameUser = $this->tagRepository->isSameUser(
+            tagId:$tagId,
+            userId:Auth::id());
+
+        if (!$isSameUser) {return response('',401);}
+
         DB::transaction(function () use($tagId){
-            if ($this->tagRepository->isSameUser(
-                tagId:$tagId,
-                userId:Auth::id()))
-            {$this->tagRepository->delete($tagId);}
+            $this->tagRepository->delete($tagId);
+
         });
     }
 

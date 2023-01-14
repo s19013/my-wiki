@@ -946,4 +946,40 @@ class ArticleController_UpdateTest extends TestCase
             'tag_id'     => $tags[1]->id,
         ]);
     }
+
+    // 期待
+    // * タイトル､bodyが更新されている
+    // * articleTagが更新されている
+    // 条件
+    // * タグがついてた記事にをタグありで更新､タグなしで更新
+    public function test_articleUpdate_他人の記事を更新しようとしても防がれる()
+    {
+
+        $otherUser = User::factory()->create();
+
+        // 記事などを作成
+        $article = Article::factory()->create(['user_id' => $this->user->id]);
+
+        // タグ
+        $tags    = Tag::factory()->count(4)->create(['user_id' => $this->user->id]);
+
+        ArticleTag::create([
+            "article_id" => $article->id,
+            "tag_id"     => $tags[0]->id
+        ]);
+
+        // 更新
+        $response = $this
+        ->actingAs($otherUser)
+        ->withSession(['test' => 'test'])
+        ->put('/api/article/update/',[
+            'articleId'     => $article->id,
+            'articleTitle'  => "更新",
+            'articleBody'    => "更新" ,
+            'tagList' => [$tags[1]->id],
+        ]);
+
+        // ステータス
+        $response->assertStatus(401);
+    }
 }
