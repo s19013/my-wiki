@@ -1,5 +1,7 @@
 <template>
-    <inertia-head :title="title" />
+    <Head>
+        <title>{{ title }}</title>
+    </Head>
     <v-app>
         <originalHead :pageTitle="pageTitle"/>
         <v-main>
@@ -11,14 +13,13 @@
 </template>
 
 <script>
-    import { InertiaLink, InertiaHead } from '@inertiajs/inertia-vue3'
+    import { Head } from '@inertiajs/inertia-vue3'
     import originalHead from '@/Components/head/originalHead.vue'
     import originalFooter from '@/Components/foot/originalFooter.vue'
 
     export default {
         components: {
-            InertiaLink,
-            InertiaHead,
+            Head,
             originalHead,
             originalFooter
         },
