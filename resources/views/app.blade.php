@@ -19,6 +19,10 @@
         @routes
         @vite('resources/js/app.js')
         @inertiaHead
+
+        {{-- google広告 --}}
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6551381289717615"
+     crossorigin="anonymous"></script>
     </head>
     <style>
         /* #app {
