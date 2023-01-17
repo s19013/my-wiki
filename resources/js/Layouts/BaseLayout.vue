@@ -23,7 +23,10 @@
             originalHead,
             originalFooter
         },
-        props:['title','pageTitle']
-        ,
+        props:['title','pageTitle'],
+        mounted(){
+            // 言語拾う
+            if ((window.navigator.language).substring(0,2) == "ja") {this.$store.state.lang = "ja"}
+        }
     }
 </script>
