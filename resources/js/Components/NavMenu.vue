@@ -6,7 +6,7 @@
                     <li>
                         <button class="closeButton" @click.stop = "show = !show">
                             <v-icon> mdi-close-box</v-icon>
-                            <p>閉じる</p>
+                            <p>{{ messages.close }}</p>
                         </button>
                     </li>
 
@@ -14,14 +14,14 @@
                         <menuLabel
                             backgroundColor='#1a81c1'
                             textColor='#fafafa'
-                            text="記事"
+                            :text="messages.article"
                             icon="mdi-note"
                         />
                     </li>
 
                     <li>
                         <menuButton
-                            text="新規作成"
+                            :text="messages.createNew"
                             icon="mdi-plus"
                             :path="route('CreateArticle')"
                         />
@@ -29,7 +29,7 @@
 
                     <li>
                         <menuButton
-                            text="検索"
+                            :text="messages.search"
                             icon="mdi-magnify"
                             :path="route('SearchArticle')"
                         />
@@ -39,14 +39,14 @@
                         <menuLabel
                             backgroundColor='#4015a6'
                             textColor='#fafafa'
-                            text="ブックマーク"
+                            :text="messages.bookmark"
                             icon="mdi-bookmark"
                         />
                     </li>
 
                     <li>
                         <menuButton
-                            text="新規作成"
+                            :text="messages.createNew"
                             icon="mdi-plus"
                             :path="route('CreateBookMark')"
                         />
@@ -54,7 +54,7 @@
 
                     <li>
                         <menuButton
-                            text="検索"
+                            :text="messages.search"
                             icon="mdi-magnify"
                             :path="route('SearchBookMark')"
                         />
@@ -64,14 +64,14 @@
                         <menuLabel
                             backgroundColor='#5ac287'
                             textColor='#fafafa'
-                            text="タグ"
+                            :text="messages.tag"
                             icon="mdi-tag"
                         />
                     </li>
 
                     <li>
                         <menuButton
-                            text="編集 削除"
+                            :text="messages.edit"
                             icon="mdi-pencil-plus"
                             :path="route('searchInEditTag')"
                         />
@@ -82,7 +82,7 @@
                         <menuButton
                             textColor="#f0f8ff"
                             backgroundColor="#a80000"
-                            text="ログアウト"
+                            :text="messages.logout"
                             icon="mdi-logout"
                             :path="route('logout')"
                             method="post"
@@ -101,12 +101,37 @@ import menuButton from '@/Components/button/menuButton.vue';
 export default{
     data() {
         return {
+            japanese:{
+                close:"閉じる",
+                article:"記事",
+                bookmark:"ブックマーク",
+                tag:"タグ",
+                createNew:"新規作成",
+                search:"検索",
+                edit:"編集 検索",
+                logout:"ログアウト",
+            },
+            messages:{
+                close:"Close",
+                article:"Article",
+                bookmark:"Bookmark",
+                tag:"Tag",
+                createNew:"Create New",
+                search:"Search",
+                edit:"Edit Search",
+                logout:"logout",
+            },
             show:false
         }
     },
     components:{
         menuLabel,
         menuButton,
+    },
+    mounted() {
+        this.$nextTick(function () {
+            if (this.$store.state.lang == "ja"){this.messages = this.japanese}
+        })
     },
 }
 </script>
