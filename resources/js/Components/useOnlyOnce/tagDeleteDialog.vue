@@ -2,7 +2,7 @@
     <div class="tagDeleteDialog">
         <v-dialog v-model="dialogFlag" persistent>
             <section class="global_css_Dialog">
-                <h2>{{ messages.delete }}</h2>
+                <h2>{{ messages.message }}</h2>
                 <p
                     v-show="errorMessages.messages.length>0"
                     v-for ="message of errorMessages.messages" :key="message"
