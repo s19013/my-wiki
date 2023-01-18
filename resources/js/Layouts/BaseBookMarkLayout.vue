@@ -3,13 +3,12 @@
         <div class="articleContainer">
             <div class="head">
                 <DeleteAlertComponent
-                    type="bookmark"
                     ref ="deleteAlert"
                     @deleteTrigger="deleteBookMark"
                 />
                 <v-btn color="#BBDEFB" class="global_css_haveIconButton_Margin" @click="submit()" >
                     <v-icon>mdi-content-save</v-icon>
-                    <p>保存</p>
+                    <p>{{messages.save}}</p>
                 </v-btn>
             </div>
 
@@ -17,7 +16,7 @@
 
             <TagDialog
                 ref="tagDialog"
-                text = "つけたタグ"
+                :text = "messages.attachedTag"
                 :originalCheckedTagList=originalCheckedTagList
             />
 
@@ -43,7 +42,7 @@
 
                 <v-text-field
                     v-model="bookMarkTitle"
-                    label="タイトル"
+                    :label="messages.title"
                     outlined hide-details="false"
                     @keydown.enter.exact="this.$refs.url.focus()"
                 />
@@ -59,8 +58,8 @@
 
                 <v-text-field
                     ref="url"
-                    label="url [必須]"
-                    v-model   = "bookMarkUrl"
+                    :label="messages.url"
+                    v-model = "bookMarkUrl"
                     @keydown.enter.exact="this.submit()"
                 ></v-text-field>
             </v-form>
@@ -81,6 +80,20 @@ import DateLabel from '@/Components/DateLabel.vue';
 export default {
     data() {
       return {
+        japanese:{
+            save:'保存',
+            attachedTag:'付けたタグ',
+            title:"タイトル",
+            url:"url [必須]",
+            otherError:"サーバー側でエラーが発生しました｡数秒待って再度送信してください",
+        },
+        messages:{
+            save:'save',
+            attachedTag:'Attached Tag',
+            title:"title",
+            url:"url [required]",
+            otherError:"An error occurred on the server side, please wait a few seconds and try again",
+        },
         bookMarkTitle :this.originalBookMark.title,
         bookMarkUrl   :this.originalBookMark.url,
         checkedTagList:this.originalCheckedTagList,
@@ -150,18 +163,16 @@ export default {
             console.log(errors);
             if (String(errors.status)[0] == 5) {
                 this.errorMessages = {
-                    "others" : ["サーバー側でエラーが発生しました｡数秒待って再度送信してください"]
+                    "others" : [this.messages.otherError]
                 }
             }
             else { this.errorMessages = errors.data.messages }
         }
     },
     mounted() {
-        // this.checkedTagList = this.originalCheckedTagList
-        // if (this.originalBookMark !== null) {
-        //     this.bookMarkTitle =this.originalBookMark.title
-        //     this.bookMarkUrl   =this.originalBookMark.url
-        // }
+        this.$nextTick(function () {
+            if (this.$store.state.lang == "ja"){this.messages = this.japanese}
+        })
         //キーボード受付
         document.addEventListener('keydown', (event)=>{
             // 削除ダイアログ呼び出し

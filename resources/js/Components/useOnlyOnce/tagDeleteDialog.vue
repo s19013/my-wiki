@@ -2,7 +2,7 @@
     <div class="tagDeleteDialog">
         <v-dialog v-model="dialogFlag" persistent>
             <section class="global_css_Dialog">
-                <h2>{{name}}を削除しますか?</h2>
+                <h2>{{ messages.delete }}</h2>
                 <p
                     v-show="errorMessages.messages.length>0"
                     v-for ="message of errorMessages.messages" :key="message"
@@ -13,11 +13,11 @@
                 </p>
                 <div class="control">
                     <v-btn class="back" @click.stop="dialogFlagSwitch(),resetErrorMessage()" :loading="loading" :disabled="loading">
-                        <p>もどる</p>
+                        <p>{{ messages.cancel }}</p>
                     </v-btn>
 
                     <v-btn class="delete" color="error" @click.stop="deleteTag()" :loading="loading" :disabled="loading">
-                        <p>削除する</p>
+                        <p>{{ messages.delete }}</p>
                     </v-btn>
                 </div>
             </section>
@@ -29,6 +29,16 @@
 export default {
     data() {
         return {
+            japanese:{
+                message:"削除しますか",
+                delete:'削除',
+                cancel:'戻る',
+            },
+            messages:{
+                message:"Do you want to delete",
+                delete:'delete',
+                cancel:'cancel',
+            },
             loading:false,
             id:0,
             name:"",
@@ -37,6 +47,12 @@ export default {
                 messages:[]
             },
         }
+    },
+    props:{
+        message:{
+            type   :String,
+            default:"削除しますか"
+        },
     },
     methods: {
         //切り替え
@@ -79,6 +95,9 @@ export default {
         }
     },
     mounted() {
+        this.$nextTick(function () {
+            if (this.$store.state.lang == "ja"){this.messages = this.japanese}
+        })
         //キーボード受付
         document.addEventListener('keydown', (event)=>{
             //ダイアログが開いている時有効にする

@@ -1,8 +1,8 @@
 <template>
     <BaseBookMarkLayout
         ref  ="BaseBookMarkLayout"
-        title="新規作成"
-        pageTitle      ="新規作成"
+        :title="$store.state.lang == 'ja' ? '新規作成' : 'Create New'"
+        :pageTitle="$store.state.lang == 'ja' ? '新規作成' : 'Create New'"
         @triggerSubmit = "submit"
         @triggerDeleteBookMark = "deleteBookMark"
     >

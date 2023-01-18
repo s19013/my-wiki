@@ -9,7 +9,8 @@
                         :loading  = "loading"
                         elevation="2"
                         @click.stop="dialogFlagSwitch(),resetErrorMessage()">
-                        <v-icon>mdi-close-box</v-icon><p>閉じる</p>
+                        <v-icon>mdi-close-box</v-icon>
+                        <p>{{ messages.close }}</p>
                 </v-btn>
                 <p
                     v-show="errorMessages.name.length>0"
@@ -22,13 +23,13 @@
 
                 <v-text-field
                     v-model="name"
-                    label="タグ名"
+                    :label="messages.tagName"
                     outlined hide-details="false"
                 />
                 <v-btn color="#BBDEFB" class="global_css_haveIconButton_Margin submitButton"
                 @click.stop="updateTag()" :disabled = "loading" :loading  = "loading">
                     <v-icon>mdi-content-save</v-icon>
-                    <p>保存</p>
+                    <p>{{ messages.update }}</p>
                 </v-btn>
             </section>
         </v-dialog>
@@ -39,6 +40,16 @@
 export default {
     data() {
         return {
+            japanese:{
+                tagName:"タグ名",
+                close  :'閉じる',
+                update :'更新',
+            },
+            messages:{
+                tagName:"tag name",
+                close  :'close',
+                update :'update',
+            },
             dialogFlag:false,
             loading:false,
             id:0,
@@ -86,6 +97,9 @@ export default {
         }
     },
     mounted() {
+        this.$nextTick(function () {
+            if (this.$store.state.lang == "ja"){this.messages = this.japanese}
+        })
         //キーボード受付
         document.addEventListener('keydown', (event)=>{
             //ダイアログが開いている時有効にする

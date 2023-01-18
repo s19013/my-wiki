@@ -1,8 +1,8 @@
 <template>
     <BaseArticleLayout
         ref="BaseArticleLayout"
-        title="記事編集"
-        pageTitle="記事編集"
+        :title="$store.state.lang == 'ja' ? '記事編集' : 'Edit Article'"
+        :pageTitle="$store.state.lang == 'ja' ? '記事編集' : 'Edit Article'"
         :originalArticle        ="originalArticle"
         :originalCheckedTagList ="originalCheckedTagList"
         :edit="true"
@@ -17,8 +17,7 @@ import BaseArticleLayout from '@/Layouts/BaseArticleLayout.vue'
 
 export default {
     data() {
-      return {
-      }
+      return {}
     },
     props:['originalArticle','originalCheckedTagList'],
     components:{BaseArticleLayout},
@@ -55,8 +54,6 @@ export default {
                 console.log(errors);
             })
         },
-    },
-    mounted() {
     },
 }
 </script>

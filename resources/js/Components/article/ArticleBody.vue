@@ -1,13 +1,13 @@
 <template>
     <div class="articleBody">
         <!-- タブ -->
-        <p>ctrl + spaceで変換前､変換後切り替え</p>
+        <p>{{ messages.shotcutMessage }}</p>
         <div class="tabLabel">
             <v-btn @click="changeTab()" flat :rounded="0" :class="[activeTab === 1 ? 'active' : '']" >
-                <p>本文</p>
+                <p>{{ messages.beforeConversion }}</p>
             </v-btn>
             <v-btn @click="changeTab()" flat :rounded="0" :class="[activeTab === -1 ? 'active' : '']">
-                <p>変換後</p>
+                <p>{{ messages.afterConversion }}</p>
             </v-btn>
         </div>
         <!-- md入力欄  -->
@@ -17,7 +17,7 @@
                 filled
                 no-resize
                 rows="20"
-                label="本文 ※マークダウン記法対応"
+                :label="messages.bodylabel"
                 v-model = "body"
             ></v-textarea>
         </div>
@@ -31,6 +31,18 @@ import CompiledMarkDown from '@/Components/article/CompiledMarkDown.vue';
 export default {
     data() {
         return {
+            japanese:{
+                shotcutMessage:"'ctrl + space'で変換前､変換後切り替え",
+                beforeConversion:"本文",
+                afterConversion :"変換後",
+                bodylabel:"本文 ※マークダウン記法対応"
+            },
+            messages:{
+                shotcutMessage:"Switch before and after conversion with 'ctrl + space'",
+                beforeConversion:"text",
+                afterConversion :"conversiond",
+                bodylabel:"Text * Supports markdown notation"
+            },
             activeTab :1,
             body      :'',
         }
@@ -51,6 +63,9 @@ export default {
         focusToBody(){ this.$nextTick(() => this.$refs.textarea.focus()) },
     },
     mounted() {
+        this.$nextTick(function () {
+            if (this.$store.state.lang == "ja"){this.messages = this.japanese}
+        })
         //キーボード受付
         document.addEventListener('keydown', (event)=>{
             // タブ切り替え(アプリ内)
@@ -81,7 +96,7 @@ textarea {
     display: flex;
     button{
         border :black solid 1px;
-        width: 6rem;
+        min-width: 6rem;
     }
     p {font-size: larger;}
 }

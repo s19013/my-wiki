@@ -112,8 +112,11 @@ export default{
             });
         }
     },
-    // mounted() {
-    // },
+    mounted() {
+        this.$nextTick(function () {
+            if (this.$store.state.lang == "ja"){this.messages = this.japanese}
+        })
+    },
 }
 </script>
 

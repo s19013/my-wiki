@@ -1,5 +1,5 @@
 <template>
-    <BaseLayout :title="article.title" pageTitle="記事観覧">
+    <BaseLayout :title="article.title" :pageTitle="messages.title">
         <div class="articleContainer">
                 <!-- タイトルとボタン2つ -->
                 <div class="head">
@@ -11,14 +11,14 @@
                     <Link :href="'/Article/Edit/' + article.id">
                         <v-btn class="editButton global_css_haveIconButton_Margin" color="#BBDEFB" @click="this.disabledFlag = true">
                             <v-icon>mdi-pencil-plus</v-icon>
-                            <p>編集</p>
+                            <p>{{ messages.button }}</p>
                         </v-btn>
                     </Link>
                 </div>
 
                 <DateLabel :createdAt="article.created_at" :updatedAt="article.updated_at"/>
                 <!-- タグ -->
-                <TagList :tagList="articleTagList"/>
+                <TagList :tagList="articleTagList" :text="messages.tagList"/>
 
                 <h1 class="title">{{article.title}}</h1>
 
@@ -44,6 +44,16 @@ import axios from 'axios'
 export default{
     data() {
       return {
+        japanese:{
+            title:'記事観覧',
+            button:"編集",
+            tagList:"付けたタグ",
+        },
+        messages:{
+            title:'Browse article',
+            button:"Edit",
+            tagList:"Attached Tag",
+        },
         //loding
         disabledFlag:false,
       }
@@ -69,6 +79,11 @@ export default{
                 console.log(errors);
             })
         },
+    },
+    mounted() {
+        this.$nextTick(function () {
+            if (this.$store.state.lang == "ja"){this.messages = this.japanese}
+        })
     },
 }
 </script>

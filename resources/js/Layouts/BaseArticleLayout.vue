@@ -10,7 +10,7 @@
                     color="#BBDEFB" class="global_css_haveIconButton_Margin"
                     @click="submit()">
                     <v-icon>mdi-content-save</v-icon>
-                    <p>保存</p>
+                    <p>{{messages.save}}</p>
                 </v-btn>
             </div>
 
@@ -18,7 +18,7 @@
 
             <TagDialog
                 ref="tagDialog"
-                text = "つけたタグ"
+                :text = "messages.attachedTag"
                 :originalCheckedTagList=originalCheckedTagList
             />
 
@@ -43,7 +43,7 @@
                 </p>
                 <v-text-field
                     v-model="articleTitle"
-                    label="タイトル"
+                    :label="messages.title"
                     outlined hide-details="false"
                     @keydown.enter.exact="focusToBody()"
                 />
@@ -72,6 +72,19 @@ import DateLabel from '@/Components/DateLabel.vue';
 export default {
     data() {
       return {
+        japanese:{
+            save:'保存',
+            attachedTag:'付けたタグ',
+            title:"タイトル",
+            otherError:"サーバー側でエラーが発生しました｡数秒待って再度送信してください",
+        },
+        messages:{
+            save:'save',
+            attachedTag:'Attached Tag',
+            title:"title",
+            otherError:"An error occurred on the server side, please wait a few seconds and try again",
+        },
+
         articleTitle  :this.originalArticle.title,
         articleBody   :this.originalArticle.body,
         checkedTagList:this.originalCheckedTagList,
@@ -144,20 +157,17 @@ export default {
             // サーバー側のエラー(500番台)だったら､もう一度送信するようにユーザーに促す
             if (String(errors.status)[0] == 5) {
                 this.errorMessages = {
-                    "others" : ["サーバー側でエラーが発生しました｡数秒待って再度送信してください"]
+                    "others" : [this.messages.otherError]
                 }
             }
             else { this.errorMessages = errors.data.messages }
         }
     },
     mounted() {
-        //props受け渡し
-        // this.checkedTagList = this.originalCheckedTagList
-        // if (this.originalArticle !== null ) {
-        //     this.articleTitle = this.originalArticle.title
-        //     this.articleBody  = this.originalArticle.body
-        // }
-
+        this.$nextTick(function () {
+            // ビュー全体がレンダリングされた後にのみ実行されるコード
+            if (this.$store.state.lang == "ja"){this.messages = this.japanese}
+        })
         //キーボード受付
         document.addEventListener('keydown', (event)=>{
             // 削除ダイアログ呼び出し

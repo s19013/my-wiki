@@ -1,31 +1,44 @@
 <template>
-    <BaseLayout title="ブックマーク検索" pageTitle="ブックマーク検索">
+    <BaseLayout :title="messages.title" :pageTitle="messages.title">
         <v-container>
             <SearchField
                 ref        = "SearchField"
-                searchLabel="ブックマーク検索"
+                :searchLabel="messages.searchBookmarkLabel"
                 :loadingFlag  ="loading"
                 :orignalKeyWord="old.keyword"
                 @triggerSearch="search({
                     page:1,
                     keyword:this.$refs.SearchField.serveKeywordToParent(),
                     tagList:this.$refs.tagDialog.serveCheckedTagList(),
-                    searchTarget:this.$refs.DetailComponent.serveChecked()
+                    searchTarget:this.searchTarget
                 })"
             />
 
+            <div class="searchTarget">
+                <p>{{messages.searchTarget.label}}</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="searchTargetTitle"
+                        value="title" v-model="searchTarget"/>
+                        <label for="searchTargetTitle">
+                            {{messages.searchTarget.title}}
+                        </label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="url"
+                        value="url" v-model="searchTarget"/>
+                        <label for="url">
+                            Url
+                        </label>
+                    </div>
+                </div>
+            </div>
+
             <TagDialog
                 ref="tagDialog"
-                text = "検索するタグ"
+                :text = "messages.TagDialogLabel"
                 :originalCheckedTagList="old.tagList"
                 :searchOnly="true"/>
-
-            <DetailComponent
-                ref="DetailComponent"
-                summary="検索対象"
-                :defaltChecked="old.searchTarget"
-                :elements="detailElements"
-            ></DetailComponent>
 
             <!-- loadingアニメ -->
             <loading v-show="loading"/>
@@ -61,19 +74,27 @@ const makeListTools = new MakeListTools()
 export default{
     data() {
         return {
+            japanese:{
+                title:'ブックマーク',
+                searchBookmarkLabel:"ブックマーク検索",
+                searchTarget:{
+                    label:"検索対象",
+                    title:"タイトル",
+                },
+                TagDialogLabel:"検索するタグ"
+            },
+            messages:{
+                title:'Bookmark',
+                searchBookmarkLabel:"search Bookmark",
+                searchTarget:{
+                    label:"Search Target",
+                    title:"title",
+                },
+                TagDialogLabel:"Search Tag"
+            },
             page: this.result.current_page,
             loading:false,
             searchTarget:this.old.searchTarget,
-            detailElements:[
-                {
-                    label:"タイトルのみ",
-                    value:"title"
-                },
-                {
-                    label:"urlのみ",
-                    value:"url"
-                }
-            ]
         }
     },
     props:{
@@ -124,6 +145,9 @@ export default{
         }
     },
     mounted() {
+        this.$nextTick(function () {
+            if (this.$store.state.lang == "ja"){this.messages = this.japanese}
+        })
     },
 }
 </script>
@@ -132,4 +156,11 @@ export default{
 .content{margin-bottom: 1.2rem;}
 .TagDialog{margin:1rem 0;}
 .DetailComponent{margin:1rem 0 ;}
+.searchTarget{
+    .options{
+        display: flex;
+        gap:1rem;
+        .option{width:fit-content}
+    }
+}
 </style>

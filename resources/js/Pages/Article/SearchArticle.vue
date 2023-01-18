@@ -1,33 +1,46 @@
 <template>
-    <BaseLayout title="記事検索" pageTitle="記事検索">
+    <BaseLayout :title="messages.title" :pageTitle="messages.title">
         <v-container>
 
             <SearchField
                 ref = "SearchField"
-                searchLabel   ="記事検索"
+                :searchLabel   ="messages.searchArticleLabel"
                 :loadingFlag  ="loading"
                 :orignalKeyWord="old.keyword"
                 @triggerSearch="search({
                     page:1,
                     keyword:this.$refs.SearchField.serveKeywordToParent(),
                     tagList:this.$refs.tagDialog.serveCheckedTagList(),
-                    searchTarget:this.$refs.DetailComponent.serveChecked()
+                    searchTarget:this.searchTarget
                 })"
                 >
             </SearchField>
 
+            <div class="searchTarget">
+                <p>{{messages.searchTarget.label}}</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="searchTargetTitle"
+                        value="title" v-model="searchTarget"/>
+                        <label for="searchTargetTitle">
+                            {{messages.searchTarget.title}}
+                        </label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="searchTargetBody"
+                        value="body" v-model="searchTarget"/>
+                        <label for="searchTargetBody">
+                            {{messages.searchTarget.body}}
+                        </label>
+                    </div>
+                </div>
+            </div>
+
             <TagDialog
                 ref="tagDialog"
-                text = "検索するタグ"
+                :text = "messages.TagDialogLabel"
                 :originalCheckedTagList="old.tagList"
                 :searchOnly="true"/>
-
-            <DetailComponent
-                ref="DetailComponent"
-                summary="検索対象"
-                :defaltChecked="old.searchTarget"
-                :elements="detailElements"
-            ></DetailComponent>
 
             <!-- loadingアニメ -->
             <loading v-show="loading"></loading>
@@ -62,18 +75,29 @@ const makeListTools = new MakeListTools()
 export default{
     data() {
         return {
+            japanese:{
+                title:'記事',
+                searchArticleLabel:"記事検索",
+                searchTarget:{
+                    label:"検索対象",
+                    title:"タイトル",
+                    body :"本文"
+                },
+                TagDialogLabel:"検索するタグ"
+            },
+            messages:{
+                title:'Article',
+                searchArticleLabel:"search Article",
+                searchTarget:{
+                    label:"Search Target",
+                    title:"title",
+                    body :"body"
+                },
+                TagDialogLabel:"Search Tag"
+            },
             page: this.result.current_page,
             loading:false,
-            detailElements:[
-                {
-                    label:"タイトルのみ",
-                    value:"title"
-                },
-                {
-                    label:"本文のみ",
-                    value:"body"
-                }
-            ]
+            searchTarget:this.old.searchTarget,
         }
     },
     props:{
@@ -122,13 +146,22 @@ export default{
             });
         }
     },
-    // mounted() {
-    // },
+    mounted() {
+        this.$nextTick(function () {
+            if (this.$store.state.lang == "ja"){this.messages = this.japanese}
+        })
+    },
 }
 </script>
 
 <style lang="scss" scoped>
 .content{margin-bottom: 1.2rem;}
 .TagDialog{margin:1rem 0;}
-.DetailComponent{margin:1rem 0 ;}
+.searchTarget{
+    .options{
+        display: flex;
+        gap:1rem;
+        .option{width:fit-content}
+    }
+}
 </style>

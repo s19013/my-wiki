@@ -1,8 +1,8 @@
 <template>
     <BaseBookMarkLayout
         ref="BaseBookMarkLayout"
-        title="ブックマーク編集"
-        pageTitle="ブックマーク編集"
+        :title="$store.state.lang == 'ja' ? 'ブックマーク編集' : 'Edit Bookmark'"
+        :pageTitle="$store.state.lang == 'ja' ? 'ブックマーク編集' : 'Edit Bookmark'"
         :originalBookMark        ="originalBookMark"
         :originalCheckedTagList  ="originalCheckedTagList"
         :edit="true"
@@ -64,9 +64,6 @@ export default {
                 console.log(errors);
             })
         },
-    },
-    mounted() {
-
     },
 }
 </script>

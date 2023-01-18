@@ -16,7 +16,8 @@
                 :disabled = "loadingFlag"
                 @click.stop="triggerSearch()">
                 <v-icon>mdi-magnify</v-icon>
-                <p>検索</p>
+                <p v-if="$store.state.lang == 'ja'">検索</p>
+                <p v-else>search</p>
             </v-btn>
         </v-form>
     </div>
