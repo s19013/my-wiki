@@ -76,7 +76,7 @@ export default{
     data() {
         return {
             japanese:{
-                title:'記事',
+                title:'記事検索',
                 searchArticleLabel:"記事検索",
                 searchTarget:{
                     label:"検索対象",
@@ -86,8 +86,8 @@ export default{
                 TagDialogLabel:"検索するタグ"
             },
             messages:{
-                title:'Article',
-                searchArticleLabel:"search Article",
+                title:'Search Article',
+                searchArticleLabel:"Search Article",
                 searchTarget:{
                     label:"Search Target",
                     title:"title",

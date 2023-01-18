@@ -75,7 +75,7 @@ export default{
     data() {
         return {
             japanese:{
-                title:'ブックマーク',
+                title:'ブックマーク検索',
                 searchBookmarkLabel:"ブックマーク検索",
                 searchTarget:{
                     label:"検索対象",
@@ -84,8 +84,8 @@ export default{
                 TagDialogLabel:"検索するタグ"
             },
             messages:{
-                title:'Bookmark',
-                searchBookmarkLabel:"search Bookmark",
+                title:'Search Bookmark',
+                searchBookmarkLabel:"Search Bookmark",
                 searchTarget:{
                     label:"Search Target",
                     title:"title",
