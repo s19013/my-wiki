@@ -5,7 +5,9 @@ export default createStore({
         lang:"en"
 	},
 	mutations: {
-
+        setLang(state,lang){
+            state.lang = lang
+        },
     },
     actions: {
     },
