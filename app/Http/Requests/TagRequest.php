@@ -32,9 +32,15 @@ class TagRequest extends FormRequest
 
     public function messages()
     {
+        if ((substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0,2)) == 'ja'){
+            return [
+                "name.required" => "新しいタグ名を入力してください",
+                "name.max"      => "126文字以内で入力してください"
+            ];
+        }
         return [
-            "name.required" => "新しいタグ名を入力してください",
-            "name.max"      => "126文字以内で入力してください"
+            "name.required" => "Enter new tag name",
+            "name.max"      => "Please enter within 255 characters"
         ];
     }
 

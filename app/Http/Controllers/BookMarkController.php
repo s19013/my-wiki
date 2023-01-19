@@ -44,8 +44,14 @@ class BookMarkController extends Controller
         //urlがすでに登録されているか確かめる
         $isAllreadyExists =$this->bookMarkRepository->isAllreadyExists(Auth::id(),$request->bookMarkUrl);
         if ($isAllreadyExists == true) {
+            if ((substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0,2)) == 'ja'){
+                return response()->json([
+                    'messages' => ["bookMarkUrl" => ["そのブックマークは既に保存しています"]],
+                    ],
+                    400);
+            }
             return response()->json([
-                'messages' => ["bookMarkUrl" => ["そのブックマークは既に保存しています"]],
+                'messages' => ["bookMarkUrl" => ["this bookmark is already saved"]],
                 ],
                 400);
         }
@@ -98,8 +104,14 @@ class BookMarkController extends Controller
 
         // 帰り値がnullの場合は無視する(urlを完全に別のものに変更したから,更新するurlがまだ登録されてないから)
         if (!is_null($bookMarkId)&&$request->bookMarkId != $bookMarkId) {
+            if ((substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0,2)) == 'ja'){
+                return response()->json([
+                    'messages' => ["bookMarkUrl" => ["そのブックマークは既に保存しています"]],
+                    ],
+                    400);
+            }
             return response()->json([
-                'messages' => ["bookMarkUrl" => ["そのブックマークは既に保存しています"]],
+                'messages' => ["bookMarkUrl" => ["this bookmark is already saved"]],
                 ],
                 400);
         }
