@@ -14,6 +14,12 @@
                 })"
             />
 
+            <TagDialog
+                ref="tagDialog"
+                :text = "messages.TagDialogLabel"
+                :originalCheckedTagList="old.tagList"
+                :searchOnly="true"/>
+
             <div class="searchTarget">
                 <p>{{messages.searchTarget.label}}</p>
                 <div class="options">
@@ -33,12 +39,6 @@
                     </div>
                 </div>
             </div>
-
-            <TagDialog
-                ref="tagDialog"
-                :text = "messages.TagDialogLabel"
-                :originalCheckedTagList="old.tagList"
-                :searchOnly="true"/>
 
             <!-- loadingアニメ -->
             <loading v-show="loading"/>
