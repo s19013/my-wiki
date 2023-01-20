@@ -61,22 +61,14 @@
                     </li>
 
                     <li>
-                        <menuLabel
+                        <menuButton
                             backgroundColor='#5ac287'
                             textColor='#fafafa'
                             :text="messages.tag"
                             icon="mdi-tag"
-                        />
-                    </li>
-
-                    <li>
-                        <menuButton
-                            :text="messages.edit"
-                            icon="mdi-pencil-plus"
                             :path="route('searchInEditTag')"
                         />
                     </li>
-
 
                     <li>
                         <menuButton
@@ -154,43 +146,28 @@ nav {
     }
 
     ol{
-        .menuButton{ margin-bottom: 0.5rem;}
         height: 100vh;
         overflow-y: auto;
         list-style-type:none;
-        display: grid;
-        grid-template-rows:
-        auto
-        1fr
-        auto
-        auto
-        auto
-        1fr
-        auto
-        auto
-        auto
-        1fr
-        auto
-        auto
-        4fr
-        auto
-        ;
-        li:nth-child(1){grid-row: 1/2; }
+        display:flex;
+        flex-flow: column;
+        .menuLabel{
+            margin-top: 1.5rem;
+            padding: 0.5rem 0;
+            font-size: 1.4rem;
+        }
+        .menuButton{
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
 
-        li:nth-child(2){grid-row: 3/4; }
-        li:nth-child(3){grid-row: 4/5; }
-        li:nth-child(4){grid-row: 5/6; }
+        li:nth-child(8){.menuButton{ margin-top: 1.5rem;} }
 
-        li:nth-child(5){grid-row: 7/8; }
-        li:nth-child(6){grid-row: 8/9; }
-        li:nth-child(7){grid-row: 9/10; }
-
-        li:nth-child(8){grid-row: 11/12; }
-        li:nth-child(9){grid-row: 12/13; }
-
-        li:nth-child(10){
-            grid-row: 16/17;
-            // ここだけマージンを消す
+        li:nth-child(9){
+            // ここだけ下とぴったりくっつける
+            width: 100%;
+            position: absolute;
+            bottom: 0px;
             .menuButton{ margin-bottom: 0;}
         }
     }
