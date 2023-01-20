@@ -40,6 +40,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('test');
     })->name('test');
 
+    Route::get('setting',function () {
+        return Inertia::render('Setting');
+    })->name('setting');
+
 
     Route::prefix('Article')->group(function () {
         Route::get('/Create', function () {
