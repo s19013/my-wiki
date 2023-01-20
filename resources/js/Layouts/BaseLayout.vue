@@ -1,6 +1,6 @@
 <template>
     <Head>
-        <title>{{ title }}</title>
+        <title>{{ title }} | sundlf</title>
     </Head>
     <v-app>
         <originalHead :pageTitle="pageTitle"/>
