@@ -73,6 +73,16 @@
                     <li>
                         <menuButton
                             textColor="#f0f8ff"
+                            backgroundColor="#464646"
+                            :text="messages.setting"
+                            icon="mdi-cog"
+                            :path="route('setting')"
+                        />
+                    </li>
+
+                    <li>
+                        <menuButton
+                            textColor="#f0f8ff"
                             backgroundColor="#a80000"
                             :text="messages.logout"
                             icon="mdi-logout"
@@ -101,6 +111,7 @@ export default{
                 createNew:"新規作成",
                 search:"検索",
                 edit:"編集 検索",
+                setting:"設定",
                 logout:"ログアウト",
             },
             messages:{
@@ -111,6 +122,7 @@ export default{
                 createNew:"Create New",
                 search:"Search",
                 edit:"Edit Search",
+                setting:"Setting",
                 logout:"logout",
             },
             show:false
@@ -161,9 +173,10 @@ nav {
             font-size: 1.2rem;
         }
 
-        li:nth-child(8){.menuButton{ margin-top: 1.5rem;} }
+        li:nth-child(8){.menuButton{ margin-top: 1.4rem;} }
+        li:nth-child(9){.menuButton{ margin-top: 1.4rem;} }
 
-        li:nth-child(9){
+        li:nth-child(10){
             // ここだけ下とぴったりくっつける
             width: 100%;
             position: absolute;
