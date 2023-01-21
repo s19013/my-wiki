@@ -1,5 +1,8 @@
 <script setup>
-import { Head, Link } from '@inertiajs/inertia-vue3';
+import { Head, Link } from '@inertiajs/inertia-vue3'
+import { ref, onMounted, onUnmounted,nextTick, reactive } from 'vue';
+import { useStore } from "vuex";
+const store = useStore();
 
 defineProps({
     canLogin: Boolean,
@@ -7,48 +10,95 @@ defineProps({
     laravelVersion: String,
     phpVersion: String,
 })
+
+const japanese = reactive({
+    title:"sundlf  -- タグを使ってメモ､ブックマークを整理",
+    login:"ログイン",
+    Register:"新規登録",
+    message:"メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするアプリです",
+    article:"メモ",
+    articleMessage:"メモをmd形式でかいて保存できます",
+    bookmark:"ブックマーク",
+    bookmarkMessage:"ブックマークを保存できます",
+    tag:"タグを付けられます",
+    tagMessage:"タグをつけて整理したり検索などで探すことができます",
+})
+
+const messages = reactive({
+    title:"sundlf  -- Organize article and bookmarks using tags",
+    login:"Log in",
+    Register:"Register",
+    message:"this application is makes it easier to find by adding tags to memos and bookmarks, saving them, organizing them, and searching them.",
+    article:"article",
+    articleMessage:"You can write and save articles in markdown format",
+    bookmark:"bookmark",
+    bookmarkMessage:"You can save bookmarks",
+    tag:"tag",
+    tagMessage:"You can add tags to organize and search.",
+})
+
+onMounted(() => {
+    nextTick(() => {
+        if ((window.navigator.language).substring(0,2) == "ja") {store.commit('setLang','ja')}
+        if (store.state.lang == "ja"){Object.assign(messages,japanese)}
+    })
+})
 </script>
 
 <template>
-    <Head title="Welcome" />
+    <Head>
+        <title>{{ messages.title }}</title>
+        <meta name="description" :content="messages.message" />
 
-    <div class="relative flex items-top justify-center min-h-screen bg-gray-100  sm:items-center sm:pt-0">
-        <div v-if="canLogin" class=" fixed top-0 right-0 px-6 pb-5 pt-2" >
+        <meta property="og:url" content="https://sundlf.com/" />
+        <meta property="og:title" :content="messages.title" />
+        <meta property="og:description" :content="messages.message" />
+        <meta property="og:image" :content="'/sundlf_logo_og.png'" />
+
+        <meta name="twitter:card" content="Summary Card"/>
+
+        <meta name="msapplication-TileImage" :content="'/sundlf_logo_og.png'" />
+        <meta name="msapplication-TileColor" content="#f7fafc"/>
+    </Head>
+
+    <v-container>
+        <div v-if="canLogin" class="links" >
             <Link v-if="$page.props.auth.user" :href="route('SearchBookMark')" class="text-sm text-gray-700 underline">
                 Home
             </Link>
 
             <template v-else>
-                <Link :href="route('login')" class="text-sm text-gray-700 underline">
-                    Log in
+                <Link :href="route('login')" class="">
+                    <p>{{ messages.login }}</p>
                 </Link>
 
-                <Link v-if="canRegister" :href="route('register')" class="ml-4 text-sm text-gray-700 underline">
-                    Register
+                <Link v-if="canRegister" :href="route('register')" class="">
+                    <p>{{ messages.Register }}</p>
                 </Link>
             </template>
         </div>
 
         <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
             <div class="flex justify-center pt-10 sm:justify-start sm:pt-0">
-                <h1>Sundlf</h1>
+                <img :src="'/sundlf_logo.png'" alt="ロゴ">
             </div>
 
             <div class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg">
+                <p class="p-3">{{ messages.message }}</p>
                 <div class="grid grid-cols-1 md:grid-cols-2">
                     <div class="p-6 border-t border-gray-200 dark:border-gray-700 md:border-t-0 md:border-l">
                         <div class="flex items-center">
                             <v-icon>mdi-note</v-icon>
                             <div class="ml-4 text-lg leading-7 font-semibold">
                                 <h2>
-                                    記事
+                                    {{ messages.article }}
                                 </h2>
                             </div>
                         </div>
 
                         <div class="ml-12">
                             <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                md形式で記事を作成できます
+                                <p>{{ messages.articleMessage }}</p>
                             </div>
                         </div>
                     </div>
@@ -57,13 +107,13 @@ defineProps({
                         <div class="flex items-center">
                             <v-icon>mdi-bookmark</v-icon>
                             <div class="ml-4 text-lg leading-7 font-semibold">
-                                ブックマーク
+                                <h2>{{ messages.bookmark }}</h2>
                             </div>
                         </div>
 
                         <div class="ml-12">
                             <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                ブックマークを保存できます
+                                <p>{{ messages.bookmarkMessage }}</p>
                             </div>
                         </div>
                     </div>
@@ -72,13 +122,13 @@ defineProps({
                         <div class="flex items-center">
                             <v-icon>mdi-tag</v-icon>
                             <div class="ml-4 text-lg leading-7 font-semibold">
-                                タグ機能
+                                <h2>{{ messages.tag }}</h2>
                             </div>
                         </div>
 
                         <div class="ml-12">
                             <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                タグをつけて整理しましょう
+                                <p>{{ messages.tagMessage }}</p>
                             </div>
                         </div>
                     </div>
@@ -112,10 +162,19 @@ defineProps({
                 </div>
             </div>
         </div>
-    </div>
+    </v-container>
 </template>
 
 <style scoped>
+    img{
+        height: 5rem;
+        width: auto;
+    }
+    .links{
+        display: flex;
+        justify-content: flex-end;
+        gap:1rem;
+    }
     .bg-gray-100 {
         background-color: #f7fafc;
         background-color: rgba(247, 250, 252, var(--tw-bg-opacity));
