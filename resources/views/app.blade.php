@@ -27,8 +27,6 @@
         {{-- seo対策 --}}
         {{-- googleに見つけてもらう --}}
         <meta name="google-site-verification" content="ero83E0pFy6Cmszzqy2IoKzSt-oFYzsg6hqXfemz0MM" />
-        {{-- 説明文 --}}
-        <meta name="description" content="メモやブックマークをタグをつけて保存する" />
     </head>
     <style>
         /* #app {
