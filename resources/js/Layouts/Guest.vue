@@ -1,6 +1,14 @@
 <script setup>
 import BreezeApplicationLogo from '@/Components/ApplicationLogo.vue';
 import { Link } from '@inertiajs/inertia-vue3';
+import { ref, onMounted, onUnmounted,nextTick } from 'vue';
+import { useStore } from "vuex";
+
+const store = useStore()
+
+onMounted(() => {
+    if ((window.navigator.language).substring(0,2) == "ja") {store.commit('setLang','ja')}
+})
 </script>
 
 <template>

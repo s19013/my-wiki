@@ -1,9 +1,9 @@
 <template>
-    <BaseLayout title="タグ編集" pageTitle="タグ編集">
+    <BaseLayout :title="messages.title" :pageTitle="messages.title">
         <v-container>
             <SearchField
                 ref = "SearchField"
-                searchLabel   ="タグ検索"
+                :searchLabel   ="messages.search"
                 :loadingFlag  ="loading"
                 :orignalKeyWord="old.keyword"
                 @triggerSearch="search({
@@ -15,7 +15,7 @@
 
             <!-- loadingアニメ -->
             <loading v-show="loading"></loading>
-            <p>(使用回数)</p>
+            <p>({{ messages.usedCount }})</p>
             <div v-show="!loading">
                 <template v-for="tag of result.data" :key="tag.id">
                     <div class ="content">
@@ -25,11 +25,11 @@
                             <h2>{{tag.name}}</h2>
                             <v-btn color="error" elevation="2"
                             class="deleteButton" @click="openDeleteDialog(tag.id,tag.name)">
-                                削除
+                                <p>{{ messages.delete }}</p>
                             </v-btn>
                             <v-btn color="submit" elevation="2"
                             class="submitButton" @click="openUpdateDialog(tag.id,tag.name)">
-                                編集
+                                <p>{{ messages.edit }}</p>
                             </v-btn>
                         </div>
                     </div>
@@ -56,6 +56,22 @@ import tagUpdateDialog from '@/Components/useOnlyOnce/tagUpdateDialog.vue'
 export default{
     data() {
         return {
+            japanese:{
+                title:"タグ編集",
+                createNew:"新規作成",
+                search:"タグ検索",
+                edit:"編集",
+                delete:"削除",
+                usedCount:"使用回数"
+            },
+            messages:{
+                title:"Edit Tag",
+                createNew:"Create New",
+                search:"Search Tag",
+                edit:"Edit",
+                delete:"Delete",
+                usedCount:"Used Count"
+            },
             page: this.result.current_page,
             loading:false,
         }
@@ -112,8 +128,11 @@ export default{
             });
         }
     },
-    // mounted() {
-    // },
+    mounted() {
+        this.$nextTick(function () {
+            if (this.$store.state.lang == "ja"){this.messages = this.japanese}
+        })
+    },
 }
 </script>
 

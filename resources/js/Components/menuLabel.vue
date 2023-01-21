@@ -36,8 +36,7 @@ export default{
         grid-template-columns:2fr 1fr 4fr 2fr;
         background-color: var(--background-color);
         cursor : default;
-        padding:0.5rem;
-        font-size :1.8rem;
+        padding:0.2rem;
         color:var(--color);
         i{
             grid-column: 2/3;

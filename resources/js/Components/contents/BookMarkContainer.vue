@@ -11,7 +11,7 @@
             </a>
             <Link :href="'/BookMark/Edit/' + bookMark.id">
                 <v-btn color="submit" elevation="2">
-                    編集
+                    {{messages.button}}
                 </v-btn>
             </Link>
         </div>
@@ -22,13 +22,28 @@
 import { Link } from '@inertiajs/inertia-vue3';
 import DateLabel from '@/Components/DateLabel.vue';
 export default{
+    data() {
+        return {
+            japanese:{
+                button:"編集"
+            },
+            messages:{
+                button:"Edit"
+            }
+        }
+    },
     components:{
         Link,
         DateLabel
     },
     props:{
         bookMark:{type:Object}
-    }
+    },
+    mounted(){
+        this.$nextTick(function () {
+            if (this.$store.state.lang == "ja"){this.messages = this.japanese}
+        })
+    },
 }
 </script>
 

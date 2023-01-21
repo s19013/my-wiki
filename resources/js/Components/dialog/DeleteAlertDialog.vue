@@ -6,19 +6,19 @@
         class="global_css_haveIconButton_Margin"  @click.stop="deleteDialogFlagSwitch()"
     >
         <v-icon>mdi-trash-can</v-icon>
-        <p>削除</p>
+        <p>{{ messages.delete }}</p>
     </v-btn>
 
         <v-dialog v-model="deleteDialogFlag">
             <section class="global_css_Dialog">
-                <h2>{{text}}</h2>
+                <h2>{{messages.message}}</h2>
                 <div class="control">
                     <v-btn class="back" @click.stop="deleteDialogFlagSwitch()">
-                        <p>もどる</p>
+                        <p>{{ messages.cancel }}</p>
                     </v-btn>
 
                     <v-btn class="delete" color="error" @click.stop="deleteTrigger()">
-                        <p>削除する</p>
+                        <p>{{ messages.delete }}</p>
                     </v-btn>
                 </div>
             </section>
@@ -31,13 +31,22 @@ export default {
     data() {
         return {
             deleteDialogFlag:false,
-            text:null,
+            japanese:{
+                message:"削除しますか",
+                delete:'削除',
+                cancel:'戻る',
+            },
+            messages:{
+                message:"Do you want to delete",
+                delete:'delete',
+                cancel:'cancel',
+            },
         }
     },
     props:{
-        type:{
+        message:{
             type   :String,
-            default:"article"
+            default:"削除しますか"
         },
     },
     methods: {
@@ -50,9 +59,10 @@ export default {
         }
     },
     mounted() {
-        //textの切り替え
-        if(this.type.toLowerCase() == 'article'){ this.text = "この記事を削除しますか" }
-        else {this.text = "このブックマークを削除しますか"}
+        this.$nextTick(function () {
+            // ビュー全体がレンダリングされた後にのみ実行されるコード
+            if (this.$store.state.lang == "ja"){this.messages = this.japanese}
+        })
 
         //キーボード受付
         document.addEventListener('keydown', (event)=>{

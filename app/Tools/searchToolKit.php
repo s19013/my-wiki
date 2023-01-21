@@ -2,8 +2,6 @@
 
 namespace App\Tools;
 
-use Illuminate\Http\Request;
-
 class searchToolKit
 {
     //sqlでlike検索する前にするエスケープ処理

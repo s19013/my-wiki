@@ -1,13 +1,25 @@
 <template>
     <div class="DateLabel" :style="textSizeComp">
-        <p><span>作成日:</span>{{format(createdAt)}}</p>
-        <p><span>編集日:</span>{{format(updatedAt)}}</p>
+        <p><span>{{ messages.createdDate }}:</span>{{format(createdAt)}}</p>
+        <p><span>{{ messages.updatedDate }}:</span>{{format(updatedAt)}}</p>
     </div>
 </template>
 
 <script>
 
 export default{
+    data() {
+        return {
+            japanese:{
+                createdDate:'作成日',
+                updatedDate:'編集日'
+            },
+            messages:{
+                createdDate:'created',
+                updatedDate:'edited'
+            }
+        }
+    },
     props:{
         createdAt:{
             type   :String,
@@ -37,7 +49,12 @@ export default{
         textSizeComp(){
             return {'--size' : this.size,}
         }
-    }
+    },
+    mounted() {
+        this.$nextTick(function () {
+            if (this.$store.state.lang == "ja"){this.messages = this.japanese}
+        })
+    },
 }
 </script>
 

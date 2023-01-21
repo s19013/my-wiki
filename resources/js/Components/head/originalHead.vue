@@ -4,7 +4,8 @@
             <h2>{{pageTitle}}</h2>
             <v-btn @click.stop="$refs.NavMenu.show = true" class="global_css_haveIconButton_Margin">
                 <v-icon>mdi-view-headline</v-icon>
-                <p>メニュー</p>
+                <p v-if="$store.state.lang == 'ja'">メニュー</p>
+                <p v-else>menu</p>
             </v-btn>
         </div>
 
@@ -18,7 +19,7 @@ export default{
     components:{
         NavMenu,
     },
-    props:['pageTitle']
+    props:['pageTitle'],
 }
 
 </script>

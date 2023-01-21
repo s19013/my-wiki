@@ -6,7 +6,7 @@
                     <li>
                         <button class="closeButton" @click.stop = "show = !show">
                             <v-icon> mdi-close-box</v-icon>
-                            <p>閉じる</p>
+                            <p>{{ messages.close }}</p>
                         </button>
                     </li>
 
@@ -14,14 +14,14 @@
                         <menuLabel
                             backgroundColor='#1a81c1'
                             textColor='#fafafa'
-                            text="記事"
+                            :text="messages.article"
                             icon="mdi-note"
                         />
                     </li>
 
                     <li>
                         <menuButton
-                            text="新規作成"
+                            :text="messages.createNew"
                             icon="mdi-plus"
                             :path="route('CreateArticle')"
                         />
@@ -29,7 +29,7 @@
 
                     <li>
                         <menuButton
-                            text="検索"
+                            :text="messages.search"
                             icon="mdi-magnify"
                             :path="route('SearchArticle')"
                         />
@@ -39,14 +39,14 @@
                         <menuLabel
                             backgroundColor='#4015a6'
                             textColor='#fafafa'
-                            text="ブックマーク"
+                            :text="messages.bookmark"
                             icon="mdi-bookmark"
                         />
                     </li>
 
                     <li>
                         <menuButton
-                            text="新規作成"
+                            :text="messages.createNew"
                             icon="mdi-plus"
                             :path="route('CreateBookMark')"
                         />
@@ -54,35 +54,37 @@
 
                     <li>
                         <menuButton
-                            text="検索"
+                            :text="messages.search"
                             icon="mdi-magnify"
                             :path="route('SearchBookMark')"
                         />
                     </li>
 
                     <li>
-                        <menuLabel
+                        <menuButton
                             backgroundColor='#5ac287'
                             textColor='#fafafa'
-                            text="タグ"
+                            :text="messages.tag"
                             icon="mdi-tag"
+                            :path="route('searchInEditTag')"
                         />
                     </li>
 
                     <li>
                         <menuButton
-                            text="編集 削除"
-                            icon="mdi-pencil-plus"
-                            :path="route('searchInEditTag')"
+                            textColor="#f0f8ff"
+                            backgroundColor="#464646"
+                            :text="messages.setting"
+                            icon="mdi-cog"
+                            :path="route('setting')"
                         />
                     </li>
-
 
                     <li>
                         <menuButton
                             textColor="#f0f8ff"
                             backgroundColor="#a80000"
-                            text="ログアウト"
+                            :text="messages.logout"
                             icon="mdi-logout"
                             :path="route('logout')"
                             method="post"
@@ -101,12 +103,39 @@ import menuButton from '@/Components/button/menuButton.vue';
 export default{
     data() {
         return {
+            japanese:{
+                close:"閉じる",
+                article:"記事",
+                bookmark:"ブックマーク",
+                tag:"タグ",
+                createNew:"新規作成",
+                search:"検索",
+                edit:"編集 検索",
+                setting:"設定",
+                logout:"ログアウト",
+            },
+            messages:{
+                close:"Close",
+                article:"Article",
+                bookmark:"Bookmark",
+                tag:"Tag",
+                createNew:"Create New",
+                search:"Search",
+                edit:"Edit Search",
+                setting:"Setting",
+                logout:"logout",
+            },
             show:false
         }
     },
     components:{
         menuLabel,
         menuButton,
+    },
+    mounted() {
+        this.$nextTick(function () {
+            if (this.$store.state.lang == "ja"){this.messages = this.japanese}
+        })
     },
 }
 </script>
@@ -129,43 +158,29 @@ nav {
     }
 
     ol{
-        .menuButton{ margin-bottom: 0.5rem;}
         height: 100vh;
         overflow-y: auto;
         list-style-type:none;
-        display: grid;
-        grid-template-rows:
-        auto
-        1fr
-        auto
-        auto
-        auto
-        1fr
-        auto
-        auto
-        auto
-        1fr
-        auto
-        auto
-        4fr
-        auto
-        ;
-        li:nth-child(1){grid-row: 1/2; }
+        display:flex;
+        flex-flow: column;
+        .menuLabel{
+            margin-top: 1.5rem;
+            padding: 0.5rem 0;
+            font-size: 1.4rem;
+        }
+        .menuButton{
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
 
-        li:nth-child(2){grid-row: 3/4; }
-        li:nth-child(3){grid-row: 4/5; }
-        li:nth-child(4){grid-row: 5/6; }
-
-        li:nth-child(5){grid-row: 7/8; }
-        li:nth-child(6){grid-row: 8/9; }
-        li:nth-child(7){grid-row: 9/10; }
-
-        li:nth-child(8){grid-row: 11/12; }
-        li:nth-child(9){grid-row: 12/13; }
+        li:nth-child(8){.menuButton{ margin-top: 1.4rem;} }
+        li:nth-child(9){.menuButton{ margin-top: 1.4rem;} }
 
         li:nth-child(10){
-            grid-row: 16/17;
-            // ここだけマージンを消す
+            // ここだけ下とぴったりくっつける
+            width: 100%;
+            position: absolute;
+            bottom: 0px;
             .menuButton{ margin-bottom: 0;}
         }
     }

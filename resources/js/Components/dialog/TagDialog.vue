@@ -7,7 +7,7 @@
                 class="global_css_haveIconButton_Margin"
                 @click.stop="openTagDialog()">
                 <v-icon>mdi-tag</v-icon>
-                <p>タグ</p>
+                <p>{{ messages.tag }}</p>
             </v-btn>
             <TagList
                 :tagList="checkedTagList"
@@ -28,13 +28,13 @@
                         elevation="2"
                         @click.stop="closeTagDialog()">
                         <v-icon
-                        >mdi-close-box</v-icon><p>閉じる</p>
+                        >mdi-close-box</v-icon><p>{{ messages.close }}</p>
                     </v-btn>
                 </div>
 
                 <SearchField
                     ref = "SearchField"
-                    searchLabel="タグ検索"
+                    :searchLabel="messages.search "
                     :disabled    = "disableFlag"
                     :loadingFlag = "disableFlag"
                     @triggerSearch="searchBranch"
@@ -46,7 +46,7 @@
                     <div class="existCheckbox">
                         <!-- この部分を既存チェックボックスという -->
                         <input type="checkbox" id="checked" v-model="onlyCheckedFlag">
-                        <label for="checked">チェックがついているタグだけを表示</label>
+                        <label for="checked">{{ messages.checked }}</label>
                     </div>
                     <v-btn
                         variant="outlined"
@@ -57,7 +57,7 @@
                         :loading  = "disableFlag"
                         @click.stop="clearAllCheck"
                         >
-                            チェックをすべて外す
+                            <p>{{ messages.uncheck }}</p>
                     </v-btn>
                 </div>
 
@@ -90,7 +90,7 @@
                         :loading ="disableFlag"
                         @click.stop="createNewTagFlagSwitch">
                         <v-icon>mdi-tag-plus</v-icon>
-                        <p>新規作成</p>
+                        <p>{{ messages.make }}</p>
                     </v-btn>
 
                     <!-- 新規タグ作成 -->
@@ -107,7 +107,7 @@
                         <v-form v-on:submit.prevent ="createNewTag">
                             <v-text-field
                                 v-model="newTag"
-                                label="新しいタグ"
+                                :label=" messages.tagName "
                                 outlined hide-details="false"
                                 :disabled="disableFlag"
                                 :loading ="disableFlag"
@@ -124,7 +124,7 @@
                             :loading ="disableFlag"
                             @click.stop="createNewTag()">
                             <v-icon>mdi-content-save</v-icon>
-                            <p>作成</p>
+                            <p>{{ messages.create }}</p>
                         </v-btn>
                     </div>
 
@@ -145,6 +145,26 @@ const makeListTools =  new MakeListTools()
 export default{
     data() {
       return {
+        japanese:{
+            tag:"タグ",
+            close:"閉じる",
+            search:"タグ検索",
+            checked:"チェックを付けたタグだけを表示",
+            uncheck:"チェックをすべてはずす",
+            make:"新規作成",
+            tagName:"タグ名",
+            create:"作成",
+        },
+        messages:{
+            tag:"tag",
+            close:"close",
+            search:"Tag search",
+            checked:"Show only checked tags",
+            uncheck:"uncheck all",
+            make:"Create New",
+            tagName:"タグ名",
+            create:"create",
+        },
         newTag:'',
 
         // flag
@@ -344,6 +364,9 @@ export default{
         }
     },
     mounted() {
+        this.$nextTick(function () {
+            if (this.$store.state.lang == "ja"){this.messages = this.japanese}
+        })
         //originalCheckedTagListの中が完全に空ではなかったら代入
         if (this.originalCheckedTagList.length != 0 ) {
             // idがnullのデータ(ユーザーがget通信でurlを変にいじったら起きる)の時の処理

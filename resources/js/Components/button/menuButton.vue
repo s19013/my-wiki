@@ -59,7 +59,6 @@ export default{
     a{text-decoration: none;}
     button{
         width: 100%;
-        font-size :1.3rem;
         background-color: var(--background-color);
         color:var(--color);
     }

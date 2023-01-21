@@ -5,7 +5,7 @@
             <h2>{{article.title}}</h2>
             <Link :href="'/Article/View/' + article.id">
                 <v-btn color="submit" elevation="2">
-                    閲覧 編集
+                    <p>{{ messages.button }}</p>
                 </v-btn>
             </Link>
         </div>
@@ -16,11 +16,26 @@
 import { Link } from '@inertiajs/inertia-vue3';
 import DateLabel from '@/Components/DateLabel.vue';
 export default{
+    data() {
+        return {
+            japanese:{
+                button:"閲覧 編集"
+            },
+            messages:{
+                button:"Browse Edit"
+            }
+        }
+    },
     components:{
         Link,
         DateLabel
     },
-    props:{article:{type:Object}}
+    props:{article:{type:Object}},
+    mounted(){
+        this.$nextTick(function () {
+            if (this.$store.state.lang == "ja"){this.messages = this.japanese}
+        })
+    },
 }
 </script>
 

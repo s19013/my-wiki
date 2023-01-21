@@ -35,8 +35,13 @@ class ArticleRequest extends FormRequest
 
     public function messages()
     {
+        if ((substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0,2)) == 'ja'){
+            return [
+                "articleTitle.max"    => "126文字以内で入力してください",
+            ];
+        }
         return [
-            "articleTitle.max"    => "126文字以内で入力してください",
+            "articleTitle.max"    => "Please enter within 255 characters",
         ];
     }
 

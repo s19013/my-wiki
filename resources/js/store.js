@@ -1,11 +1,13 @@
 import { createStore } from 'vuex'
-// import axios from 'axios'
 
 export default createStore({
 	state: {
+        lang:"en"
 	},
 	mutations: {
-
+        setLang(state,lang){
+            state.lang = lang
+        },
     },
     actions: {
     },

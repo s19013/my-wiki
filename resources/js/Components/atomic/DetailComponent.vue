@@ -61,10 +61,8 @@ export default {
 
 <style scoped lang="scss">
 details{
-    text-align: right;
     .options{
         display: flex;
-        justify-content: flex-end;
         gap:1rem;
         .option{width:fit-content}
     }
