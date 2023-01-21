@@ -55,7 +55,7 @@ onMounted(() => {
         <meta property="og:description" :content="messages.message" />
         <meta property="og:image" :content="'/sundlf_logo_og.png'" />
 
-        <meta name="twitter:card" content="Summary Card"/>
+        <meta name="twitter:card" content="summary"/>
 
         <meta name="msapplication-TileImage" :content="'/sundlf_logo_og.png'" />
         <meta name="msapplication-TileColor" content="#f7fafc"/>
