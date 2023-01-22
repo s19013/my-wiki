@@ -27,6 +27,17 @@
         {{-- seo対策 --}}
         {{-- googleに見つけてもらう --}}
         <meta name="google-site-verification" content="ero83E0pFy6Cmszzqy2IoKzSt-oFYzsg6hqXfemz0MM" />
+
+        {{-- google analytics --}}
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-JHN6733DMV"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-JHN6733DMV');
+        </script>
     </head>
     <style>
         /* #app {
