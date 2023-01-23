@@ -31,14 +31,14 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('/test', function () {
+    return Inertia::render('test');
+})->name('test');
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
-
-    Route::get('/test', function () {
-        return Inertia::render('test');
-    })->name('test');
 
     Route::get('setting',function () {
         return Inertia::render('Setting');
