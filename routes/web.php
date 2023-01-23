@@ -31,6 +31,11 @@ Route::get('/', function () {
     ]);
 });
 
+// ads.text
+Route::get('/ads.text', function () {
+    return response()->file("ads.text");
+});
+
 Route::get('/test', function () {
     return Inertia::render('test');
 })->name('test');
