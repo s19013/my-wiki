@@ -16,7 +16,6 @@
             <VueScriptInsert id="ad_sq_book" url="<div class='admax-ads' data-admax-id='7b5482022e760e221d7ddb68f09fca5d' style='display:inline-block;'></div><script type='text/javascript'>(admaxads = window.admaxads || []).push({admax_id: '7b5482022e760e221d7ddb68f09fca5d',type: 'banner'});</script><script type='text/javascript' charset='utf-8' src='https://adm.shinobi.jp/st/t.js' async></script>" />
         </div> -->
         <BarAd></BarAd>
-        <BarAd type="travel"></BarAd>
     </div>
 </template>
 
@@ -35,19 +34,5 @@ export default {
 </script>
 
 <style lang="scss">
-// .ad_bar iframe{
-//     border: none;
-//     width:750px;
-//     height:110px;
-//     @media (max-width: 750px){
-//         width:350px;
-//         height:120px;
-//     }
-// }
 
-// .ad_sq iframe{
-//     border: none;
-//     width:320px;
-//     height:270px;
-// }
 </style>
