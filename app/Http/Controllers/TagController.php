@@ -38,7 +38,7 @@ class TagController extends Controller
         if ($this->tagRepository->isAllreadyExists(Auth::id(),$request->name)){
             if ((substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0,2)) == 'ja'){
                 return response()->json([
-                    'messages' => ["bookMarkUrl" => ["そのタグは既に保存しています"]],
+                    'messages' => ["name" => ["そのタグは既に保存しています"]],
                     ],
                     400);
             }
@@ -77,7 +77,7 @@ class TagController extends Controller
         if (!is_null($tagId)&&$request->name != $tagId) {
             if ((substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0,2)) == 'ja'){
                 return response()->json([
-                    'messages' => ["bookMarkUrl" => ["そのタグは既に保存しています"]],
+                    'messages' => ["name" => ["そのタグは既に保存しています"]],
                     ],
                     400);
             }
