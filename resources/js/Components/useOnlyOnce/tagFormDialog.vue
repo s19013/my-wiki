@@ -27,9 +27,10 @@
                     outlined hide-details="false"
                 />
                 <v-btn color="#BBDEFB" class="global_css_haveIconButton_Margin submitButton"
-                @click.stop="updateTag()" :disabled = "loading" :loading  = "loading">
+                @click.stop="clickSubmit()" :disabled = "loading" :loading  = "loading">
                     <v-icon>mdi-content-save</v-icon>
-                    <p>{{ messages.update }}</p>
+                    <p v-if="type == 'create'">{{ messages.create }}</p>
+                    <p v-else>{{ messages.update }}</p>
                 </v-btn>
             </section>
         </v-dialog>
@@ -44,11 +45,13 @@ export default {
                 tagName:"タグ名",
                 close  :'閉じる',
                 update :'更新',
+                create :'作成',
             },
             messages:{
                 tagName:"tag name",
                 close  :'close',
                 update :'update',
+                create :'create',
             },
             dialogFlag:false,
             loading:false,
@@ -57,42 +60,54 @@ export default {
             errorMessages:{name:[]},
         }
     },
+    props:{
+        type:{
+            type:String,
+            default:"update"
+        },
+    },
     methods: {
         //切り替え
         dialogFlagSwitch(){this.dialogFlag = !this.dialogFlag},
-        resetErrorMessage(){
-            this.errorMessages = {messages:[]}
-        },
+        resetErrorMessage(){this.errorMessages = {messages:[]}},
         // セッター(今回はpropsを使わない)
-        setter(id,name){
+        setIdAndName(id,name){
             this.id   = id
             this.name = name
         },
-        // 削除処理
+        setErrorMessages(errors){
+            this.$emit('parentLoading')
+            // エラーメッセージ表示
+            if (String(errors.response.status)[0] == 5) {
+                this.errorMessages = {name:['サーバー側でエラーが発生しました｡数秒待って再度送信してください']}
+            }
+            else { this.errorMessages = errors.response.data.messages }
+        },
+        transition(){
+            this.dialogFlag = false
+            this.$inertia.get('/Tag/Edit/Search')
+        },
+        clickSubmit(){
+            if (this.type == "create") {this.createTag()}
+            else {this.updateTag()}
+        },
+        async createTag(){
+            this.loading = true
+            this.$emit('parentLoading')
+            await axios.post('/api/tag/store',{name:this.name})
+            .then((res)=>{this.transition()})
+            .catch((errors) => {this.setErrorMessages(errors)})
+            this.loading = false
+        },
         async updateTag(){
             this.loading = true
+            this.$emit('parentLoading')
             await axios.put('/api/tag/update',{
                 id  :this.id,
                 name:this.name
             })
-            .then((res)=>{
-                // ダイアログを閉じて親タグで再読み込みしてもらう
-                this.dialogFlag = false
-                // this.$emit("deleted");
-
-                // このコンポーネントの中でイナーシャ使っても問題ないようだが､なんか不安なので親の方でやるかどうか迷ってる
-                this.$inertia.get('/Tag/Edit/Search')
-            })
-            .catch((errors) => {
-                // エラーメッセージ表示
-                if (String(errors.response.status)[0] == 5) {
-                    this.errorMessages = {
-                        name:['サーバー側でエラーが発生しました｡数秒待って再度送信してください']
-                    }
-                }
-                else { this.errorMessages = errors.response.data.messages }
-                console.log(this.errorMessages.name);
-            })
+            .then((res)=>{this.transition()})
+            .catch((errors) => {this.setErrorMessages(errors)})
             this.loading = false
         }
     },
