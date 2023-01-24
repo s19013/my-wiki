@@ -1,6 +1,12 @@
 <template>
     <BaseLayout :title="messages.title" :pageTitle="messages.title">
         <v-container>
+            <v-btn
+            color="#BBDEFB" elevation="2" class="createButton" @click="openCreateDialog({type:'create'})"
+            :disabled = "loading" :loading  = "loading">
+                <v-icon>mdi-plus</v-icon>
+                <p>{{ messages.createNew }}</p>
+            </v-btn>
             <SearchField
                 ref = "SearchField"
                 :searchLabel   ="messages.search"
@@ -25,23 +31,28 @@
                             <h2>{{tag.name}}</h2>
                             <v-btn color="error" elevation="2"
                             class="deleteButton" @click="openDeleteDialog(tag.id,tag.name)">
+                                <v-icon>mdi-trash-can</v-icon>
                                 <p>{{ messages.delete }}</p>
                             </v-btn>
                             <v-btn color="submit" elevation="2"
-                            class="submitButton" @click="openUpdateDialog(tag.id,tag.name)">
+                            class="updateButton" @click="openUpdateDialog(tag.id,tag.name)">
+                                <v-icon>mdi-pencil-plus</v-icon>
                                 <p>{{ messages.edit }}</p>
                             </v-btn>
                         </div>
                     </div>
                 </template>
             </div>
-            <tagDeleteDialog ref = "tagDeleteDialog"/>
-            <tagUpdateDialog ref = "tagUpdateDialog"/>
+            <tagDeleteDialog ref = "tagDeleteDialog" @parentLoading="switchLoading()"/>
+            <tagFormDialog   ref = "tagCreateDialog" type="create" @parentLoading="switchLoading()"/>
+            <tagFormDialog   ref = "tagUpdateDialog" type="update" @parentLoading="switchLoading()"/>
         <v-pagination
             v-model="page"
             :length="result.last_page"
+            :disabled = "loading"
         ></v-pagination>
         </v-container>
+        <loadingDialog :loadingFlag="loading"/>
     </BaseLayout>
 </template>
 
@@ -51,7 +62,8 @@ import loading from '@/Components/loading/loading.vue'
 import SearchField from '@/Components/SearchField.vue'
 import DateLabel from '@/Components/DateLabel.vue';
 import tagDeleteDialog from '@/Components/useOnlyOnce/tagDeleteDialog.vue'
-import tagUpdateDialog from '@/Components/useOnlyOnce/tagUpdateDialog.vue'
+import tagFormDialog from '@/Components/useOnlyOnce/tagFormDialog.vue'
+import loadingDialog from '@/Components/dialog/loadingDialog.vue';
 
 export default{
     data() {
@@ -90,9 +102,11 @@ export default{
         SearchField,
         DateLabel,
         tagDeleteDialog,
-        tagUpdateDialog,
+        tagFormDialog,
+        loadingDialog,
     },
     methods: {
+        switchLoading(){this.loading = !this.loading},
         // 検索用
         search({page,keyword}){
             this.loading     = true
@@ -105,14 +119,19 @@ export default{
                 }
             })
         },
-        // 削除
+        // 削除ダイアログ開く
         openDeleteDialog(id,name){
             this.$refs.tagDeleteDialog.setter(id,name)
             this.$refs.tagDeleteDialog.dialogFlagSwitch()
         },
-        // 更新
+        // 作成ダイアログ開く
+        openCreateDialog(id,name){
+            this.$refs.tagCreateDialog.setIdAndName(id,name)
+            this.$refs.tagCreateDialog.dialogFlagSwitch()
+        },
+        // 更新ダイアログ開く
         openUpdateDialog(id,name){
-            this.$refs.tagUpdateDialog.setter(id,name)
+            this.$refs.tagUpdateDialog.setIdAndName(id,name)
             this.$refs.tagUpdateDialog.dialogFlagSwitch()
         },
     },
@@ -164,12 +183,10 @@ export default{
         grid-row: 1;
         grid-column: 3/4;
     }
-    .submitButton{
+    .updateButton{
         width: 100%;
         grid-row: 1;
         grid-column: 4/5;
     }
 }
 </style>
-
-
