@@ -4,11 +4,12 @@ import { ref, onMounted, onUnmounted,nextTick, reactive } from 'vue';
 import { useStore } from "vuex";
 const store = useStore();
 
-defineProps({
+const props = defineProps({
     canLogin: Boolean,
     canRegister: Boolean,
     laravelVersion: String,
     phpVersion: String,
+    lang:String,
 })
 
 const japanese = reactive({
@@ -40,7 +41,7 @@ const messages = reactive({
 onMounted(() => {
     nextTick(() => {
         if ((window.navigator.language).substring(0,2) == "ja") {store.commit('setLang','ja')}
-        if (store.state.lang == "ja"){Object.assign(messages,japanese)}
+        if (props.lang == "ja"){Object.assign(messages,japanese)}
     })
 })
 </script>
@@ -61,7 +62,7 @@ onMounted(() => {
 
         <!-- <meta name="twitter:card" content="summary"/> -->
 
-        <meta name="twitter:card" content="summary_large_image"/>
+        <meta name="twitter:card" content="summary"/>
         <meta property="twitter:domain" content="sundlf.com"/>
         <meta property="twitter:url" content="https://sundlf.com/"/>
         <meta name="twitter:title" :content="messages.title"/>
@@ -74,7 +75,6 @@ onMounted(() => {
             <Link v-if="$page.props.auth.user" :href="route('SearchBookMark')" class="text-sm text-gray-700 underline">
                 Home
             </Link>
-
             <template v-else>
                 <Link :href="route('login')" class="">
                     <p>{{ messages.login }}</p>

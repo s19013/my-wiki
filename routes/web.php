@@ -23,11 +23,29 @@ use App\Http\Controllers\TagController;
 */
 
 Route::get('/', function () {
+    if ((substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0,2)) == 'ja'){
+        return redirect('/ja');
+    }
+    return redirect('/en');
+});
+
+Route::get('/ja', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
+        'lang' => 'ja',
+    ]);
+});
+
+Route::get('/en', function () {
+    return Inertia::render('Welcome', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+        'lang' => 'en',
     ]);
 });
 
