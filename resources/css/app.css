@@ -3,17 +3,9 @@
 @import "tailwindcss/utilities";
 /* tailwindcss邪魔 */
 html {overflow-y: auto;}
-body{
-    /* これをつければスクロールバーが出てこないバグはなくなるが､代わりにスクロールバーが2本表示される */
-    /* overflow-y: auto; */
-    background-color: #f5f5f5;
-}
-
+body{background-color: #f5f5f5;}
 
 .global_css_longButton{width:100%}
-
-/* .global_css_haveIconButton_Margin { margin-top:0.5rem ; } */
-
 /* アイコンありのボタンの文字の左にマージンを足す */
 .global_css_haveIconButton_Margin p{margin-left: 0.4rem;}
 
