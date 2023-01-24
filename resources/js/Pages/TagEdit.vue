@@ -52,6 +52,7 @@
             :disabled = "loading"
         ></v-pagination>
         </v-container>
+        <loadingDialog :loadingFlag="loading"/>
     </BaseLayout>
 </template>
 
@@ -62,6 +63,7 @@ import SearchField from '@/Components/SearchField.vue'
 import DateLabel from '@/Components/DateLabel.vue';
 import tagDeleteDialog from '@/Components/useOnlyOnce/tagDeleteDialog.vue'
 import tagFormDialog from '@/Components/useOnlyOnce/tagFormDialog.vue'
+import loadingDialog from '@/Components/dialog/loadingDialog.vue';
 
 export default{
     data() {
@@ -101,6 +103,7 @@ export default{
         DateLabel,
         tagDeleteDialog,
         tagFormDialog,
+        loadingDialog,
     },
     methods: {
         switchLoading(){this.loading = !this.loading},

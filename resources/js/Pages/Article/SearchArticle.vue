@@ -1,7 +1,6 @@
 <template>
     <BaseLayout :title="messages.title" :pageTitle="messages.title">
         <v-container>
-
             <SearchField
                 ref = "SearchField"
                 :searchLabel   ="messages.searchArticleLabel"
@@ -42,9 +41,6 @@
                 </div>
             </div>
 
-            <!-- loadingアニメ -->
-            <loading v-show="loading"></loading>
-
             <template v-for="article of result.data" :key="article.id">
                 <ArticleContainer
                     v-if="!loading"
@@ -56,6 +52,8 @@
             :length="result.last_page"
         ></v-pagination>
         </v-container>
+        <!-- loadingアニメ -->
+        <loadingDialog :loadingFlag="loading"/>
     </BaseLayout>
 </template>
 
@@ -63,11 +61,10 @@
 import BaseLayout from '@/Layouts/BaseLayout.vue'
 
 import TagDialog from '@/Components/dialog/TagDialog.vue';
-import loading from '@/Components/loading/loading.vue'
+import loadingDialog from '@/Components/dialog/loadingDialog.vue';
 import DetailComponent from '@/Components/atomic/DetailComponent.vue';
 import SearchField from '@/Components/SearchField.vue';
 import ArticleContainer from '@/Components/contents/ArticleContainer.vue';
-
 import MakeListTools from '@/tools/MakeListTools.js';
 
 const makeListTools = new MakeListTools()
@@ -111,7 +108,7 @@ export default{
     components:{
         BaseLayout,
         TagDialog,
-        loading,
+        loadingDialog,
         SearchField,
         ArticleContainer,
         DetailComponent

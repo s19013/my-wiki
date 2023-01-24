@@ -40,9 +40,6 @@
                 </div>
             </div>
 
-            <!-- loadingアニメ -->
-            <loading v-show="loading"/>
-
             <template v-for="bookMark of result.data" :key="bookMark.id">
                 <BookMarkContainer
                     v-if="!loading"
@@ -54,6 +51,8 @@
                 :length="result.last_page"
             />
         </v-container>
+        <!-- loadingアニメ -->
+        <loadingDialog :loadingFlag="loading"/>
     </BaseLayout>
 </template>
 
@@ -62,10 +61,10 @@ import BaseLayout from '@/Layouts/BaseLayout.vue'
 
 import { Link } from '@inertiajs/inertia-vue3';
 import TagDialog from '@/Components/dialog/TagDialog.vue';
-import loading from '@/Components/loading/loading.vue';
 import DetailComponent from '@/Components/atomic/DetailComponent.vue';
 import SearchField from '@/Components/SearchField.vue';
 import BookMarkContainer from '@/Components/contents/BookMarkContainer.vue';
+import loadingDialog from '@/Components/dialog/loadingDialog.vue';
 
 import MakeListTools from '@/tools/MakeListTools.js';
 
@@ -109,7 +108,7 @@ export default{
         BaseLayout,
         Link,
         TagDialog,
-        loading,
+        loadingDialog,
         SearchField,
         BookMarkContainer,
         DetailComponent
