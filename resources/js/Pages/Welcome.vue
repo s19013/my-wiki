@@ -27,6 +27,7 @@ const japanese = reactive({
 const messages = reactive({
     login:"Log in",
     Register:"Register",
+    message:"this application is makes it easier to find by adding tags to memos and bookmarks, saving them, organizing them, and searching them.",
     article:"article",
     articleMessage:"You can write and save articles in markdown format",
     bookmark:"bookmark",
