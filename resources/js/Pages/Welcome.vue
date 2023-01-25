@@ -13,10 +13,9 @@ const props = defineProps({
 })
 
 const japanese = reactive({
-    title:"sundlf  -- タグを使ってメモ､ブックマークを整理",
     login:"ログイン",
     Register:"新規登録",
-    message:"メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするアプリです",
+    message:"メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです",
     article:"メモ",
     articleMessage:"メモをmd形式でかいて保存できます",
     bookmark:"ブックマーク",
@@ -26,10 +25,8 @@ const japanese = reactive({
 })
 
 const messages = reactive({
-    title:"sundlf  -- Organize article and bookmarks using tags",
     login:"Log in",
     Register:"Register",
-    message:"this application is makes it easier to find by adding tags to memos and bookmarks, saving them, organizing them, and searching them.",
     article:"article",
     articleMessage:"You can write and save articles in markdown format",
     bookmark:"bookmark",
@@ -47,29 +44,6 @@ onMounted(() => {
 </script>
 
 <template>
-    <Head>
-        <title>{{ messages.title }}</title>
-        <meta name="description" :content="messages.message" />
-
-        <meta property="og:url" content="https://sundlf.com/" />
-        <meta property="og:title" :content="messages.title" />
-        <meta property="og:type" content="website"/>
-        <meta property="og:description" :content="messages.message" />
-        <meta property="og:image" :content="'https://sundlf.com/sundlf_logo_og.png'" />
-
-        <meta name="msapplication-TileImage" :content="'https://sundlf.com/sundlf_logo_og.png'" />
-        <meta name="msapplication-TileColor" content="#f7fafc"/>
-
-        <!-- <meta name="twitter:card" content="summary"/> -->
-
-        <meta name="twitter:card" content="summary"/>
-        <meta property="twitter:domain" content="sundlf.com"/>
-        <meta property="twitter:url" content="https://sundlf.com/"/>
-        <meta name="twitter:title" :content="messages.title"/>
-        <meta name="twitter:description" :content="messages.title"/>
-        <meta name="twitter:image" :content="'https://sundlf.com/sundlf_logo_og.png'"/>
-    </Head>
-
     <v-container>
         <div v-if="canLogin" class="links" >
             <Link v-if="$page.props.auth.user" :href="route('SearchBookMark')" class="text-sm text-gray-700 underline">
