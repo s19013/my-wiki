@@ -60,7 +60,6 @@ class MetaToolKit
 
     public static function render()
     {
-        dd(static::$meta);
         $html = '';
         $html .= '<title>'.static::$title.'</title>'.PHP_EOL;
 
