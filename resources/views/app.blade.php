@@ -6,6 +6,20 @@
         {{-- レスポンシブデザインに必要らしい --}}
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
+        {{-- seo対策 --}}
+        {!! \App\Tools\MetaToolKit::render() !!}
+        <meta property="og:type" content="website"/>
+        <meta property="og:image" :content="'https://sundlf.com/sundlf_logo_og.png'" />
+
+        <meta name="twitter:card" content="summary_large_image"/>
+        <meta property="twitter:domain" content="sundlf.com"/>
+        <meta name="twitter:image" :content="'https://sundlf.com/sundlf_logo_og.png'"/>
+
+
+        <meta name="msapplication-TileImage" content="https://sundlf.com/sundlf_logo_og.png" />
+        <meta name="msapplication-TileColor" content="#f7fafc"/>
+        {{--  --}}
+
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
         {{-- csrf対策? --}}
