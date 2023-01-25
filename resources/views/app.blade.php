@@ -7,13 +7,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         {{-- seo対策 --}}
+        <head prefix="og: https://ogp.me/ns#"> {{-- ogpを使うには必要 --}}
         {!! \App\Tools\MetaToolKit::render() !!}
-        <meta property="og:type" content="website"/>
-        <meta property="og:image" :content="'https://sundlf.com/sundlf_logo_og.png'" />
-
-        <meta name="twitter:card" content="summary_large_image"/>
-        <meta property="twitter:domain" content="sundlf.com"/>
-        <meta name="twitter:image" :content="'https://sundlf.com/sundlf_logo_og.png'"/>
 
 
         <meta name="msapplication-TileImage" content="https://sundlf.com/sundlf_logo_og.png" />
