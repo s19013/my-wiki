@@ -10,6 +10,9 @@ use App\Http\Controllers\BookMarkController;
 use App\Http\Controllers\BookMarkTransitionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\WellcomeController;
+
+use App\Tools\MetaToolKit;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,30 +27,15 @@ use App\Http\Controllers\TagController;
 
 Route::get('/', function () {
     if ((substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0,2)) == 'ja'){
+        MetaToolKit::setPropertyMeta('og:url', 'https://sundlf.com/');
         return redirect('/ja');
     }
     return redirect('/en');
 });
 
-Route::get('/ja', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-        'lang' => 'ja',
-    ]);
-});
+Route::get('/ja', [WellcomeController::class,'returnJa']);
 
-Route::get('/en', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-        'lang' => 'en',
-    ]);
-});
+Route::get('/en', [WellcomeController::class,'returnEn']);
 
 // ads.text
 Route::get('/ads.text', function () {
