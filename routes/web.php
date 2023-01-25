@@ -27,7 +27,6 @@ use App\Tools\MetaToolKit;
 
 Route::get('/', function () {
     if ((substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0,2)) == 'ja'){
-        MetaToolKit::setPropertyMeta('og:url', 'https://sundlf.com/');
         return redirect('/ja');
     }
     return redirect('/en');
