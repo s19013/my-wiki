@@ -10,12 +10,9 @@
         <head prefix="og: https://ogp.me/ns#"> {{-- ogpを使うには必要 --}}
         {!! \App\Tools\MetaToolKit::render() !!}
 
-
         <meta name="msapplication-TileImage" content="https://sundlf.com/sundlf_logo_og.png" />
         <meta name="msapplication-TileColor" content="#f7fafc"/>
         {{--  --}}
-
-        <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
         {{-- csrf対策? --}}
         <meta name="csrf-token" content="{{ csrf_token() }}">
