@@ -16,7 +16,10 @@ export default {
         }
     },
     mounted() {
-        postscribe('#ad', `<div  class='admax-switch' data-admax-id='4c1dc2d6f04b64689024958f1f0b1823' style='display:inline-block;'></div><script type='text/javascript'>(admaxads = window.admaxads || []).push({admax_id: '4c1dc2d6f04b64689024958f1f0b1823',type: 'switch'});<\/script><script type='text/javascript' charset='utf-8' src='https://adm.shinobi.jp/st/t.js' async><\/script>`)
+        postscribe('#ad', `<script src='https://adm.shinobi.jp/o/6b9fed37e6c3984f691df90de1dc69e0'><\/script>`)
+        // this.$nextTick(function () {
+        //     postscribe('#ad', `<div  class='admax-switch' data-admax-id='4c1dc2d6f04b64689024958f1f0b1823' style='display:inline-block;'></div><script type='text/javascript'>(admaxads = window.admaxads || []).push({admax_id: '4c1dc2d6f04b64689024958f1f0b1823',type: 'switch'});<\/script><script type='text/javascript' charset='utf-8' src='https://adm.shinobi.jp/st/t.js' async><\/script>`)
+        // })
     }
 }
 </script>
