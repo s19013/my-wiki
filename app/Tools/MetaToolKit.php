@@ -5,22 +5,22 @@ namespace App\Tools;
 class MetaToolKit
 {
     protected static $meta = [
-        'description'    => ['name','詳細'],
+        'description'    => ['name','メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです'],
 
         'og:locale' => ['property','ja_JP'],
-        'og:url'         => ['property','url'],
-        'og:title'       => ['property','タイトル'],
+        'og:url'         => ['property','https://sundlf.com/'],
+        'og:title'       => ['property','sundlf  -- タグを使ってメモ､ブックマークを整理'],
         'og:type'        => ['property','website'],
-        'og:description' => ['property','詳細'],
-        'og:image'       => ['property','画像'],
+        'og:description' => ['property','メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです'],
+        'og:image'       => ['property','https://sundlf.com/sundlf_logo_og.png'],
         'og:site_name'   => ['property','sundlf'],
 
         'twitter:card'   => ['name','summary_large_image'],
         'twitter:domain' => ['property','sundlf.com'],
-        'twitter:url'    => ['property','url'],
-        'twitter:title'  => ['name','title'],
-        'twitter:image'  => ['name','summary_large_image'],
-        'twitter:description' => ['name','summary_large_image'],
+        'twitter:url'    => ['property','https://sundlf.com/'],
+        'twitter:title'  => ['name','sundlf  -- タグを使ってメモ､ブックマークを整理'],
+        'twitter:image'  => ['name','https://sundlf.com/sundlf_logo_og.png'],
+        'twitter:description' => ['name','メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです'],
     ];
     protected static $title = "sundlf";
     protected static $lang  = "en";
