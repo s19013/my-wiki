@@ -6,16 +6,20 @@
         {{-- レスポンシブデザインに必要らしい --}}
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
+        <title inertia>
+            @if((preg_match('/(?<=\/)ja/',url()->current())) === 1)
+            sundlf  -- タグを使ってメモ､ブックマークを整理
+            @else
+            sundlf  -- Organize article and bookmarks using tags
+            @endif
+        </title>
         {{-- seo対策 --}}
         <head prefix="og: https://ogp.me/ns#"> {{-- ogpを使うには必要 --}}
         {!! \App\Tools\MetaToolKit::render() !!}
 
-
         <meta name="msapplication-TileImage" content="https://sundlf.com/sundlf_logo_og.png" />
         <meta name="msapplication-TileColor" content="#f7fafc"/>
         {{--  --}}
-
-        <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
         {{-- csrf対策? --}}
         <meta name="csrf-token" content="{{ csrf_token() }}">
