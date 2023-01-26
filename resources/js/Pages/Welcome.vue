@@ -9,7 +9,6 @@ const props = defineProps({
     canRegister: Boolean,
     laravelVersion: String,
     phpVersion: String,
-    lang:String,
 })
 
 const japanese = reactive({
@@ -39,7 +38,8 @@ const messages = reactive({
 onMounted(() => {
     nextTick(() => {
         if ((window.navigator.language).substring(0,2) == "ja") {store.commit('setLang','ja')}
-        if (props.lang == "ja"){Object.assign(messages,japanese)}
+        if (store.state.lang == "ja"){Object.assign(messages,japanese)}
+        // if (props.lang == "ja"){Object.assign(messages,japanese)}
     })
 })
 </script>
