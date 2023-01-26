@@ -23,39 +23,75 @@ class MetaToolKit
         'twitter:description' => ['name','summary_large_image'],
     ];
     protected static $title = "sundlf";
+    protected static $lang  = "en";
 
-    public static function setTitleTag($title)
+    public static function setLang($lang)
     {
-        static::$title = $title;
+        static::$lang = $lang;
     }
 
-    public static function setTitle($title)
+    public static function setTitleTag($ja,$en)
     {
-        static::$meta['twitter:title'][1] = $title;
-        static::$meta['og:title'][1]      = $title;
+        if (static::$lang == "ja") {
+            static::$title = $ja;
+            return;
+        }
+        static::$title = $en;
     }
 
-    public static function setUrl($url)
+    public static function setTitle($ja,$en)
     {
-        static::$meta['twitter:url'][1] = $url;
-        static::$meta['og:url'][1]      = $url;
+        if (static::$lang == "ja") {
+            static::$meta['twitter:title'][1] = $ja;
+            static::$meta['og:title'][1]      = $ja;
+            return;
+        }
+        static::$meta['twitter:title'][1] = $en;
+        static::$meta['og:title'][1]      = $en;
     }
 
-    public static function setImg($img)
+    public static function setUrl($ja,$en)
     {
-        static::$meta['og:image'][1] = $img;
+        if (static::$lang == "ja") {
+            static::$meta['twitter:url'][1] = $ja;
+            static::$meta['og:url'][1]      = $ja;
+            return;
+        }
+        static::$meta['twitter:url'][1] = $en;
+        static::$meta['og:url'][1]      = $en;
     }
 
-    public static function setDescription($discription)
+    public static function setImg($ja,$en)
     {
-        static::$meta['description'][1]         = $discription;
-        static::$meta['og:description'][1]      = $discription;
-        static::$meta['twitter:description'][1] = $discription;
+        if (static::$lang == "ja") {
+            static::$meta['og:image'][1]      = $ja;
+            static::$meta['twitter:image'][1] = $ja;
+            return;
+        }
+        static::$meta['og:image'][1]      = $en;
+        static::$meta['twitter:image'][1] = $en;
     }
 
-    public static function setMeta($name, $content)
+    public static function setDescription($ja,$en)
     {
-        static::$meta[$name][1] = $content;
+        if (static::$lang == "ja") {
+            static::$meta['description'][1]         = $ja;
+            static::$meta['og:description'][1]      = $ja;
+            static::$meta['twitter:description'][1] = $ja;
+            return;
+        }
+        static::$meta['description'][1]         = $en;
+        static::$meta['og:description'][1]      = $en;
+        static::$meta['twitter:description'][1] = $en;
+    }
+
+    public static function setMeta($name, $ja,$en)
+    {
+        if (static::$lang == "ja") {
+            static::$meta[$name][1] = $ja;
+            return;
+        }
+        static::$meta[$name][1] = $en;
     }
 
     public static function render()
