@@ -85,13 +85,13 @@ class MetaToolKit
         static::$meta['twitter:description'][1] = $en;
     }
 
-    public static function setMeta($name, $ja,$en)
+    public static function setMeta($place, $ja,$en)
     {
         if (static::$lang == "ja") {
-            static::$meta[$name][1] = $ja;
+            static::$meta[$place][1] = $ja;
             return;
         }
-        static::$meta[$name][1] = $en;
+        static::$meta[$place][1] = $en;
     }
 
     public static function render()

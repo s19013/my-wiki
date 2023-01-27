@@ -30,8 +30,9 @@ class SetMeta
         );
 
         MetaToolKit::setMeta(
-            $ja='og:locale','ja_JP',
-            $en='og:locale','en_US'
+            $place='og:locale',
+            $ja='ja_JP',
+            $en='en_US'
         );
 
         MetaToolKit::setTitleTag(
