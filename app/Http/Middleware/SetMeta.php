@@ -20,7 +20,7 @@ class SetMeta
         MetaToolKit::setLang((substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0,2)));
 
         MetaToolKit::setUrl(
-            $ja='https://sundlf.com/ja',
+            $ja='https://sundlf.com/',
             $en='https://sundlf.com/en'
         );
 

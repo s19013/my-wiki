@@ -6,16 +6,29 @@
         {{-- レスポンシブデザインに必要らしい --}}
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        {{-- <title inertia>
-            @if((preg_match('/(?<=\/)ja/',url()->current())) === 1)
-            sundlf  -- タグを使ってメモ､ブックマークを整理
-            @else
-            sundlf  -- Organize article and bookmarks using tags
-            @endif
-        </title> --}}
         {{-- seo対策 --}}
         <head prefix="og: https://ogp.me/ns#"> {{-- ogpを使うには必要 --}}
-        {!! \App\Tools\MetaToolKit::render() !!}
+        <title inertia>sundlf -- メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです</title>
+        <meta name="description" content="メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです" />
+
+        <meta property="og:url" content="https://sundlf.com/" />
+        <meta property="og:title" content="メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです" />
+        <meta property="og:type" content="website"/>
+        <meta property="og:description" content="メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです" />
+        <meta property="og:image" :content="'https://sundlf.com/sundlf_logo_og.png'" />
+
+        <meta name="msapplication-TileImage" :content="'https://sundlf.com/sundlf_logo_og.png'" />
+        <meta name="msapplication-TileColor" content="#f7fafc"/>
+
+        <meta name="twitter:card" content="summary_large_image"/>
+        <meta property="twitter:domain" content="sundlf.com"/>
+        <meta property="twitter:url" content="https://sundlf.com/"/>
+        <meta name="twitter:title" content="メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです"/>
+        <meta name="twitter:description" content="メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです"/>
+        <meta name="twitter:image" :content="'https://sundlf.com/sundlf_logo_og.png'"/>
+
+        {{--  数日後サイド調整する --}}
+        {{-- {!! \App\Tools\MetaToolKit::render() !!} --}}
 
         <meta name="msapplication-TileImage" content="https://sundlf.com/sundlf_logo_og.png" />
         <meta name="msapplication-TileColor" content="#f7fafc"/>
