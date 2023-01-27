@@ -6,13 +6,13 @@
         {{-- レスポンシブデザインに必要らしい --}}
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title inertia>
+        {{-- <title inertia>
             @if((preg_match('/(?<=\/)ja/',url()->current())) === 1)
             sundlf  -- タグを使ってメモ､ブックマークを整理
             @else
             sundlf  -- Organize article and bookmarks using tags
             @endif
-        </title>
+        </title> --}}
         {{-- seo対策 --}}
         <head prefix="og: https://ogp.me/ns#"> {{-- ogpを使うには必要 --}}
         {!! \App\Tools\MetaToolKit::render() !!}
