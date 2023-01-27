@@ -8,7 +8,7 @@
 
         {{-- seo対策 --}}
         <head prefix="og: https://ogp.me/ns#"> {{-- ogpを使うには必要 --}}
-        <title inertia>メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです</title>
+        <title inertia>sundlf -- メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです</title>
         <meta name="description" content="メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです" />
 
         <meta property="og:url" content="https://sundlf.com/" />
