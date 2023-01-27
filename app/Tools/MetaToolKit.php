@@ -30,22 +30,15 @@ class MetaToolKit
         static::$lang = $lang;
     }
 
-    public static function setTitleTag($ja,$en)
-    {
-        if (static::$lang == "ja") {
-            static::$title = $ja;
-            return;
-        }
-        static::$title = $en;
-    }
-
     public static function setTitle($ja,$en)
     {
         if (static::$lang == "ja") {
+            static::$title = $ja;
             static::$meta['twitter:title'][1] = $ja;
             static::$meta['og:title'][1]      = $ja;
             return;
         }
+        static::$title = $en;
         static::$meta['twitter:title'][1] = $en;
         static::$meta['og:title'][1]      = $en;
     }
