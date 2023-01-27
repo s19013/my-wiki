@@ -25,19 +25,7 @@ use App\Tools\MetaToolKit;
 |
 */
 
-// Route::get('/', function () {
-//     if ((substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0,2)) == 'ja'){
-//         return Inertia::render('Welcome', [
-//             'canLogin' => Route::has('login'),
-//             'canRegister' => Route::has('register'),
-//             'laravelVersion' => Application::VERSION,
-//             'phpVersion' => PHP_VERSION,
-//         ]);
-//     }
-//     return redirect('/en');
-// })->middleware('setMeta');
-
-Route::middleware('setMeta')->get('/',function(){
+Route::get('/', function () {
     if ((substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0,2)) == 'ja'){
         return Inertia::render('Welcome', [
             'canLogin' => Route::has('login'),
@@ -50,6 +38,19 @@ Route::middleware('setMeta')->get('/',function(){
     return redirect('/en');
 });
 
+// Route::middleware('setMeta')->get('/',function(){
+//     if ((substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0,2)) == 'ja'){
+//         return Inertia::render('Welcome', [
+//             'canLogin' => Route::has('login'),
+//             'canRegister' => Route::has('register'),
+//             'laravelVersion' => Application::VERSION,
+//             'phpVersion' => PHP_VERSION,
+//             'lang' => "ja"
+//         ]);
+//     }
+//     return redirect('/en');
+// });
+
 Route::get('/en', function() {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -58,7 +59,7 @@ Route::get('/en', function() {
         'phpVersion' => PHP_VERSION,
         'lang' => "en"
     ]);
-})->middleware('setMeta');
+});
 
 // ads.text
 Route::get('/ads.text', function () {
@@ -69,7 +70,7 @@ Route::get('/test', function () {
     return Inertia::render('test');
 })->name('test');
 
-Route::middleware(['auth', 'verified','setMeta'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
