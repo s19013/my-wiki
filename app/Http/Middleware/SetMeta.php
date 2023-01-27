@@ -35,11 +35,6 @@ class SetMeta
             $en='en_US'
         );
 
-        MetaToolKit::setTitleTag(
-            $ja="sundlf  -- タグを使ってメモ､ブックマークを整理",
-            $en="sundlf  -- Organize article and bookmarks using tags"
-        );
-
         MetaToolKit::setTitle(
             $ja="sundlf  -- タグを使ってメモ､ブックマークを整理",
             $en="sundlf  -- Organize article and bookmarks using tags"
