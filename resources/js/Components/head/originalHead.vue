@@ -28,25 +28,21 @@ export default{
 .originalHead{
     background-color: rgb(127, 255, 174);
     height        : 3rem;
-    margin-bottom :0.2rem;
+    padding-bottom :0.2rem;
     display       : grid;
-    gap:1rem;
-    grid-template-columns:1fr 4fr 1fr 0.1fr;
-    @media (max-width: 600px){
-        grid-template-columns: auto 10rem;
-        padding-right:0.5rem;
-    }
+    grid-template-columns:20% 60% 18% auto;
+    @media (max-width: 900px){grid-template-columns:0 70% 28% auto;}
     h2{
         grid-column: 2/3;
         text-align :center;
-        margin:auto;
+        margin-top:auto;
+        margin-bottom:auto;
     }
     button{
         grid-column: 3/4;
+        width:100%;
         margin-top:auto;
         margin-bottom:auto;
     }
 }
 </style>
-
-
