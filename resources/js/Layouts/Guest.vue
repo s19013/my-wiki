@@ -27,7 +27,8 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 img {
-    width:40vw;
+    width:30vw;
+    @media (max-width: 900px){width:50vw;}
     height: auto;
 }
 </style>
