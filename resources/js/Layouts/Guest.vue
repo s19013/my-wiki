@@ -15,7 +15,7 @@ onMounted(() => {
     <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
         <div>
             <Link href="/">
-                <img :src="'/sundlf_logo.png'" alt="ロゴ"/>
+                <img class="flex justify-center pt-10 sm:justify-start sm:pt-0" :src="'/sundlf_logo.png'" alt="ロゴ"/>
             </Link>
         </div>
 
