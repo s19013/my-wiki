@@ -9,10 +9,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         {{-- seo対策 --}}
-        {{-- <title inertia>sundlf -- メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです</title>
+        <title inertia>sundlf -- メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです</title>
         <meta name="description" content="メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです" />
 
-        <meta property="og:url" content="https://sundlf.com/" />
+        {{-- <meta property="og:url" content="https://sundlf.com/" />
         <meta property="og:title" content="メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです" />
         <meta property="og:type" content="website"/>
         <meta property="og:description" content="メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです" />
