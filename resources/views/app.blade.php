@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head prefix="og: https://ogp.me/ns#"> {{-- ogpを使うには必要 --}}
+    <head>
+    {{-- <head prefix="og: https://ogp.me/ns#">  --}}
+        {{-- ogpを使うには必要 --}}
         <meta charset="utf-8">
 
         {{-- レスポンシブデザインに必要らしい --}}
