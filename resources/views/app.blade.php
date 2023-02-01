@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         {{-- seo対策 --}}
-        <title inertia>sundlf -- メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです</title>
+        {{-- <title inertia>sundlf -- メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです</title>
         <meta name="description" content="メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです" />
 
         <meta property="og:url" content="https://sundlf.com/" />
@@ -24,13 +24,13 @@
         <meta property="twitter:url" content="https://sundlf.com/"/>
         <meta name="twitter:title" content="メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです"/>
         <meta name="twitter:description" content="メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです"/>
-        <meta name="twitter:image" :content="'https://sundlf.com/sundlf_logo_og.png'"/>
+        <meta name="twitter:image" :content="'https://sundlf.com/sundlf_logo_og.png'"/> --}}
 
-        {{--  数日後サイド調整する --}}
+        {{--  数日後再度調整する --}}
         {{-- {!! \App\Tools\MetaToolKit::render() !!} --}}
 
-        <meta name="msapplication-TileImage" content="https://sundlf.com/sundlf_logo_og.png" />
-        <meta name="msapplication-TileColor" content="#f7fafc"/>
+        {{-- <meta name="msapplication-TileImage" content="https://sundlf.com/sundlf_logo_og.png" />
+        <meta name="msapplication-TileColor" content="#f7fafc"/> --}}
         {{--  --}}
 
         {{-- csrf対策? --}}
