@@ -40,7 +40,7 @@ class SetMeta
 
         MetaToolKit::setDescription(
             $ja="メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです",
-            $en="description','this application is makes it easier to find by adding tags to memos and bookmarks, saving them, organizing them, and searching them."
+            $en="this application is makes it easier to find by adding tags to memos and bookmarks, saving them, organizing them, and searching them."
         );
 
         return $next($request);
