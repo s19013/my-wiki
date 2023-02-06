@@ -22,16 +22,11 @@ class SetMeta
             $en='https://sundlf.com/en'
         );
 
-        MetaToolKit::setImg(
-            $ja='https://sundlf.com/sundlf_logo_og.png',
-            $en='https://sundlf.com/sundlf_logo_og.png'
-        );
-
-        MetaToolKit::setMeta(
-            $place='og:locale',
-            $ja='ja_JP',
-            $en='en_US'
-        );
+        // MetaToolKit::setMeta(
+        //     $place='og:locale',
+        //     $ja='ja_JP',
+        //     $en='en_US'
+        // );
 
         MetaToolKit::setTitle(
             $ja="sundlf  -- タグを使ってメモ､ブックマークを整理",
