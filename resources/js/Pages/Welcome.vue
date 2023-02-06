@@ -51,25 +51,6 @@ onMounted(() => {
         <Head>
             <title>{{ messages.title }}</title>
             <meta name="description" :content="messages.message" />
-
-            <meta property="og:url" content="https://sundlf.com/" />
-            <meta property="og:title" :content="messages.title" />
-            <meta property="og:type" content="website"/>
-            <meta property="og:description" :content="messages.message" />
-            <meta property="og:image" :content="'https://sundlf.com/sundlf_logo_og.png'" />
-
-            <meta name="msapplication-TileImage" :content="'https://sundlf.com/sundlf_logo_og.png'" />
-            <meta name="msapplication-TileColor" content="#f7fafc"/>
-
-            <meta name="twitter:card" content="summary"/>
-            <meta property="twitter:domain" content="sundlf.com"/>
-            <meta property="twitter:url" content="https://sundlf.com/"/>
-            <meta name="twitter:title" :content="messages.title"/>
-            <meta name="twitter:description" :content="messages.title"/>
-            <meta name="twitter:image" :content="'https://sundlf.com/sundlf_logo_og.png'"/>
-
-            <link rel="alternate" hreflang="ja" href="https://sundlf.com/">
-            <link rel="alternate" hreflang="en" href="https://sundlf.com/en/">
         </Head>
         <div v-if="canLogin" class="links" >
             <Link v-if="$page.props.auth.user" :href="route('SearchBookMark')" class="text-sm text-gray-700 underline">

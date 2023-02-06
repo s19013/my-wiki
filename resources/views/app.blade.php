@@ -12,7 +12,7 @@
 
 
 
-        {{-- {!! \App\Tools\MetaToolKit::render() !!} --}}
+        {!! \App\Tools\MetaToolKit::render() !!}
 
         {{--  --}}
 
