@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-    {{-- <head prefix="og: https://ogp.me/ns#"> --}}
+    <head prefix="og: https://ogp.me/ns#">
         {{-- ogpを使うには必要 --}}
         <meta charset="utf-8">
 
@@ -10,7 +9,7 @@
 
         {{-- seo対策 --}}
         {{-- 一部直接書かないとエラーを図れるかも --}}
-        @inertiaHead
+
 
 
         {{-- {!! \App\Tools\MetaToolKit::render() !!} --}}
@@ -27,6 +26,7 @@
         <link rel="icon" type="image/png" href="/favicon.png">
 
         <!-- Scripts -->
+        @inertiaHead
         @routes
         @vite('resources/js/app.js')
 
