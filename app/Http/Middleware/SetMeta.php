@@ -17,8 +17,6 @@ class SetMeta
      */
     public function handle(Request $request, Closure $next)
     {
-        MetaToolKit::setLang((substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0,2)));
-
         MetaToolKit::setUrl(
             $ja='https://sundlf.com/',
             $en='https://sundlf.com/en'
