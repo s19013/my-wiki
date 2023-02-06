@@ -29,7 +29,7 @@
         <meta name="twitter:image" :content="'https://sundlf.com/sundlf_logo_og.png'"/> --}}
 
         {{--  数日後再度調整する --}}
-        {!! \App\Tools\MetaToolKit::render() !!}
+        {{-- {!! \App\Tools\MetaToolKit::render() !!} --}}
 
         {{-- <meta name="msapplication-TileImage" content="https://sundlf.com/sundlf_logo_og.png" />
         <meta name="msapplication-TileColor" content="#f7fafc"/> --}}
