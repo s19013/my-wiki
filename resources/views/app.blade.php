@@ -9,30 +9,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         {{-- seo対策 --}}
-        {{-- <title inertia>sundlf -- メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです</title>
-        <meta name="description" content="メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです" /> --}}
+        {{-- 一部直接書かないとエラーを図れるかも --}}
+        @inertiaHead
 
-        {{-- <meta property="og:url" content="https://sundlf.com/" />
-        <meta property="og:title" content="メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです" />
-        <meta property="og:type" content="website"/>
-        <meta property="og:description" content="メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです" />
-        <meta property="og:image" :content="'https://sundlf.com/sundlf_logo_og.png'" />
 
-        <meta name="msapplication-TileImage" :content="'https://sundlf.com/sundlf_logo_og.png'" />
-        <meta name="msapplication-TileColor" content="#f7fafc"/>
-
-        <meta name="twitter:card" content="summary_large_image"/>
-        <meta property="twitter:domain" content="sundlf.com"/>
-        <meta property="twitter:url" content="https://sundlf.com/"/>
-        <meta name="twitter:title" content="メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです"/>
-        <meta name="twitter:description" content="メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです"/>
-        <meta name="twitter:image" :content="'https://sundlf.com/sundlf_logo_og.png'"/> --}}
-
-        {{--  数日後再度調整する --}}
         {{-- {!! \App\Tools\MetaToolKit::render() !!} --}}
 
-        {{-- <meta name="msapplication-TileImage" content="https://sundlf.com/sundlf_logo_og.png" />
-        <meta name="msapplication-TileColor" content="#f7fafc"/> --}}
         {{--  --}}
 
         {{-- csrf対策? --}}
@@ -47,7 +29,6 @@
         <!-- Scripts -->
         @routes
         @vite('resources/js/app.js')
-        @inertiaHead
 
         {{-- google広告 --}}
         {{-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6551381289717615" crossorigin="anonymous"></script> --}}
