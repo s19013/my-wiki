@@ -37,7 +37,7 @@ Route::get('/',function(){
         'phpVersion' => PHP_VERSION,
         'lang' => "ja"
     ]);
-});
+})->middleware("setMeta");
 
 Route::get('/en', function() {
     MetaToolKit::setLang("en");
@@ -49,7 +49,7 @@ Route::get('/en', function() {
         'phpVersion' => PHP_VERSION,
         'lang' => "en"
     ]);
-});
+})->middleware("setMeta");
 
 // ads.text
 // Route::get('/ads.text', function () {
@@ -60,7 +60,7 @@ Route::get('/en', function() {
 //     return Inertia::render('test');
 // })->name('test');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified','setMeta'])->group(function () {
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
