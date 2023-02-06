@@ -25,31 +25,17 @@ use App\Tools\MetaToolKit;
 |
 */
 
-Route::get('/', function () {
-    if ((substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0,2)) == 'ja'){
-        return Inertia::render('Welcome', [
-            'canLogin' => Route::has('login'),
-            'canRegister' => Route::has('register'),
-            'laravelVersion' => Application::VERSION,
-            'phpVersion' => PHP_VERSION,
-            'lang' => "ja"
-        ]);
-    }
-    return redirect('/en');
-});
 
-// Route::middleware('setMeta')->get('/',function(){
-//     if ((substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0,2)) == 'ja'){
-//         return Inertia::render('Welcome', [
-//             'canLogin' => Route::has('login'),
-//             'canRegister' => Route::has('register'),
-//             'laravelVersion' => Application::VERSION,
-//             'phpVersion' => PHP_VERSION,
-//             'lang' => "ja"
-//         ]);
-//     }
-//     return redirect('/en');
-// });
+
+Route::get('/',function(){
+    return Inertia::render('Welcome', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+        'lang' => "ja"
+    ]);
+})->middleware('setMeta');
 
 Route::get('/en', function() {
     return Inertia::render('Welcome', [
@@ -59,18 +45,18 @@ Route::get('/en', function() {
         'phpVersion' => PHP_VERSION,
         'lang' => "en"
     ]);
-});
+})->middleware('setMeta');
 
 // ads.text
-Route::get('/ads.text', function () {
-    return response()->file("ads.text");
-});
+// Route::get('/ads.text', function () {
+//     return response()->file("ads.text");
+// });
 
-Route::get('/test', function () {
-    return Inertia::render('test');
-})->name('test');
+// Route::get('/test', function () {
+//     return Inertia::render('test');
+// })->name('test');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified','setMeta'])->group(function () {
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');

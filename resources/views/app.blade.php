@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-    {{-- <head prefix="og: https://ogp.me/ns#">  --}}
+    <head prefix="og: https://ogp.me/ns#">
         {{-- ogpを使うには必要 --}}
         <meta charset="utf-8">
 
@@ -9,8 +8,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         {{-- seo対策 --}}
-        <title inertia>sundlf -- メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです</title>
-        <meta name="description" content="メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです" />
+        {{-- <title inertia>sundlf -- メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです</title>
+        <meta name="description" content="メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです" /> --}}
 
         {{-- <meta property="og:url" content="https://sundlf.com/" />
         <meta property="og:title" content="メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです" />
@@ -29,7 +28,7 @@
         <meta name="twitter:image" :content="'https://sundlf.com/sundlf_logo_og.png'"/> --}}
 
         {{--  数日後再度調整する --}}
-        {{-- {!! \App\Tools\MetaToolKit::render() !!} --}}
+        {!! \App\Tools\MetaToolKit::render() !!}
 
         {{-- <meta name="msapplication-TileImage" content="https://sundlf.com/sundlf_logo_og.png" />
         <meta name="msapplication-TileColor" content="#f7fafc"/> --}}

@@ -13,6 +13,7 @@ const props = defineProps({
 })
 
 const japanese = reactive({
+    title:"sundlf  -- タグを使ってメモ､ブックマークを整理",
     login:"ログイン",
     Register:"新規登録",
     message:"メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです",
@@ -25,6 +26,7 @@ const japanese = reactive({
 })
 
 const messages = reactive({
+    title:"sundlf  -- Organize article and bookmarks using tags",
     login:"Log in",
     Register:"Register",
     message:"this application is makes it easier to find by adding tags to memos and bookmarks, saving them, organizing them, and searching them.",
@@ -39,7 +41,6 @@ const messages = reactive({
 onMounted(() => {
     nextTick(() => {
         if ((window.navigator.language).substring(0,2) == "ja") {store.commit('setLang','ja')}
-        // if (store.state.lang == "ja"){Object.assign(messages,japanese)}
         if (props.lang == "ja"){Object.assign(messages,japanese)}
     })
 })
@@ -47,6 +48,19 @@ onMounted(() => {
 
 <template>
     <v-container>
+        <Head>
+            <title>{{ messages.title }}</title>
+            <meta name="description" :content="messages.message" />
+
+            <meta property="og:title" :content="messages.title" />
+            <meta property="og:description" :content="messages.message" />
+
+            <meta name="twitter:title" :content="messages.title"/>
+            <meta name="twitter:description" :content="messages.title"/>
+
+            <link rel="alternate" hreflang="ja" href="https://sundlf.com/">
+            <link rel="alternate" hreflang="en" href="https://sundlf.com/en/">
+        </Head>
         <div v-if="canLogin" class="links" >
             <Link v-if="$page.props.auth.user" :href="route('SearchBookMark')" class="text-sm text-gray-700 underline">
                 Home
