@@ -90,7 +90,7 @@ class MetaToolKit
     public static function render()
     {
         $html = '';
-        $html .= '<title>'.static::$title.'</title>'.PHP_EOL;
+        $html .= '<title inertia>'.static::$title.'</title>'.PHP_EOL;
 
         foreach (static::$meta as $prop => [$type,$content]) {
             if ($type=='name') {
