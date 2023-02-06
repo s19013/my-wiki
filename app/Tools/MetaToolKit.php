@@ -8,13 +8,9 @@ class MetaToolKit
     protected static $description = "メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです";
     protected static $lang  = "en";
     protected static $meta = [
-        // 'description'    => ['name','メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです'],
-
         // 'og:locale' => ['property','ja_JP'],
         'og:url'         => ['property','https://sundlf.com/'],
-        // 'og:title'       => ['property','sundlf  -- タグを使ってメモ､ブックマークを整理'],
         'og:type'        => ['property','website'],
-        // 'og:description' => ['property','メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです'],
         'og:image'       => ['property','https://sundlf.com/sundlf_logo_og.png'],
         'og:site_name'   => ['property','sundlf'],
 
