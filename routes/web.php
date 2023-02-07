@@ -28,6 +28,7 @@ use App\Tools\MetaToolKit;
 
 
 Route::get('/',function(){
+    MetaToolKit::setLang("ja");
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
@@ -38,6 +39,7 @@ Route::get('/',function(){
 })->middleware("setMeta");
 
 Route::get('/en', function() {
+    MetaToolKit::setLang("en");
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
