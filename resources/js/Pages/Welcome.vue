@@ -50,15 +50,15 @@ onMounted(() => {
     <v-container>
         <Head>
             <title>{{ messages.title }}</title>
-            <meta name="description" :content="messages.message" />
+            <meta inertia name="description" :content="messages.message" />
             <meta inertia property="og:title" :content="messages.title"/>
             <meta inertia property="og:description" :content="messages.message"/>
-            <link rel="alternate" hreflang="ja" href="https://sundlf.com/">
+            <link rel="alternate" hreflang="ja" href="https://sundlf.com">
             <link rel="alternate" hreflang="en" href="https://sundlf.com/en/">
         </Head>
         <div v-if="canLogin" class="links" >
-            <Link v-if="props.lang == 'ja'" href="https://sundlf.com/en/">English</Link>
-            <Link v-else href="https://sundlf.com/">日本語</Link>
+            <Link v-if="props.lang == 'ja'" href="/en">English</Link>
+            <Link v-else href="/">日本語</Link>
             <Link v-if="$page.props.auth.user" :href="route('SearchBookMark')" class="text-sm text-gray-700 underline">
                 Home
             </Link>
