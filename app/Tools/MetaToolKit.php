@@ -4,9 +4,18 @@ namespace App\Tools;
 
 class MetaToolKit
 {
-    protected static $title = "sundlf  -- タグを使ってメモ､ブックマークを整理";
-    protected static $description = "メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです";
-    protected static $url = "https://sundlf.com/";
+    protected static $title = [
+        "ja" => "sundlf  -- タグを使ってメモ､ブックマークを整理",
+        "en" => "sundlf  -- Organize article and bookmarks using tags",
+    ];
+    protected static $description = [
+        "ja" => "メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです",
+        "en" => "this application is makes it easier to find by adding tags to memos and bookmarks, saving them, organizing them, and searching them."
+    ];
+    protected static $url = [
+        "ja" => "https://sundlf.com/",
+        "en" => "https://sundlf.com/en"
+    ];
     protected static $lang  = "en";
     protected static $meta = [
         'og:type'        => ['property','website'],
@@ -23,20 +32,14 @@ class MetaToolKit
 
     public static function setTitle($ja,$en)
     {
-        if (static::$lang == "ja") {
-            static::$title = $ja;
-            return;
-        }
-        static::$title = $en;
+        static::$title["ja"] = $ja;
+        static::$title["en"] = $en;
     }
 
     public static function setUrl($ja,$en)
     {
-        if (static::$lang == "ja") {
-            static::$url = $ja;
-            return;
-        }
-        static::$url = $en;
+        static::$url["ja"] = $ja;
+        static::$url["en"] = $en;
     }
 
     public static function setImg($ja,$en)
@@ -50,11 +53,8 @@ class MetaToolKit
 
     public static function setDescription($ja,$en)
     {
-        if (static::$lang == "ja") {
-            static::$description = $ja;
-            return;
-        }
-        static::$description = $en;
+        static::$description["ja"] = $ja;
+        static::$description["en"] = $en;
     }
 
     public static function setMeta($place, $ja,$en)
@@ -69,11 +69,19 @@ class MetaToolKit
     public static function render()
     {
         $html = "";
-        $html .= "<title inertia>".static::$title."</title>".PHP_EOL;
-        $html .= '<meta inertia name="description" content="'.static::$description.'"/>'.PHP_EOL;
-        $html .= '<meta inertia property="og:description" content="'.static::$description.'"/>'.PHP_EOL;
-        $html .= '<meta inertia property="og:title" content="'.static::$title.'"/>'.PHP_EOL;
-        $html .= '<meta inertia property="og:url" content="'.static::$url.'"/>'.PHP_EOL;
+        if (static::$lang == "ja") {
+            $html .= "<title inertia>".static::$title["ja"]."</title>".PHP_EOL;
+            $html .= '<meta inertia name="description" content="'.static::$description["ja"].'"/>'.PHP_EOL;
+            $html .= '<meta inertia property="og:description" content="'.static::$description["ja"].'"/>'.PHP_EOL;
+            $html .= '<meta inertia property="og:title" content="'.static::$title["ja"].'"/>'.PHP_EOL;
+            $html .= '<meta inertia property="og:url" content="'.static::$url["ja"].'"/>'.PHP_EOL;
+        } else {
+            $html .= "<title inertia>".static::$title["en"]."</title>".PHP_EOL;
+            $html .= '<meta inertia name="description" content="'.static::$description["en"].'"/>'.PHP_EOL;
+            $html .= '<meta inertia property="og:description" content="'.static::$description["en"].'"/>'.PHP_EOL;
+            $html .= '<meta inertia property="og:title" content="'.static::$title["en"].'"/>'.PHP_EOL;
+            $html .= '<meta inertia property="og:url" content="'.static::$url["en"].'"/>'.PHP_EOL;
+        }
 
         foreach (static::$meta as $prop => [$type,$content]) {
             if ($type=='name') {
