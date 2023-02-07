@@ -72,8 +72,8 @@ class MetaToolKit
         $html = "";
         $html .= "<title inertia>".static::$title."</title>".PHP_EOL;
         $html .= '<meta inertia name="description" content="'.static::$description.'"/>'.PHP_EOL;
-        $html .= '<meta property="og:description" content="'.static::$description.'"/>'.PHP_EOL;
-        $html .= '<meta property="og:title" content="'.static::$title.'"/>'.PHP_EOL;
+        $html .= '<meta inertia property="og:description" content="'.static::$description.'"/>'.PHP_EOL;
+        $html .= '<meta inertia property="og:title" content="'.static::$title.'"/>'.PHP_EOL;
 
         foreach (static::$meta as $prop => [$type,$content]) {
             if ($type=='name') {
