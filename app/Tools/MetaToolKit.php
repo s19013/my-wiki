@@ -6,10 +6,9 @@ class MetaToolKit
 {
     protected static $title = "sundlf  -- タグを使ってメモ､ブックマークを整理";
     protected static $description = "メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです";
+    protected static $url = "https://sundlf.com/";
     protected static $lang  = "en";
     protected static $meta = [
-        // 'og:locale' => ['property','ja_JP'],
-        'og:url'         => ['property','https://sundlf.com/'],
         'og:type'        => ['property','website'],
         'og:image'       => ['property','https://sundlf.com/sundlf_logo_og.png'],
         'og:site_name'   => ['property','sundlf'],
@@ -34,10 +33,10 @@ class MetaToolKit
     public static function setUrl($ja,$en)
     {
         if (static::$lang == "ja") {
-            static::$meta['og:url'][1]      = $ja;
+            static::$url = $ja;
             return;
         }
-        static::$meta['og:url'][1]      = $en;
+        static::$url = $en;
     }
 
     public static function setImg($ja,$en)
@@ -74,6 +73,7 @@ class MetaToolKit
         $html .= '<meta inertia name="description" content="'.static::$description.'"/>'.PHP_EOL;
         $html .= '<meta inertia property="og:description" content="'.static::$description.'"/>'.PHP_EOL;
         $html .= '<meta inertia property="og:title" content="'.static::$title.'"/>'.PHP_EOL;
+        $html .= '<meta inertia property="og:url" content="'.static::$url.'"/>'.PHP_EOL;
 
         foreach (static::$meta as $prop => [$type,$content]) {
             if ($type=='name') {
