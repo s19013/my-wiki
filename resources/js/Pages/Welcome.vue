@@ -49,8 +49,10 @@ onMounted(() => {
 <template>
     <v-container>
         <Head>
-            <!-- <title>{{ messages.title }}</title>
-            <meta name="description" :content="messages.message" /> -->
+            <title>{{ messages.title }}</title>
+            <meta name="description" :content="messages.message" />
+            <meta inertia property="og:title" :content="messages.title"/>
+            <meta inertia property="og:description" :content="messages.message"/>
             <link rel="alternate" hreflang="ja" href="https://sundlf.com/">
             <link rel="alternate" hreflang="en" href="https://sundlf.com/en/">
         </Head>
