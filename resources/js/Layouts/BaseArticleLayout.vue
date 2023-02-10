@@ -201,7 +201,7 @@ export default {
                 if ((event.ctrlKey || event.key === "Meta")
                 && event.altKey && event.code === "KeyT" ) {
                     event.preventDefault();
-                    this.$refs.tagDialog.tagDialogFlag = true
+                    this.$refs.tagDialog.openTagDialog()
                 }
 
                 if (event.ctrlKey || event.key === "Meta") {
