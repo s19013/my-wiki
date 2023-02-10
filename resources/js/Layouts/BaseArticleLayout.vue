@@ -48,7 +48,6 @@
                     @keydown.enter.exact="focusToBody()"
                 />
 
-
                 <ArticleBody
                     ref="articleBody"
                     :originalArticleBody="articleBody"
@@ -57,6 +56,12 @@
             </v-form>
         </div>
         <loadingDialog :loadingFlag="disabledFlag"/>
+        <v-snackbar
+          v-model="successed"
+          :timeout="1000"
+        >
+          {{ messages.success }}
+        </v-snackbar>
     </BaseLayout>
 </template>
 
@@ -77,20 +82,23 @@ export default {
             attachedTag:'付けたタグ',
             title:"タイトル",
             otherError:"サーバー側でエラーが発生しました｡数秒待って再度送信してください",
+            success:"保存しました",
         },
         messages:{
             save:'save',
             attachedTag:'Attached Tag',
             title:"title",
             otherError:"An error occurred on the server side, please wait a few seconds and try again",
+            success:"saved",
         },
 
+        articleId     :this.originalArticle.id,
         articleTitle  :this.originalArticle.title,
         articleBody   :this.originalArticle.body,
         checkedTagList:this.originalCheckedTagList,
 
-        //loding
         disabledFlag:false,
+        successed:false,
 
         // 初期の読み込みで空配列などが無いとエラーを吐かれる
         errorMessages:{
@@ -122,6 +130,7 @@ export default {
         originalArticle:{
             type   :Object,
             default:{
+                id:null,
                 title:'',
                 body :''
             }
@@ -137,10 +146,14 @@ export default {
     },
     methods: {
         switchDisabledFlag(){this.disabledFlag = !this.disabledFlag},
+        switchSuccessed(){this.successed = !this.successed},
         // 本文送信
         submit(){
             this.disabledFlag = true
+            this.successed    = false
+            this.resetErrors()
             this.$emit('triggerSubmit',{
+                articleId   :this.articleId,
                 articleTitle:this.articleTitle,
                 articleBody :this.$refs.articleBody.serveBody(),
                 tagList     :this.$refs.tagDialog.serveCheckedTagList()
@@ -148,10 +161,17 @@ export default {
         },
         deleteArticle() {
             this.disabledFlag = true
-            this.$emit('triggerDeleteArticle')
+            this.$emit('triggerDeleteArticle',{articleId:this.articleId})
         },
         focusToBody(){this.$refs.articleBody.focusToBody()},
         changeTab(){this.$refs.articleBody.changeTab()},
+        setArticleId(articleId){this.articleId = articleId},
+        resetErrors(){
+            this.errorMessages = {
+                others:[],
+                articleTitle:[],
+            }
+        },
         // エラーを受け取る
         setErrors(errors){
             // サーバー側のエラー(500番台)だったら､もう一度送信するようにユーザーに促す
@@ -170,15 +190,29 @@ export default {
         })
         //キーボード受付
         document.addEventListener('keydown', (event)=>{
-            // 削除ダイアログ呼び出し
-            if (event.key === "Delete") {
-                this.$refs.deleteAlert.deleteDialogFlagSwitch()
-                return
-            }
-            // 送信
-            if (event.ctrlKey || event.key === "Meta") {
-                if(event.code === "Enter"){this.submit()}
-                return
+            // 読み込み中には呼ばせない
+            if(this.disabledFlag === false){
+                // 削除ダイアログ呼び出し
+                if (event.key === "Delete") {
+                    this.$refs.deleteAlert.deleteDialogFlagSwitch()
+                    return
+                }
+
+                if ((event.ctrlKey || event.key === "Meta")
+                && event.altKey && event.code === "KeyT" ) {
+                    event.preventDefault();
+                    this.$refs.tagDialog.tagDialogFlag = true
+                }
+
+                if (event.ctrlKey || event.key === "Meta") {
+                    // 送信
+                    if(event.code === "Enter"){this.submit()}
+                    if(event.code === "KeyS"){
+                        event.preventDefault();
+                        this.submit()
+                    }
+                    return
+                }
             }
         })
     },

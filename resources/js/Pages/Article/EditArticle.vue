@@ -23,19 +23,22 @@ export default {
     components:{BaseArticleLayout},
     methods: {
         async submit({
+            articleId,
             articleTitle,
             articleBody,
             tagList,
         }){
             await axios.put('/api/article/update',{
-                articleId   :this.originalArticle.id,
+                articleId   :articleId,
                 articleTitle:articleTitle,
                 articleBody :articleBody,
                 tagList     :tagList,
                 timezone    :Intl.DateTimeFormat().resolvedOptions().timeZone
             })
             .then((res)=>{
-                this.$inertia.get('/Article/Search')
+                // スナックバーを表示させる
+                this.$refs.BaseArticleLayout.switchDisabledFlag()
+                this.$refs.BaseArticleLayout.switchSuccessed()
             })
             .catch((errors) => {
                 this.$refs.BaseArticleLayout.switchDisabledFlag()

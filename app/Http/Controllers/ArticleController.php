@@ -40,8 +40,7 @@ class ArticleController extends Controller
         // CSRFトークンを再生成して、二重送信対策
         $request->session()->regenerateToken();
 
-
-        DB::transaction(function () use($request){
+        $id = DB::transaction(function () use($request){
             // 記事を保存して記事のidを取得
             $articleId  = $this->articleRepository->store(
                 userId   : Auth::id(),
@@ -49,6 +48,7 @@ class ArticleController extends Controller
                 body     : $request->articleBody,
                 timezone : $request->timezone,
             );
+
 
             // なんのタグも設定されていない時
             if (empty($request->tagList) == true) {
@@ -66,7 +66,13 @@ class ArticleController extends Controller
                     );
                 }
             }
+            return $articleId;
         });
+
+
+        return response()->json([
+            'articleId' => $id,
+        ]);
     }
 
     //記事更新
