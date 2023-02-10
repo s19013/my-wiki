@@ -176,11 +176,18 @@ export default {
         //キーボード受付
         document.addEventListener('keydown', (event)=>{
             // 削除ダイアログ呼び出し
-            if(disabledFlag === false){
+            if(this.disabledFlag === false){
                 if (event.key === "Delete") {
                     this.$refs.deleteAlert.deleteDialogFlagSwitch()
                     return
                 }
+
+                if ((event.ctrlKey || event.key === "Meta")
+                && event.altKey && event.code === "KeyT" ) {
+                    event.preventDefault();
+                    this.$refs.tagDialog.openTagDialog()
+                }
+
                 // 送信
                 if (event.ctrlKey || event.key === "Meta") {
                     if(event.code === "Enter"){this.submit()}
