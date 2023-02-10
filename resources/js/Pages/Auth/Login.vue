@@ -35,6 +35,7 @@ const japanese = reactive({
     password:"パスワード",
     RememberMe:"ログインしたままにする",
     ForgotPassword:"パスワードをわすれましたか?",
+    Register:"新規登録",
     login:"ログイン"
 })
 
@@ -43,6 +44,7 @@ const messages = reactive({
     password:"Password",
     RememberMe:"Remember me",
     ForgotPassword:"Forgot your password",
+    Register:"Register",
     login:"log in"
 })
 
@@ -81,7 +83,11 @@ onMounted(() => {
                 </label>
             </div>
 
-            <div class="flex items-center justify-end mt-4">
+            <div class="flex items-center justify-end mt-4 gap-2">
+                <Link :href="route('register')" class="underline text-sm text-gray-600 hover:text-gray-900">
+                    <p>{{ messages.Register }}</p>
+                </Link>
+
                 <Link v-if="canResetPassword" :href="route('password.request')" class="underline text-sm text-gray-600 hover:text-gray-900">
                     <p>{{ messages.ForgotPassword }}</p>
                 </Link>
