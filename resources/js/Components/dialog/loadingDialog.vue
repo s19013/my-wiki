@@ -1,5 +1,5 @@
 <template>
-    <div v-show="loadingFlag">
+    <div v-show="$store.state.globalLoading">
         <v-progress-circular
             :size=100
             color="primary"
@@ -9,10 +9,6 @@
 </template>
 
 <script>
-export default{
-    props:['loadingFlag'],
-}
-
 </script>
 
 <style scoped lang="scss">

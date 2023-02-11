@@ -2,7 +2,8 @@
     <div class="tagDeleteDialog">
         <v-dialog v-model="dialogFlag" persistent>
             <section class="global_css_Dialog">
-                <h2>{{ messages.message }}</h2>
+                <h2>" {{ this.name }} "</h2>
+                <h2> {{ messages.message }}</h2>
                 <p
                     v-show="errorMessages.messages.length>0"
                     v-for ="message of errorMessages.messages" :key="message"
@@ -70,13 +71,12 @@ export default {
         },
         // 削除処理
         async deleteTag(){
+            this.$store.commit('switchGlobalLoading')
             this.loading = true
             await axios.delete('/api/tag/' + this.id)
             .then((res)=>{
                 // ダイアログを閉じて親タグで再読み込みしてもらう
                 this.dialogFlag = false
-
-                // this.$emit("deleted");
 
                 // このコンポーネントの中でイナーシャ使っても問題ないようだが､なんか不安なので親の方でやるかどうか迷ってる
                 this.$inertia.get('/Tag/Edit/Search')

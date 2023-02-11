@@ -37,11 +37,11 @@ export default {
             })
             .then((res)=>{
                 // スナックバーを表示させる
-                this.$refs.BaseArticleLayout.switchDisabledFlag()
+                this.$store.commit('switchGlobalLoading')
                 this.$refs.BaseArticleLayout.switchSuccessed()
             })
             .catch((errors) => {
-                this.$refs.BaseArticleLayout.switchDisabledFlag()
+                this.$store.commit('switchGlobalLoading')
                 this.$refs.BaseArticleLayout.setErrors(errors.response)
                 console.log(errors);
             })
@@ -53,11 +53,12 @@ export default {
                 this.$inertia.get('/Article/Search')
             })
             .catch((errors) => {
-                this.$refs.BaseArticleLayout.switchDisabledFlag()
+                this.$store.commit('switchGlobalLoading')
                 console.log(errors);
             })
         },
     },
+    mounted() {this.$store.commit('setGlobalLoading',false)},
 }
 </script>
 

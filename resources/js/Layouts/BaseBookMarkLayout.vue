@@ -64,7 +64,7 @@
                 ></v-text-field>
             </v-form>
         </div>
-        <loadingDialog :loadingFlag="disabledFlag"/>
+        <loadingDialog/>
     </BaseLayout>
 </template>
 
@@ -104,9 +104,6 @@ export default {
             bookMarkTitle:[],
             bookMarkUrl:[],
         },
-
-        //loding
-        disabledFlag:false,
       }
     },
     components:{
@@ -144,10 +141,9 @@ export default {
         },
     },
     methods: {
-        switchDisabledFlag(){this.disabledFlag = !this.disabledFlag},
         // 本文送信
         submit(){
-            this.disabledFlag = true
+            this.$store.commit('switchGlobalLoading')
             this.$emit('triggerSubmit',{
                 bookMarkTitle:this.bookMarkTitle,
                 bookMarkUrl  :this.bookMarkUrl,
@@ -155,7 +151,7 @@ export default {
             })
         },
         deleteBookMark() {
-            this.disabledFlag = true
+            this.$store.commit('switchGlobalLoading')
             this.$emit('triggerDeleteBookMark')
         },
         // エラーを受け取る
@@ -176,7 +172,7 @@ export default {
         //キーボード受付
         document.addEventListener('keydown', (event)=>{
             // 削除ダイアログ呼び出し
-            if(this.disabledFlag === false){
+            if(this.$store.state.globalLoading === false){
                 if (event.key === "Delete") {
                     this.$refs.deleteAlert.deleteDialogFlagSwitch()
                     return

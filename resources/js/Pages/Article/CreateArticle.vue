@@ -38,12 +38,12 @@ export default {
                 })
                 .then((res)=>{
                     console.log(res);
-                    this.$refs.BaseArticleLayout.switchDisabledFlag()
+                    this.$store.commit('switchGlobalLoading')
                     this.$refs.BaseArticleLayout.switchSuccessed()
                     this.$refs.BaseArticleLayout.setArticleId(res.data.articleId)
                 })
                 .catch((errors) => {
-                    this.$refs.BaseArticleLayout.switchDisabledFlag()
+                    this.$store.commit('switchGlobalLoading')
                     this.$refs.BaseArticleLayout.setErrors(errors.response)
                 })
             } else {
@@ -55,11 +55,11 @@ export default {
                 timezone    :Intl.DateTimeFormat().resolvedOptions().timeZone
             })
             .then((res)=>{
-                this.$refs.BaseArticleLayout.switchDisabledFlag()
+                this.$store.commit('switchGlobalLoading')
                 this.$refs.BaseArticleLayout.switchSuccessed()
             })
             .catch((errors) => {
-                this.$refs.BaseArticleLayout.switchDisabledFlag()
+                this.$store.commit('switchGlobalLoading')
                 this.$refs.BaseArticleLayout.setErrors(errors.response)
             })
             }
@@ -76,9 +76,10 @@ export default {
                 this.$inertia.get('/Article/Search')
             })
             .catch((errors) => {
-                this.$refs.BaseArticleLayout.switchDisabledFlag()
+                this.$store.commit('switchGlobalLoading')
             })
         },
+        mounted() {this.$store.commit('setGlobalLoading',false)},
     },
 }
 </script>

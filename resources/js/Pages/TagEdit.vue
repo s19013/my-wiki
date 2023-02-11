@@ -1,16 +1,14 @@
 <template>
     <BaseLayout :title="messages.title" :pageTitle="messages.title">
         <v-container>
-            <v-btn
-            color="#BBDEFB" elevation="2" class="createButton" @click="openCreateDialog({type:'create'})"
-            :disabled = "loading" :loading  = "loading">
+            <v-btn color="#BBDEFB" elevation="2"
+            class="createButton" @click="openCreateDialog({type:'create'})">
                 <v-icon>mdi-plus</v-icon>
                 <p>{{ messages.createNew }}</p>
             </v-btn>
             <SearchField
                 ref = "SearchField"
                 :searchLabel   ="messages.search"
-                :loadingFlag  ="loading"
                 :orignalKeyWord="old.keyword"
                 @triggerSearch="search({
                     page:1,
@@ -19,10 +17,8 @@
                 >
             </SearchField>
 
-            <!-- loadingアニメ -->
-            <loading v-show="loading"></loading>
             <p>({{ messages.usedCount }})</p>
-            <div v-show="!loading">
+            <div>
                 <template v-for="tag of result.data" :key="tag.id">
                     <div class ="content">
                         <DateLabel :createdAt="tag.created_at" :updatedAt="tag.updated_at"/>
@@ -43,22 +39,20 @@
                     </div>
                 </template>
             </div>
-            <tagDeleteDialog ref = "tagDeleteDialog" @parentLoading="switchLoading()"/>
-            <tagFormDialog   ref = "tagCreateDialog" type="create" @parentLoading="switchLoading()"/>
-            <tagFormDialog   ref = "tagUpdateDialog" type="update" @parentLoading="switchLoading()"/>
+            <tagDeleteDialog ref = "tagDeleteDialog"/>
+            <tagFormDialog   ref = "tagCreateDialog" type="create" @parentLoading="$store.commit('switchGlobalLoading')"/>
+            <tagFormDialog   ref = "tagUpdateDialog" type="update" @parentLoading="$store.commit('switchGlobalLoading')"/>
         <v-pagination
             v-model="page"
             :length="result.last_page"
-            :disabled = "loading"
         ></v-pagination>
         </v-container>
-        <loadingDialog :loadingFlag="loading"/>
+        <loadingDialog/>
     </BaseLayout>
 </template>
 
 <script>
 import BaseLayout from '@/Layouts/BaseLayout.vue'
-import loading from '@/Components/loading/loading.vue'
 import SearchField from '@/Components/SearchField.vue'
 import DateLabel from '@/Components/DateLabel.vue';
 import tagDeleteDialog from '@/Components/useOnlyOnce/tagDeleteDialog.vue'
@@ -85,7 +79,6 @@ export default{
                 usedCount:"Used Count"
             },
             page: this.result.current_page,
-            loading:false,
         }
     },
     props:{
@@ -98,7 +91,6 @@ export default{
     },
     components:{
         BaseLayout,
-        loading,
         SearchField,
         DateLabel,
         tagDeleteDialog,
@@ -106,16 +98,15 @@ export default{
         loadingDialog,
     },
     methods: {
-        switchLoading(){this.loading = !this.loading},
         // 検索用
         search({page,keyword}){
-            this.loading     = true
+            this.$store.commit('switchGlobalLoading')
             this.$inertia.get('/Tag/Edit/Search' ,{
                 page    : page,
                 keyword : keyword,
                 onError:(errors) => {
                     console.log(errors)
-                    this.loading = false
+                    this.$store.commit('switchGlobalLoading')
                 }
             })
         },
@@ -148,6 +139,7 @@ export default{
         }
     },
     mounted() {
+        this.$store.commit('setGlobalLoading',false)
         this.$nextTick(function () {
             if (this.$store.state.lang == "ja"){this.messages = this.japanese}
         })

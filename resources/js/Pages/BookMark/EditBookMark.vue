@@ -49,7 +49,7 @@ export default {
                 this.$inertia.get('/BookMark/Search')
             })
             .catch((errors)=>{
-                this.$refs.BaseBookMarkLayout.switchDisabledFlag()
+                this.$store.commit('switchGlobalLoading')
                 this.$refs.BaseBookMarkLayout.setErrors(errors.response)
             })
         },
@@ -60,10 +60,11 @@ export default {
                 this.$inertia.get('/BookMark/Search')
             })
             .catch((errors) => {
-                this.$refs.BaseBookMarkLayout.switchDisabledFlag()
+                this.$store.commit('switchGlobalLoading')
                 console.log(errors);
             })
         },
     },
+    mounted() {this.$store.commit('setGlobalLoading',false)},
 }
 </script>
