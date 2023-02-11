@@ -5,11 +5,10 @@
                 <div class="head">
                     <DeleteAlertComponent
                         type="bookmark"
-                        :disabledFlag="disabledFlag"
                         @deleteTrigger="deleteArticle"
                     />
                     <Link :href="'/Article/Edit/' + article.id">
-                        <v-btn class="editButton global_css_haveIconButton_Margin" color="#BBDEFB" @click="this.disabledFlag = true">
+                        <v-btn class="editButton global_css_haveIconButton_Margin" color="#BBDEFB" @click="this.$store.commit('switchGlobalLoading')">
                             <v-icon>mdi-pencil-plus</v-icon>
                             <p>{{ messages.button }}</p>
                         </v-btn>
@@ -25,7 +24,7 @@
                 <!-- md表示 -->
                 <CompiledMarkDown :originalMarkDown="article.body"/>
 
-                <loadingDialog :loadingFlag="disabledFlag"/>
+                <loadingDialog/>
         </div>
     </BaseLayout>
 </template>
@@ -54,8 +53,6 @@ export default{
             button:"Edit",
             tagList:"Attached Tag",
         },
-        //loding
-        disabledFlag:false,
       }
     },
     props:['article','articleTagList'],
@@ -70,17 +67,18 @@ export default{
     },
     methods: {
         deleteArticle() {
-            this.disabledFlag = true
+            this.$store.commit('switchGlobalLoading')
             // 消す処理
             axios.delete('/api/article/' + this.article.id)
             .then((res)=>{this.$inertia.get('/Article/Search')})
             .catch((errors) => {
-                this.disabledFlag = false
+                this.$store.commit('switchGlobalLoading')
                 console.log(errors);
             })
         },
     },
     mounted() {
+        this.$store.commit('setGlobalLoading',false)
         this.$nextTick(function () {
             if (this.$store.state.lang == "ja"){this.messages = this.japanese}
         })

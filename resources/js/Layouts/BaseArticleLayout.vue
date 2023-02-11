@@ -55,7 +55,7 @@
 
             </v-form>
         </div>
-        <loadingDialog :loadingFlag="disabledFlag"/>
+        <loadingDialog/>
         <v-snackbar
           v-model="successed"
           :timeout="1000"
@@ -97,7 +97,6 @@ export default {
         articleBody   :this.originalArticle.body,
         checkedTagList:this.originalCheckedTagList,
 
-        disabledFlag:false,
         successed:false,
 
         // 初期の読み込みで空配列などが無いとエラーを吐かれる
@@ -145,11 +144,10 @@ export default {
         },
     },
     methods: {
-        switchDisabledFlag(){this.disabledFlag = !this.disabledFlag},
         switchSuccessed(){this.successed = !this.successed},
         // 本文送信
         submit(){
-            this.disabledFlag = true
+            this.$store.commit('switchGlobalLoading')
             this.successed    = false
             this.resetErrors()
             this.$emit('triggerSubmit',{
@@ -160,7 +158,7 @@ export default {
             })
         },
         deleteArticle() {
-            this.disabledFlag = true
+            this.$store.commit('switchGlobalLoading')
             this.$emit('triggerDeleteArticle',{articleId:this.articleId})
         },
         focusToBody(){this.$refs.articleBody.focusToBody()},
@@ -191,7 +189,7 @@ export default {
         //キーボード受付
         document.addEventListener('keydown', (event)=>{
             // 読み込み中には呼ばせない
-            if(this.disabledFlag === false){
+            if(this.$store.state.globalLoading === false){
                 // 削除ダイアログ呼び出し
                 if (event.key === "Delete") {
                     this.$refs.deleteAlert.deleteDialogFlagSwitch()
