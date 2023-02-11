@@ -4,7 +4,6 @@
             <SearchField
                 ref        = "SearchField"
                 :searchLabel="messages.searchBookmarkLabel"
-                :loadingFlag  ="loading"
                 :orignalKeyWord="old.keyword"
                 @triggerSearch="search({
                     page:1,
@@ -42,7 +41,6 @@
 
             <template v-for="bookMark of result.data" :key="bookMark.id">
                 <BookMarkContainer
-                    v-if="!loading"
                     :bookMark="bookMark"
                 />
             </template>
@@ -52,7 +50,7 @@
             />
         </v-container>
         <!-- loadingアニメ -->
-        <loadingDialog :loadingFlag="loading"/>
+        <loadingDialog/>
     </BaseLayout>
 </template>
 
@@ -92,7 +90,6 @@ export default{
                 TagDialogLabel:"Search Tag"
             },
             page: this.result.current_page,
-            loading:false,
             searchTarget:this.old.searchTarget,
         }
     },
@@ -116,7 +113,7 @@ export default{
     methods: {
         // 検索用
         search({page,keyword,tagList,searchTarget}){
-            this.loading     = true
+            this.$store.commit('switchGlobalLoading')
             this.$inertia.get('/BookMark/Search' ,{
                 page    : page,
                 keyword : keyword,
@@ -124,7 +121,7 @@ export default{
                 searchTarget:searchTarget,
                 onError:(errors) => {
                     console.log(errors)
-                    this.loading = false
+                    this.$store.commit('switchGlobalLoading')
                 }
             })
         },
@@ -144,6 +141,7 @@ export default{
         }
     },
     mounted() {
+        this.$store.commit('setGlobalLoading',false)
         this.$nextTick(function () {
             if (this.$store.state.lang == "ja"){this.messages = this.japanese}
         })

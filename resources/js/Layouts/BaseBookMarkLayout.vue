@@ -64,7 +64,7 @@
                 ></v-text-field>
             </v-form>
         </div>
-        <loadingDialog :loadingFlag="disabledFlag"/>
+        <loadingDialog/>
     </BaseLayout>
 </template>
 
@@ -104,9 +104,6 @@ export default {
             bookMarkTitle:[],
             bookMarkUrl:[],
         },
-
-        //loding
-        disabledFlag:false,
       }
     },
     components:{
@@ -144,10 +141,9 @@ export default {
         },
     },
     methods: {
-        switchDisabledFlag(){this.disabledFlag = !this.disabledFlag},
         // 本文送信
         submit(){
-            this.disabledFlag = true
+            this.$store.commit('switchGlobalLoading')
             this.$emit('triggerSubmit',{
                 bookMarkTitle:this.bookMarkTitle,
                 bookMarkUrl  :this.bookMarkUrl,
@@ -155,7 +151,7 @@ export default {
             })
         },
         deleteBookMark() {
-            this.disabledFlag = true
+            this.$store.commit('switchGlobalLoading')
             this.$emit('triggerDeleteBookMark')
         },
         // エラーを受け取る
