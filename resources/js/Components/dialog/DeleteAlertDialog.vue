@@ -63,21 +63,6 @@ export default {
             // ビュー全体がレンダリングされた後にのみ実行されるコード
             if (this.$store.state.lang == "ja"){this.messages = this.japanese}
         })
-
-        //キーボード受付
-        document.addEventListener('keydown', (event)=>{
-            //ダイアログが開いている時有効にする
-            if(this.deleteDialogFlag == true){
-                if (event.key === "Enter") {
-                    this.deleteTrigger()
-                    return
-                }
-                if (event.key === "Escape" || event.key === "Backspace") {
-                    this.deleteDialogFlagSwitch()
-                    return
-                }
-            }
-        })
     },
 }
 </script>
