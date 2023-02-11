@@ -76,7 +76,6 @@ export default {
             this.name = name
         },
         setErrorMessages(errors){
-            this.$emit('parentLoading')
             // エラーメッセージ表示
             if (String(errors.response.status)[0] == 5) {
                 this.errorMessages = {name:['サーバー側でエラーが発生しました｡数秒待って再度送信してください']}
@@ -85,6 +84,7 @@ export default {
         },
         transition(){
             this.dialogFlag = false
+            this.$store.commit('switchGlobalLoading')
             this.$inertia.get('/Tag/Edit/Search')
         },
         clickSubmit(){
@@ -93,7 +93,6 @@ export default {
         },
         async createTag(){
             this.loading = true
-            this.$emit('parentLoading')
             await axios.post('/api/tag/store',{name:this.name})
             .then((res)=>{this.transition()})
             .catch((errors) => {this.setErrorMessages(errors)})
@@ -101,7 +100,6 @@ export default {
         },
         async updateTag(){
             this.loading = true
-            this.$emit('parentLoading')
             await axios.put('/api/tag/update',{
                 id  :this.id,
                 name:this.name
