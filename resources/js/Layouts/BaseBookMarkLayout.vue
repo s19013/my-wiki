@@ -172,7 +172,7 @@ export default {
         //キーボード受付
         document.addEventListener('keydown', (event)=>{
             // 削除ダイアログ呼び出し
-            if(this.disabledFlag === false){
+            if(this.$store.state.globalLoading === false){
                 if (event.key === "Delete") {
                     this.$refs.deleteAlert.deleteDialogFlagSwitch()
                     return
