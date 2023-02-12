@@ -386,7 +386,7 @@ export default{
             //ダイアログが開いている時有効にする
             if(this.tagDialogFlag == true){
                 if (event.key === "Escape") {
-                    this.tagDialogFlag = false
+                    this.tagDialogFlagSwithch()
                     return
                 }
             }
