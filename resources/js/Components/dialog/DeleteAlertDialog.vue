@@ -51,7 +51,10 @@ export default {
     },
     methods: {
         //切り替え
-        deleteDialogFlagSwitch(){this.deleteDialogFlag = !this.deleteDialogFlag},
+        deleteDialogFlagSwitch(){
+            this.$store.commit('switchSomeDialogOpening')
+            this.deleteDialogFlag = !this.deleteDialogFlag
+        },
         //ダイアログ内の削除するボタンを押したことを親に伝える
         deleteTrigger(){
             this.deleteDialogFlagSwitch()

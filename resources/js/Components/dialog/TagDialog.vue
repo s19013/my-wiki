@@ -316,7 +316,10 @@ export default{
         clearAllCheck(){this.checkedTagList = []},
         // 切り替え
         createNewTagFlagSwitch(){ this.createNewTagFlag = !this.createNewTagFlag },
-        tagDialogFlagSwithch(){this.tagDialogFlag = !this.tagDialogFlag},
+        tagDialogFlagSwithch(){
+            this.$store.commit('switchSomeDialogOpening')
+            this.tagDialogFlag = !this.tagDialogFlag
+        },
         //
         openTagDialog() {
             this.tagDialogFlagSwithch()
