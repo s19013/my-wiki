@@ -4,6 +4,7 @@
                 <!-- タイトルとボタン2つ -->
                 <div class="head">
                     <DeleteAlertComponent
+                        ref ="deleteAlert"
                         type="bookmark"
                         @deleteTrigger="deleteArticle"
                     />
@@ -81,6 +82,28 @@ export default{
         this.$store.commit('setGlobalLoading',false)
         this.$nextTick(function () {
             if (this.$store.state.lang == "ja"){this.messages = this.japanese}
+        })
+        //キーボード受付
+        document.addEventListener('keydown', (event)=>{
+            // ダイアログが開いている時,読み込み中には呼ばせない
+            if( this.$store.state.globalLoading === false &&
+                this.$refs.deleteAlert.deleteDialogFlag === false
+            ){
+                // 削除ダイアログ呼び出し
+                if (event.key === "Delete") {
+                    this.$refs.deleteAlert.deleteDialogFlagSwitch()
+                    return
+                }
+
+                if (event.ctrlKey || event.key === "Meta") {
+                    // 送信
+                    if(event.code === "Enter"){
+                        this.$store.commit('switchGlobalLoading')
+                        this.$inertia.get('/Article/Edit/' + this.article.id)
+                    }
+                    return
+                }
+            }
         })
     },
 }
