@@ -70,9 +70,9 @@ export default {
         //キーボード受付
         document.addEventListener('keydown', (event)=>{
             //ダイアログが開いている時有効にする
-            if(this.tagDialogFlag == true){
+            if(this.deleteDialogFlag == true){
                 if (event.key === "Escape") {
-                    this.tagDialogFlag = false
+                    this.deleteDialogFlag = false
                     return
                 }
             }
