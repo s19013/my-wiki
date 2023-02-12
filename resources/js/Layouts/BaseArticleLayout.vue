@@ -188,14 +188,18 @@ export default {
         })
         //キーボード受付
         document.addEventListener('keydown', (event)=>{
-            // 読み込み中には呼ばせない
-            if(this.$store.state.globalLoading === false){
+            // ダイアログが開いている時,読み込み中には呼ばせない
+            if( this.$store.state.globalLoading === false &&
+                this.$refs.deleteAlert.deleteDialogFlag === false &&
+                this.$refs.tagDialog.tagDialogFlag === false
+            ){
                 // 削除ダイアログ呼び出し
                 if (event.key === "Delete") {
                     this.$refs.deleteAlert.deleteDialogFlagSwitch()
                     return
                 }
 
+                // タグダイアログを開く
                 if ((event.ctrlKey || event.key === "Meta")
                 && event.altKey && event.code === "KeyT" ) {
                     event.preventDefault();
@@ -205,6 +209,7 @@ export default {
                 if (event.ctrlKey || event.key === "Meta") {
                     // 送信
                     if(event.code === "Enter"){this.submit()}
+                    // 保存
                     if(event.code === "KeyS"){
                         event.preventDefault();
                         this.submit()
