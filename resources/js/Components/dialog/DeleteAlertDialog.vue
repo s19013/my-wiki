@@ -72,7 +72,7 @@ export default {
             //ダイアログが開いている時有効にする
             if(this.deleteDialogFlag == true){
                 if (event.key === "Escape") {
-                    this.deleteDialogFlag = false
+                    this.deleteDialogFlagSwitch()
                     return
                 }
             }
