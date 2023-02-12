@@ -13,11 +13,9 @@ export default createStore({
         },
         setGlobalLoading(state,loading){
             state.globalLoading = loading
-            console.log("Global:" + state.globalLoading);
         },
         switchGlobalLoading(state){
             state.globalLoading = !state.globalLoading
-            console.log("Global:" + state.globalLoading);
         },
         setSomeDialogOpening(state,status){
             state.someDialogOpening = status
