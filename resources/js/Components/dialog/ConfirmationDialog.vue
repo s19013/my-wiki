@@ -1,6 +1,6 @@
 <template>
     <div class="deleteAlertDialog">
-        <v-dialog v-model="deleteDialogFlag">
+        <v-dialog v-model="dialogFlag" persistent>
             <section class="global_css_Dialog">
                 <h2>{{messages.message}}</h2>
                 <div class="control">
@@ -21,7 +21,7 @@
 export default {
     data() {
         return {
-            deleteDialogFlag:false,
+            dialogFlag:false,
             messages:{
                 buttonMessage:"confirmation",
                 message:"really?",
@@ -54,7 +54,7 @@ export default {
         //切り替え
         dialogFlagSwitch(){
             this.$store.commit('switchSomeDialogOpening')
-            this.deleteDialogFlag = !this.deleteDialogFlag
+            this.dialogFlag = !this.dialogFlag
         },
         //ダイアログ内の削除するボタンを押したことを親に伝える
         submit(){
@@ -72,12 +72,8 @@ export default {
         //キーボード受付
         document.addEventListener('keydown', (event)=>{
             //ダイアログが開いている時有効にする
-            if(this.deleteDialogFlag == true){
-                if (event.key === "Enter") {
-                    this.submit()
-                    return
-                }
-                if (event.key === "Escape" || event.key === "Backspace") {
+            if(this.dialogFlag == true){
+                if (event.key === "Escape") {
                     this.dialogFlagSwitch()
                     return
                 }

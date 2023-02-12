@@ -9,7 +9,7 @@
         <p>{{ messages.delete }}</p>
     </v-btn>
 
-        <v-dialog v-model="deleteDialogFlag">
+        <v-dialog v-model="deleteDialogFlag" persistent>
             <section class="global_css_Dialog">
                 <h2>{{messages.message}}</h2>
                 <div class="control">
@@ -65,6 +65,17 @@ export default {
         this.$nextTick(function () {
             // ビュー全体がレンダリングされた後にのみ実行されるコード
             if (this.$store.state.lang == "ja"){this.messages = this.japanese}
+        })
+
+        //キーボード受付
+        document.addEventListener('keydown', (event)=>{
+            //ダイアログが開いている時有効にする
+            if(this.tagDialogFlag == true){
+                if (event.key === "Escape") {
+                    this.tagDialogFlag = false
+                    return
+                }
+            }
         })
     },
 }

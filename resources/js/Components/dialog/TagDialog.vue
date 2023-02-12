@@ -16,7 +16,7 @@
         </div>
 
         <!-- v-modelがv-ifとかの代わりになっている -->
-        <v-dialog v-model="tagDialogFlag" scrollable>
+        <v-dialog v-model="tagDialogFlag" scrollable persistent>
 
             <section class="global_css_Dialog tagDialog">
                 <div class="clooseButton">
