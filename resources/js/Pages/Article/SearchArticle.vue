@@ -125,31 +125,10 @@ export default{
                 }
             })
         },
-    },
-    watch: {
-    // @input="pagination"でできるはずなのにできないのでwatchで対応
-    // ページネーションのボタン類を押した場合の処理
-    // 厳密にはページネーションのボタン類を押すとpageの値が変化するのでそれをwatchしてページネーションを起動
-        page:function(newValue,oldValue){
-            console.log(newValue);
-            this.search({
-                page    : newValue,
-                keyword : this.old.keyword,
-                tagList : makeListTools.tagIdList(this.old.tagList),
-                searchTarget : this.old.searchTarget
-            });
-        }
-    },
-    mounted() {
-        this.$store.commit('setGlobalLoading',false)
-        this.$nextTick(function () {
-            if (this.$store.state.lang == "ja"){this.messages = this.japanese}
-        })
-        //キーボード受付
-        document.addEventListener('keydown', (event)=>{
+        keyEvents(event){
             // ダイアログが開いている時,読み込み中には呼ばせない
             if( this.$store.state.globalLoading === false &&
-            this.$refs.tagDialog.tagDialogFlag === false
+                this.$store.state.someDialogOpening === false
             ){
 
                 if (event.ctrlKey || event.key === "Meta") {
@@ -162,6 +141,13 @@ export default{
                             searchTarget:this.searchTarget
                         })
                         return
+                    }
+
+                    // タグダイアログを開く
+                    if ((event.ctrlKey || event.key === "Meta")
+                    && event.altKey && event.code === "KeyT" ) {
+                        event.preventDefault();
+                        this.$refs.tagDialog.openTagDialog()
                     }
 
                     // ページめくり
@@ -181,8 +167,35 @@ export default{
                     }
                 }
             }
+        }
+    },
+    watch: {
+    // @input="pagination"でできるはずなのにできないのでwatchで対応
+    // ページネーションのボタン類を押した場合の処理
+    // 厳密にはページネーションのボタン類を押すとpageの値が変化するのでそれをwatchしてページネーションを起動
+        page:function(newValue,oldValue){
+            console.log(newValue);
+            this.search({
+                page    : newValue,
+                keyword : this.old.keyword,
+                tagList : makeListTools.tagIdList(this.old.tagList),
+                searchTarget : this.old.searchTarget
+            });
+        }
+    },
+    mounted() {
+        //キーボード受付
+        document.addEventListener('keydown', this.keyEvents)
+
+        this.$store.commit('setGlobalLoading',false)
+        this.$nextTick(function () {
+            if (this.$store.state.lang == "ja"){this.messages = this.japanese}
         })
     },
+    beforeUnmount() {
+        //キーボードによる動作の削除(副作用みたいエラーがでるため)
+        document.removeEventListener("keydown", this.keyEvents);
+    }
 }
 </script>
 

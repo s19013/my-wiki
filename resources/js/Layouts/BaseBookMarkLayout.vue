@@ -163,18 +163,11 @@ export default {
                 }
             }
             else { this.errorMessages = errors.data.messages }
-        }
-    },
-    mounted() {
-        this.$nextTick(function () {
-            if (this.$store.state.lang == "ja"){this.messages = this.japanese}
-        })
-        //キーボード受付
-        document.addEventListener('keydown', (event)=>{
+        },
+        keyEvents(event){
             // ダイアログが開いている時,読み込み中には呼ばせない
             if( this.$store.state.globalLoading === false &&
-                this.$refs.deleteAlert.deleteDialogFlag === false &&
-                this.$refs.tagDialog.tagDialogFlag === false
+                this.$store.state.someDialogOpening === false
             ){
                 // 削除ダイアログ呼び出し
                 if (event.key === "Delete") {
@@ -195,8 +188,19 @@ export default {
                     return
                 }
             }
-        })
+        }
     },
+    mounted() {
+        this.$nextTick(function () {
+            if (this.$store.state.lang == "ja"){this.messages = this.japanese}
+        })
+        //キーボード受付
+        document.addEventListener('keydown', this.keyEvents)
+    },
+    beforeUnmount() {
+        //キーボードによる動作の削除(副作用みたいエラーがでるため)
+        document.removeEventListener("keydown", this.keyEvents);
+    }
 }
 </script>
 
