@@ -5,7 +5,6 @@ export default createStore({
         lang:"en",
         globalLoading:false,
         someDialogOpening:false,
-        pageName:null,
 	},
     getters:{},
 	mutations: {
@@ -24,10 +23,6 @@ export default createStore({
         switchSomeDialogOpening(state){
             state.someDialogOpening = !state.someDialogOpening
         },
-        setPageName(state,name){
-            state.pageName = name
-            console.log("Global:" +  state.pageName);
-        }
     },
     actions: {
     },
