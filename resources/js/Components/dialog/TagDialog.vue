@@ -350,6 +350,15 @@ export default{
         },
         //親にチェックリストを渡す
         serveCheckedTagList(){return makeListTools.tagIdList(this.checkedTagList)},
+        keyEvents(event){
+            //ダイアログが開いている時有効にする
+            if(this.tagDialogFlag == true){
+                if (event.key === "Escape") {
+                    this.tagDialogFlagSwithch()
+                    return
+                }
+            }
+        }
     },
     watch:{
         onlyCheckedFlag:function(){
@@ -377,21 +386,16 @@ export default{
                 if(this.originalCheckedTagList[index].id == null){this.originalCheckedTagList.splice(index) }
             }
 
-
             this.checkedTagList = this.originalCheckedTagList
         }
 
         //キーボード受付
-        document.addEventListener('keydown', (event)=>{
-            //ダイアログが開いている時有効にする
-            if(this.tagDialogFlag == true){
-                if (event.key === "Escape") {
-                    this.tagDialogFlagSwithch()
-                    return
-                }
-            }
-        })
+        document.addEventListener('keydown', this.keyEvents)
     },
+    beforeUnmount() {
+        //キーボードによる動作の削除(副作用みたいエラーがでるため)
+        document.removeEventListener("keydown", this.keyEvents);
+    }
 }
 </script>
 

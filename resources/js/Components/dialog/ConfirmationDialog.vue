@@ -60,6 +60,15 @@ export default {
         submit(){
             this.dialogFlagSwitch()
             this.$emit("submit");
+        },
+        keyEvents(event){
+            //ダイアログが開いている時有効にする
+            if(this.dialogFlag == true){
+                if (event.key === "Escape") {
+                    this.dialogFlagSwitch()
+                    return
+                }
+            }
         }
     },
     mounted() {
@@ -70,16 +79,12 @@ export default {
         })
 
         //キーボード受付
-        document.addEventListener('keydown', (event)=>{
-            //ダイアログが開いている時有効にする
-            if(this.dialogFlag == true){
-                if (event.key === "Escape") {
-                    this.dialogFlagSwitch()
-                    return
-                }
-            }
-        })
+        document.addEventListener('keydown', this.keyEvents)
     },
+    beforeUnmount() {
+        //キーボードによる動作の削除(副作用みたいエラーがでるため)
+        document.removeEventListener("keydown", this.keyEvents);
+    }
 }
 </script>
 

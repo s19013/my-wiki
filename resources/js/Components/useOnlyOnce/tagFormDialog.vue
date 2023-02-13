@@ -1,7 +1,7 @@
 <template>
     <div class="tagUpdateDialog">
         <v-dialog v-model="dialogFlag" persistent>
-            <section class="global_css_Dialog">
+            <div class="global_css_Dialog">
                 <v-btn
                         color="#E57373"
                         size="small"
@@ -21,18 +21,20 @@
                     {{messages}}
                 </p>
 
-                <v-text-field
-                    v-model="name"
-                    :label="messages.tagName"
-                    outlined hide-details="false"
-                />
-                <v-btn color="#BBDEFB" class="global_css_haveIconButton_Margin submitButton"
-                @click.stop="clickSubmit()" :disabled = "loading" :loading  = "loading">
-                    <v-icon>mdi-content-save</v-icon>
-                    <p v-if="type == 'create'">{{ messages.create }}</p>
-                    <p v-else>{{ messages.update }}</p>
-                </v-btn>
-            </section>
+                <v-form v-on:submit.prevent="submit">
+                    <v-text-field
+                        v-model="name"
+                        :label="messages.tagName"
+                        outlined hide-details="false"
+                    />
+                    <v-btn color="#BBDEFB" class="global_css_haveIconButton_Margin submitButton"
+                    @click.stop="submit()" :disabled = "loading" :loading  = "loading">
+                        <v-icon>mdi-content-save</v-icon>
+                        <p v-if="type == 'create'">{{ messages.create }}</p>
+                        <p v-else>{{ messages.update }}</p>
+                    </v-btn>
+                </v-form>
+            </div>
         </v-dialog>
     </div>
 </template>
@@ -68,7 +70,10 @@ export default {
     },
     methods: {
         //切り替え
-        dialogFlagSwitch(){this.dialogFlag = !this.dialogFlag},
+        dialogFlagSwitch(){
+            this.$store.commit('switchSomeDialogOpening')
+            this.dialogFlag = !this.dialogFlag
+        },
         resetErrorMessage(){this.errorMessages = {messages:[]}},
         // セッター(今回はpropsを使わない)
         setIdAndName(id,name){
@@ -87,7 +92,7 @@ export default {
             this.$store.commit('switchGlobalLoading')
             this.$inertia.get('/Tag/Edit/Search')
         },
-        clickSubmit(){
+        submit(){
             if (this.type == "create") {this.createTag()}
             else {this.updateTag()}
         },
@@ -107,6 +112,15 @@ export default {
             .then((res)=>{this.transition()})
             .catch((errors) => {this.setErrorMessages(errors)})
             this.loading = false
+        },
+        keyEvents(event){
+            //ダイアログが開いている時有効にする
+            if(this.dialogFlag == true && this.loading == false){
+                if (event.key === "Escape") {
+                    this.dialogFlagSwitch()
+                    return
+                }
+            }
         }
     },
     mounted() {
@@ -114,21 +128,12 @@ export default {
             if (this.$store.state.lang == "ja"){this.messages = this.japanese}
         })
         //キーボード受付
-        document.addEventListener('keydown', (event)=>{
-            //ダイアログが開いている時有効にする
-            if(this.dialogFlag == true && this.loading == false){
-                // 送信
-                if (event.ctrlKey || event.key === "Meta") {
-                    if(event.code === "Enter"){this.updateTag()}
-                    return
-                }
-                if (event.key === "Escape") {
-                    this.dialogFlagSwitch()
-                    return
-                }
-            }
-        })
+        document.addEventListener('keydown', this.keyEvents)
     },
+    beforeUnmount() {
+        //キーボードによる動作の削除(副作用みたいエラーがでるため)
+        document.removeEventListener("keydown", this.keyEvents);
+    }
 }
 </script>
 

@@ -58,6 +58,7 @@ export default {
     methods: {
         //切り替え
         dialogFlagSwitch(){
+            this.$store.commit('switchSomeDialogOpening')
             this.dialogFlag = !this.dialogFlag
             this.resetErrorMessage()
         },
@@ -92,27 +93,28 @@ export default {
                 else { this.errorMessages = errors.response.data.messages }
                 this.loading = false
             })
-        }
+        },
+        keyEvents(event){
+            //ダイアログが開いている時有効にする
+            if(this.dialogFlag == true && this.loading == false){
+                if (event.key === "Escape") {
+                    this.dialogFlagSwitch()
+                    return
+                }
+            }
+        },
     },
     mounted() {
         this.$nextTick(function () {
             if (this.$store.state.lang == "ja"){this.messages = this.japanese}
         })
         //キーボード受付
-        document.addEventListener('keydown', (event)=>{
-            //ダイアログが開いている時有効にする
-            if(this.deleteDialogFlag == true){
-                if (event.key === "Enter") {
-                    this.deleteTag()
-                    return
-                }
-                if (event.key === "Escape" || event.key === "Backspace") {
-                    this.dialogFlagSwitch()
-                    return
-                }
-            }
-        })
+        document.addEventListener('keydown', this.keyEvents)
     },
+    beforeUnmount() {
+        //キーボードによる動作の削除(副作用みたいエラーがでるため)
+        document.removeEventListener("keydown", this.keyEvents);
+    }
 }
 </script>
 

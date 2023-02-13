@@ -59,6 +59,15 @@ export default {
         deleteTrigger(){
             this.deleteDialogFlagSwitch()
             this.$emit("deleteTrigger");
+        },
+        keyEvents(event){
+            //ダイアログが開いている時有効にする
+            if(this.deleteDialogFlag == true){
+                if (event.key === "Escape") {
+                    this.deleteDialogFlagSwitch()
+                    return
+                }
+            }
         }
     },
     mounted() {
@@ -68,16 +77,12 @@ export default {
         })
 
         //キーボード受付
-        document.addEventListener('keydown', (event)=>{
-            //ダイアログが開いている時有効にする
-            if(this.deleteDialogFlag == true){
-                if (event.key === "Escape") {
-                    this.deleteDialogFlagSwitch()
-                    return
-                }
-            }
-        })
+        document.addEventListener('keydown', this.keyEvents)
     },
+    beforeUnmount() {
+        //キーボードによる動作の削除(副作用みたいエラーがでるため)
+        document.removeEventListener("keydown", this.keyEvents);
+    }
 }
 </script>
 
