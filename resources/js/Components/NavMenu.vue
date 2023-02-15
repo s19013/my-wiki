@@ -132,11 +132,76 @@ export default{
         menuLabel,
         menuButton,
     },
+    methods: {
+        keyEvents(event){
+            if( this.$store.state.globalLoading === false &&
+                this.$store.state.someDialogOpening === false
+            ){
+                // メニュー呼び出し
+                if ((event.ctrlKey || event.key === "Meta") &&
+                    event.altKey && event.code === "KeyM") {
+                    event.preventDefault();
+                    this.show = !this.show
+                    return
+                }
+
+                // 記事作成画面
+                if ((event.ctrlKey || event.key === "Meta") &&
+                    event.altKey && event.code === "KeyA") {
+                    event.preventDefault();
+                    this.$inertia.get(route('CreateArticle'))
+                    return
+                }
+
+                // 記事検索画面
+                if (event.altKey && event.shiftKey && event.code === "KeyA" ) {
+                    event.preventDefault();
+                    this.$inertia.get(route('SearchArticle'))
+                    return
+                }
+
+                // ブックマーク作成画面
+                if ((event.ctrlKey || event.key === "Meta") &&
+                    event.altKey && event.code === "KeyB") {
+                    event.preventDefault();
+                    this.$inertia.get(route('CreateArticle'))
+                    return
+                }
+
+                // ブックマーク検索画面
+                if (event.altKey &&  event.shiftKey  && event.code === "KeyB" ) {
+                    event.preventDefault();
+                    this.$inertia.get(route('SearchBookMark'))
+                    return
+                }
+
+                // タグ検索画面
+                if (event.altKey && event.shiftKey && event.code === "KeyT") {
+                    event.preventDefault();
+                    this.$inertia.get(route('searchInEditTag'))
+                    return
+                }
+
+                // 設定画面
+                if (event.altKey && event.shiftKey && event.code === "KeyS") {
+                    event.preventDefault();
+                    this.$inertia.get(route('setting'))
+                    return
+                }
+            }
+        }
+    },
     mounted() {
         this.$nextTick(function () {
             if (this.$store.state.lang == "ja"){this.messages = this.japanese}
         })
+        //キーボード受付
+        document.addEventListener('keydown', this.keyEvents)
     },
+    beforeUnmount() {
+        //キーボードによる動作の削除(副作用みたいエラーがでるため)
+        document.removeEventListener("keydown", this.keyEvents);
+    }
 }
 </script>
 
