@@ -9,7 +9,7 @@
         <p>{{ messages.delete }}</p>
     </v-btn>
 
-        <v-dialog v-model="deleteDialogFlag">
+        <v-dialog v-model="deleteDialogFlag" persistent>
             <section class="global_css_Dialog">
                 <h2>{{messages.message}}</h2>
                 <div class="control">
@@ -51,11 +51,23 @@ export default {
     },
     methods: {
         //切り替え
-        deleteDialogFlagSwitch(){this.deleteDialogFlag = !this.deleteDialogFlag},
+        deleteDialogFlagSwitch(){
+            this.$store.commit('switchSomeDialogOpening')
+            this.deleteDialogFlag = !this.deleteDialogFlag
+        },
         //ダイアログ内の削除するボタンを押したことを親に伝える
         deleteTrigger(){
             this.deleteDialogFlagSwitch()
             this.$emit("deleteTrigger");
+        },
+        keyEvents(event){
+            //ダイアログが開いている時有効にする
+            if(this.deleteDialogFlag == true){
+                if (event.key === "Escape") {
+                    this.deleteDialogFlagSwitch()
+                    return
+                }
+            }
         }
     },
     mounted() {
@@ -65,20 +77,12 @@ export default {
         })
 
         //キーボード受付
-        document.addEventListener('keydown', (event)=>{
-            //ダイアログが開いている時有効にする
-            if(this.deleteDialogFlag == true){
-                if (event.key === "Enter") {
-                    this.deleteTrigger()
-                    return
-                }
-                if (event.key === "Escape" || event.key === "Backspace") {
-                    this.deleteDialogFlagSwitch()
-                    return
-                }
-            }
-        })
+        document.addEventListener('keydown', this.keyEvents)
     },
+    beforeUnmount() {
+        //キーボードによる動作の削除(副作用みたいエラーがでるため)
+        document.removeEventListener("keydown", this.keyEvents);
+    }
 }
 </script>
 

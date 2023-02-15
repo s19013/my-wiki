@@ -16,7 +16,7 @@
         </div>
 
         <!-- v-modelがv-ifとかの代わりになっている -->
-        <v-dialog v-model="tagDialogFlag" scrollable>
+        <v-dialog v-model="tagDialogFlag" scrollable persistent>
 
             <section class="global_css_Dialog tagDialog">
                 <div class="clooseButton">
@@ -316,7 +316,10 @@ export default{
         clearAllCheck(){this.checkedTagList = []},
         // 切り替え
         createNewTagFlagSwitch(){ this.createNewTagFlag = !this.createNewTagFlag },
-        tagDialogFlagSwithch(){this.tagDialogFlag = !this.tagDialogFlag},
+        tagDialogFlagSwithch(){
+            this.$store.commit('switchSomeDialogOpening')
+            this.tagDialogFlag = !this.tagDialogFlag
+        },
         //
         openTagDialog() {
             this.tagDialogFlagSwithch()
@@ -347,6 +350,15 @@ export default{
         },
         //親にチェックリストを渡す
         serveCheckedTagList(){return makeListTools.tagIdList(this.checkedTagList)},
+        keyEvents(event){
+            //ダイアログが開いている時有効にする
+            if(this.tagDialogFlag == true){
+                if (event.key === "Escape") {
+                    this.tagDialogFlagSwithch()
+                    return
+                }
+            }
+        }
     },
     watch:{
         onlyCheckedFlag:function(){
@@ -374,21 +386,16 @@ export default{
                 if(this.originalCheckedTagList[index].id == null){this.originalCheckedTagList.splice(index) }
             }
 
-
             this.checkedTagList = this.originalCheckedTagList
         }
 
         //キーボード受付
-        document.addEventListener('keydown', (event)=>{
-            //ダイアログが開いている時有効にする
-            if(this.tagDialogFlag == true){
-                if (event.key === "Escape") {
-                    this.tagDialogFlag = false
-                    return
-                }
-            }
-        })
+        document.addEventListener('keydown', this.keyEvents)
     },
+    beforeUnmount() {
+        //キーボードによる動作の削除(副作用みたいエラーがでるため)
+        document.removeEventListener("keydown", this.keyEvents);
+    }
 }
 </script>
 

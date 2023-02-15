@@ -163,21 +163,19 @@ export default {
                 }
             }
             else { this.errorMessages = errors.data.messages }
-        }
-    },
-    mounted() {
-        this.$nextTick(function () {
-            if (this.$store.state.lang == "ja"){this.messages = this.japanese}
-        })
-        //キーボード受付
-        document.addEventListener('keydown', (event)=>{
-            // 削除ダイアログ呼び出し
-            if(this.$store.state.globalLoading === false){
+        },
+        keyEvents(event){
+            // ダイアログが開いている時,読み込み中には呼ばせない
+            if( this.$store.state.globalLoading === false &&
+                this.$store.state.someDialogOpening === false
+            ){
+                // 削除ダイアログ呼び出し
                 if (event.key === "Delete") {
                     this.$refs.deleteAlert.deleteDialogFlagSwitch()
                     return
                 }
 
+                // タグダイアログを開く
                 if ((event.ctrlKey || event.key === "Meta")
                 && event.altKey && event.code === "KeyT" ) {
                     event.preventDefault();
@@ -190,8 +188,19 @@ export default {
                     return
                 }
             }
-        })
+        }
     },
+    mounted() {
+        this.$nextTick(function () {
+            if (this.$store.state.lang == "ja"){this.messages = this.japanese}
+        })
+        //キーボード受付
+        document.addEventListener('keydown', this.keyEvents)
+    },
+    beforeUnmount() {
+        //キーボードによる動作の削除(副作用みたいエラーがでるため)
+        document.removeEventListener("keydown", this.keyEvents);
+    }
 }
 </script>
 

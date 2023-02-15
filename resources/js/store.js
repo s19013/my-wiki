@@ -3,7 +3,8 @@ import { createStore } from 'vuex'
 export default createStore({
 	state: {
         lang:"en",
-        globalLoading:false
+        globalLoading:false,
+        someDialogOpening:false,
 	},
     getters:{},
 	mutations: {
@@ -12,12 +13,16 @@ export default createStore({
         },
         setGlobalLoading(state,loading){
             state.globalLoading = loading
-            console.log("Global:" + state.globalLoading);
         },
         switchGlobalLoading(state){
             state.globalLoading = !state.globalLoading
-            console.log("Global:" + state.globalLoading);
-        }
+        },
+        setSomeDialogOpening(state,status){
+            state.someDialogOpening = status
+        },
+        switchSomeDialogOpening(state){
+            state.someDialogOpening = !state.someDialogOpening
+        },
     },
     actions: {
     },

@@ -125,6 +125,49 @@ export default{
                 }
             })
         },
+        keyEvents(event){
+            // ダイアログが開いている時,読み込み中には呼ばせない
+            if( this.$store.state.globalLoading === false &&
+                this.$store.state.someDialogOpening === false
+            ){
+
+                if (event.ctrlKey || event.key === "Meta") {
+                    // 送信
+                    if(event.code === "Enter"){
+                        this.search({
+                            page:1,
+                            keyword:this.$refs.SearchField.serveKeywordToParent(),
+                            tagList:this.$refs.tagDialog.serveCheckedTagList(),
+                            searchTarget:this.searchTarget
+                        })
+                        return
+                    }
+
+                    // タグダイアログを開く
+                    if ((event.ctrlKey || event.key === "Meta")
+                    && event.altKey && event.code === "KeyT" ) {
+                        event.preventDefault();
+                        this.$refs.tagDialog.openTagDialog()
+                    }
+
+                    // ページめくり
+                    if (event.key === "ArrowRight" &&
+                        this.page < this.result.last_page
+                    ) {
+                        this.page += 1
+                        return
+                    }
+
+                    // ページめくり
+                    if (event.key === "ArrowLeft" &&
+                        this.page > 1
+                    ) {
+                        this.page -= 1
+                        return
+                    }
+                }
+            }
+        }
     },
     watch: {
     // @input="pagination"でできるはずなのにできないのでwatchで対応
@@ -145,7 +188,14 @@ export default{
         this.$nextTick(function () {
             if (this.$store.state.lang == "ja"){this.messages = this.japanese}
         })
+
+        //キーボード受付
+        document.addEventListener('keydown', this.keyEvents)
     },
+    beforeUnmount() {
+        //キーボードによる動作の削除(副作用みたいエラーがでるため)
+        document.removeEventListener("keydown", this.keyEvents);
+    }
 }
 </script>
 
