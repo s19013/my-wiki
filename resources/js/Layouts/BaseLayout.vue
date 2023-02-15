@@ -35,6 +35,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.v-application{
+    background-color: #fcfcfc;
+}
 #ad {
     margin: 1rem 0;
     display: flex;

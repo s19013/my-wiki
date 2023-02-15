@@ -164,7 +164,7 @@ export default{
                 if ((event.ctrlKey || event.key === "Meta") &&
                     event.altKey && event.code === "KeyB") {
                     event.preventDefault();
-                    this.$inertia.get(route('CreateArticle'))
+                    this.$inertia.get(route('CreateBookMark'))
                     return
                 }
 

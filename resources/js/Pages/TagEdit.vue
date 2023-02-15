@@ -39,9 +39,17 @@
                     </div>
                 </template>
             </div>
+
             <tagDeleteDialog ref = "tagDeleteDialog"/>
             <tagFormDialog   ref = "tagCreateDialog" type="create" @parentLoading="$store.commit('switchGlobalLoading')"/>
             <tagFormDialog   ref = "tagUpdateDialog" type="update" @parentLoading="$store.commit('switchGlobalLoading')"/>
+
+        <PageController
+            :page="page"
+            :length="result.last_page"
+            @clickPre ="page -= 1"
+            @clickNext="page += 1"
+        />
         <v-pagination
             v-model="page"
             :length="result.last_page"
@@ -58,6 +66,7 @@ import DateLabel from '@/Components/DateLabel.vue';
 import tagDeleteDialog from '@/Components/useOnlyOnce/tagDeleteDialog.vue'
 import tagFormDialog from '@/Components/useOnlyOnce/tagFormDialog.vue'
 import loadingDialog from '@/Components/dialog/loadingDialog.vue';
+import PageController from '@/Components/PageController.vue';
 
 export default{
     data() {
@@ -96,6 +105,7 @@ export default{
         tagDeleteDialog,
         tagFormDialog,
         loadingDialog,
+        PageController
     },
     methods: {
         // 検索用
@@ -148,22 +158,25 @@ export default{
                     }
 
                     // ページめくり
-                    if (event.key === "ArrowRight" &&
-                        this.page < this.result.last_page
-                    ) {
-                        this.page += 1
+                    if (event.key === "ArrowRight") {
+                        this.pageIncrease()
                         return
                     }
 
                     // ページめくり
-                    if (event.key === "ArrowLeft" &&
-                        this.page > 1
+                    if (event.key === "ArrowLeft"
                     ) {
-                        this.page -= 1
+                        this.pageDecrease()
                         return
                     }
                 }
             }
+        },
+        pageIncrease(){
+            if (this.page < this.result.last_page) { this.page += 1 }
+        },
+        pageDecrease(){
+            if (this.page > 1) {this.page -= 1}
         }
     },
     watch: {
