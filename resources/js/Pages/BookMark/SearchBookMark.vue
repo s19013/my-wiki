@@ -44,6 +44,14 @@
                     :bookMark="bookMark"
                 />
             </template>
+
+            <PageController
+                :page="page"
+                :length="result.last_page"
+                @clickPre ="page -= 1"
+                @clickNext="page += 1"
+            />
+
             <v-pagination
                 v-model="page"
                 :length="result.last_page"
@@ -62,6 +70,7 @@ import TagDialog from '@/Components/dialog/TagDialog.vue';
 import DetailComponent from '@/Components/atomic/DetailComponent.vue';
 import SearchField from '@/Components/SearchField.vue';
 import BookMarkContainer from '@/Components/contents/BookMarkContainer.vue';
+import PageController from '@/Components/PageController.vue';
 import loadingDialog from '@/Components/dialog/loadingDialog.vue';
 
 import MakeListTools from '@/tools/MakeListTools.js';
@@ -108,7 +117,8 @@ export default{
         loadingDialog,
         SearchField,
         BookMarkContainer,
-        DetailComponent
+        DetailComponent,
+        PageController
     },
     methods: {
         // 検索用
@@ -151,22 +161,25 @@ export default{
                     }
 
                     // ページめくり
-                    if (event.key === "ArrowRight" &&
-                        this.page < this.result.last_page
-                    ) {
-                        this.page += 1
+                    if (event.key === "ArrowRight") {
+                        this.pageIncrease()
                         return
                     }
 
                     // ページめくり
-                    if (event.key === "ArrowLeft" &&
-                        this.page > 1
+                    if (event.key === "ArrowLeft"
                     ) {
-                        this.page -= 1
+                        this.pageDecrease()
                         return
                     }
                 }
             }
+        },
+        pageIncrease(){
+            if (this.page < this.result.last_page) { this.page += 1 }
+        },
+        pageDecrease(){
+            if (this.page > 1) {this.page -= 1}
         }
     },
     watch: {

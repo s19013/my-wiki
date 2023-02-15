@@ -45,6 +45,14 @@
                     :article="article"
                 />
             </template>
+
+        <PageController
+            :page="page"
+            :length="result.last_page"
+            @clickPre ="page -= 1"
+            @clickNext="page += 1"
+        />
+
         <v-pagination
             v-model="page"
             :length="result.last_page"
@@ -63,6 +71,8 @@ import loadingDialog from '@/Components/dialog/loadingDialog.vue';
 import DetailComponent from '@/Components/atomic/DetailComponent.vue';
 import SearchField from '@/Components/SearchField.vue';
 import ArticleContainer from '@/Components/contents/ArticleContainer.vue';
+import PageController from '@/Components/PageController.vue';
+
 import MakeListTools from '@/tools/MakeListTools.js';
 
 const makeListTools = new MakeListTools()
@@ -78,7 +88,7 @@ export default{
                     title:"タイトル",
                     body :"本文"
                 },
-                TagDialogLabel:"検索するタグ"
+                TagDialogLabel:"検索するタグ",
             },
             messages:{
                 title:'Search Article',
@@ -88,7 +98,7 @@ export default{
                     title:"title",
                     body :"body"
                 },
-                TagDialogLabel:"Search Tag"
+                TagDialogLabel:"Search Tag",
             },
             page: this.result.current_page,
             searchTarget:this.old.searchTarget,
@@ -108,7 +118,8 @@ export default{
         loadingDialog,
         SearchField,
         ArticleContainer,
-        DetailComponent
+        DetailComponent,
+        PageController
     },
     methods: {
         // 検索用
@@ -130,7 +141,6 @@ export default{
             if( this.$store.state.globalLoading === false &&
                 this.$store.state.someDialogOpening === false
             ){
-
                 if (event.ctrlKey || event.key === "Meta") {
                     // 送信
                     if(event.code === "Enter"){
@@ -151,22 +161,25 @@ export default{
                     }
 
                     // ページめくり
-                    if (event.key === "ArrowRight" &&
-                        this.page < this.result.last_page
-                    ) {
-                        this.page += 1
+                    if (event.key === "ArrowRight") {
+                        this.pageIncrease()
                         return
                     }
 
                     // ページめくり
-                    if (event.key === "ArrowLeft" &&
-                        this.page > 1
+                    if (event.key === "ArrowLeft"
                     ) {
-                        this.page -= 1
+                        this.pageDecrease()
                         return
                     }
                 }
             }
+        },
+        pageIncrease(){
+            if (this.page < this.result.last_page) { this.page += 1 }
+        },
+        pageDecrease(){
+            if (this.page > 1) {this.page -= 1}
         }
     },
     watch: {
