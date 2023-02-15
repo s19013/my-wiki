@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Carbon\Carbon;
+use App\Models\User;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -36,6 +38,12 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+
+        // ここにログインした日にちを入れればok
+        User::where('id','=',Auth::id())
+        ->update([
+            'logined_at' => Carbon::now(),
+        ]);
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }
