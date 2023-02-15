@@ -27,7 +27,8 @@
 export default{
     data() {
         return {
-            keyword:this.orignalKeyWord
+            // propsのoriginalKeyWordがnullの時は ""
+            keyword:this.orignalKeyWord ? this.orignalKeyWord :""
         }
     },
     props:{
