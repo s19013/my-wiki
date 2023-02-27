@@ -88,7 +88,7 @@ export default {
             else { this.errorMessages = errors.response.data.messages }
         },
         transition(){
-            this.dialogFlag = false
+            this.dialogFlagSwitch()
             this.$store.commit('switchGlobalLoading')
             this.$inertia.get('/Tag/Edit/Search')
         },
