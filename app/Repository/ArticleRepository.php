@@ -92,7 +92,8 @@ class ArticleRepository
         } else {
             //タグ検索が不要な場合
             $query = DB::table("articles")
-            ->select('id','title','created_at','updated_at')
+            // ->select('id','title','created_at','updated_at')
+            ->select('*')
             ->where('user_id','=',$userId)
             ->whereNull('deleted_at');
         }
@@ -139,7 +140,8 @@ class ArticleRepository
 
         // なぜarticle_tagsをメインにしているのか
         // -> article_tagsが2つを外部参照しているから
-        $subTable = Article::select('articles.id','articles.title','articles.created_at','articles.updated_at')
+        // Article::select('articles.id','articles.title','articles.created_at','articles.updated_at')
+        $subTable = Article::select('articles.*')
         ->leftJoin('article_tags','articles.id','=','article_tags.article_id')
         ->leftJoin('tags','article_tags.tag_id','=','tags.id')
         ->where('articles.user_id','=',$userId)
