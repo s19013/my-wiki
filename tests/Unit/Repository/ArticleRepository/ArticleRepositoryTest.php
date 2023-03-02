@@ -47,7 +47,7 @@ class ArticleRepositoryTest extends TestCase
     public function test_store_記事データを登録した時にその記事のidを取ってこれるか(): void
     {
         // 正しく動けば､記事を保存したと同時に記事のIdが帰ってくる
-        $returnedId = $this->articleRepository->store("testTitle","testBody",$this->userId);
+        $returnedId = $this->articleRepository->store("testTitle","testBody",$this->userId,Carbon::now("UTC"));
 
         // このテスト関数は一番最初に動く(この記事は一番最初に登録されるので) idは必ず[1]が帰ってくるはず
         // なんでって言われてもそれがdbの連番の仕様だからとしか答え切れない
@@ -68,7 +68,8 @@ class ArticleRepositoryTest extends TestCase
         $this->articleRepository->store(
             "testTitle_test_storeArticle_タイトルを入力",
             "testBody_test_storeArticle_タイトルを入力" ,
-            $this->userId
+            $this->userId,
+            Carbon::now("UTC")
         );
 
         // 登録したデータがあるか確認
@@ -94,11 +95,64 @@ class ArticleRepositoryTest extends TestCase
         $this->articleRepository->store(
             null,
             null,
-            $this->userId
+            $this->userId,
+            Carbon::now("UTC")
         );
 
         $this->assertDatabaseHas('articles',[
-            'title' => Carbon::now(),
+            'title' => Carbon::now("UTC"),
+            'body'  => ""
+        ]);
+    }
+
+    // 期待
+    // データがdbに登録されている
+    // * タイトルにはJSTでの今の日時が登録されてる
+    // * 本文には空文字が入っている
+    //
+    // 条件
+    // タイトルを入力しなかった
+    public function test_store_タイトルも本文を入力しなかった_タイムゾーンJSTを指定()
+    {
+        //これで､Carbon::now()で呼び出される時間を固定化できるらしい
+        Carbon::setTestNow(Carbon::now());
+
+        // データを登録
+        $this->articleRepository->store(
+            null,
+            null,
+            $this->userId,
+            Carbon::now("JST")
+        );
+
+        $this->assertDatabaseHas('articles',[
+            'title' => Carbon::now("JST"),
+            'body'  => ""
+        ]);
+    }
+
+    // 期待
+    // データがdbに登録されている
+    // * タイトルには"UTC"時間の今の日時が登録されてる
+    // * 本文には空文字が入っている
+    //
+    // 条件
+    // タイトルと本文とタイムゾーンを入力しなかった
+    public function test_store_タイトルと本文とタイムゾーンを入力しなかった()
+    {
+        //これで､Carbon::now()で呼び出される時間を固定化できるらしい
+        Carbon::setTestNow(Carbon::now());
+
+        // データを登録
+        $this->articleRepository->store(
+            null,
+            null,
+            $this->userId,
+            null
+        );
+
+        $this->assertDatabaseHas('articles',[
+            'title' => Carbon::now("UTC"),
             'body'  => ""
         ]);
     }
@@ -110,7 +164,7 @@ class ArticleRepositoryTest extends TestCase
         $article = Article::factory()->create(['user_id' => $this->userId]);
 
         // データを更新
-        $this->articleRepository->update($article->id,"updatedTitle","updatedBody");
+        $this->articleRepository->update($article->id,"updatedTitle","updatedBody",Carbon::now("UTC"));
 
         $this->assertDatabaseHas('articles',[
             'id'    => $article->id,
@@ -126,7 +180,7 @@ class ArticleRepositoryTest extends TestCase
         $article = Article::factory()->create(['user_id' => $this->userId]);
 
         // データを更新
-        $this->articleRepository->update($article->id,"updatedTitle","updatedBody");
+        $this->articleRepository->update($article->id,"updatedTitle","updatedBody",Carbon::now("UTC"));
 
         $this->assertDatabaseHas('articles',[
             'id'    => $article->id,
@@ -135,11 +189,41 @@ class ArticleRepositoryTest extends TestCase
         ]);
 
         // もう一度更新
-        $this->articleRepository->update($article->id,"updatedTitleAgain","updatedBodyAgain");
+        $this->articleRepository->update($article->id,"updatedTitleAgain","updatedBodyAgain",Carbon::now("UTC"));
 
         $this->assertDatabaseHas('articles',[
             'id'    => $article->id,
             'title' => 'updatedTitleAgain',
+            'body'  => 'updatedBodyAgain'
+        ]);
+    }
+
+    // 期待
+    // タイトルに今の日付が入る
+    public function test_update_タイトルを消して更新した()
+    {
+        $article = Article::factory()->create(['user_id' => $this->userId]);
+
+        $this->articleRepository->update($article->id,null,"updatedBodyAgain",Carbon::now("UTC"));
+
+        $this->assertDatabaseHas('articles',[
+            'id'    => $article->id,
+            'title' => Carbon::now("UTC"),
+            'body'  => 'updatedBodyAgain'
+        ]);
+    }
+
+    // 期待
+    // タイトルに今の日付が入る
+    public function test_update_タイトルを消して更新した_タイムゾーンJSTを指定()
+    {
+        $article = Article::factory()->create(['user_id' => $this->userId]);
+
+        $this->articleRepository->update($article->id,null,"updatedBodyAgain",Carbon::now("JST"));
+
+        $this->assertDatabaseHas('articles',[
+            'id'    => $article->id,
+            'title' => Carbon::now("JST"),
             'body'  => 'updatedBodyAgain'
         ]);
     }

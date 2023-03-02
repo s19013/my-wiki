@@ -50,7 +50,7 @@ class BookMarkRepositoryTest extends TestCase
     public function test_store_ブックマークデータを登録した時にそのブックマークのidを取ってこれるか(): void
     {
         // 正しく動けば､ブックマークを保存したと同時にブックマークのIdが帰ってくる
-        $returnedId = $this->bookMarkRepository->store("testTitle","testBody",$this->userId);
+        $returnedId = $this->bookMarkRepository->store("testTitle","testBody",$this->userId,Carbon::now("UTC"));
 
         // このテスト関数は一番最初に動く(このブックマークは一番最初に登録されるので) idは必ず[1]が帰ってくるはず
         // なんでって言われてもそれがdbの連番の仕様だからとしか答え切れない
@@ -71,7 +71,8 @@ class BookMarkRepositoryTest extends TestCase
         $this->bookMarkRepository->store(
             "testTitle_test_storeBookMark_タイトルを入力",
             "testBody_test_storeBookMark_タイトルを入力" ,
-            $this->userId
+            $this->userId,
+            Carbon::now("UTC")
         );
 
         // 登録したデータがあるか確認
@@ -84,7 +85,7 @@ class BookMarkRepositoryTest extends TestCase
     // 期待
     // データがdbに登録されている
     // * タイトルには今の日時が登録されてる
-    // * 入力したタイトル
+    // * 入力したurl
     //
     // 条件
     // タイトルを入力しなかった
@@ -97,11 +98,63 @@ class BookMarkRepositoryTest extends TestCase
         $this->bookMarkRepository->store(
             null,
             "testBody_test_storeBookMark_タイトルを入力しなかった",
-            $this->userId
+            $this->userId,
+            Carbon::now("UTC")
         );
 
         $this->assertDatabaseHas('book_marks',[
-            'title' => Carbon::now(),
+            'title' => Carbon::now("UTC"),
+            'url'  => 'testBody_test_storeBookMark_タイトルを入力しなかった'
+        ]);
+    }
+
+    // 期待
+    // データがdbに登録されている
+    // * タイトルにはjstの今の日時が登録されてる
+    // * 入力したurl
+    //
+    // 条件
+    // タイトルを入力しなかった
+    public function test_store_タイトルを入力しなかった_タイムゾーン指定()
+    {
+        //これで､Carbon::now()で呼び出される時間を固定化できるらしい
+        Carbon::setTestNow(Carbon::now());
+
+        // データを登録
+        $this->bookMarkRepository->store(
+            null,
+            "testBody_test_storeBookMark_タイトルを入力しなかった",
+            $this->userId,
+            Carbon::now("JST")
+        );
+
+        $this->assertDatabaseHas('book_marks',[
+            'title' => Carbon::now("JST"),
+            'url'  => 'testBody_test_storeBookMark_タイトルを入力しなかった'
+        ]);
+    }
+
+    // 期待
+    // データがdbに登録されている
+    // * タイトルには"UTC"時間の今の日時が登録されてる
+    //
+    // 条件
+    // タイトルとタイムゾーンを入力しなかった
+    public function test_store_タイトルとタイムゾーンを入力しなかった()
+    {
+        //これで､Carbon::now()で呼び出される時間を固定化できるらしい
+        Carbon::setTestNow(Carbon::now());
+
+        // データを登録
+        $this->bookMarkRepository->store(
+            null,
+            "testBody_test_storeBookMark_タイトルを入力しなかった",
+            $this->userId,
+            null,
+        );
+
+        $this->assertDatabaseHas('book_marks',[
+            'title' => Carbon::now("UTC"),
             'url'  => 'testBody_test_storeBookMark_タイトルを入力しなかった'
         ]);
     }
@@ -113,12 +166,12 @@ class BookMarkRepositoryTest extends TestCase
         $bookMark = BookMark::factory()->create(['user_id' => $this->userId]);
 
         // データを更新
-        $this->bookMarkRepository->update($bookMark->id,"updatedTitle","updatedBody");
+        $this->bookMarkRepository->update($bookMark->id,"updatedTitle","updatedBody","UTC");
 
         $this->assertDatabaseHas('book_marks',[
             'id'    => $bookMark->id,
             'title' => 'updatedTitle',
-            'url'  => 'updatedBody'
+            'url'   => 'updatedBody'
         ]);
     }
 
@@ -129,7 +182,7 @@ class BookMarkRepositoryTest extends TestCase
         $bookMark = BookMark::factory()->create(['user_id' => $this->userId]);
 
         // データを更新
-        $this->bookMarkRepository->update($bookMark->id,"updatedTitle","updatedBody");
+        $this->bookMarkRepository->update($bookMark->id,"updatedTitle","updatedBody",Carbon::now("UTC"));
 
         $this->assertDatabaseHas('book_marks',[
             'id'    => $bookMark->id,
@@ -138,12 +191,44 @@ class BookMarkRepositoryTest extends TestCase
         ]);
 
         // データを再度更新
-        $this->bookMarkRepository->update($bookMark->id,"updatedTitleAgain","updatedBodyAgain");
+        $this->bookMarkRepository->update($bookMark->id,"updatedTitleAgain","updatedBodyAgain",Carbon::now("UTC"));
 
         $this->assertDatabaseHas('book_marks',[
             'id'    => $bookMark->id,
             'title' => 'updatedTitleAgain',
             'url'  => 'updatedBodyAgain'
+        ]);
+    }
+
+    // 期待
+    // タイトルに時間が保存されている
+    public function test_update_タイトルなしで更新()
+    {
+        $bookMark = BookMark::factory()->create(['user_id' => $this->userId]);
+
+        // データを更新
+        $this->bookMarkRepository->update($bookMark->id,null,"updatedBodyAgain",Carbon::now("UTC"));
+
+        $this->assertDatabaseHas('book_marks',[
+            'id'    => $bookMark->id,
+            'title' => Carbon::now("UTC"),
+            'url'   => 'updatedBodyAgain'
+        ]);
+    }
+
+    // 期待
+    // タイトルにJST時間が保存されている
+    public function test_update_タイトルなしで更新_タイムゾーンを指定()
+    {
+        $bookMark = BookMark::factory()->create(['user_id' => $this->userId]);
+
+        // データを更新
+        $this->bookMarkRepository->update($bookMark->id,null,"updatedBodyAgain",Carbon::now("JST"));
+
+        $this->assertDatabaseHas('book_marks',[
+            'id'    => $bookMark->id,
+            'title' => Carbon::now("JST"),
+            'url'   => 'updatedBodyAgain'
         ]);
     }
 
