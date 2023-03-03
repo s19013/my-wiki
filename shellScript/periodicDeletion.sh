@@ -1,4 +1,6 @@
 #!/bin/sh
+# 古いデータをデータベースから消す
+
 # DBUSER='windows' #ローカル
 DBUSER='root'
 DBPASSWORD='gemini0522'
