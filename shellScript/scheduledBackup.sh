@@ -16,9 +16,5 @@ exportDirectryPath='/home/bitnami/backup/my-wiki'
 
 date=`date +%Y-%m-%d-%H-%M`
 
-#31日前の古いファイル
-# 31日立ってから実験して見ようと思う
-oldfile=`date --date "31 days ago" +%Y-%m-%d-%H-%M`
-
 # バックアップ実行
 mysqldump --single-transaction -u $DBUSER -p$DBPASSWORD $DBNAME | gzip > $exportDirectryPath/$DBNAME-$date.dump.gz
