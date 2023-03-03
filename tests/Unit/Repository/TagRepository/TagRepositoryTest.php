@@ -60,6 +60,23 @@ class TagRepositoryTest extends TestCase
     }
 
     // 期待
+    // データベースに保存される
+    public function test_store_消したタグをもう一度登録()
+    {
+        $tag = Tag::factory()->create( ["user_id" => $this->userId] );
+        $this->tagRepository->delete($tag->id);
+
+
+        $this->tagRepository->store($this->userId,$tag->name);
+        $this->assertDatabaseHas('tags',[
+            'name'       => $tag->name,
+            'user_id'    => $this->userId,
+            'deleted_at' => null
+        ]);
+
+    }
+
+    // 期待
     // 削除されていないすべてのデータをとってくる
     public function test_search_削除されていないすべてのタグをとって来る()
     {
@@ -237,6 +254,30 @@ class TagRepositoryTest extends TestCase
     // 期待
     // データが更新されたデータをもう一度更新する
     public function test_update_再度アップデート()
+    {
+        $tag = Tag::factory()->count(2)->create( [
+            "user_id" => $this->userId,
+        ]);
+
+        $this->tagRepository->delete($tag[0]->id);
+
+        $this->tagRepository->update($this->userId,$tag[1]->id,$tag[1]->name);
+
+        $this->assertDatabaseHas('tags',[
+            'name'       => $tag[1]->name,
+            'user_id'    => $this->userId,
+            'deleted_at' => null
+        ]);
+
+    }
+
+    // 条件
+    // タグを消去
+    // 別のタグを消去したタグと同じ名前にする
+    // 期待
+    // エラーが出ない
+    // タグ名がアプデされている
+    public function test_update_消したタグ名にアップデート()
     {
         $tag = Tag::create([
             'name'    => 'beforeUpdate',
