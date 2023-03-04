@@ -32,6 +32,7 @@ const japanese = reactive({
     confirm:"確認のため パスワードをもう一度入力してください",
     forgotPassword:"パスワードをわすれた場合",
     register:"登録",
+    message:"ユーザーごとにデータを保存するためにアカウントを作る必要があります"
 })
 
 const messages = reactive({
@@ -40,7 +41,8 @@ const messages = reactive({
     password:"Password",
     confirm:"Confirm Password",
     forgotPassword:"Forgot your password?",
-    register:"Register"
+    register:"Register",
+    message:"An account must be created for each user to store data"
 })
 
 onMounted(() => {
@@ -54,8 +56,9 @@ onMounted(() => {
     <BreezeGuestLayout>
         <Head title="Register" />
 
-        <BreezeValidationErrors class="mb-4" />
+        <p class="mt-2 mb-10">{{ messages.message }}</p>
 
+        <BreezeValidationErrors class="mb-4" />
         <form @submit.prevent="submit">
             <div>
                 <BreezeLabel for="name" :value="messages.name" />
