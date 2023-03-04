@@ -16,6 +16,7 @@ const japanese = reactive({
     title:"sundlf  -- タグを使ってメモ､ブックマークを整理",
     login:"ログイン",
     Register:"新規登録",
+    firstHere:"初めての方はこちら",
     message:"メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです",
     article:"メモ",
     articleMessage:"メモをmd形式でかいて保存できます",
@@ -29,6 +30,7 @@ const messages = reactive({
     title:"sundlf  -- Organize article and bookmarks using tags",
     login:"Log in",
     Register:"Register",
+    firstHere:"Click here for the first time",
     message:"this application is makes it easier to find by adding tags to memos and bookmarks, saving them, organizing them, and searching them.",
     article:"article",
     articleMessage:"You can write and save articles in markdown format",
@@ -47,23 +49,23 @@ onMounted(() => {
 </script>
 
 <template>
+    <Head>
+        <title>{{ messages.title }}</title>
+        <meta inertia name="description" :content="messages.message" />
+        <meta inertia property="og:title" :content="messages.title"/>
+        <meta inertia property="og:description" :content="messages.message"/>
+        <link rel="alternate" hreflang="ja" href="https://sundlf.com"/>
+        <link rel="alternate" hreflang="en" href="https://sundlf.com/en/"/>
+        <link rel="alternate" hreflang="x-default" href="https://sundlf.com/en/"/>
+    </Head>
     <v-container>
-        <Head>
-            <title>{{ messages.title }}</title>
-            <meta inertia name="description" :content="messages.message" />
-            <meta inertia property="og:title" :content="messages.title"/>
-            <meta inertia property="og:description" :content="messages.message"/>
-            <link rel="alternate" hreflang="ja" href="https://sundlf.com"/>
-            <link rel="alternate" hreflang="en" href="https://sundlf.com/en/"/>
-            <link rel="alternate" hreflang="x-default" href="https://sundlf.com/en/"/>
-        </Head>
         <div v-if="canLogin" class="links" >
-            <Link v-if="props.lang == 'ja'" href="/en">English</Link>
-            <Link v-else href="/">日本語</Link>
             <Link v-if="$page.props.auth.user" :href="route('SearchBookMark')" class="text-sm text-gray-700 underline">
                 Home
             </Link>
             <template v-else>
+                <Link v-if="props.lang == 'ja'" href="/en">English</Link>
+                <Link v-else href="/">日本語</Link>
                 <Link :href="route('login')" class="">
                     <p>{{ messages.login }}</p>
                 </Link>
@@ -79,10 +81,10 @@ onMounted(() => {
                 <img :src="'/sundlf_logo.png'" alt="ロゴ">
             </div>
 
-            <div class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg">
+            <div class="mt-8 bg-white overflow-hidden shadow sm:rounded-lg">
                 <p class="p-3">{{ messages.message }}</p>
                 <div class="grid grid-cols-1 md:grid-cols-2">
-                    <div class="p-6 border-t border-gray-200 dark:border-gray-700 md:border-t-0 md:border-l">
+                    <div class="p-6 border-t border-gray-200 md:border-t-0 md:border-l">
                         <div class="flex items-center">
                             <v-icon>mdi-note</v-icon>
                             <div class="ml-4 text-lg leading-7 font-semibold">
@@ -99,7 +101,7 @@ onMounted(() => {
                         </div>
                     </div>
 
-                    <div class="p-6 border-t border-gray-200 dark:border-gray-700 md:border-t-0 md:border-l">
+                    <div class="p-6 border-t border-gray-200 md:border-t-0 md:border-l">
                         <div class="flex items-center">
                             <v-icon>mdi-bookmark</v-icon>
                             <div class="ml-4 text-lg leading-7 font-semibold">
@@ -114,7 +116,7 @@ onMounted(() => {
                         </div>
                     </div>
 
-                    <div class="p-6 border-t border-gray-200 dark:border-gray-700">
+                    <div class="p-6 border-t border-gray-200 ">
                         <div class="flex items-center">
                             <v-icon>mdi-tag</v-icon>
                             <div class="ml-4 text-lg leading-7 font-semibold">
@@ -129,9 +131,9 @@ onMounted(() => {
                         </div>
                     </div>
 
-                    <div class="p-6 border-t border-gray-200 dark:border-gray-700 md:border-l">
+                    <div class="p-6 border-t border-gray-200">
                         <div class="flex items-center">
-                            <div class="ml-4 text-lg leading-7 font-semibold text-gray-900 dark:text-white"></div>
+                            <div class="ml-4 text-lg leading-7 font-semibold text-gray-900"></div>
                         </div>
 
                         <div class="ml-12">
@@ -143,7 +145,7 @@ onMounted(() => {
                 </div>
             </div>
 
-            <div class="flex justify-center mt-4 sm:items-center sm:justify-between">
+            <div class="flex justify-center mt-2 sm:items-center sm:justify-between">
                 <div class="text-center text-sm text-gray-500 sm:text-left">
                     <div class="flex items-center">
                         <v-icon>mdi-github</v-icon>
@@ -154,9 +156,16 @@ onMounted(() => {
                 </div>
 
                 <div class="ml-4 text-center text-sm text-gray-500 sm:text-right sm:ml-0">
-                    Laravel v{{ laravelVersion }} (PHP v{{ phpVersion }})
+                    Laravel v9 (PHP v8)
                 </div>
             </div>
+
+            <Link v-if="canRegister" :href="route('register')" class="flex justify-center">
+                <v-btn class="fw-bolder mt-10" color="#BBDEFB">
+                    <v-icon class="mr-2">mdi-account-plus</v-icon>
+                    {{messages.firstHere}}
+                </v-btn>
+            </Link>
         </div>
     </v-container>
 </template>
@@ -168,7 +177,7 @@ onMounted(() => {
     }
     .links{
         display: flex;
-        justify-content: flex-end;
+        justify-content: flex-start;
         gap:1rem;
     }
     .bg-gray-100 {
