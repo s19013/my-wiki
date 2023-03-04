@@ -24,6 +24,7 @@ const japanese = reactive({
     bookmarkMessage:"ブックマークを保存できます",
     tag:"タグを付けられます",
     tagMessage:"タグをつけて整理したり検索などで探すことができます",
+    returnHome:"ホーム画面に戻る"
 })
 
 const messages = reactive({
@@ -38,6 +39,7 @@ const messages = reactive({
     bookmarkMessage:"You can save bookmarks",
     tag:"tag",
     tagMessage:"You can add tags to organize and search.",
+    returnHome:"Return Home"
 })
 
 onMounted(() => {
@@ -61,7 +63,7 @@ onMounted(() => {
     <v-container>
         <div v-if="canLogin" class="links" >
             <Link v-if="$page.props.auth.user" :href="route('SearchBookMark')" class="text-sm text-gray-700 underline">
-                Home
+                {{ messages.returnHome }}
             </Link>
             <template v-else>
                 <Link v-if="props.lang == 'ja'" href="/en">English</Link>
@@ -77,7 +79,12 @@ onMounted(() => {
         </div>
 
         <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
-            <div class="flex justify-center pt-10 sm:justify-start sm:pt-0">
+            <Link v-if="$page.props.auth.user" :href="route('SearchBookMark')">
+                <div class="flex justify-center pt-10 sm:justify-start sm:pt-0">
+                    <img :src="'/sundlf_logo.png'" alt="ロゴ">
+                </div>
+            </Link>
+            <div v-else class="flex justify-center pt-10 sm:justify-start sm:pt-0">
                 <img :src="'/sundlf_logo.png'" alt="ロゴ">
             </div>
 
