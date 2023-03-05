@@ -51,4 +51,6 @@ class BookMarkTransitionController extends Controller
             'originalCheckedTagList'   => $this->nullAvoidanceToolKit->ifnull($bookMarkTagList,[]),
         ]);
     }
+
+    // ブックマークは処理が必要なのが1パターンだけなので記事のようにミドルウェアにしなくても良い
 }
