@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'setMeta'  => \App\Http\Middleware\SetMeta::class,
+        'isSameUser_article'  => \App\Http\Middleware\IsSameUser_article::class,
     ];
 }
