@@ -73,9 +73,9 @@ Route::middleware(['auth', 'verified','setMeta'])->group(function () {
             return Inertia::render('Article/CreateArticle');
         })->name('CreateArticle');
 
-        Route::get('/View/{articleId}', [ArticleTransitionController::class,'transitionToViewArticle'])->name('ViewArticle');
+        Route::get('/View/{articleId}', [ArticleTransitionController::class,'transitionToViewArticle'])->middleware('isSameUser_article')->name('ViewArticle');
 
-        Route::get('/Edit/{articleId}', [ArticleTransitionController::class,'transitionToEditArticle'])->name('EditArticle');
+        Route::get('/Edit/{articleId}', [ArticleTransitionController::class,'transitionToEditArticle'])->middleware('isSameUser_article')->name('EditArticle');
 
         Route::get('/Search',[ArticleController::class,'search'])->name('SearchArticle');
 
