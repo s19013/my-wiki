@@ -2,8 +2,10 @@
     <div class ="content">
         <DateLabel :createdAt="article.created_at" :updatedAt="article.updated_at"/>
         <div class="elements">
-            <h2>{{article.title}}</h2>
             <Link :href="'/Article/View/' + article.id">
+                <h2>{{article.title}}</h2>
+            </Link>
+            <Link :href="'/Article/Edit/' + article.id">
                 <v-btn color="submit" elevation="2">
                     <p>{{ messages.button }}</p>
                 </v-btn>
@@ -19,10 +21,10 @@ export default{
     data() {
         return {
             japanese:{
-                button:"閲覧 編集"
+                button:"編集"
             },
             messages:{
-                button:"Browse Edit"
+                button:"Edit"
             }
         }
     },
