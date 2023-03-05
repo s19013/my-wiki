@@ -68,9 +68,5 @@ export default{
         width: 100%;
         grid-column: 2/3;
     }
-    a{
-        text-decoration: none;
-        color: black;
-    }
 }
 </style>
