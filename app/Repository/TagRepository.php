@@ -23,14 +23,12 @@ class TagRepository
     public function update($userId,$tagId,$name)
     {
         Tag::where('id','=',$tagId) -> update(['name' => $name]);
-        # TODO: カウントアップ
     }
 
     // delete
     public function delete($tagId)
     {
         Tag::where('id','=',$tagId)->delete();
-        # TODO: カウントダウン
     }
 
     //タグを検索する
