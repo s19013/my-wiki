@@ -214,9 +214,7 @@ export default{
         async createNewTag(){
             //ローディングアニメ開始
             this.disableFlag = true
-            await axios.post('/api/tag/store',{
-                name:this.newTag
-            })
+            await axios.post('/api/tag/store',{name:this.newTag})
             .then((res)=>{
                 //検索欄をリセット
                 this.$refs.SearchField.resetKeyword()
@@ -224,22 +222,17 @@ export default{
 
                 // 読み込み直し
                 this.isFirstSearchFlag = true
-
-                // キャッシュ再取得
                 this.searchAllTag()
 
                 // 入力欄を消す
                 this.createNewTagFlag=false
                 this.newTag=null
             })
-            .catch((errors) =>{
-                // ダブりエラー
-                this.errorMessages =errors.response.data.messages
-            })
+            .catch((errors) =>{this.errorMessages =errors.response.data.messages})
             this.disableFlag = false
         },
         // タグ検索
-        searchBranch:function(){
+        searchBranch(){
             if (this.$refs.SearchField.serveKeywordToParent() == "") {
                 //初期ローディング以外の全件検索だったらキャッシュを使う
                 if (this.isFirstSearchFlag == false) {
@@ -294,10 +287,8 @@ export default{
 
             //配列,キャッシュ初期化
             this.tagSearchResultList = []
-            this.tagCacheList         = []//キャッシュをクリアするのは既存チェックボックスを外す時に出てくるバグを防ぐため
-            await axios.post('/api/tag/search',{
-                keyword:this.$refs.SearchField.serveKeywordToParent()
-            })
+            this.tagCacheList        = []//キャッシュをクリアするのは既存チェックボックスを外す時に出てくるバグを防ぐため
+            await axios.post('/api/tag/search',{keyword:this.$refs.SearchField.serveKeywordToParent()})
             .then((res)=>{
                 for (const tag of res.data) {
                     this.tagSearchResultList.push({
@@ -313,6 +304,7 @@ export default{
             //ローディングアニメ解除
             this.disableFlag = false
         },
+        // タグ削除
         popTag(i){this.checkedTagList.splice(i, 1)},
         //チェック全消し
         clearAllCheck(){this.checkedTagList = []},
