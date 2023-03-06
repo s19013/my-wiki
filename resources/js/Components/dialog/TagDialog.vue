@@ -344,8 +344,11 @@ export default{
         },
         //タグを名前順でソート
         sortArrayByName(x, y){
-            if (x.name < y.name) {return -1;}
-            if (x.name > y.name) {return 1;}
+            // 大文字小文字無視ソート
+            x = x.name.toString().toLowerCase();
+	        y = y.name.toString().toLowerCase();
+            if (x < y) {return -1;}
+            if (x > y) {return 1;}
             return 0;
         },
         //親にチェックリストを渡す
