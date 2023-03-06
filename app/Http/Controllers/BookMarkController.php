@@ -190,4 +190,19 @@ class BookMarkController extends Controller
             'old' => $old
         ]);
     }
+
+    public function countup($bookMarkId)
+    {
+        // 同一人物じゃなかったら数えない(いたずら防止)
+        $isSameUser = $this->bookMarkRepository->isSameUser(
+            bookMarkId:$bookMarkId,
+            userId:Auth::id());
+
+        if (!$isSameUser) {return response('',400);}
+        // 削除済みだったら数えない
+        if ($this->bookMarkRepository->isDeleted($bookMarkId)) {return response('',400);}
+
+
+        BookMark::where('id','=',$bookMarkId)->increment('count');
+    }
 }

@@ -3,7 +3,7 @@
         <!-- 別タブで開くようにする -->
         <DateLabel :createdAt="bookMark.created_at" :updatedAt="bookMark.updated_at"/>
         <div class="elements">
-            <a :href="bookMark.url" target="_blank" rel="noopener noreferrer">
+            <a :href="bookMark.url" target="_blank" rel="noopener noreferrer" @click="countup(bookMark.id)">
                 <h2>
                     <v-icon>mdi-arrow-top-left-bold-box-outline</v-icon>
                     {{bookMark.title}}
@@ -38,6 +38,14 @@ export default{
     },
     props:{
         bookMark:{type:Object}
+    },
+    methods: {
+        // 今回は待たなくて良い
+        countup(bookMarkId){
+            axios.get('/api/bookmark/countup/' + bookMarkId)
+            .then((res)=>{})
+            .catch((errors) => {})
+        }
     },
     mounted(){
         this.$nextTick(function () {
