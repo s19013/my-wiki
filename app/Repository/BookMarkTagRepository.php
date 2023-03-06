@@ -5,6 +5,7 @@ use DB;
 use Carbon\Carbon;
 
 use App\Models\BookMarkTag;
+use App\Models\Tag;
 
 class BookMarkTagRepository
 {
@@ -15,6 +16,9 @@ class BookMarkTagRepository
             'book_mark_id' => $bookMarkId,
             'tag_id'     => $tagId,
         ]);
+
+        //カウントアップ
+        Tag::where('id','=',$tagId)-> increment('count');
     }
 
     //ブックマークからはずされたタグを削除
@@ -23,6 +27,9 @@ class BookMarkTagRepository
         BookMarkTag::where('book_mark_id','=',$bookMarkId)
             ->where('tag_id','=',$tagId)
             ->delete();
+
+        //カウントダウン
+        Tag::where('id','=',$tagId)-> decrement('count');
     }
 
     //ブックマークに紐付けられているタグを更新
