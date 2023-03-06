@@ -1,9 +1,18 @@
 <template>
     <div class="tagList">
         <p><v-icon>mdi-tag</v-icon>{{text}}</p>
-            <ul >
-                <li v-for="tag of tagList" :key="tag">{{tag.name}}</li>
-            </ul>
+        <ul >
+            <li v-for="(tag, i) in tagList"
+                :key="tag.name"
+            >
+                <v-chip
+                    closable
+                    @click:close="popTag(i)"
+                >
+                    {{ tag.name }}
+                </v-chip>
+            </li>
+        </ul>
     </div>
 </template>
 
@@ -23,6 +32,11 @@ export default{
             default:"つけたタグ"
         },
     },
+    methods: {
+        popTag(i){
+            this.$emit('popTag',i)
+        }
+    },
 }
 </script>
 
@@ -34,11 +48,7 @@ export default{
     }
     li{
         list-style:none;
-        border:black solid 1px;
-        padding: 0 10px ;
         margin:5px;
-        cursor: default;
-
     }
 }
 </style>
