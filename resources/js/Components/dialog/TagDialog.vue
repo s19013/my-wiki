@@ -12,6 +12,7 @@
             <TagList
                 :tagList="checkedTagList"
                 :text="text"
+                @popTag="popTag"
             />
         </div>
 
@@ -312,6 +313,7 @@ export default{
             //ローディングアニメ解除
             this.disableFlag = false
         },
+        popTag(i){this.checkedTagList.splice(i, 1)},
         //チェック全消し
         clearAllCheck(){this.checkedTagList = []},
         // 切り替え
