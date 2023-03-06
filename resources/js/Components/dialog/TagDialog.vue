@@ -184,8 +184,8 @@ export default{
         // tagList
         checkedTagList     :[],
         tagSearchResultList:[],
-        tagCashList        :[],//全件検索のキャッシュ
-        allTagCashList     :[],//全件検索のキャッシュ
+        tagCacheList        :[],//全件検索のキャッシュ
+        allTagCacheList     :[],//全件検索のキャッシュ
       }
     },
     props:{
@@ -220,12 +220,12 @@ export default{
             .then((res)=>{
                 //検索欄をリセット
                 this.$refs.SearchField.resetKeyword()
-
-                // エラーをリセット
-                this.errorMessages={name:[]}
+                this.resetError()
 
                 // 読み込み直し
                 this.isFirstSearchFlag = true
+
+                // キャッシュ再取得
                 this.searchAllTag()
 
                 // 入力欄を消す
@@ -235,24 +235,23 @@ export default{
             .catch((errors) =>{
                 // ダブりエラー
                 this.errorMessages =errors.response.data.messages
-                console.log(this.errorMessages);
             })
             this.disableFlag = false
         },
         // タグ検索
-        searchBranch:_.debounce(_.throttle(function(){
+        searchBranch:function(){
             if (this.$refs.SearchField.serveKeywordToParent() == "") {
                 //初期ローディング以外の全件検索だったらキャッシュを使う
                 if (this.isFirstSearchFlag == false) {
-                    this.tagSearchResultList = this.allTagCashList
-                    this.tagCashList         = this.allTagCashList
+                    this.tagSearchResultList = this.allTagCacheList
+                    this.tagCacheList         = this.allTagCacheList
                 }
                 // 初期ローディング､更新後の全件検索
                 else {this.searchAllTag()}
             }
             // 他の検索
             else {this.searchTag()}
-        },100),150),
+        },
         // 全件検索
         async searchAllTag(){
             //ローディングアニメ開始
@@ -263,7 +262,7 @@ export default{
 
             //配列,キャッシュ初期化
             this.tagSearchResultList = []
-            this.tagCashList         = []//キャッシュをクリアするのは既存チェックボックスを外す時に出てくるバグを防ぐため
+            this.tagCacheList        = []//キャッシュをクリアするのは既存チェックボックスを外す時に出てくるバグを防ぐため
 
             await axios.post('/api/tag/search',{keyword:''})
             .then((res)=>{
@@ -274,8 +273,8 @@ export default{
                     })
                 }
                 //キャッシュにコピー
-                this.allTagCashList = [...this.tagSearchResultList]
-                this.tagCashList    = [...this.tagSearchResultList]
+                this.allTagCacheList = [...this.tagSearchResultList]
+                this.tagCacheList    = [...this.tagSearchResultList]
             })
             .catch((err)=>{console.log(err);})
 
@@ -295,7 +294,7 @@ export default{
 
             //配列,キャッシュ初期化
             this.tagSearchResultList = []
-            this.tagCashList         = []//キャッシュをクリアするのは既存チェックボックスを外す時に出てくるバグを防ぐため
+            this.tagCacheList         = []//キャッシュをクリアするのは既存チェックボックスを外す時に出てくるバグを防ぐため
             await axios.post('/api/tag/search',{
                 keyword:this.$refs.SearchField.serveKeywordToParent()
             })
@@ -307,7 +306,7 @@ export default{
                     })
                 }
                 //キャッシュにコピー
-                this.tagCashList = [...this.tagSearchResultList]
+                this.tagCacheList = [...this.tagSearchResultList]
             })
             .catch((err)=>{console.log(err);})
 
@@ -317,6 +316,8 @@ export default{
         popTag(i){this.checkedTagList.splice(i, 1)},
         //チェック全消し
         clearAllCheck(){this.checkedTagList = []},
+        // エラーをリセット
+        resetError(){this.errorMessages={name:[]}},
         // 切り替え
         createNewTagFlagSwitch(){ this.createNewTagFlag = !this.createNewTagFlag },
         tagDialogFlagSwithch(){
@@ -340,8 +341,7 @@ export default{
             // チェックをつけたタグをソード
             this.checkedTagList = this.checkedTagList.sort(sortArrayByName)
 
-            // エラーをリセット
-            this.errorMessages={name:[]}
+            this.resetError()
 
             this.$emit('closedTagDialog',this.checkedTagList)
         },
@@ -368,7 +368,7 @@ export default{
             else if (this.onlyCheckedFlag == false && this.tagDialogFlag == true) {
                 //全タグのキャッシュに置き換える
                 //参照元を変えるだけなので読み込みが早い
-                this.tagSearchResultList = this.tagCashList
+                this.tagSearchResultList = this.tagCacheList
             }
         }
     },
