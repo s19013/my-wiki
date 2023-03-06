@@ -241,7 +241,43 @@ class ArticleTagRepositoryTest extends TestCase
         $this->assertDatabaseHas('article_tags',[
             'article_id' => $this->articleId,
             'tag_id'     => null,
+        ]);
+    }
 
+    // カウントアップしているか
+    public function test_タグをつけたらタグテーブルのcountが増えているか(){
+        $tag =Tag::factory()->create(['user_id' => $this->userId,]);
+
+        $articles = Article::factory()->count(5)->create(['user_id' => $this->userId]);
+
+        // 登録
+        foreach ($articles as $article) { $this->articleTagRepository->store($tag->id,$article->id); }
+
+        // 5つの記事に紐づけたので､countが5になっているはず
+        $this->assertDatabaseHas('tags',[
+            'id'    => $tag->id,
+            'count' => 5,
+        ]);
+    }
+
+
+
+    // カウントダウンしているか
+    public function test_タグをはずしたらタグテーブルのcountが減っているか(){
+        $tag =Tag::factory()->create(['user_id' => $this->userId,]);
+
+        $articles = Article::factory()->count(5)->create(['user_id' => $this->userId]);
+
+        // 登録
+        foreach ($articles as $article) { $this->articleTagRepository->store($tag->id,$article->id); }
+
+        // 一つだけ消す
+        $this->articleTagRepository->delete($tag->id,$articles[0]->id);
+
+        // 4つの記事に紐づけたので､countが5になっているはず
+        $this->assertDatabaseHas('tags',[
+            'id'    => $tag->id,
+            'count' => 4,
         ]);
     }
 }

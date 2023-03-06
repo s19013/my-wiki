@@ -242,5 +242,42 @@ class BookMarkTagRepositoryTest extends TestCase
 
         ]);
     }
+
+    // カウントアップしているか
+    public function test_タグをつけたらタグテーブルのcountが増えているか(){
+        $tag =Tag::factory()->create(['user_id' => $this->userId,]);
+
+        $bookmarks = BookMark::factory()->count(5)->create(['user_id' => $this->userId]);
+
+        // 登録
+        foreach ($bookmarks as $bookmark) { $this->bookMarkTagRepository->store($tag->id,$bookmark->id); }
+
+        // 5つの記事に紐づけたので､countが5になっているはず
+        $this->assertDatabaseHas('tags',[
+            'id'    => $tag->id,
+            'count' => 5,
+        ]);
+    }
+
+
+
+    // カウントダウンしているか
+    public function test_タグをはずしたらタグテーブルのcountが減っているか(){
+        $tag =Tag::factory()->create(['user_id' => $this->userId,]);
+
+        $bookmarks = BookMark::factory()->count(5)->create(['user_id' => $this->userId]);
+
+        // 登録
+        foreach ($bookmarks as $bookmark) { $this->bookMarkTagRepository->store($tag->id,$bookmark->id); }
+
+        // 一つだけ消す
+        $this->bookMarkTagRepository->delete($tag->id,$bookmarks[0]->id);
+
+        // 4つの記事に紐づけたので､countが5になっているはず
+        $this->assertDatabaseHas('tags',[
+            'id'    => $tag->id,
+            'count' => 4,
+        ]);
+    }
 }
 
