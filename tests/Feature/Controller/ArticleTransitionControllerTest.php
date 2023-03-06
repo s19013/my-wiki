@@ -283,5 +283,31 @@ class ArticleTransitionControllerTest extends TestCase
         $response->assertRedirect(route('SearchArticle'));
     }
 
+    // 不正操作についてはこれより前のテストでテストされているのでここではしない
+    // カウントアップ
+    public function test_transitionToViewArticle_カウントアップ()
+    {
+        $article = Article::factory()->create(['user_id' => $this->user->id]);
+
+        ArticleTag::create([
+            'article_id' => $article->id,
+            'tag_id'     => null,
+        ]);
+
+        $response = $this
+        ->actingAs($this->user)
+        ->withSession(['test' => 'test'])
+        ->get(route('ViewArticle', ['articleId' => $article->id]));
+
+        // ステータス
+        $response->assertStatus(200);
+
+        $this->assertDatabaseHas('articles',[
+            'id'    => $article->id,
+            'count' => 1,
+        ]);
+
+    }
+
 }
 
