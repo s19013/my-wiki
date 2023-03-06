@@ -23,12 +23,14 @@ class TagRepository
     public function update($userId,$tagId,$name)
     {
         Tag::where('id','=',$tagId) -> update(['name' => $name]);
+        # TODO: カウントアップ
     }
 
     // delete
     public function delete($tagId)
     {
         Tag::where('id','=',$tagId)->delete();
+        # TODO: カウントダウン
     }
 
     //タグを検索する
@@ -60,7 +62,7 @@ class TagRepository
         return $query->get();
     }
 
-    //タグを検索する 検索系に初期値設定しとく?
+    //編集画面用の検索ツール
     public function searchInEdit($userId,$keyword,$page)
     {
         // ツールを実体化
@@ -75,34 +77,16 @@ class TagRepository
         //and検索のために空白区切りでつくった配列を用意
         $wordListToSearch = $searchToolKit->preparationToAndSearch($escaped);
 
-        // article,bookmarkで使われているタグのid
-        $artilceTags = DB::table('article_tags')
-        ->select('tag_id')
-        ->whereNotNull('tag_id');
+        //ログインユーザーのタグを探す
+        $query = Tag::select('*')
+        ->where('user_id','=',$userId);
 
-        $bookMarkTags = DB::table('book_mark_tags')
-        ->select('tag_id')
-        ->whereNotNull('tag_id');
-
-        // 合体
-        $unioned = $bookMarkTags->unionAll($artilceTags)->toSql();
-
-        // タグの数を数える
-        $counted = DB::table(DB::raw('('.$unioned.') AS unioned'))
-        ->select('unioned.tag_id',DB::raw('count(*) as count'))
-        ->groupBy('unioned.tag_id');
-
-        // tagsと合体
-        $query = Tag::select('tags.*',DB::raw("ifnull(counted.count,0) as count"))
-        ->leftJoinSub($counted, 'counted', function ($join) {
-            $join->on('tags.id', '=', 'counted.tag_id');
-        })
-        ->where('tags.user_id','=',$userId)
-        ->whereNull('tags.deleted_at');
+        // 削除されてないタグを探す
+        $query->WhereNull('deleted_at');
 
         // tag名をlikeけんさく
         foreach($wordListToSearch as $word){
-            $query->where('tags.name','like',"%$word%");
+            $query->where('name','like',"%$word%");
         }
 
         //ヒット件数取得
