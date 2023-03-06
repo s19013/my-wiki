@@ -6,9 +6,15 @@
                 :key="tag.name"
             >
                 <v-chip
+                    v-if="!onlyView"
                     closable
                     @click:close="popTag(i)"
                 >
+                    {{ tag.name }}
+                </v-chip>
+
+                <!-- 観覧のときはタグをいじれないようにする -->
+                <v-chip v-else>
                     {{ tag.name }}
                 </v-chip>
             </li>
@@ -31,6 +37,10 @@ export default{
             type:String,
             default:"つけたタグ"
         },
+        onlyView:{
+            type:Boolean,
+            default:false
+        }
     },
     methods: {
         popTag(i){
