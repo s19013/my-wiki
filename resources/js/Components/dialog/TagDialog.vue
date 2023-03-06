@@ -141,6 +141,7 @@ import SearchField from '@/Components/SearchField.vue';
 import TagList from '@/Components/TagList.vue';
 
 import MakeListTools from '@/tools/MakeListTools.js';
+import {sortArrayByName} from '@/tools/SortOption.js';
 
 const makeListTools =  new MakeListTools()
 export default{
@@ -337,21 +338,12 @@ export default{
             this.onlyCheckedFlag = false
 
             // チェックをつけたタグをソード
-            this.checkedTagList = this.checkedTagList.sort(this.sortArrayByName)
+            this.checkedTagList = this.checkedTagList.sort(sortArrayByName)
 
             // エラーをリセット
             this.errorMessages={name:[]}
 
             this.$emit('closedTagDialog',this.checkedTagList)
-        },
-        //タグを名前順でソート
-        sortArrayByName(x, y){
-            // 大文字小文字無視ソート
-            x = x.name.toString().toLowerCase();
-	        y = y.name.toString().toLowerCase();
-            if (x < y) {return -1;}
-            if (x > y) {return 1;}
-            return 0;
         },
         //親にチェックリストを渡す
         serveCheckedTagList(){return makeListTools.tagIdList(this.checkedTagList)},
@@ -370,7 +362,7 @@ export default{
             //チェックをつけた場合
             if (this.onlyCheckedFlag == true) {
                 //チェックがついているタグだけを表示
-                this.checkedTagList.sort(this.sortArrayByName)
+                this.checkedTagList.sort(sortArrayByName)
                 this.tagSearchResultList = this.checkedTagList
             }
             else if (this.onlyCheckedFlag == false && this.tagDialogFlag == true) {
