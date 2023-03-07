@@ -4,7 +4,8 @@
 
 <script>
 import {marked} from 'marked';
-import githubMarkdownCss from 'github-markdown-css';
+// import githubMarkdownCss from 'github-markdown-css';
+import githubMarkdownCss from 'github-markdown-css/github-markdown-light.css';
 import sanitizeHtml from 'sanitize-html';
 
 // エンターで改行できるように設定
