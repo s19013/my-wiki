@@ -29,10 +29,6 @@ export default{
             type   :String,
             default:''
         },
-        size:{
-            type   :String,
-            default:'0.8rem'
-        }
     },
     methods: {
         format(arg){
@@ -45,11 +41,6 @@ export default{
             }
         },
     },
-    computed:{
-        textSizeComp(){
-            return {'--size' : this.size,}
-        }
-    },
     mounted() {
         this.$nextTick(function () {
             if (this.$store.state.lang == "ja"){this.messages = this.japanese}
@@ -61,10 +52,9 @@ export default{
 <style lang="scss" scoped>
     .DateLabel{
         display: flex;
-        gap: var(--size);
-        @media (max-width: 300px){display: block;}
+        gap: 0.6rem;
         p{
-            font-size: var(--size);
+            font-size: 0.8rem;
             font-weight: 450;
         }
         span{font-weight: 500;}
