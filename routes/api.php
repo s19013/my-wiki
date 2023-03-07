@@ -52,6 +52,9 @@ Route::middleware('auth:sanctum', 'throttle:60,1')->group(function () {
         Route::put('/update' , [BookMarkController::class,'update']);
         Route::delete('/{bookMarkId}' , [BookMarkController::class,'delete'])->name('api.bookMark.delete');
         Route::get('/search' , [BookMarkController::class,'search']);
+
+        // カウントアップ用
+        Route::get('/countup/{bookMarkId}',[BookMarkController::class,'countup']);
     });
 });
 

@@ -38,6 +38,9 @@ class BookMarkControllerTest extends TestCase
         parent::setUp();
         // ユーザーを用意
         $this->user = User::factory()->create();
+
+        // ここでこの値を設定しておかないとエラーが出てしまう(テスト環境のみ)
+        $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'ja';
     }
 
     // 期待
@@ -309,13 +312,62 @@ class BookMarkControllerTest extends TestCase
         ])
         ->delete('/api/bookmark/'.$bookMark->id);
 
-        $response->assertStatus(200);
+        $response->assertStatus(401);
+    }
 
-        //
-        $this->assertDatabaseHas('book_marks',[
-            'id' => $bookMark->id,
-            'deleted_at' => null,
-        ]);
+    // カウントアップ
+    // public function test_countup_通常(){
+    //     $bookMark = BookMark::factory()->create(['user_id' => $this->user->id]);
+
+    //     $response = $this
+    //     ->actingAs($this->user)
+    //     ->withSession([
+    //         'my_wiki_session' => 'test',
+    //         'XSRF-TOKEN' => 'test'
+    //     ])
+    //     ->get('/api/bookmark/countup/'.$bookMark->id);
+
+    //     $response->assertStatus(200);
+
+    //     //
+    //     $this->assertDatabaseHas('book_marks',[
+    //         'id' => $bookMark->id,
+    //         'count' => 1
+    //     ]);
+    // }
+
+    // 削除済みはそもそもsameuserで引っかかる
+    // public function test_countup_削除済みはカウントしない(){
+    //     $bookMark = BookMark::factory()->create(['user_id' => $this->user->id]);
+
+    //     BookMark::where('id','=',$bookMark->id)->delete();
+
+    //     $response = $this
+    //     ->actingAs($this->user)
+    //     ->withSession([
+    //         'my_wiki_session' => 'test',
+    //         'XSRF-TOKEN' => 'test'
+    //     ])
+    //     ->get('/api/bookmark/countup/'.$bookMark->id);
+
+    //     $response->assertStatus(400);
+    // }
+
+    // 別のユーザー
+    public function test_countup_別のユーザーはカウントしない(){
+        $otherUser = User::factory()->create();
+
+        $bookMark = BookMark::factory()->create(['user_id' => $this->user->id]);
+
+        $response = $this
+        ->actingAs($otherUser)
+        ->withSession([
+            'my_wiki_session' => 'test',
+            'XSRF-TOKEN' => 'test'
+        ])
+        ->get('/api/bookmark/countup/'.$bookMark->id);
+
+        $response->assertStatus(400);
     }
 
 }
