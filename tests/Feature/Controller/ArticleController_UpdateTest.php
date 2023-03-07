@@ -14,6 +14,8 @@ use App\Models\ArticleTag;
 use App\Models\Tag;
 use App\Models\User;
 
+use App\Repository\ArticleTagRepository;
+
 // データベース関係で使う
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 
@@ -32,14 +34,28 @@ class ArticleController_UpdateTest extends TestCase
     // use WithoutMiddleware;
 
     private $user;
+    private $articleTagRepository;
 
     public function setup():void
     {
         parent::setUp();
         // ユーザーを用意
         $this->user = User::factory()->create();
+        $this->articleTagRepository = new ArticleTagRepository();
         // carbonの時間固定
         Carbon::setTestNow(Carbon::now());
+        $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'ja';
+    }
+
+    public function update($id,$title,$body,$tagList)
+    {
+        return $this->actingAs($this->user)
+        ->put('/api/article/update/',[
+            'articleId'     => $id,
+            'articleTitle'  => $title,
+            'articleBody'   => $body,
+            'tagList' => $tagList,
+        ]);
     }
 
     // 期待
@@ -59,10 +75,7 @@ class ArticleController_UpdateTest extends TestCase
         $newTags = Tag::factory()->count(2)->create(['user_id' => $this->user->id]);
 
         foreach ($tags as $tag){
-            ArticleTag::create([
-                "article_id" => $article->id,
-                "tag_id"     => $tag->id
-            ]);
+            $this->articleTagRepository->store($tag->id,$article->id);
         }
 
 
@@ -122,10 +135,7 @@ class ArticleController_UpdateTest extends TestCase
         $newTags = Tag::factory()->count(2)->create(['user_id' => $this->user->id]);
 
         foreach ($tags as $tag){
-            ArticleTag::create([
-                "article_id" => $article->id,
-                "tag_id"     => $tag->id
-            ]);
+            $this->articleTagRepository->store($tag->id,$article->id);
         }
 
         $response = $this
@@ -186,10 +196,7 @@ class ArticleController_UpdateTest extends TestCase
         $tags    = Tag::factory()->count(4)->create(['user_id' => $this->user->id]);
 
         foreach ($tags as $tag){
-            ArticleTag::create([
-                "article_id" => $article->id,
-                "tag_id"     => $tag->id
-            ]);
+            $this->articleTagRepository->store($tag->id,$article->id);
         }
 
         $response = $this
@@ -255,10 +262,7 @@ class ArticleController_UpdateTest extends TestCase
         // タグ
         $tags    = Tag::factory()->count(2)->create(['user_id' => $this->user->id]);
 
-        ArticleTag::create([
-            "article_id" => $article->id,
-            "tag_id"     => null
-        ]);
+        $this->articleTagRepository->store(null,$article->id);
 
         $response = $this
         ->actingAs($this->user)
@@ -316,10 +320,7 @@ class ArticleController_UpdateTest extends TestCase
         $tags    = Tag::factory()->count(2)->create(['user_id' => $this->user->id]);
 
         foreach ($tags as $tag){
-            ArticleTag::create([
-                "article_id" => $article->id,
-                "tag_id"       => $tag->id
-            ]);
+            $this->articleTagRepository->store($tag->id,$article->id);
         }
 
         $response = $this
@@ -372,10 +373,7 @@ class ArticleController_UpdateTest extends TestCase
         // 記事などを作成
         $article = Article::factory()->create(['user_id' => $this->user->id]);
 
-        ArticleTag::create([
-            "article_id" => $article->id,
-            "tag_id"     => null
-        ]);
+        $this->articleTagRepository->store(null,$article->id);
 
         // 更新
         $response = $this
@@ -435,10 +433,7 @@ class ArticleController_UpdateTest extends TestCase
         // タグ
         $tags    = Tag::factory()->count(2)->create(['user_id' => $this->user->id]);
 
-        ArticleTag::create([
-            "article_id" => $article->id,
-            "tag_id"     => null
-        ]);
+        $this->articleTagRepository->store(null,$article->id);
 
         // 更新
         $response = $this
@@ -508,10 +503,7 @@ class ArticleController_UpdateTest extends TestCase
         // タグ
         $tags    = Tag::factory()->count(2)->create(['user_id' => $this->user->id]);
 
-        ArticleTag::create([
-            "article_id" => $article->id,
-            "tag_id"     => null
-        ]);
+        $this->articleTagRepository->store(null,$article->id);
 
         // 更新
         $response = $this
@@ -581,10 +573,7 @@ class ArticleController_UpdateTest extends TestCase
         // タグ
         $tags    = Tag::factory()->count(4)->create(['user_id' => $this->user->id]);
 
-        ArticleTag::create([
-            "article_id" => $article->id,
-            "tag_id"     => null
-        ]);
+        $this->articleTagRepository->store(null,$article->id);
 
         // 更新
         $response = $this
@@ -662,10 +651,7 @@ class ArticleController_UpdateTest extends TestCase
         // タグ
         $tags    = Tag::factory()->count(4)->create(['user_id' => $this->user->id]);
 
-        ArticleTag::create([
-            "article_id" => $article->id,
-            "tag_id"     => $tags[0]->id
-        ]);
+        $this->articleTagRepository->store($tags[0]->id,$article->id);
 
         // 更新
         $response = $this
@@ -733,10 +719,7 @@ class ArticleController_UpdateTest extends TestCase
         // タグ
         $tags    = Tag::factory()->count(3)->create(['user_id' => $this->user->id]);
 
-        ArticleTag::create([
-            "article_id" => $article->id,
-            "tag_id"       => $tags[0]->id,
-        ]);
+        $this->articleTagRepository->store($tags[0]->id,$article->id);
 
         // 更新
         $response = $this
@@ -809,10 +792,7 @@ class ArticleController_UpdateTest extends TestCase
         // タグ
         $tags    = Tag::factory()->count(3)->create(['user_id' => $this->user->id]);
 
-        ArticleTag::create([
-            "article_id" => $article->id,
-            "tag_id"       => $tags[0]->id
-        ]);
+        $this->articleTagRepository->store($tags[0]->id,$article->id);
 
         // 更新
         $response = $this
@@ -885,35 +865,16 @@ class ArticleController_UpdateTest extends TestCase
         // タグ
         $tags    = Tag::factory()->count(4)->create(['user_id' => $this->user->id]);
 
-        ArticleTag::create([
-            "article_id" => $article->id,
-            "tag_id"     => $tags[0]->id
-        ]);
+        $this->articleTagRepository->store($tags[0]->id,$article->id);
 
         // 更新
-        $response = $this
-        ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
-        ->put('/api/article/update/',[
-            'articleId'     => $article->id,
-            'articleTitle'  => "更新",
-            'articleBody'    => "更新" ,
-            'tagList' => [$tags[1]->id],
-        ]);
+        $response = $this->update($article->id,"更新","更新",[$tags[1]->id]);
 
         // ステータス
         $response->assertStatus(200);
 
         // 再度更新
-        $response = $this
-        ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
-        ->put('/api/article/update/',[
-            'articleId'     => $article->id,
-            'articleTitle'  => "再度更新",
-            'articleBody'    => "再度更新" ,
-            'tagList' => [$tags[2]->id],
-        ]);
+        $response = $this->update($article->id,"再度更新","再度更新",[$tags[2]->id]);
 
         // ステータス
         $response->assertStatus(200);
@@ -963,10 +924,7 @@ class ArticleController_UpdateTest extends TestCase
         // タグ
         $tags    = Tag::factory()->count(4)->create(['user_id' => $this->user->id]);
 
-        ArticleTag::create([
-            "article_id" => $article->id,
-            "tag_id"     => $tags[0]->id
-        ]);
+        $this->articleTagRepository->store($tags[0]->id,$article->id);
 
         // 更新
         $response = $this

@@ -14,6 +14,8 @@ use App\Models\BookMarkTag;
 use App\Models\Tag;
 use App\Models\User;
 
+use App\Repository\BookMarkTagRepository;
+
 // データベース関係で使う
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 
@@ -32,12 +34,16 @@ class BookMarkController_UpdateTest extends TestCase
     // use WithoutMiddleware;
 
     private $user;
+    private $bookMarkRepository;
 
     public function setup():void
     {
         parent::setUp();
         // ユーザーを用意
         $this->user = User::factory()->create();
+        $this->bookMarkRepository = new BookMarkTagRepository();
+
+        $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'ja';
     }
 
     // 期待
@@ -60,10 +66,7 @@ class BookMarkController_UpdateTest extends TestCase
         $newTags = Tag::factory()->count(2)->create(['user_id' => $this->user->id]);
 
         foreach ($tags as $tag){
-            BookMarkTag::create([
-                "book_mark_id" => $bookMark->id,
-                "tag_id"     => $tag->id
-            ]);
+            $this->bookMarkRepository->store($tag->id,$bookMark->id);
         }
 
 
@@ -123,10 +126,7 @@ class BookMarkController_UpdateTest extends TestCase
         $newTags = Tag::factory()->count(2)->create(['user_id' => $this->user->id]);
 
         foreach ($tags as $tag){
-            BookMarkTag::create([
-                "book_mark_id" => $bookMark->id,
-                "tag_id"     => $tag->id
-            ]);
+            $this->bookMarkRepository->store($tag->id,$bookMark->id);
         }
 
         $response = $this
@@ -187,10 +187,7 @@ class BookMarkController_UpdateTest extends TestCase
         $tags    = Tag::factory()->count(4)->create(['user_id' => $this->user->id]);
 
         foreach ($tags as $tag){
-            BookMarkTag::create([
-                "book_mark_id" => $bookMark->id,
-                "tag_id"     => $tag->id
-            ]);
+            $this->bookMarkRepository->store($tag->id,$bookMark->id);
         }
 
         $response = $this
@@ -256,10 +253,7 @@ class BookMarkController_UpdateTest extends TestCase
         // タグ
         $tags    = Tag::factory()->count(2)->create(['user_id' => $this->user->id]);
 
-        BookMarkTag::create([
-            "book_mark_id" => $bookMark->id,
-            "tag_id"     => null
-        ]);
+        $this->bookMarkRepository->store(null,$bookMark->id);
 
         $response = $this
         ->actingAs($this->user)
@@ -317,10 +311,7 @@ class BookMarkController_UpdateTest extends TestCase
         $tags    = Tag::factory()->count(2)->create(['user_id' => $this->user->id]);
 
         foreach ($tags as $tag){
-            BookMarkTag::create([
-                "book_mark_id" => $bookMark->id,
-                "tag_id"       => $tag->id
-            ]);
+            $this->bookMarkRepository->store($tag->id,$bookMark->id);
         }
 
         $response = $this
@@ -374,10 +365,7 @@ class BookMarkController_UpdateTest extends TestCase
         // ブックマークなどを作成
         $bookMark = BookMark::factory()->create(['user_id' => $this->user->id]);
 
-        BookMarkTag::create([
-            "book_mark_id" => $bookMark->id,
-            "tag_id"     => null
-        ]);
+        $this->bookMarkRepository->store(null,$bookMark->id);
 
         // 更新
         $response = $this
@@ -438,10 +426,7 @@ class BookMarkController_UpdateTest extends TestCase
         // タグ
         $tags    = Tag::factory()->count(2)->create(['user_id' => $this->user->id]);
 
-        BookMarkTag::create([
-            "book_mark_id" => $bookMark->id,
-            "tag_id"     => null
-        ]);
+        $this->bookMarkRepository->store(null,$bookMark->id);
 
         // 更新
         $response = $this
@@ -511,10 +496,7 @@ class BookMarkController_UpdateTest extends TestCase
         // タグ
         $tags    = Tag::factory()->count(2)->create(['user_id' => $this->user->id]);
 
-        BookMarkTag::create([
-            "book_mark_id" => $bookMark->id,
-            "tag_id"     => null
-        ]);
+        $this->bookMarkRepository->store(null,$bookMark->id);
 
         // 更新
         $response = $this
@@ -584,10 +566,7 @@ class BookMarkController_UpdateTest extends TestCase
         // タグ
         $tags    = Tag::factory()->count(4)->create(['user_id' => $this->user->id]);
 
-        BookMarkTag::create([
-            "book_mark_id" => $bookMark->id,
-            "tag_id"     => null
-        ]);
+        $this->bookMarkRepository->store(null,$bookMark->id);
 
         // 更新
         $response = $this
@@ -665,10 +644,7 @@ class BookMarkController_UpdateTest extends TestCase
         // タグ
         $tags    = Tag::factory()->count(4)->create(['user_id' => $this->user->id]);
 
-        BookMarkTag::create([
-            "book_mark_id" => $bookMark->id,
-            "tag_id"     => $tags[0]->id
-        ]);
+        $this->bookMarkRepository->store($tags[0]->id,$bookMark->id);
 
         // 更新
         $response = $this
@@ -736,10 +712,7 @@ class BookMarkController_UpdateTest extends TestCase
         // タグ
         $tags    = Tag::factory()->count(3)->create(['user_id' => $this->user->id]);
 
-        BookMarkTag::create([
-            "book_mark_id" => $bookMark->id,
-            "tag_id"       => $tags[0]->id,
-        ]);
+        $this->bookMarkRepository->store($tags[0]->id,$bookMark->id);
 
         // 更新
         $response = $this
@@ -812,10 +785,7 @@ class BookMarkController_UpdateTest extends TestCase
         // タグ
         $tags    = Tag::factory()->count(3)->create(['user_id' => $this->user->id]);
 
-        BookMarkTag::create([
-            "book_mark_id" => $bookMark->id,
-            "tag_id"       => $tags[0]->id
-        ]);
+        $this->bookMarkRepository->store($tags[0]->id,$bookMark->id);
 
         // 更新
         $response = $this
@@ -888,10 +858,7 @@ class BookMarkController_UpdateTest extends TestCase
         // タグ
         $tags    = Tag::factory()->count(4)->create(['user_id' => $this->user->id]);
 
-        BookMarkTag::create([
-            "book_mark_id" => $bookMark->id,
-            "tag_id"     => $tags[0]->id
-        ]);
+        $this->bookMarkRepository->store($tags[0]->id,$bookMark->id);
 
         // 更新
         $response = $this
@@ -960,15 +927,10 @@ class BookMarkController_UpdateTest extends TestCase
         $oldBookMark = BookMark::factory()->create(['user_id' => $this->user->id]);
         $newBookMark = BookMark::factory()->create(['user_id' => $this->user->id]);
 
-        BookMarkTag::create([
-            "book_mark_id" => $oldBookMark->id,
-            "tag_id"       => null
-        ]);
 
-        BookMarkTag::create([
-            "book_mark_id" => $newBookMark->id,
-            "tag_id"       => null
-        ]);
+        $this->bookMarkRepository->store(null,$oldBookMark->id);
+
+        $this->bookMarkRepository->store(null,$newBookMark->id);
 
         // 更新
         $response = $this
@@ -1000,10 +962,7 @@ class BookMarkController_UpdateTest extends TestCase
         // タグ
         $tags    = Tag::factory()->count(4)->create(['user_id' => $this->user->id]);
 
-        BookMarkTag::create([
-            "book_mark_id" => $bookMark->id,
-            "tag_id"     => $tags[0]->id
-        ]);
+        $this->bookMarkRepository->store($tags[0]->id,$bookMark->id);
 
 
         $otherUser = User::factory()->create();
