@@ -217,6 +217,7 @@ export default{
 .TagDialog{margin:1rem 0;}
 .DetailComponent{margin:1rem 0 ;}
 .searchTarget{
+    margin-bottom: 1rem;
     .options{
         display: flex;
         gap:1rem;

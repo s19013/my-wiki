@@ -221,5 +221,6 @@ export default{
         gap:1rem;
         .option{width:fit-content}
     }
+    margin-bottom: 1rem;
 }
 </style>

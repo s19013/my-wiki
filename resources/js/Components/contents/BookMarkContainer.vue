@@ -1,16 +1,19 @@
 <template>
     <div class ="content">
         <!-- 別タブで開くようにする -->
-        <DateLabel :createdAt="bookMark.created_at" :updatedAt="bookMark.updated_at"/>
+        <div class="others">
+            <p><span>{{ messages.count }}</span>:{{ bookMark.count }}</p>
+            <DateLabel :createdAt="bookMark.created_at" :updatedAt="bookMark.updated_at"/>
+        </div>
         <div class="elements">
             <a :href="bookMark.url" target="_blank" rel="noopener noreferrer" @click="countup(bookMark.id)">
-                <h2>
+                <h3>
                     <v-icon>mdi-arrow-top-left-bold-box-outline</v-icon>
                     {{bookMark.title}}
-                </h2>
+                </h3>
             </a>
             <Link :href="'/BookMark/Edit/' + bookMark.id">
-                <v-btn color="submit" elevation="2">
+                <v-btn color="submit" elevation="2"  size="small">
                     {{messages.button}}
                 </v-btn>
             </Link>
@@ -25,10 +28,12 @@ export default{
     data() {
         return {
             japanese:{
-                button:"編集"
+                button:"編集",
+                count:"閲覧数"
             },
             messages:{
-                button:"Edit"
+                button:"Edit",
+                count:"count"
             }
         }
     },
@@ -56,7 +61,25 @@ export default{
 </script>
 
 <style scoped lang="scss">
-.DateLabel{ justify-content: flex-end; }
+.others{
+    span{font-weight: bold;}
+    p{
+        font-size: 0.8rem;
+        text-align:right
+    }
+    .DateLabel{justify-content: flex-end;}
+}
+
+@media (min-width: 601px){
+    .others{
+        display: flex;
+        justify-content: flex-end;
+        word-break   :break-word;
+        overflow-wrap:normal;
+        gap: 0.6rem;
+    }
+}
+
 .elements{
     display: grid;
     grid-template-columns:10fr 1fr;
@@ -66,7 +89,8 @@ export default{
     margin-bottom:20px;
     padding: 5px;
     i{float: left}
-    h2{
+    h3{
+        font-size: 1.3rem;
         margin: auto 0;
         grid-column: 1/2;
         word-break   :break-word;
