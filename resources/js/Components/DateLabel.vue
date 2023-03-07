@@ -1,5 +1,5 @@
 <template>
-    <div class="DateLabel" :style="textSizeComp">
+    <div class="DateLabel">
         <p><span>{{ messages.createdDate }}:</span>{{format(createdAt)}}</p>
         <p><span>{{ messages.updatedDate }}:</span>{{format(updatedAt)}}</p>
     </div>
