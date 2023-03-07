@@ -1,6 +1,9 @@
 <template>
     <div class ="content">
-        <DateLabel :createdAt="article.created_at" :updatedAt="article.updated_at"/>
+        <div class="others">
+            <p><span>{{ messages.count }}</span>:{{ article.count }}</p>
+            <DateLabel :createdAt="article.created_at" :updatedAt="article.updated_at"/>
+        </div>
         <div class="elements">
             <Link :href="'/Article/View/' + article.id">
                 <h2>{{article.title}}</h2>
@@ -21,10 +24,12 @@ export default{
     data() {
         return {
             japanese:{
-                button:"編集"
+                button:"編集",
+                count:"閲覧数"
             },
             messages:{
-                button:"Edit"
+                button:"Edit",
+                count:"count"
             }
         }
     },
@@ -42,7 +47,25 @@ export default{
 </script>
 
 <style scope lang="scss">
-.DateLabel{ justify-content: flex-end; }
+.others{
+    span{font-weight: bold;}
+    p{
+        font-size: 0.8rem;
+        text-align:right
+    }
+    .DateLabel{justify-content: flex-end;}
+}
+
+@media (min-width: 420px){
+    .others{
+        display: flex;
+        justify-content: flex-end;
+        word-break   :break-word;
+        overflow-wrap:normal;
+        gap: 0.6rem;
+    }
+}
+
 .elements{
     display: grid;
     grid-template-columns:10fr 1fr;
@@ -50,7 +73,8 @@ export default{
     background-color: #e1e1e1;
     border:black solid 1px;
     padding: 5px;
-    h2{
+    h3{
+        font-size: 1.3rem;
         margin: auto 0;
         grid-column: 1/2;
         word-break   :break-word;
