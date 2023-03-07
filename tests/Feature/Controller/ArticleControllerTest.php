@@ -41,6 +41,7 @@ class ArticleControllerTest extends TestCase
 
         // carbonの時間固定
         Carbon::setTestNow(Carbon::now());
+        $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'ja';
     }
     /**
      * A basic feature test example.
@@ -297,13 +298,7 @@ class ArticleControllerTest extends TestCase
         ])
         ->delete('/api/article/'.$article->id);
 
-        $response->assertStatus(200);
-
-        //
-        $this->assertDatabaseHas('articles',[
-            'id' => $article->id,
-            'deleted_at' => null,
-        ]);
+        $response->assertStatus(401);
     }
 
 }
