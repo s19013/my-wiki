@@ -12,6 +12,8 @@ use App\Models\BookMark;
 use App\Models\BookMarkTag;
 use App\Http\Controllers\BookMarkTransitionController;
 
+use App\Repository\BookMarkTagRepository;
+
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 
 use Carbon\Carbon;
@@ -37,6 +39,7 @@ class BookMarkTransitionControllerTest extends TestCase
 
     private $user;
     private $controller;
+    private $bookMarkRepository;
 
     public function setup():void
     {
@@ -44,6 +47,9 @@ class BookMarkTransitionControllerTest extends TestCase
         // ユーザーを用意
         $this->user = User::factory()->create();
         $this->controller = new BookMarkTransitionController();
+        $this->bookMarkRepository = new BookMarkTagRepository();
+
+        $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'ja';
     }
 
     public function test_transitionToEditBookMark_自分の記事_タグ登録済み()
@@ -63,10 +69,7 @@ class BookMarkTransitionControllerTest extends TestCase
         $tags = Tag::factory()->count(3)->create(['user_id' => $this->user->id]);
 
         foreach ($tags as $tag) {
-            BookMarkTag::create([
-                'book_mark_id' => $bookMark->id,
-                'tag_id'     => $tag->id,
-            ]);
+            $this->bookMarkRepository->store($tag->id,$bookMark->id);
         }
 
         $response = $this
@@ -94,10 +97,7 @@ class BookMarkTransitionControllerTest extends TestCase
         // タグを登録
         $tags = Tag::factory()->count(3)->create(['user_id' => $this->user->id]);
 
-        BookMarkTag::create([
-            'book_mark_id' => $bookMark->id,
-            'tag_id'     => null,
-        ]);
+        $this->bookMarkRepository->store(null,$bookMark->id);
 
         $response = $this
         ->actingAs($this->user)
@@ -128,10 +128,7 @@ class BookMarkTransitionControllerTest extends TestCase
         $tags = Tag::factory()->count(3)->create(['user_id' => $this->user->id]);
 
         foreach ($tags as $tag) {
-            BookMarkTag::create([
-                'book_mark_id' => $bookMark->id,
-                'tag_id'     => $tag->id,
-            ]);
+            $this->bookMarkRepository->store($tag->id,$bookMark->id);
         }
 
         //削除
@@ -166,10 +163,7 @@ class BookMarkTransitionControllerTest extends TestCase
         $tags = Tag::factory()->count(3)->create(['user_id' => $this->user->id]);
 
         foreach ($tags as $tag) {
-            BookMarkTag::create([
-                'book_mark_id' => $bookMark->id,
-                'tag_id'     => $tag->id,
-            ]);
+            $this->bookMarkRepository->store($tag->id,$bookMark->id);
         }
 
         $response = $this

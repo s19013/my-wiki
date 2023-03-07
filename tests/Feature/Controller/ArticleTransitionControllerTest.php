@@ -12,6 +12,8 @@ use App\Models\Article;
 use App\Models\ArticleTag;
 use App\Http\Controllers\ArticleTransitionController;
 
+use App\Repository\ArticleTagRepository;
+
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 
 use Carbon\Carbon;
@@ -26,6 +28,7 @@ class ArticleTransitionControllerTest extends TestCase
 
     private $user;
     private $controller;
+    private $articleTagRepository;
 
     public function setup():void
     {
@@ -33,6 +36,8 @@ class ArticleTransitionControllerTest extends TestCase
         // ユーザーを用意
         $this->user = User::factory()->create();
         $this->controller = new ArticleTransitionController();
+        $this->articleTagRepository = new ArticleTagRepository();
+        $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'ja';
     }
 
     //自分でもいまいちなテストだと思う(他のテストもだけど)
@@ -53,10 +58,7 @@ class ArticleTransitionControllerTest extends TestCase
         $tags = Tag::factory()->count(3)->create(['user_id' => $this->user->id]);
 
         foreach ($tags as $tag) {
-            ArticleTag::create([
-                'article_id' => $article->id,
-                'tag_id'     => $tag->id,
-            ]);
+            $this->articleTagRepository->store($tag->id,$article->id);
         }
 
         $response = $this
@@ -82,10 +84,7 @@ class ArticleTransitionControllerTest extends TestCase
         $article = Article::factory()->create(['user_id' => $this->user->id]);
 
         // タグを登録
-        ArticleTag::create([
-            'article_id' => $article->id,
-            'tag_id'     => null,
-        ]);
+        $this->articleTagRepository->store(null,$article->id);
 
         $response = $this
         ->actingAs($this->user)
@@ -117,10 +116,7 @@ class ArticleTransitionControllerTest extends TestCase
         $tags = Tag::factory()->count(3)->create(['user_id' => $this->user->id]);
 
         foreach ($tags as $tag) {
-            ArticleTag::create([
-                'article_id' => $article->id,
-                'tag_id'     => $tag->id,
-            ]);
+            $this->articleTagRepository->store($tag->id,$article->id);
         }
 
         //削除
@@ -155,10 +151,7 @@ class ArticleTransitionControllerTest extends TestCase
         $tags = Tag::factory()->count(3)->create(['user_id' => $this->user->id]);
 
         foreach ($tags as $tag) {
-            ArticleTag::create([
-                'article_id' => $article->id,
-                'tag_id'     => $tag->id,
-            ]);
+            $this->articleTagRepository->store($tag->id,$article->id);
         }
 
         $response = $this
@@ -190,10 +183,7 @@ class ArticleTransitionControllerTest extends TestCase
         $tags = Tag::factory()->count(3)->create(['user_id' => $this->user->id]);
 
         foreach ($tags as $tag) {
-            ArticleTag::create([
-                'article_id' => $article->id,
-                'tag_id'     => $tag->id,
-            ]);
+            $this->articleTagRepository->store($tag->id,$article->id);
         }
 
         $response = $this
@@ -225,10 +215,7 @@ class ArticleTransitionControllerTest extends TestCase
         $tags = Tag::factory()->count(3)->create(['user_id' => $this->user->id]);
 
         foreach ($tags as $tag) {
-            ArticleTag::create([
-                'article_id' => $article->id,
-                'tag_id'     => $tag->id,
-            ]);
+            $this->articleTagRepository->store($tag->id,$article->id);
         }
 
         //削除
@@ -265,10 +252,7 @@ class ArticleTransitionControllerTest extends TestCase
         $tags = Tag::factory()->count(3)->create(['user_id' => $this->user->id]);
 
         foreach ($tags as $tag) {
-            ArticleTag::create([
-                'article_id' => $article->id,
-                'tag_id'     => $tag->id,
-            ]);
+            $this->articleTagRepository->store($tag->id,$article->id);
         }
 
         $response = $this
@@ -289,10 +273,7 @@ class ArticleTransitionControllerTest extends TestCase
     {
         $article = Article::factory()->create(['user_id' => $this->user->id]);
 
-        ArticleTag::create([
-            'article_id' => $article->id,
-            'tag_id'     => null,
-        ]);
+        $this->articleTagRepository->store(null,$article->id);
 
         $response = $this
         ->actingAs($this->user)
