@@ -32,6 +32,7 @@ class TagControllerTest extends TestCase
         parent::setUp();
         // ユーザーを用意
         $this->user = User::factory()->create();
+        $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'ja';
     }
 
     // 期待
