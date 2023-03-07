@@ -9,7 +9,7 @@
                 <h2>{{article.title}}</h2>
             </Link>
             <Link :href="'/Article/Edit/' + article.id">
-                <v-btn color="submit" elevation="2">
+                <v-btn color="submit" elevation="2" size="small">
                     <p>{{ messages.button }}</p>
                 </v-btn>
             </Link>
