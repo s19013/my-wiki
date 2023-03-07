@@ -56,7 +56,7 @@ export default{
     .DateLabel{justify-content: flex-end;}
 }
 
-@media (min-width: 420px){
+@media (min-width: 440px){
     .others{
         display: flex;
         justify-content: flex-end;
@@ -74,7 +74,8 @@ export default{
     border:black solid 1px;
     padding: 5px;
     h3{
-        font-size: 1.3rem;
+        @media (min-width: 420px){font-size: 1.3rem;}
+        font-size: 1.6rem;
         margin: auto 0;
         grid-column: 1/2;
         word-break   :break-word;
