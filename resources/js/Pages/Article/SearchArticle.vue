@@ -3,19 +3,21 @@
         <v-container>
             <SearchField
                 ref = "SearchField"
-                :searchLabel   ="messages.searchArticleLabel"
+                :searchLabel   ="messages.title"
                 :orignalKeyWord="old.keyword"
                 @triggerSearch="search({
-                    page:1,
+                    page   :1,
                     keyword:this.$refs.SearchField.serveKeywordToParent(),
-                    tagList:this.$refs.tagDialog.serveCheckedTagList(),
-                    searchTarget:this.searchTarget
+                    tagList:this.$refs.TagDialog.serveCheckedTagList(),
+                    searchTarget  :this.searchTarget,
+                    searchQuantity:this.$refs.SearchOption.serveSearchQuantity(),
+                    sortType:this.$refs.SearchOption.serveSort()
                 })"
                 >
             </SearchField>
 
             <TagDialog
-                ref="tagDialog"
+                ref="TagDialog"
                 :text = "messages.TagDialogLabel"
                 :originalCheckedTagList="old.tagList"
                 :searchOnly="true"/>
@@ -39,6 +41,12 @@
                     </div>
                 </div>
             </div>
+
+            <SearchOption
+                ref="SearchOption"
+                :oldSearchQuantity="Number(this.old.searchQuantity)"
+                :oldSortType="this.old.sortType"
+            />
 
             <template v-for="article of result.data" :key="article.id">
                 <ArticleContainer
@@ -72,6 +80,7 @@ import DetailComponent from '@/Components/atomic/DetailComponent.vue';
 import SearchField from '@/Components/SearchField.vue';
 import ArticleContainer from '@/Components/contents/ArticleContainer.vue';
 import PageController from '@/Components/PageController.vue';
+import SearchOption from '@/Components/SearchOption.vue';
 
 import MakeListTools from '@/tools/MakeListTools.js';
 
@@ -82,23 +91,21 @@ export default{
         return {
             japanese:{
                 title:'記事検索',
-                searchArticleLabel:"記事検索",
+                TagDialogLabel:"検索するタグ",
                 searchTarget:{
                     label:"検索対象",
                     title:"タイトル",
                     body :"本文"
                 },
-                TagDialogLabel:"検索するタグ",
             },
             messages:{
                 title:'Search Article',
-                searchArticleLabel:"Search Article",
+                TagDialogLabel:"Search Tag",
                 searchTarget:{
                     label:"Search Target",
                     title:"title",
                     body :"body"
                 },
-                TagDialogLabel:"Search Tag",
             },
             page: this.result.current_page,
             searchTarget:this.old.searchTarget,
@@ -119,17 +126,22 @@ export default{
         SearchField,
         ArticleContainer,
         DetailComponent,
-        PageController
+        PageController,
+        SearchOption
     },
     methods: {
         // 検索用
-        search({page,keyword,tagList,searchTarget}){
+        pageIncrease(){if (this.page < this.result.last_page) { this.page += 1 }},
+        pageDecrease(){if (this.page > 1) {this.page -= 1}},
+        search({page,keyword,tagList,searchTarget,searchQuantity,sortType}){
             this.$store.commit('switchGlobalLoading')
             this.$inertia.get('/Article/Search' ,{
                 page    : page,
                 keyword : keyword,
                 tagList : tagList,
                 searchTarget:searchTarget,
+                searchQuantity:searchQuantity,
+                sortType:sortType,
                 onError:(errors) => {
                     console.log(errors)
                     this.$store.commit('switchGlobalLoading')
@@ -147,8 +159,10 @@ export default{
                         this.search({
                             page:1,
                             keyword:this.$refs.SearchField.serveKeywordToParent(),
-                            tagList:this.$refs.tagDialog.serveCheckedTagList(),
-                            searchTarget:this.searchTarget
+                            tagList:this.$refs.TagDialog.serveCheckedTagList(),
+                            searchTarget:this.searchTarget,
+                            searchQuantity:this.$refs.SearchOption.serveSearchQuantity(),
+                            sortType:this.$refs.SearchOption.serveSort()
                         })
                         return
                     }
@@ -157,7 +171,7 @@ export default{
                     if ((event.ctrlKey || event.key === "Meta")
                     && event.altKey && event.code === "KeyT" ) {
                         event.preventDefault();
-                        this.$refs.tagDialog.openTagDialog()
+                        this.$refs.TagDialog.openTagDialog()
                     }
 
                     // ページめくり
@@ -175,12 +189,6 @@ export default{
                 }
             }
         },
-        pageIncrease(){
-            if (this.page < this.result.last_page) { this.page += 1 }
-        },
-        pageDecrease(){
-            if (this.page > 1) {this.page -= 1}
-        }
     },
     watch: {
     // @input="pagination"でできるはずなのにできないのでwatchで対応
@@ -192,7 +200,9 @@ export default{
                 page    : newValue,
                 keyword : this.old.keyword,
                 tagList : makeListTools.tagIdList(this.old.tagList),
-                searchTarget : this.old.searchTarget
+                searchTarget  : this.old.searchTarget,
+                searchQuantity: this.old.searchQuantity,
+                sortType:this.old.sortType
             });
         }
     },
