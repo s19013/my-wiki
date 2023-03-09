@@ -162,7 +162,9 @@ class BookMarkController extends Controller
             keyword:$request->keyword,
             page:$this->nullAvoidanceToolKit->ifnull($request->page,1),
             tagList    :$request->tagList,
-            searchTarget:$this->nullAvoidanceToolKit->ifnull($request->searchTarget,"title")
+            searchTarget:$this->nullAvoidanceToolKit->ifnull($request->searchTarget,"title"),
+            searchQuantity:$this->nullAvoidanceToolKit->ifnull($request->searchQuantity,10),
+            sortType:$this->nullAvoidanceToolKit->ifnull($request->sortType,"updated_at_desc")
         );
 
         $tagList = [];
@@ -182,7 +184,9 @@ class BookMarkController extends Controller
         $old = [
             "keyword" => $this->nullAvoidanceToolKit->ifnull($request->keyword,""),
             "tagList" => $tagList,
-            "searchTarget" => $this->nullAvoidanceToolKit->ifnull($request->searchTarget,"title")
+            "searchTarget" => $this->nullAvoidanceToolKit->ifnull($request->searchTarget,"title"),
+            "searchQuantity" => $this->nullAvoidanceToolKit->ifnull($request->searchQuantity,10),
+            "sortType" => $this->nullAvoidanceToolKit->ifnull($request->sortType,"updated_at_desc"),
         ];
 
         return Inertia::render('BookMark/SearchBookMark',[

@@ -79,13 +79,12 @@ class BookMarkRepository
         return $temp->id;
     }
 
-    public  function search($userId,$keyword,$page,$tagList,$searchTarget)
+    public  function search(
+        $userId,$keyword,$page,$tagList,$searchTarget,
+        $searchQuantity=10,$sortType="updated_at_desc")
     {
         // ツールを実体化
         $searchToolKit = new searchToolKit();
-
-        //一度にとってくる数
-        $parPage = (int)config('app.parPage');
 
         // %と_をエスケープ
         $escaped = $searchToolKit->sqlEscape($keyword);
@@ -123,16 +122,16 @@ class BookMarkRepository
         $total = (int)$query->count();
 
         //ページ数計算(最後は何ページ目か)
-        $lastPage = (int)ceil($total / $parPage);
+        $lastPage = (int)ceil($total / $searchQuantity);
 
         // 一度にいくつ取ってくるか
-        $query->limit($parPage);
+        $query->limit($searchQuantity);
 
         //何件目から取得するか
-        $query->offset($parPage*($page-1));
+        $query->offset($searchQuantity*($page-1));
 
         //ソート
-        $sort = $query->orderBy('updated_at','desc');
+        $query = $this->sort($query,$sortType);
 
         //検索
         // dd($query->toSql());
@@ -170,6 +169,40 @@ class BookMarkRepository
         ->having(DB::raw('count(*)'), '=', count($tagList));
 
         return $subTable;
+    }
+
+    // ソート
+    public function sort($query,$type)
+    {
+        switch ($type) {
+            case "updated_at_desc":
+                return $query->orderBy('updated_at','desc');
+                break;
+            case "updated_at_asc":
+                return $query->orderBy('updated_at');
+                break;
+            case "created_at_desc":
+                return $query->orderBy('created_at','desc');
+                break;
+            case "created_at_asc":
+                return $query->orderBy('created_at');
+                break;
+            case "title_desc":
+                return $query->orderBy('title','desc');
+                break;
+            case "title_asc":
+                return $query->orderBy('title');
+                break;
+            case "count_desc":
+                return $query->orderBy('count','desc');
+                break;
+            case "count_asc":
+                return $query->orderBy('count');
+                break;
+            case "random":
+                return $query->inRandomOrder();
+                break;
+        }
     }
 
     // 削除済みか確かめる
