@@ -66,13 +66,13 @@ class ArticleRepository
     }
 
     //検索する数
-    public function search($userId,$keyword,$page,$tagList,$searchTarget)
+    public function search(
+        $userId,$keyword,$page,$tagList,$searchTarget,
+        $searchQuantity=10,$sortType="updated_at_desc"
+        )
     {
         // ツールを実体化
         $searchToolKit = new searchToolKit();
-
-        //一度にとってくる数
-        $parPage = (int)config('app.parPage');
 
         // %と_をエスケープ
         $escaped = $searchToolKit->sqlEscape($keyword);
@@ -90,7 +90,7 @@ class ArticleRepository
         } else {
             //タグ検索が不要な場合
             $query = DB::table("articles")
-            ->select('id','title','user_id','created_at','updated_at')
+            ->select('id','title','user_id','count','created_at','updated_at')
             ->where('user_id','=',$userId)
             ->whereNull('deleted_at');
         }
@@ -109,16 +109,16 @@ class ArticleRepository
         $total = (int)$query->count();
 
         //ページ数計算(最後は何ページ目か)
-        $lastPage = (int)ceil($total / $parPage);
+        $lastPage = (int)ceil($total / $searchQuantity);
 
         // 一度にいくつ取ってくるか
-        $query->limit($parPage);
+        $query->limit($searchQuantity);
 
         //何件目から取得するか
-        $query->offset($parPage*($page-1));
+        $query->offset($searchQuantity*($page-1));
 
         //ソート
-        $sort = $query->orderBy('updated_at','desc');
+        $query = $this->sort($query,$sortType);
 
         //検索
         // dd($query->toSql());
@@ -138,7 +138,7 @@ class ArticleRepository
         // なぜarticle_tagsをメインにしているのか
         // -> article_tagsが2つを外部参照しているから
         $subTable = DB::table('articles')
-        ->select('articles.id','articles.title','articles.user_id','articles.created_at','articles.updated_at')
+        ->select('articles.id','articles.title','articles.user_id','articles.count','articles.created_at','articles.updated_at')
         ->leftJoin('article_tags','articles.id','=','article_tags.article_id')
         ->leftJoin('tags','article_tags.tag_id','=','tags.id')
         ->where('articles.user_id','=',$userId)
@@ -162,6 +162,40 @@ class ArticleRepository
         ->having(DB::raw('count(*)'), '=', count($tagList));
 
         return $subTable;
+    }
+
+    // ソート
+    public function sort($query,$type)
+    {
+        switch ($type) {
+            case "updated_at_desc":
+                return $query->orderBy('updated_at','desc');
+                break;
+            case "updated_at_asc":
+                return $query->orderBy('updated_at');
+                break;
+            case "created_at_desc":
+                return $query->orderBy('created_at','desc');
+                break;
+            case "created_at_asc":
+                return $query->orderBy('created_at');
+                break;
+            case "title_desc":
+                return $query->orderBy('title','desc');
+                break;
+            case "title_asc":
+                return $query->orderBy('title');
+                break;
+            case "count_desc":
+                return $query->orderBy('count','desc');
+                break;
+            case "count_asc":
+                return $query->orderBy('count');
+                break;
+            case "random":
+                return $query->inRandomOrder();
+                break;
+        }
     }
 
     // 削除済みかどうか確かめる

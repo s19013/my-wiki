@@ -815,4 +815,60 @@ class ArticleRepository_SearchTest extends TestCase
         // ヒットするはずの記事を取ってきているか
         $this->assertContains($hitArticle->id , $idList);
     }
+
+    // 期待
+    // * 取ってきたデータの数が20こ
+    // 条件
+    // * 検索量を指定する
+    public function test_Search_searchQuantity()
+    {
+        Article::factory()->count(30)->create(['user_id' => $this->userId]);
+
+        $response = $this->articleRepository->search(
+            userId:$this->userId,
+            keyword:'',
+            page:1,
+            tagList:null,
+            searchTarget:'title',
+            searchQuantity:20
+        );
+
+        $this->assertCount(20,$response['data']);
+    }
+
+    // 期待
+    // * 帰ってきたデータがZ -> A
+    public function test_Search_sort()
+    {
+        Article::factory()->create([
+            'title'   => "A",
+            'user_id' => $this->userId
+        ]);
+
+        Article::factory()->create([
+            'title'   => "B",
+            'user_id' => $this->userId
+        ]);
+
+        Article::factory()->create([
+            'title'   => "C",
+            'user_id' => $this->userId
+        ]);
+
+
+        $response = $this->articleRepository->search(
+            userId:$this->userId,
+            keyword:'',
+            page:1,
+            tagList:null,
+            searchTarget:'title',
+            searchQuantity:10,
+            sortType:"title_desc"
+        );
+
+        $articleList = $response['data'];
+        $this->assertSame("C",$articleList[0]->title);
+        $this->assertSame("B",$articleList[1]->title);
+        $this->assertSame("A",$articleList[2]->title);
+    }
 }

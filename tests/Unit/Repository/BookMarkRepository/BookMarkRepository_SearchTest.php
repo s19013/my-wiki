@@ -826,4 +826,60 @@ class BookMarkRepository_SearchTest extends TestCase
         // ヒットするはずのブックマークを取ってきているか
         $this->assertContains($hitBookMark->id , $idList);
     }
+
+    // 期待
+    // * 取ってきたデータの数が20こ
+    // 条件
+    // * 検索量を指定する
+    public function test_Search_searchQuantity()
+    {
+        BookMark::factory()->count(30)->create(['user_id' => $this->userId]);
+
+        $response = $this->bookMarkRepository->search(
+            userId:$this->userId,
+            keyword:'',
+            page:1,
+            tagList:null,
+            searchTarget:'title',
+            searchQuantity:20
+        );
+
+        $this->assertCount(20,$response['data']);
+    }
+
+    // 期待
+    // * 帰ってきたデータがZ -> A
+    public function test_Search_sort()
+    {
+        BookMark::factory()->create([
+            'title'   => "A",
+            'user_id' => $this->userId
+        ]);
+
+        BookMark::factory()->create([
+            'title'   => "B",
+            'user_id' => $this->userId
+        ]);
+
+        BookMark::factory()->create([
+            'title'   => "C",
+            'user_id' => $this->userId
+        ]);
+
+
+        $response = $this->bookMarkRepository->search(
+            userId:$this->userId,
+            keyword:'',
+            page:1,
+            tagList:null,
+            searchTarget:'title',
+            searchQuantity:10,
+            sortType:"title_desc"
+        );
+
+        $bookMarkList = $response['data'];
+        $this->assertSame("C",$bookMarkList[0]->title);
+        $this->assertSame("B",$bookMarkList[1]->title);
+        $this->assertSame("A",$bookMarkList[2]->title);
+    }
 }

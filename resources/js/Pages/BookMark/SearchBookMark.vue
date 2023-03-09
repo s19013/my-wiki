@@ -3,13 +3,15 @@
         <v-container>
             <SearchField
                 ref        = "SearchField"
-                :searchLabel="messages.searchBookmarkLabel"
+                :searchLabel="messages.title"
                 :orignalKeyWord="old.keyword"
                 @triggerSearch="search({
                     page:1,
                     keyword:this.$refs.SearchField.serveKeywordToParent(),
                     tagList:this.$refs.tagDialog.serveCheckedTagList(),
-                    searchTarget:this.searchTarget
+                    searchTarget:this.searchTarget,
+                    searchQuantity:this.$refs.SearchOption.serveSearchQuantity(),
+                    sortType:this.$refs.SearchOption.serveSort()
                 })"
             />
 
@@ -38,6 +40,12 @@
                     </div>
                 </div>
             </div>
+
+            <SearchOption
+                ref="SearchOption"
+                :oldSearchQuantity="Number(this.old.searchQuantity)"
+                :oldSortType="this.old.sortType"
+            />
 
             <template v-for="bookMark of result.data" :key="bookMark.id">
                 <BookMarkContainer
@@ -72,6 +80,7 @@ import SearchField from '@/Components/SearchField.vue';
 import BookMarkContainer from '@/Components/contents/BookMarkContainer.vue';
 import PageController from '@/Components/PageController.vue';
 import loadingDialog from '@/Components/dialog/loadingDialog.vue';
+import SearchOption from '@/Components/SearchOption.vue';
 
 import MakeListTools from '@/tools/MakeListTools.js';
 
@@ -82,7 +91,6 @@ export default{
         return {
             japanese:{
                 title:'ブックマーク検索',
-                searchBookmarkLabel:"ブックマーク検索",
                 searchTarget:{
                     label:"検索対象",
                     title:"タイトル",
@@ -91,7 +99,6 @@ export default{
             },
             messages:{
                 title:'Search Bookmark',
-                searchBookmarkLabel:"Search Bookmark",
                 searchTarget:{
                     label:"Search Target",
                     title:"title",
@@ -118,17 +125,20 @@ export default{
         SearchField,
         BookMarkContainer,
         DetailComponent,
-        PageController
+        PageController,
+        SearchOption
     },
     methods: {
         // 検索用
-        search({page,keyword,tagList,searchTarget}){
+        search({page,keyword,tagList,searchTarget,searchQuantity,sortType}){
             this.$store.commit('switchGlobalLoading')
             this.$inertia.get('/BookMark/Search' ,{
                 page    : page,
                 keyword : keyword,
                 tagList : tagList,
                 searchTarget:searchTarget,
+                searchQuantity:searchQuantity,
+                sortType:sortType,
                 onError:(errors) => {
                     console.log(errors)
                     this.$store.commit('switchGlobalLoading')
@@ -148,7 +158,9 @@ export default{
                             page:1,
                             keyword:this.$refs.SearchField.serveKeywordToParent(),
                             tagList:this.$refs.tagDialog.serveCheckedTagList(),
-                            searchTarget:this.searchTarget
+                            searchTarget:this.searchTarget,
+                            searchQuantity:this.$refs.SearchOption.serveSearchQuantity(),
+                            sortType:this.$refs.SearchOption.serveSort()
                         })
                         return
                     }
@@ -192,7 +204,9 @@ export default{
                 page    : newValue,
                 keyword : this.old.keyword,
                 tagList : makeListTools.tagIdList(this.old.tagList),
-                searchTarget : this.old.searchTarget
+                searchTarget : this.old.searchTarget,
+                searchQuantity: this.old.searchQuantity,
+                sortType:this.old.sortType
             });
         }
     },
