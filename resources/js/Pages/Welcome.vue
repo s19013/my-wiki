@@ -166,13 +166,20 @@ onMounted(() => {
                     Laravel v9 (PHP v8)
                 </div>
             </div>
-
-            <Link v-if="canRegister" :href="route('register')" class="flex justify-center">
+            <Link v-if="$page.props.auth.user" :href="route('SearchBookMark')" class="text-sm text-gray-700 underline">
                 <v-btn class="fw-bolder mt-10" color="#BBDEFB">
-                    <v-icon class="mr-2">mdi-account-plus</v-icon>
-                    {{messages.firstHere}}
+                    {{messages.returnHome}}
                 </v-btn>
             </Link>
+            <template v-else>
+                <Link v-if="canRegister" :href="route('register')" class="flex justify-center">
+                    <v-btn class="fw-bolder mt-10" color="#BBDEFB">
+                        <v-icon class="mr-2">mdi-account-plus</v-icon>
+                        {{messages.firstHere}}
+                    </v-btn>
+                </Link>
+            </template>
+
         </div>
     </v-container>
 </template>
