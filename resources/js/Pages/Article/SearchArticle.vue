@@ -46,6 +46,7 @@
                 ref="SearchOption"
                 :oldSearchQuantity="Number(this.old.searchQuantity)"
                 :oldSortType="this.old.sortType"
+                :sortLabelList="this.messages.sort"
             />
 
             <template v-for="article of result.data" :key="article.id">
@@ -97,6 +98,44 @@ export default{
                     title:"タイトル",
                     body :"本文"
                 },
+                sort:[
+                    {
+                        label:"更新日 新 → 古",
+                        value:"updated_at_desc"
+                    },
+                    {
+                        label:"更新日 古 → 新",
+                        value:"updated_at_asc"
+                    },
+                    {
+                        label:"作成日 新 → 古",
+                        value:"created_at_desc"
+                    },
+                    {
+                        label:"作成日 古 → 新",
+                        value:"created_at_asc"
+                    },
+                    {
+                        label:"タイトル あ → ん",
+                        value:"title_asc"
+                    },
+                    {
+                        label:"タイトル ん → あ",
+                        value:"title_desc"
+                    },
+                    {
+                        label:"閲覧数 多 → 少",
+                        value:"count_desc"
+                    },
+                    {
+                        label:"閲覧数 少 → 多",
+                        value:"count_asc"
+                    },
+                    {
+                        label:"ランダム",
+                        value:"random"
+                    },
+                ]
             },
             messages:{
                 title:'Search Article',
@@ -106,6 +145,44 @@ export default{
                     title:"title",
                     body :"body"
                 },
+                sort:[
+                    {
+                        label:"Updated Date new → old",
+                        value:"updated_at_desc"
+                    },
+                    {
+                        label:"Updated Date old → new",
+                        value:"updated_at_asc"
+                    },
+                    {
+                        label:"Created Date new → old",
+                        value:"created_at_desc"
+                    },
+                    {
+                        label:"Created Date old → new",
+                        value:"created_at_asc"
+                    },
+                    {
+                        label:"Title A → Z",
+                        value:"title_asc"
+                    },
+                    {
+                        label:"Title Z → A",
+                        value:"title_desc"
+                    },
+                    {
+                        label:"Views Most → Less",
+                        value:"count_desc"
+                    },
+                    {
+                        label:"Views Less → Most",
+                        value:"count_asc"
+                    },
+                    {
+                        label:"Random",
+                        value:"random"
+                    },
+                ]
             },
             page: this.result.current_page,
             searchTarget:this.old.searchTarget,
