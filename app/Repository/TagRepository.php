@@ -62,7 +62,7 @@ class TagRepository
 
     //編集画面用の検索ツール
     public function searchInEdit(
-            $userId,$keyword,$page,$searchQuantity=10,$sortType="updated_at_desc"
+            $userId,$keyword,$page,$searchQuantity=10,$sortType="name_asc"
         )
     {
         // ツールを実体化
