@@ -355,10 +355,15 @@ class TagRepositoryTest extends TestCase
                 "article_id" => $article->id,
                 'tag_id'     => $tag->id
             ]);
+
+            Tag::where('id','=',$tag->id)-> increment('count');
+
             BookMarkTag::factory()->create([
                 "book_mark_id" => $bookMark->id,
                 'tag_id'     => $tag->id
             ]);
+
+            Tag::where('id','=',$tag->id)-> increment('count');
         }
 
         $receivedTags = ($this->tagRepository->searchInEdit($this->userId,"",1))['data'];
@@ -484,6 +489,58 @@ class TagRepositoryTest extends TestCase
 
         // 検索したタグが含まれているか｡
         $this->assertContains("TestTag",$nameList);
+    }
+
+    // 期待
+    // * 取ってきたデータの数が20こ
+    // 条件
+    // * 検索量を指定する
+    public function test_Search_searchQuantity()
+    {
+        Tag::factory()->count(30)->create(['user_id' => $this->userId]);
+
+        $response = $this->tagRepository->searchInEdit(
+            userId:$this->userId,
+            keyword:'',
+            page:1,
+            searchQuantity:20
+        );
+
+        $this->assertCount(20,$response['data']);
+    }
+
+    // 期待
+    // * 帰ってきたデータがZ -> A
+    public function test_Search_sort()
+    {
+        Tag::factory()->create([
+            'name'   => "A",
+            'user_id' => $this->userId
+        ]);
+
+        Tag::factory()->create([
+            'name'   => "B",
+            'user_id' => $this->userId
+        ]);
+
+        Tag::factory()->create([
+            'name'   => "C",
+            'user_id' => $this->userId
+        ]);
+
+
+        $response = $this->tagRepository->searchInEdit(
+            userId:$this->userId,
+            keyword:'',
+            page:1,
+            searchQuantity:10,
+            sortType:"name_desc"
+        );
+
+        $bookMarkList = $response['data'];
+        $this->assertSame("C",$bookMarkList[0]->name);
+        $this->assertSame("B",$bookMarkList[1]->name);
+        $this->assertSame("A",$bookMarkList[2]->name);
     }
 }
 

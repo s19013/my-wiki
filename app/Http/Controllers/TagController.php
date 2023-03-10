@@ -129,10 +129,14 @@ class TagController extends Controller
             userId :Auth::id(),
             keyword:$request->keyword,
             page   :$this->nullAvoidanceToolKit->ifnull($request->page,1),
+            searchQuantity:$this->nullAvoidanceToolKit->ifnull($request->searchQuantity,10),
+            sortType:$this->nullAvoidanceToolKit->ifnull($request->sortType,"updated_at_desc")
         );
 
         $old = [
             "keyword" => $this->nullAvoidanceToolKit->ifnull($request->keyword,""),
+            "searchQuantity" => $this->nullAvoidanceToolKit->ifnull($request->searchQuantity,10),
+            "sortType" => $this->nullAvoidanceToolKit->ifnull($request->sortType,"updated_at_desc"),
         ];
 
         return Inertia::render('TagEdit',[

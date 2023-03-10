@@ -13,17 +13,27 @@
                 @triggerSearch="search({
                     page:1,
                     keyword:this.$refs.SearchField.serveKeywordToParent(),
+                    searchQuantity:this.$refs.SearchOption.serveSearchQuantity(),
+                    sortType:this.$refs.SearchOption.serveSort()
                 })"
                 >
             </SearchField>
 
-            <p>({{ messages.usedCount }})</p>
+            <SearchOption
+                ref="SearchOption"
+                :oldSearchQuantity="Number(this.old.searchQuantity)"
+                :oldSortType="this.old.sortType"
+                :sortLabelList="this.messages.sort"
+            />
+
             <div>
                 <template v-for="tag of result.data" :key="tag.id">
                     <div class ="content">
-                        <DateLabel :createdAt="tag.created_at" :updatedAt="tag.updated_at"/>
+                        <div class="others">
+                            <p><span>{{ messages.usedCount }}</span>:{{ tag.count }}</p>
+                            <DateLabel :createdAt="tag.created_at" :updatedAt="tag.updated_at"/>
+                        </div>
                         <div class="elements">
-                            <h3>({{tag.count}})</h3>
                             <h2>{{tag.name}}</h2>
                             <v-btn color="error" elevation="2"
                             class="deleteButton" @click="openDeleteDialog(tag.id,tag.name)">
@@ -67,6 +77,7 @@ import tagDeleteDialog from '@/Components/useOnlyOnce/tagDeleteDialog.vue'
 import tagFormDialog from '@/Components/useOnlyOnce/tagFormDialog.vue'
 import loadingDialog from '@/Components/dialog/loadingDialog.vue';
 import PageController from '@/Components/PageController.vue';
+import SearchOption from '@/Components/SearchOption.vue';
 
 export default{
     data() {
@@ -77,7 +88,41 @@ export default{
                 search:"タグ検索",
                 edit:"編集",
                 delete:"削除",
-                usedCount:"使用回数"
+                usedCount:"使用回数",
+                sort:[
+                    {
+                        label:"更新日 新 → 古",
+                        value:"updated_at_desc"
+                    },
+                    {
+                        label:"更新日 古 → 新",
+                        value:"updated_at_asc"
+                    },
+                    {
+                        label:"作成日 新 → 古",
+                        value:"created_at_desc"
+                    },
+                    {
+                        label:"作成日 古 → 新",
+                        value:"created_at_asc"
+                    },
+                    {
+                        label:"タグ名 あ → ん",
+                        value:"name_asc"
+                    },
+                    {
+                        label:"タグ名 ん → あ",
+                        value:"name_desc"
+                    },
+                    {
+                        label:"使用回数 多 → 少",
+                        value:"count_desc"
+                    },
+                    {
+                        label:"使用回数 少 → 多",
+                        value:"count_asc"
+                    },
+                ]
             },
             messages:{
                 title:"Edit Tag",
@@ -85,7 +130,41 @@ export default{
                 search:"Search Tag",
                 edit:"Edit",
                 delete:"Delete",
-                usedCount:"Used Count"
+                usedCount:"Used Count",
+                sort:[
+                    {
+                        label:"Updated Date new → old",
+                        value:"updated_at_desc"
+                    },
+                    {
+                        label:"Updated Date old → new",
+                        value:"updated_at_asc"
+                    },
+                    {
+                        label:"Created Date new → old",
+                        value:"created_at_desc"
+                    },
+                    {
+                        label:"Created Date old → new",
+                        value:"created_at_asc"
+                    },
+                    {
+                        label:"Tag Name A → Z",
+                        value:"title_asc"
+                    },
+                    {
+                        label:"Tag Name Z → A",
+                        value:"title_desc"
+                    },
+                    {
+                        label:"Used Count Most → Less",
+                        value:"count_desc"
+                    },
+                    {
+                        label:"Used Count Less → Most",
+                        value:"count_asc"
+                    },
+                ]
             },
             page: this.result.current_page,
         }
@@ -105,15 +184,18 @@ export default{
         tagDeleteDialog,
         tagFormDialog,
         loadingDialog,
-        PageController
+        PageController,
+        SearchOption
     },
     methods: {
         // 検索用
-        search({page,keyword}){
+        search({page,keyword,searchQuantity,sortType}){
             this.$store.commit('switchGlobalLoading')
             this.$inertia.get('/Tag/Edit/Search' ,{
                 page    : page,
                 keyword : keyword,
+                searchQuantity:searchQuantity,
+                sortType:sortType,
                 onError:(errors) => {
                     console.log(errors)
                     this.$store.commit('switchGlobalLoading')
@@ -145,7 +227,9 @@ export default{
                         this.search({
                             page:1,
                             keyword:this.$refs.SearchField.serveKeywordToParent(),
-                            searchTarget:this.searchTarget
+                            searchTarget:this.searchTarget,
+                            searchQuantity:this.$refs.SearchOption.serveSearchQuantity(),
+                            sortType:this.$refs.SearchOption.serveSort()
                         })
                         return
                     }
@@ -188,6 +272,8 @@ export default{
             this.search({
                 page    : newValue,
                 keyword : this.old.keyword,
+                searchQuantity: this.old.searchQuantity,
+                sortType:this.old.sortType
             });
         }
     },
@@ -209,7 +295,6 @@ export default{
 
 <style scoped lang="scss">
 .content{margin-bottom: 1.2rem;}
-.DateLabel{ justify-content: flex-end; }
 .elements{
     display: grid;
     grid-template-rows:1fr;
@@ -239,6 +324,24 @@ export default{
         width: 100%;
         grid-row: 1;
         grid-column: 4/5;
+    }
+}
+.others{
+    span{font-weight: bold;}
+    p{
+        font-size: 0.8rem;
+        text-align:right
+    }
+    .DateLabel{justify-content: flex-end;}
+}
+
+@media (min-width: 440px){
+    .others{
+        display: flex;
+        justify-content: flex-end;
+        word-break   :break-word;
+        overflow-wrap:normal;
+        gap: 0.6rem;
     }
 }
 </style>

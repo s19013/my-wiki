@@ -3,27 +3,26 @@
         <p>{{ label }}:</p>
         <!-- ただの配列 -->
         <div class="selecter">
-            <select v-model="selected" v-if="object==false">
-                <option v-for="(element,index) in list" :key="index" :value="element">{{ element }}</option>
+            <select v-model="localSelected" >
+                <option v-for="(element,index) in list" :key="index" :value="element.value">{{ element.label }}</option>
             </select>
-            <!-- オブジェクトが入っている配列 -->
-            <template v-else>
-                <select v-model="selected" >
-                    <option v-for="(element,index) in list" :key="index" :value="element">{{ element.label }}</option>
-                </select>
-            </template>
         </div>
     </div>
+
 </template>
 
 <script>
 export default{
     data() {
         return {
-            selected:""
+            localSelected:this.selected
         }
     },
     props:{
+        selected:{
+            type: [String, Number],
+            default:""
+        },
         label:{
             type:String,
             default:""
@@ -31,16 +30,10 @@ export default{
         list:{
             type:Array,
             default:[{label:"",value:""}]
-        },
-        object:{
-            type:Boolean,
-            default:false
-        },
+        }
     },
     methods: {
-        serveSelected(){return this.selected},
-        // タイミングの問題でpropsでうまく初期値が設定されないため
-        setSelected(selected){this.selected = selected}
+        serveLocalSelected(){return this.localSelected},
     },
 }
 
