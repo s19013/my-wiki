@@ -36,7 +36,6 @@ export default{
             },
             searchQuantity:this.oldSearchQuantity,
             searchQuantityLabelList:[
-                {label:"2",value:2},
                 {label:"10",value:10},
                 {label:"20",value:20},
                 {label:"30",value:30},
