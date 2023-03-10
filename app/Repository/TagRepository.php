@@ -61,13 +61,12 @@ class TagRepository
     }
 
     //編集画面用の検索ツール
-    public function searchInEdit($userId,$keyword,$page)
+    public function searchInEdit(
+            $userId,$keyword,$page,$searchQuantity=10,$sortType="updated_at_desc"
+        )
     {
         // ツールを実体化
         $searchToolKit = new searchToolKit();
-
-        //一度にとってくる数
-        $parPage = (int)config('app.parPage');
 
         // %と_をエスケープ
         $escaped = $searchToolKit->sqlEscape($keyword);
@@ -91,21 +90,53 @@ class TagRepository
         $total = (int)$query->count();
 
         //ページ数計算(最後は何ページ目か)
-        $lastPage = (int)ceil($total / $parPage);
+        $lastPage = (int)ceil($total / $searchQuantity);
 
         // 一度にいくつ取ってくるか
-        $query->limit($parPage);
+        $query->limit($searchQuantity);
 
         //何件目から取得するか
-        $query->offset($parPage*($page-1));
+        $query->offset($searchQuantity*($page-1));
 
-        $query->orderBy('tags.name');
+        //ソート
+        $query = $this->sort($query,$sortType);
 
         return [
             'data' => $query->get(),
             'current_page'=> (int)$page,
             'last_page'   => $lastPage
         ];
+    }
+
+    // ソート
+    public function sort($query,$type)
+    {
+        switch ($type) {
+            case "updated_at_desc":
+                return $query->orderBy('updated_at','desc');
+                break;
+            case "updated_at_asc":
+                return $query->orderBy('updated_at');
+                break;
+            case "created_at_desc":
+                return $query->orderBy('created_at','desc');
+                break;
+            case "created_at_asc":
+                return $query->orderBy('created_at');
+                break;
+            case "name_desc":
+                return $query->orderBy('name','desc');
+                break;
+            case "name_asc":
+                return $query->orderBy('name');
+                break;
+            case "count_desc":
+                return $query->orderBy('count','desc');
+                break;
+            case "count_asc":
+                return $query->orderBy('count');
+                break;
+        }
     }
 
     // urlとユーザーからidを探す
