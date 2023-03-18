@@ -227,6 +227,17 @@ class ArticleRepository
         // false:他人のを覗こうとしている
         return ($article->user_id) == $userId;
     }
+
+    public function countUp($articleId)
+    {
+        $article = Article::where('id', $articleId)->first();
+        $article->count += 1;
+        $article->timestamps = false;
+        $article->save();
+
+        // incrementを使えば簡単だが､今回はこの動きでupdated_atが変化すると不都合が起きる
+        // Article::where('id','=',$articleId)->increment('count');
+    }
 }
 
 

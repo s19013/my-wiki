@@ -242,4 +242,14 @@ class BookMarkRepository
         ->whereNull('deleted_at')
         ->exists();//existsでダブっていればtrue
     }
+
+    public function countUp($bookMarkId)
+    {
+        $bookMark = BookMark::where('id', $bookMarkId)->first();
+        $bookMark->count += 1;
+        $bookMark->timestamps = false;
+        $bookMark->save();
+
+        // incrementを使えば簡単だが､今回はこの動きでupdated_atが変化すると不都合が起きる
+    }
 }
