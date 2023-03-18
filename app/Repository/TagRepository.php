@@ -198,4 +198,19 @@ class TagRepository
         // false:他人のを覗こうとしている
         return ($tag->user_id) == $userId ;
     }
+
+    public static function countUp($tagId){
+        $tag = Tag::where('id', $tagId)->first();
+        $tag->count += 1;
+        $tag->timestamps = false;
+        $tag->save();
+    }
+
+    public static function countDown($tagId)
+    {
+        $tag = Tag::where('id', $tagId)->first();
+        $tag->count -= 1;
+        $tag->timestamps = false;
+        $tag->save();
+    }
 }

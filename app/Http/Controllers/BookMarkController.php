@@ -207,6 +207,6 @@ class BookMarkController extends Controller
         if ($this->bookMarkRepository->isDeleted($bookMarkId)) {return response('',400);}
 
 
-        BookMark::where('id','=',$bookMarkId)->increment('count');
+        $this->bookMarkRepository->countUp($bookMarkId);
     }
 }
