@@ -3,8 +3,9 @@ namespace App\Repository;
 
 use DB;
 use Carbon\Carbon;
+
 use App\Models\ArticleTag;
-use App\Models\Tag;
+use App\Repository\TagRepository;
 
 class ArticleTagRepository
 {
@@ -17,7 +18,7 @@ class ArticleTagRepository
         ]);
 
         //カウントアップ
-        Tag::where('id','=',$tagId)-> increment('count');
+        TagRepository::countUp($tagId);
     }
 
     //記事からはずされたタグを削除
@@ -28,7 +29,7 @@ class ArticleTagRepository
             ->delete();
 
         //カウントダウン
-        Tag::where('id','=',$tagId)-> decrement('count');
+        TagRepository::countDown($tagId);
     }
 
     //記事に紐付けられているタグを更新
