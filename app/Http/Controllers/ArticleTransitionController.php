@@ -31,7 +31,7 @@ class ArticleTransitionController extends Controller
     //記事閲覧画面に遷移する時の処理
     public function transitionToViewArticle($articleId)
     {
-        Article::where('id','=',$articleId)->increment('count');
+        $this->articleRepository->countUp($articleId);
 
         return Inertia::render('Article/ViewArticle',[
             'article'        => $this->articleRepository->serve(articleId:$articleId),
