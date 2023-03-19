@@ -18,7 +18,7 @@ class ArticleTagRepository
         ]);
 
         //カウントアップ
-        TagRepository::countUp($tagId);
+        if (!is_null($tagId)) {TagRepository::countUp($tagId);}
     }
 
     //記事からはずされたタグを削除
@@ -29,7 +29,7 @@ class ArticleTagRepository
             ->delete();
 
         //カウントダウン
-        TagRepository::countDown($tagId);
+        if (!is_null($tagId)) {TagRepository::countDown($tagId);}
     }
 
     //記事に紐付けられているタグを更新
