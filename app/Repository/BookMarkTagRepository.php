@@ -18,7 +18,7 @@ class BookMarkTagRepository
         ]);
 
         //カウントアップ
-        TagRepository::countUp($tagId);
+        if (!is_null($tagId)) {TagRepository::countUp($tagId);}
     }
 
     //ブックマークからはずされたタグを削除
@@ -29,7 +29,7 @@ class BookMarkTagRepository
             ->delete();
 
         //カウントダウン
-        TagRepository::countDown($tagId);
+        if (!is_null($tagId)) {TagRepository::countDown($tagId);}
     }
 
     //ブックマークに紐付けられているタグを更新

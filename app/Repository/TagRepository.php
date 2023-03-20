@@ -209,8 +209,10 @@ class TagRepository
     public static function countDown($tagId)
     {
         $tag = Tag::where('id', $tagId)->first();
-        $tag->count -= 1;
-        $tag->timestamps = false;
-        $tag->save();
+        if ($tag->count > 0) {
+            $tag->count -= 1;
+            $tag->timestamps = false;
+            $tag->save();
+        }
     }
 }
