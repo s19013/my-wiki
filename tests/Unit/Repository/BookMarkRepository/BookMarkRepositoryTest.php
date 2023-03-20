@@ -50,7 +50,7 @@ class BookMarkRepositoryTest extends TestCase
     public function test_store_ブックマークデータを登録した時にそのブックマークのidを取ってこれるか(): void
     {
         // 正しく動けば､ブックマークを保存したと同時にブックマークのIdが帰ってくる
-        $returnedId = $this->bookMarkRepository->store("testTitle","testBody",$this->userId,Carbon::now("UTC"));
+        $returnedId = $this->bookMarkRepository->store("testTitle","testBody",$this->userId,"UTC");
 
         // このテスト関数は一番最初に動く(このブックマークは一番最初に登録されるので) idは必ず[1]が帰ってくるはず
         // なんでって言われてもそれがdbの連番の仕様だからとしか答え切れない
@@ -72,7 +72,7 @@ class BookMarkRepositoryTest extends TestCase
             "testTitle_test_storeBookMark_タイトルを入力",
             "testBody_test_storeBookMark_タイトルを入力" ,
             $this->userId,
-            Carbon::now("UTC")
+            "UTC"
         );
 
         // 登録したデータがあるか確認
@@ -99,11 +99,11 @@ class BookMarkRepositoryTest extends TestCase
             null,
             "testBody_test_storeBookMark_タイトルを入力しなかった",
             $this->userId,
-            Carbon::now("UTC")
+            "UTC"
         );
 
         $this->assertDatabaseHas('book_marks',[
-            'title' => Carbon::now("UTC"),
+            'title' => Carbon::now("UTC")."(UTC)",
             'url'  => 'testBody_test_storeBookMark_タイトルを入力しなかった'
         ]);
     }
@@ -125,11 +125,11 @@ class BookMarkRepositoryTest extends TestCase
             null,
             "testBody_test_storeBookMark_タイトルを入力しなかった",
             $this->userId,
-            Carbon::now("JST")
+            "JST"
         );
 
         $this->assertDatabaseHas('book_marks',[
-            'title' => Carbon::now("JST"),
+            'title' => Carbon::now("JST")."(JST)",
             'url'  => 'testBody_test_storeBookMark_タイトルを入力しなかった'
         ]);
     }
@@ -154,7 +154,7 @@ class BookMarkRepositoryTest extends TestCase
         );
 
         $this->assertDatabaseHas('book_marks',[
-            'title' => Carbon::now("UTC"),
+            'title' => Carbon::now("UTC")."(UTC)",
             'url'  => 'testBody_test_storeBookMark_タイトルを入力しなかった'
         ]);
     }
@@ -182,7 +182,7 @@ class BookMarkRepositoryTest extends TestCase
         $bookMark = BookMark::factory()->create(['user_id' => $this->userId]);
 
         // データを更新
-        $this->bookMarkRepository->update($bookMark->id,"updatedTitle","updatedBody",Carbon::now("UTC"));
+        $this->bookMarkRepository->update($bookMark->id,"updatedTitle","updatedBody","UTC");
 
         $this->assertDatabaseHas('book_marks',[
             'id'    => $bookMark->id,
@@ -191,7 +191,7 @@ class BookMarkRepositoryTest extends TestCase
         ]);
 
         // データを再度更新
-        $this->bookMarkRepository->update($bookMark->id,"updatedTitleAgain","updatedBodyAgain",Carbon::now("UTC"));
+        $this->bookMarkRepository->update($bookMark->id,"updatedTitleAgain","updatedBodyAgain","UTC");
 
         $this->assertDatabaseHas('book_marks',[
             'id'    => $bookMark->id,
@@ -207,11 +207,11 @@ class BookMarkRepositoryTest extends TestCase
         $bookMark = BookMark::factory()->create(['user_id' => $this->userId]);
 
         // データを更新
-        $this->bookMarkRepository->update($bookMark->id,null,"updatedBodyAgain",Carbon::now("UTC"));
+        $this->bookMarkRepository->update($bookMark->id,null,"updatedBodyAgain","UTC");
 
         $this->assertDatabaseHas('book_marks',[
             'id'    => $bookMark->id,
-            'title' => Carbon::now("UTC"),
+            'title' => Carbon::now("UTC")."(UTC)",
             'url'   => 'updatedBodyAgain'
         ]);
     }
@@ -223,11 +223,11 @@ class BookMarkRepositoryTest extends TestCase
         $bookMark = BookMark::factory()->create(['user_id' => $this->userId]);
 
         // データを更新
-        $this->bookMarkRepository->update($bookMark->id,null,"updatedBodyAgain",Carbon::now("JST"));
+        $this->bookMarkRepository->update($bookMark->id,null,"updatedBodyAgain","JST");
 
         $this->assertDatabaseHas('book_marks',[
             'id'    => $bookMark->id,
-            'title' => Carbon::now("JST"),
+            'title' => Carbon::now("JST")."(JST)",
             'url'   => 'updatedBodyAgain'
         ]);
     }

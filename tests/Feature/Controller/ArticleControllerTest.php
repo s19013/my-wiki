@@ -140,14 +140,14 @@ class ArticleControllerTest extends TestCase
         // 記事
         $this->assertDatabaseHas('articles',[
             'user_id'=> $this->user->id,
-            'title'  => Carbon::now(),
+            'title'  => Carbon::now("UTC")."(UTC)",
             'body'   => "testBodytest_store_タグあり_タイトルなし",
             'deleted_at' => null,
         ]);
 
         $article = Article::select('id')
         ->where('user_id', '=' ,$this->user->id)
-        ->where('title','=',Carbon::now())
+        ->where('title','=',Carbon::now("UTC")."(UTC)")
         ->where('body' ,'=',"testBodytest_store_タグあり_タイトルなし" )
         ->first();
 
@@ -239,14 +239,14 @@ class ArticleControllerTest extends TestCase
         // 記事
         $this->assertDatabaseHas('articles',[
             'user_id'=> $this->user->id,
-            'title'  => Carbon::now(),
+            'title'  => Carbon::now("UTC")."(UTC)",
             'body'   => "testBodytest_store_タグなし_タイトルなし",
             'deleted_at' => null,
         ]);
 
         $article = Article::select('id')
         ->where('user_id', '=' ,$this->user->id)
-        ->where('title','=',Carbon::now())
+        ->where('title','=',Carbon::now("UTC")."(UTC)")
         ->where('body' ,'=',"testBodytest_store_タグなし_タイトルなし" )
         ->first();
 
