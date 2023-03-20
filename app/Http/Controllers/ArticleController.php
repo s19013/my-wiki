@@ -12,8 +12,6 @@ use App\Repository\ArticleRepository;
 use App\Repository\ArticleTagRepository;
 use App\Repository\TagRepository;
 
-use App\Tools\NullAvoidanceToolKit;
-
 use App\Http\Requests\ArticleRequest;
 
 use Auth;
@@ -25,14 +23,12 @@ class ArticleController extends Controller
     private $articleRepository;
     private $articleTagRepository;
     private $tagRepository;
-    private $nullAvoidanceToolKit;
 
     public function __construct()
     {
         $this->articleRepository    = new ArticleRepository();
         $this->articleTagRepository = new ArticleTagRepository();
         $this->tagRepository        = new TagRepository();
-        $this->nullAvoidanceToolKit = new NullAvoidanceToolKit;
     }
     //新規記事作成
     public function store(ArticleRequest $request)
@@ -129,16 +125,14 @@ class ArticleController extends Controller
     //記事検索
     public function search(Request $request)
     {
-        $tool = new NullAvoidanceToolKit();
-
         $result = $this->articleRepository->search(
             userId :Auth::id(),
             keyword:$request->keyword,
-            page   :$this->nullAvoidanceToolKit->ifnull($request->page,1),
+            page   :\NullAvoidance::ifnull($request->page,1),
             tagList:$request->tagList,
-            searchTarget:$this->nullAvoidanceToolKit->ifnull($request->searchTarget,"title"),
-            searchQuantity:$this->nullAvoidanceToolKit->ifnull($request->searchQuantity,10),
-            sortType:$this->nullAvoidanceToolKit->ifnull($request->sortType,"updated_at_desc")
+            searchTarget:\NullAvoidance::ifnull($request->searchTarget,"title"),
+            searchQuantity:\NullAvoidance::ifnull($request->searchQuantity,10),
+            sortType:\NullAvoidance::ifnull($request->sortType,"updated_at_desc")
         );
 
         $tagList = [];
@@ -156,11 +150,11 @@ class ArticleController extends Controller
         }
 
         $old = [
-            "keyword" => $this->nullAvoidanceToolKit->ifnull($request->keyword,""),
+            "keyword" => \NullAvoidance::ifnull($request->keyword,""),
             "tagList" => $tagList,
-            "searchTarget"   => $this->nullAvoidanceToolKit->ifnull($request->searchTarget,"title"),
-            "searchQuantity" => $this->nullAvoidanceToolKit->ifnull($request->searchQuantity,10),
-            "sortType" => $this->nullAvoidanceToolKit->ifnull($request->sortType,"updated_at_desc"),
+            "searchTarget"   => \NullAvoidance::ifnull($request->searchTarget,"title"),
+            "searchQuantity" => \NullAvoidance::ifnull($request->searchQuantity,10),
+            "sortType" => \NullAvoidance::ifnull($request->sortType,"updated_at_desc"),
         ];
 
         return Inertia::render('Article/SearchArticle',[

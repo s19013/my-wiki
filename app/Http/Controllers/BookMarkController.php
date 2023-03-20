@@ -16,7 +16,6 @@ use App\Repository\TagRepository;
 
 use App\Http\Requests\BookMarkRequest;
 
-use App\Tools\NullAvoidanceToolKit;
 use Auth;
 use DB;
 
@@ -25,14 +24,12 @@ class BookMarkController extends Controller
     private $bookMarkRepository;
     private $bookMarkTagRepository;
     private $tagRepository;
-    private $nullAvoidanceToolKit;
 
     public function __construct()
     {
         $this->bookMarkRepository    = new BookMarkRepository();
         $this->bookMarkTagRepository = new BookMarkTagRepository();
         $this->tagRepository        = new TagRepository();
-        $this->nullAvoidanceToolKit = new nullAvoidanceToolKit();
     }
 
     //新規ブックマーク作成
@@ -155,16 +152,14 @@ class BookMarkController extends Controller
     //ブックマーク検索
     public function search(Request $request)
     {
-        $tool = new NullAvoidanceToolKit();
-
         $result = $this->bookMarkRepository->search(
             userId:Auth::id(),
             keyword:$request->keyword,
-            page:$this->nullAvoidanceToolKit->ifnull($request->page,1),
+            page:\NullAvoidance::ifnull($request->page,1),
             tagList    :$request->tagList,
-            searchTarget:$this->nullAvoidanceToolKit->ifnull($request->searchTarget,"title"),
-            searchQuantity:$this->nullAvoidanceToolKit->ifnull($request->searchQuantity,10),
-            sortType:$this->nullAvoidanceToolKit->ifnull($request->sortType,"updated_at_desc")
+            searchTarget:\NullAvoidance::ifnull($request->searchTarget,"title"),
+            searchQuantity:\NullAvoidance::ifnull($request->searchQuantity,10),
+            sortType:\NullAvoidance::ifnull($request->sortType,"updated_at_desc")
         );
 
         $tagList = [];
@@ -182,11 +177,11 @@ class BookMarkController extends Controller
         }
 
         $old = [
-            "keyword" => $this->nullAvoidanceToolKit->ifnull($request->keyword,""),
+            "keyword" => \NullAvoidance::ifnull($request->keyword,""),
             "tagList" => $tagList,
-            "searchTarget" => $this->nullAvoidanceToolKit->ifnull($request->searchTarget,"title"),
-            "searchQuantity" => $this->nullAvoidanceToolKit->ifnull($request->searchQuantity,10),
-            "sortType" => $this->nullAvoidanceToolKit->ifnull($request->sortType,"updated_at_desc"),
+            "searchTarget" => \NullAvoidance::ifnull($request->searchTarget,"title"),
+            "searchQuantity" => \NullAvoidance::ifnull($request->searchQuantity,10),
+            "sortType" => \NullAvoidance::ifnull($request->sortType,"updated_at_desc"),
         ];
 
         return Inertia::render('BookMark/SearchBookMark',[
