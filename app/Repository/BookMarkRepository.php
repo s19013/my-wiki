@@ -27,7 +27,9 @@ class BookMarkRepository
             'user_id'  => $userId,
             'title'    => $this->nullAvoidanceToolKit->ifnull(
                 $title,
-                $this->nullAvoidanceToolKit->ifnull($timezone,Carbon::now("UTC"))
+                $this->nullAvoidanceToolKit->ifnull(
+                    Carbon::now($timezone)."(".$timezone.")",Carbon::now("UTC")
+                )
             ),
             'url'      => $url,
         ]);
@@ -41,7 +43,9 @@ class BookMarkRepository
             ->update([
                 'title'    => $this->nullAvoidanceToolKit->ifnull(
                     $title,
-                    $this->nullAvoidanceToolKit->ifnull($timezone,Carbon::now("UTC"))
+                    $this->nullAvoidanceToolKit->ifnull(
+                        Carbon::now($timezone)."(".$timezone.")",Carbon::now("UTC")
+                    )
                 ),
                 'url'   => $url,
             ]);
