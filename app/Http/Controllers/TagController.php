@@ -12,7 +12,6 @@ use App\Repository\TagRepository;
 
 use App\Http\Requests\TagRequest;
 
-use App\Tools\NullAvoidanceToolKit;
 use Auth;
 use DB;
 
@@ -20,12 +19,10 @@ class TagController extends Controller
 {
 
     private $tagRepository;
-    private $nullAvoidanceToolKit;
 
     public function __construct()
     {
         $this->tagRepository        = new TagRepository();
-        $this->nullAvoidanceToolKit = new NullAvoidanceToolKit();
     }
 
     //新規タグ登録
@@ -128,15 +125,15 @@ class TagController extends Controller
         $result = $this->tagRepository->searchInEdit(
             userId :Auth::id(),
             keyword:$request->keyword,
-            page   :$this->nullAvoidanceToolKit->ifnull($request->page,1),
-            searchQuantity:$this->nullAvoidanceToolKit->ifnull($request->searchQuantity,10),
-            sortType:$this->nullAvoidanceToolKit->ifnull($request->sortType,"name_asc")
+            page   :\NullAvoidance::ifnull($request->page,1),
+            searchQuantity:\NullAvoidance::ifnull($request->searchQuantity,10),
+            sortType:\NullAvoidance::ifnull($request->sortType,"name_asc")
         );
 
         $old = [
-            "keyword" => $this->nullAvoidanceToolKit->ifnull($request->keyword,""),
-            "searchQuantity" => $this->nullAvoidanceToolKit->ifnull($request->searchQuantity,10),
-            "sortType" => $this->nullAvoidanceToolKit->ifnull($request->sortType,"name_asc"),
+            "keyword" => \NullAvoidance::ifnull($request->keyword,""),
+            "searchQuantity" => \NullAvoidance::ifnull($request->searchQuantity,10),
+            "sortType" => \NullAvoidance::ifnull($request->sortType,"name_asc"),
         ];
 
         return Inertia::render('TagEdit',[
