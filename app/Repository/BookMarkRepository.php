@@ -8,28 +8,18 @@ use App\Tools\searchToolKit;
 use App\Models\BookMark;
 use App\Models\BookMarkTag;
 
-use App\Tools\NullAvoidanceToolKit;
-
 class BookMarkRepository
 {
-    private $nullAvoidanceToolKit;
-
-    public function __construct()
-    {
-        $this->nullAvoidanceToolKit = new NullAvoidanceToolKit();
-    }
-
     //新規ブックマーク作成 登録したブックマークのIDを返す
     public  function store($title,$url,$userId,$timezone)
     {
         $bookMark = BookMark::create([
             // タイトルが産められてなかったら日時で埋める
             'user_id'  => $userId,
-            'title'    => $this->nullAvoidanceToolKit->ifnull(
+            'title'    => \NullAvoidance::ifnull(
                 $title,
-                $this->nullAvoidanceToolKit->ifnull(
-                    Carbon::now($timezone)."(".$timezone.")",Carbon::now("UTC")
-                )
+                Carbon::now($timezone).
+                "(".\NullAvoidance::ifnull($timezone,"UTC").")"
             ),
             'url'      => $url,
         ]);
@@ -37,15 +27,14 @@ class BookMarkRepository
     }
 
     //ブックマーク更新
-    public  function update($bookMarkId,$title,$url,$timezone="UTC")
+    public  function update($bookMarkId,$title,$url,$timezone)
     {
         BookMark::where('id','=',$bookMarkId)
             ->update([
-                'title'    => $this->nullAvoidanceToolKit->ifnull(
+                'title'    => \NullAvoidance::ifnull(
                     $title,
-                    $this->nullAvoidanceToolKit->ifnull(
-                        Carbon::now($timezone)."(".$timezone.")",Carbon::now("UTC")
-                    )
+                    Carbon::now($timezone).
+                    "(".\NullAvoidance::ifnull($timezone,"UTC").")"
                 ),
                 'url'   => $url,
             ]);
