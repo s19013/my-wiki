@@ -125,14 +125,14 @@ class BookMarkControllerTest extends TestCase
         // ブックマーク
         $this->assertDatabaseHas('book_marks',[
             'user_id'=> $this->user->id,
-            'title'  => Carbon::now(),
+            'title'  => Carbon::now("UTC")."(UTC)",
             'url'   => "http://hide-no-server.com/タグあり_タイトルなし",
             'deleted_at' => null,
         ]);
 
         $bookMark = BookMark::select('id')
         ->where('user_id', '=' ,$this->user->id)
-        ->where('title','=',Carbon::now())
+        ->where('title','=',Carbon::now("UTC")."(UTC)")
         ->where('url' ,'=',"http://hide-no-server.com/タグあり_タイトルなし" )
         ->first();
 
@@ -220,14 +220,14 @@ class BookMarkControllerTest extends TestCase
         // ブックマーク
         $this->assertDatabaseHas('book_marks',[
             'user_id'=> $this->user->id,
-            'title'  => Carbon::now(),
+            'title'  => Carbon::now("UTC")."(UTC)",
             'url'    => "http://hide-no-server.com/タグなし_タイトルなし",
             'deleted_at' => null,
         ]);
 
         $bookMark = BookMark::select('id')
         ->where('user_id', '=' ,$this->user->id)
-        ->where('title','=',Carbon::now())
+        ->where('title','=',Carbon::now("UTC")."(UTC)")
         ->where('url' ,'=',"http://hide-no-server.com/タグなし_タイトルなし" )
         ->first();
 

@@ -47,7 +47,7 @@ class ArticleRepositoryTest extends TestCase
     public function test_store_記事データを登録した時にその記事のidを取ってこれるか(): void
     {
         // 正しく動けば､記事を保存したと同時に記事のIdが帰ってくる
-        $returnedId = $this->articleRepository->store("testTitle","testBody",$this->userId,Carbon::now("UTC"));
+        $returnedId = $this->articleRepository->store("testTitle","testBody",$this->userId,"UTC");
 
         // このテスト関数は一番最初に動く(この記事は一番最初に登録されるので) idは必ず[1]が帰ってくるはず
         // なんでって言われてもそれがdbの連番の仕様だからとしか答え切れない
@@ -69,7 +69,7 @@ class ArticleRepositoryTest extends TestCase
             "testTitle_test_storeArticle_タイトルを入力",
             "testBody_test_storeArticle_タイトルを入力" ,
             $this->userId,
-            Carbon::now("UTC")
+            "UTC"
         );
 
         // 登録したデータがあるか確認
@@ -96,11 +96,11 @@ class ArticleRepositoryTest extends TestCase
             null,
             null,
             $this->userId,
-            Carbon::now("UTC")
+            "UTC"
         );
 
         $this->assertDatabaseHas('articles',[
-            'title' => Carbon::now("UTC"),
+            'title' => Carbon::now("UTC")."(UTC)",
             'body'  => ""
         ]);
     }
@@ -122,11 +122,11 @@ class ArticleRepositoryTest extends TestCase
             null,
             null,
             $this->userId,
-            Carbon::now("JST")
+            "JST"
         );
 
         $this->assertDatabaseHas('articles',[
-            'title' => Carbon::now("JST"),
+            'title' => Carbon::now("JST")."(JST)",
             'body'  => ""
         ]);
     }
@@ -152,7 +152,7 @@ class ArticleRepositoryTest extends TestCase
         );
 
         $this->assertDatabaseHas('articles',[
-            'title' => Carbon::now("UTC"),
+            'title' => Carbon::now("UTC")."(UTC)",
             'body'  => ""
         ]);
     }
@@ -164,7 +164,7 @@ class ArticleRepositoryTest extends TestCase
         $article = Article::factory()->create(['user_id' => $this->userId]);
 
         // データを更新
-        $this->articleRepository->update($article->id,"updatedTitle","updatedBody",Carbon::now("UTC"));
+        $this->articleRepository->update($article->id,"updatedTitle","updatedBody","UTC");
 
         $this->assertDatabaseHas('articles',[
             'id'    => $article->id,
@@ -180,7 +180,7 @@ class ArticleRepositoryTest extends TestCase
         $article = Article::factory()->create(['user_id' => $this->userId]);
 
         // データを更新
-        $this->articleRepository->update($article->id,"updatedTitle","updatedBody",Carbon::now("UTC"));
+        $this->articleRepository->update($article->id,"updatedTitle","updatedBody","UTC");
 
         $this->assertDatabaseHas('articles',[
             'id'    => $article->id,
@@ -189,7 +189,7 @@ class ArticleRepositoryTest extends TestCase
         ]);
 
         // もう一度更新
-        $this->articleRepository->update($article->id,"updatedTitleAgain","updatedBodyAgain",Carbon::now("UTC"));
+        $this->articleRepository->update($article->id,"updatedTitleAgain","updatedBodyAgain","UTC");
 
         $this->assertDatabaseHas('articles',[
             'id'    => $article->id,
@@ -204,11 +204,11 @@ class ArticleRepositoryTest extends TestCase
     {
         $article = Article::factory()->create(['user_id' => $this->userId]);
 
-        $this->articleRepository->update($article->id,null,"updatedBodyAgain",Carbon::now("UTC"));
+        $this->articleRepository->update($article->id,null,"updatedBodyAgain","UTC");
 
         $this->assertDatabaseHas('articles',[
             'id'    => $article->id,
-            'title' => Carbon::now("UTC"),
+            'title' => Carbon::now("UTC")."(UTC)",
             'body'  => 'updatedBodyAgain'
         ]);
     }
@@ -219,11 +219,11 @@ class ArticleRepositoryTest extends TestCase
     {
         $article = Article::factory()->create(['user_id' => $this->userId]);
 
-        $this->articleRepository->update($article->id,null,"updatedBodyAgain",Carbon::now("JST"));
+        $this->articleRepository->update($article->id,null,"updatedBodyAgain","JST");
 
         $this->assertDatabaseHas('articles',[
             'id'    => $article->id,
-            'title' => Carbon::now("JST"),
+            'title' => Carbon::now("JST")."(JST)",
             'body'  => 'updatedBodyAgain'
         ]);
     }
