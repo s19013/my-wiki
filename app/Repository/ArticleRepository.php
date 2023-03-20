@@ -26,7 +26,9 @@ class ArticleRepository
             'user_id'  => $userId,
             'title'    => $this->nullAvoidanceToolKit->ifnull(
                 $title,
-                $this->nullAvoidanceToolKit->ifnull($timezone,Carbon::now("UTC"))
+                $this->nullAvoidanceToolKit->ifnull(
+                    Carbon::now($timezone)."(".$timezone.")",Carbon::now("UTC")
+                )
             ),
             'body'     => $this->nullAvoidanceToolKit->ifnull($body,''),
         ]);
@@ -43,7 +45,9 @@ class ArticleRepository
                 // タイトルが産められてなかったら日時で埋める
                 'title'    => $this->nullAvoidanceToolKit->ifnull(
                     $title,
-                    $this->nullAvoidanceToolKit->ifnull($timezone,Carbon::now("UTC"))
+                    $this->nullAvoidanceToolKit->ifnull(
+                        Carbon::now($timezone)."(".$timezone.")",Carbon::now("UTC")
+                    )
                 ),
                 'body'     => $this->nullAvoidanceToolKit->ifnull($body,''),
             ]);
