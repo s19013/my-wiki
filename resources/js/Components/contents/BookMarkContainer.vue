@@ -86,7 +86,6 @@ export default{
     gap:0.5rem;
     background-color: #e1e1e1;
     border:black solid 1px;
-    margin-bottom:20px;
     padding: 5px;
     i{float: left}
     h3{
