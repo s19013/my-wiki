@@ -24,10 +24,12 @@ export default {
         compileMarkDown(){
         // 無毒化
         const sanitized = sanitizeHtml(this.originalMarkDown,{enforceHtmlBoundary: true})
-        const replaced  = this.replaceMarkDown(sanitized)
-        return marked(replaced)
+        const beforeCompiled  = this.replaceMarkDownBefore(sanitized)
+        const compiled = marked(beforeCompiled)
+        return this.replaceMarkDownAfter(compiled)
         },
-        replaceMarkDown(arg){
+        // 変換前の処理
+        replaceMarkDownBefore(arg){
             // codeタグ内では一部特殊文字をエスケープしない
             // gmで複数行をまたいだ(改行を無視した)検索になるはずだができてないので[\s|\S]で代用
             arg = arg.replace(/(?<=`[\s|\S]*)&lt;(?=[\s|\S]*`)/g , "<");
@@ -38,10 +40,20 @@ export default {
             // 連続改行を実現させるため｡
             // markedで<br   /> -> <br>に変換される
             // ユーザーがcodeタグ内で意図的に<br>を書いても消されないようにする
-            arg = arg.replace(/\n(?=\n)/g, "\n<br   />\n")
+            arg = arg.replace(/\n(?=\n)/g, "\n<br   />")
 
             // codeタグでは上記の<br   />を消す
             arg = arg.replace(/(?<=`[\s|\S]*)<br   \/>(?=[\s|\S]*`)/g ,"");
+
+            return arg;
+        },
+        // 変換後の処理
+        replaceMarkDownAfter(arg){
+            // liタグ内ではpタグを消す
+            // バグなのかたまにliタグ内にpタグで出力されて表示が崩れてしまう｡
+            arg = arg.replace(/(?<=\<li\>)<p>/g ,"");
+            arg = arg.replace(/<\/p>(?=[\s|\S]*\<\/li\>)/g ,"");
+
             return arg;
         }
     },
