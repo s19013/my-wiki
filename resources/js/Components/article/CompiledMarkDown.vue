@@ -40,7 +40,7 @@ export default {
             // 連続改行を実現させるため｡
             // markedで<br   /> -> <br>に変換される
             // ユーザーがcodeタグ内で意図的に<br>を書いても消されないようにする
-            arg = arg.replace(/\n(?=\n)/g, "\n<br   />")
+            arg = arg.replace(/\n(?=\n)/g, "\n<br   />\n")
 
             // codeタグでは上記の<br   />を消す
             arg = arg.replace(/(?<=`[\s|\S]*)<br   \/>(?=[\s|\S]*`)/g ,"");
@@ -49,6 +49,12 @@ export default {
         },
         // 変換後の処理
         replaceMarkDownAfter(arg){
+            console.log(arg);
+            // <br   />の副作用でテーブルに余計な空白行が追加される
+            // ので､それへの対処
+            arg = arg.replace(/<tr>\s*<td><br   \/><\/td>[\s|\S]*<\/tr>/g ,"");
+
+
             // liタグ内ではpタグを消す
             // バグなのかたまにliタグ内にpタグで出力されて表示が崩れてしまう｡
             arg = arg.replace(/(?<=\<li\>)<p>/g ,"");
