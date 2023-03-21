@@ -6,7 +6,7 @@
         </div>
         <div class="elements">
             <Link :href="'/Article/View/' + article.id">
-                <h2>{{article.title}}</h2>
+                <h3>{{article.title}}</h3>
             </Link>
             <Link :href="'/Article/Edit/' + article.id">
                 <v-btn color="submit" elevation="2" size="small">
