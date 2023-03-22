@@ -1,2 +1,8 @@
 User-agent: *
-Disallow:
+Disallow:/Article/
+Disallow:/BookMark/
+Disallow:/Tag/
+Disallow:/User/
+Disallow:/setting/
+Disallow:/dashboard/
+Disallow:/api/
