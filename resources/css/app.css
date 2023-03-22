@@ -4,6 +4,8 @@
 /* tailwindcss邪魔 */
 html {overflow-y: auto;}
 body{background-color: #f5f5f5;}
+#app{height: 100vh;}
+
 
 .global_css_longButton{width:100%}
 /* アイコンありのボタンの文字の左にマージンを足す */

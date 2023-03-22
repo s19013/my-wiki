@@ -1,9 +1,9 @@
 <template>
-    <div class="originalFooter">
+    <footer>
         <a target="_blank" rel="noopener noreferrer" :href="messages.termsUrl">{{ messages.terms }}</a>
         <a target="_blank" rel="noopener noreferrer" :href="messages.privacyUrl">{{ messages.privacy }}</a>
         <a target="_blank" rel="noopener noreferrer" :href="messages.enquiryUrl">{{ messages.enquiry }}</a>
-    </div>
+    </footer>
 </template>
 
 <script>
@@ -33,14 +33,20 @@ export default{
     components:{},
     mounted() {
         this.$nextTick(function () {
-            if (this.$store.state.lang == "ja"){this.messages = this.japanese}
+            // 一番最初の画面で言語が変更されるのにどうしてもほんのすこし時間がかかる
+            // ごり押しだが更新が終わるの待つために短時間だけ処理を止める
+            setTimeout(() => {
+                if (this.$store.state.lang == "ja"){this.messages = this.japanese}
+            }, "100")
+
         })
     },
 }
 </script>
 
 <style lang="scss" scoped>
-.originalFooter{
+footer{
+    width: 100%;
     padding:1rem 0;
     background-color: rgb(127, 255, 174);
     display: flex;
@@ -48,9 +54,7 @@ export default{
     align-items: center;
     gap: 1rem;
     a {color: black;}
-    @media (max-width: 960px){
-        flex-flow: column;
-    }
+    @media (max-width: 450px){flex-flow: column;}
 }
 </style>
 
