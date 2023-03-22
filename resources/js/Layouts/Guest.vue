@@ -3,6 +3,7 @@ import BreezeApplicationLogo from '@/Components/ApplicationLogo.vue';
 import { Link } from '@inertiajs/inertia-vue3';
 import { ref, onMounted, onUnmounted,nextTick } from 'vue';
 import { useStore } from "vuex";
+import originalFooter from '@/Components/foot/originalFooter.vue'
 
 const store = useStore()
 
@@ -23,6 +24,7 @@ onMounted(() => {
             <slot />
         </div>
     </div>
+    <originalFooter/>
 </template>
 
 <style lang="scss" scoped>

@@ -2,6 +2,7 @@
 import { Head, Link } from '@inertiajs/inertia-vue3'
 import { ref, onMounted, onUnmounted,nextTick, reactive } from 'vue';
 import { useStore } from "vuex";
+import originalFooter from '@/Components/foot/originalFooter.vue'
 const store = useStore();
 
 const props = defineProps({
@@ -166,14 +167,14 @@ onMounted(() => {
                     Laravel v9 (PHP v8)
                 </div>
             </div>
-            <Link v-if="$page.props.auth.user" :href="route('SearchBookMark')" class="text-sm text-gray-700 underline">
-                <v-btn class="fw-bolder mt-10" color="#BBDEFB">
+            <Link v-if="$page.props.auth.user" :href="route('SearchBookMark')" class="">
+                <v-btn class="fw-bolder" color="#BBDEFB">
                     {{messages.returnHome}}
                 </v-btn>
             </Link>
             <template v-else>
                 <Link v-if="canRegister" :href="route('register')" class="flex justify-center">
-                    <v-btn class="fw-bolder mt-10" color="#BBDEFB">
+                    <v-btn class="fw-bolder" color="#BBDEFB">
                         <v-icon class="mr-2">mdi-account-plus</v-icon>
                         {{messages.firstHere}}
                     </v-btn>
@@ -181,10 +182,15 @@ onMounted(() => {
             </template>
 
         </div>
+
     </v-container>
+    <originalFooter/>
 </template>
 
 <style scoped>
+    .v-container{
+        height: 100%;
+    }
     img{
         height: 5rem;
         width: auto;
@@ -194,6 +200,7 @@ onMounted(() => {
         justify-content: flex-start;
         gap:1rem;
     }
+    .v-btn{margin: 0 auto;}
     .bg-gray-100 {
         background-color: #f7fafc;
         background-color: rgba(247, 250, 252, var(--tw-bg-opacity));
