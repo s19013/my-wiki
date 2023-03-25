@@ -23,8 +23,12 @@ const japanese = reactive({
     articleMessage:"メモをmd形式でかいて保存できます",
     bookmark:"ブックマーク",
     bookmarkMessage:"ブックマークを保存できます",
-    tag:"タグを付けられます",
+    tag:"タグをつけて管理",
     tagMessage:"タグをつけて整理したり検索などで探すことができます",
+    free:"無料で使える",
+    freeMessage:"",
+    search:"",
+    searchMessage:"",
     returnHome:"ホーム画面に戻る"
 })
 
@@ -38,8 +42,12 @@ const messages = reactive({
     articleMessage:"You can write and save articles in markdown format",
     bookmark:"bookmark",
     bookmarkMessage:"You can save bookmarks",
-    tag:"tag",
+    tag:"Tags",
     tagMessage:"You can add tags to organize and search.",
+    free:"Free to use",
+    freeMessage:"",
+    search:"",
+    searchMessage:"",
     returnHome:"Return Home"
 })
 
@@ -141,7 +149,40 @@ onMounted(() => {
 
                     <div class="p-6 border-t border-gray-200">
                         <div class="flex items-center">
-                            <div class="ml-4 text-lg leading-7 font-semibold text-gray-900"></div>
+                            <v-icon>mdi-currency-usd-off</v-icon>
+                            <div class="ml-4 text-lg leading-7 font-semibold text-gray-900">
+                                <h2>{{ messages.free }}</h2>
+                            </div>
+                        </div>
+
+                        <div class="ml-12">
+                            <div class="mt-2 text-gray-600  text-sm">
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-6 border-t border-gray-200">
+                        <div class="flex items-center">
+
+                            <div class="ml-4 text-lg leading-7 font-semibold text-gray-900">
+                                <h2></h2>
+                            </div>
+                        </div>
+
+                        <div class="ml-12">
+                            <div class="mt-2 text-gray-600  text-sm">
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-6 border-t border-gray-200">
+                        <div class="flex items-center">
+
+                            <div class="ml-4 text-lg leading-7 font-semibold text-gray-900">
+                                <h2></h2>
+                            </div>
                         </div>
 
                         <div class="ml-12">
@@ -200,7 +241,7 @@ onMounted(() => {
         justify-content: flex-start;
         gap:1rem;
     }
-    .v-btn{margin: 0 auto;}
+    .v-btn{margin: 1rem auto;}
     .bg-gray-100 {
         background-color: #f7fafc;
         background-color: rgba(247, 250, 252, var(--tw-bg-opacity));
