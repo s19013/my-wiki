@@ -3,6 +3,8 @@ import { Head, Link } from '@inertiajs/inertia-vue3'
 import { ref, onMounted, onUnmounted,nextTick, reactive } from 'vue';
 import { useStore } from "vuex";
 import originalFooter from '@/Components/foot/originalFooter.vue'
+import RakutenAd from '@/Components/Ads/RakutenAd.vue';
+import WellcomMessageContainer from '@/Components/contents/WellcomMessageContainer.vue';
 const store = useStore();
 
 const props = defineProps({
@@ -100,97 +102,41 @@ onMounted(() => {
             <div class="mt-8 bg-white overflow-hidden shadow sm:rounded-lg">
                 <p class="p-3">{{ messages.message }}</p>
                 <div class="grid grid-cols-1 md:grid-cols-2">
-                    <div class="p-6 border-t border-gray-200 md:border-t-0 md:border-l">
-                        <div class="flex items-center">
-                            <v-icon>mdi-note</v-icon>
-                            <div class="ml-4 text-lg leading-7 font-semibold">
-                                <h2>
-                                    {{ messages.article }}
-                                </h2>
-                            </div>
-                        </div>
+                    <WellcomMessageContainer
+                        icon="mdi-note"
+                        :title="messages.article"
+                        :message="messages.articleMessage"
+                    />
 
-                        <div class="ml-12">
-                            <div class="mt-2 text-gray-600 text-sm">
-                                <p>{{ messages.articleMessage }}</p>
-                            </div>
-                        </div>
-                    </div>
+                    <WellcomMessageContainer
+                        icon="mdi-bookmark"
+                        :title="messages.bookmark"
+                        :message="messages.bookmarkMessage"
+                    />
 
-                    <div class="p-6 border-t border-gray-200 md:border-t-0 md:border-l">
-                        <div class="flex items-center">
-                            <v-icon>mdi-bookmark</v-icon>
-                            <div class="ml-4 text-lg leading-7 font-semibold">
-                                <h2>{{ messages.bookmark }}</h2>
-                            </div>
-                        </div>
+                    <WellcomMessageContainer
+                        icon="mdi-tag"
+                        :title="messages.tag"
+                        :message="messages.tagMessage"
+                    />
 
-                        <div class="ml-12">
-                            <div class="mt-2 text-gray-600 text-sm">
-                                <p>{{ messages.bookmarkMessage }}</p>
-                            </div>
-                        </div>
-                    </div>
+                    <WellcomMessageContainer
+                        icon="mdi-currency-usd-off"
+                        :title="messages.free"
+                        :message="messages.freeMessage"
+                    />
 
-                    <div class="p-6 border-t border-gray-200 ">
-                        <div class="flex items-center">
-                            <v-icon>mdi-tag</v-icon>
-                            <div class="ml-4 text-lg leading-7 font-semibold">
-                                <h2>{{ messages.tag }}</h2>
-                            </div>
-                        </div>
+                    <!-- <WellcomMessageContainer
+                        icon="mdi-currency-usd-off"
+                        :title="messages.free"
+                        :message="messages.freeMessage"
+                    />
 
-                        <div class="ml-12">
-                            <div class="mt-2 text-gray-600 text-sm">
-                                <p>{{ messages.tagMessage }}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="p-6 border-t border-gray-200">
-                        <div class="flex items-center">
-                            <v-icon>mdi-currency-usd-off</v-icon>
-                            <div class="ml-4 text-lg leading-7 font-semibold text-gray-900">
-                                <h2>{{ messages.free }}</h2>
-                            </div>
-                        </div>
-
-                        <div class="ml-12">
-                            <div class="mt-2 text-gray-600  text-sm">
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="p-6 border-t border-gray-200">
-                        <div class="flex items-center">
-
-                            <div class="ml-4 text-lg leading-7 font-semibold text-gray-900">
-                                <h2></h2>
-                            </div>
-                        </div>
-
-                        <div class="ml-12">
-                            <div class="mt-2 text-gray-600  text-sm">
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="p-6 border-t border-gray-200">
-                        <div class="flex items-center">
-
-                            <div class="ml-4 text-lg leading-7 font-semibold text-gray-900">
-                                <h2></h2>
-                            </div>
-                        </div>
-
-                        <div class="ml-12">
-                            <div class="mt-2 text-gray-600  text-sm">
-
-                            </div>
-                        </div>
-                    </div>
+                    <WellcomMessageContainer
+                        icon="mdi-currency-usd-off"
+                        :title="messages.free"
+                        :message="messages.freeMessage"
+                    /> -->
                 </div>
             </div>
 
@@ -221,16 +167,16 @@ onMounted(() => {
                     </v-btn>
                 </Link>
             </template>
-
         </div>
-
     </v-container>
+    <RakutenAd/>
     <originalFooter/>
 </template>
 
 <style scoped>
-    .v-container{
-        height: 100%;
+    #ad{
+        margin: 1rem 0;
+        padding: 1rem 0;
     }
     img{
         height: 5rem;
