@@ -7,7 +7,7 @@
         <v-main>
             <slot />
         </v-main>
-        <BarAd></BarAd>
+        <RakutenAdVue></RakutenAdVue>
         <originalFooter/>
     </v-app>
 
@@ -17,14 +17,14 @@
 import { Head } from '@inertiajs/inertia-vue3'
 import originalHead from '@/Components/head/originalHead.vue'
 import originalFooter from '@/Components/foot/originalFooter.vue'
-import BarAd from '@/Components/Ads/BarAd.vue';
+import RakutenAdVue from '@/Components/Ads/RakutenAd.vue'
 
 export default {
     components: {
         Head,
         originalHead,
         originalFooter,
-        BarAd,
+        RakutenAdVue
     },
     props:['title','pageTitle'],
     mounted(){
