@@ -4,7 +4,7 @@ import { ref, onMounted, onUnmounted,nextTick, reactive } from 'vue';
 import { useStore } from "vuex";
 import originalFooter from '@/Components/foot/originalFooter.vue'
 import RakutenAd from '@/Components/Ads/RakutenAd.vue';
-import WellcomMessageContainer from '@/Components/contents/WellcomMessageContainer.vue';
+import WelcomMessageContainer from '@/Components/contents/WelcomMessageContainer.vue';
 const store = useStore();
 
 const props = defineProps({
@@ -102,37 +102,37 @@ onMounted(() => {
             <div class="mt-8 bg-white overflow-hidden shadow sm:rounded-lg">
                 <p class="p-3">{{ messages.message }}</p>
                 <div class="grid grid-cols-1 md:grid-cols-2">
-                    <WellcomMessageContainer
+                    <WelcomMessageContainer
                         icon="mdi-note"
                         :title="messages.article"
                         :message="messages.articleMessage"
                     />
 
-                    <WellcomMessageContainer
+                    <WelcomMessageContainer
                         icon="mdi-bookmark"
                         :title="messages.bookmark"
                         :message="messages.bookmarkMessage"
                     />
 
-                    <WellcomMessageContainer
+                    <WelcomMessageContainer
                         icon="mdi-tag"
                         :title="messages.tag"
                         :message="messages.tagMessage"
                     />
 
-                    <WellcomMessageContainer
+                    <WelcomMessageContainer
                         icon="mdi-currency-usd-off"
                         :title="messages.free"
                         :message="messages.freeMessage"
                     />
 
-                    <!-- <WellcomMessageContainer
+                    <!-- <WelcomMessageContainer
                         icon="mdi-currency-usd-off"
                         :title="messages.free"
                         :message="messages.freeMessage"
                     />
 
-                    <WellcomMessageContainer
+                    <WelcomMessageContainer
                         icon="mdi-currency-usd-off"
                         :title="messages.free"
                         :message="messages.freeMessage"
@@ -176,7 +176,6 @@ onMounted(() => {
 <style scoped>
     #ad{
         margin: 1rem 0;
-        padding: 1rem 0;
     }
     img{
         height: 5rem;
