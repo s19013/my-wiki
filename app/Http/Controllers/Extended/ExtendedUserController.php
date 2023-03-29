@@ -10,7 +10,7 @@ use \Symfony\Component\HttpFoundation\Response;
 
 use App\Models\User;
 
-class ExtendedLoginController extends Controller
+class ExtendedUserController extends Controller
 {
     public function login(Request $request)
     {
@@ -30,5 +30,12 @@ class ExtendedLoginController extends Controller
         }
 
         return response()->json('User Not Found.', Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+
+    public function logout()
+    {
+        Auth::guard('sanctum')->user()->tokens()->delete();
+        $res = [];
+        return response()->json($res, Response::HTTP_OK);
     }
 }
