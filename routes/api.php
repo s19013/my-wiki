@@ -7,6 +7,8 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\BookMarkController;
 
+use App\Http\Controllers\Extended\ExtendedUserController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -17,6 +19,10 @@ use App\Http\Controllers\BookMarkController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+// 拡張機能のログイン
+Route::post('/extended/login', [ExtendedUserController::class, 'login']);
+Route::get('/extended/logout', [ExtendedUserController::class, 'logout']);
 
 // 認証が必要な部分
 Route::middleware('auth:sanctum', 'throttle:60,1')->group(function () {
