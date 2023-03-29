@@ -1,5 +1,6 @@
 <template>
     <div id="ad">
+        <!-- a8.net の広告 -->
     </div>
 </template>
 
