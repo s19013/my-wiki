@@ -32,7 +32,6 @@ class TagRequest extends FormRequest
 
     public function messages()
     {
-        dd($this);
         if ((substr($this->headers->get("UserLang"), 0,2)) == 'ja'){
             return [
                 "name.required" => "新しいタグ名を入力してください",
