@@ -34,7 +34,7 @@ class BookMarkRequest extends FormRequest
 
     public function messages()
     {
-        if ((substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0,2)) == 'ja') {
+        if ((substr($this->headers->get("UserLang"), 0,2)) == 'ja') {
             return [
                 "bookMarkTitle.max"    => "126文字以内で入力してください",
                 "bookMarkUrl.required" => "urlを入力してください",

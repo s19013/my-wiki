@@ -33,7 +33,7 @@ class TagController extends Controller
 
         // すでに登録してあるった場合は弾く
         if ($this->tagRepository->isAllreadyExists(Auth::id(),$request->name)){
-            if ((substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0,2)) == 'ja'){
+            if ((substr($this->headers->get("UserLang"), 0,2)) == 'ja'){
                 return response()->json([
                     'messages' => ["name" => ["そのタグは既に保存しています"]],
                     ],
@@ -72,7 +72,7 @@ class TagController extends Controller
 
         // 帰り値がnullの場合は無視する(urlを完全に別のものに変更したから,まだ更新するurlが登録されてないから)
         if (!is_null($tagId)&&$request->name != $tagId) {
-            if ((substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0,2)) == 'ja'){
+            if ((substr($this->headers->get("UserLang"), 0,2)) == 'ja'){
                 return response()->json([
                     'messages' => ["name" => ["そのタグは既に保存しています"]],
                     ],
@@ -121,7 +121,6 @@ class TagController extends Controller
 
     public function transitionToEdit(Request $request)
     {
-
         $result = $this->tagRepository->searchInEdit(
             userId :Auth::id(),
             keyword:$request->keyword,
