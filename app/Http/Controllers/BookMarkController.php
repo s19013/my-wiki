@@ -204,4 +204,25 @@ class BookMarkController extends Controller
 
         $this->bookMarkRepository->countUp($bookMarkId);
     }
+
+    // 拡張機能用
+    public function serveBookMarkToExtended(Request $request)
+    {
+        $bookMarkId = $this->bookMarkRepository->serveBookMarkId(
+            url   :$request->url,
+            userId:Auth::id(),
+        );
+
+        $bookMark = $this->bookMarkRepository->serve($bookMarkId);
+
+        $bookMarkTagList = $this->bookMarkTagRepository->serveTagsRelatedToBookMark(
+            userId:Auth::id(),
+            bookMarkId:$bookMarkId
+        );
+
+        return response()->json([
+            "bookmark"       => $bookMark,
+            "checkedTagList" => \NullAvoidance::ifnull($bookMarkTagList,[])
+        ]);
+    }
 }
