@@ -50,6 +50,7 @@ class ArticleController_UpdateTest extends TestCase
     public function update($id,$title,$body,$tagList)
     {
         return $this->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->put('/api/article/update/',[
             'articleId'     => $id,
             'articleTitle'  => $title,
@@ -81,6 +82,7 @@ class ArticleController_UpdateTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
@@ -140,6 +142,7 @@ class ArticleController_UpdateTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
@@ -201,6 +204,7 @@ class ArticleController_UpdateTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
@@ -266,6 +270,7 @@ class ArticleController_UpdateTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
@@ -325,6 +330,7 @@ class ArticleController_UpdateTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'    => $article->id,
@@ -378,6 +384,7 @@ class ArticleController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
@@ -392,6 +399,7 @@ class ArticleController_UpdateTest extends TestCase
         // 再度更新
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
@@ -438,6 +446,7 @@ class ArticleController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
@@ -452,6 +461,7 @@ class ArticleController_UpdateTest extends TestCase
         // 再度更新
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
@@ -508,6 +518,7 @@ class ArticleController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
@@ -522,6 +533,7 @@ class ArticleController_UpdateTest extends TestCase
         // 再度更新
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
@@ -578,6 +590,7 @@ class ArticleController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
@@ -592,6 +605,7 @@ class ArticleController_UpdateTest extends TestCase
         // 再度更新
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
@@ -656,6 +670,7 @@ class ArticleController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
@@ -670,6 +685,7 @@ class ArticleController_UpdateTest extends TestCase
         // 再度更新
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
@@ -724,6 +740,7 @@ class ArticleController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
@@ -738,6 +755,7 @@ class ArticleController_UpdateTest extends TestCase
         // 再度更新
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
@@ -797,6 +815,7 @@ class ArticleController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
@@ -811,6 +830,7 @@ class ArticleController_UpdateTest extends TestCase
         // 再度更新
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
@@ -929,6 +949,7 @@ class ArticleController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($otherUser)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,

@@ -72,6 +72,7 @@ class BookMarkController_UpdateTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
@@ -131,6 +132,7 @@ class BookMarkController_UpdateTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
@@ -192,6 +194,7 @@ class BookMarkController_UpdateTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
@@ -257,6 +260,7 @@ class BookMarkController_UpdateTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
@@ -316,6 +320,7 @@ class BookMarkController_UpdateTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'    => $bookMark->id,
@@ -370,6 +375,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
@@ -384,6 +390,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 再度更新
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
@@ -431,6 +438,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
@@ -445,6 +453,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 再度更新
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
@@ -501,6 +510,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
@@ -515,6 +525,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 再度更新
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
@@ -571,6 +582,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
@@ -585,6 +597,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 再度更新
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
@@ -649,6 +662,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
@@ -663,6 +677,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 再度更新
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
@@ -717,6 +732,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
@@ -731,6 +747,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 再度更新
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
@@ -790,6 +807,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
@@ -804,6 +822,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 再度更新
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
@@ -863,6 +882,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
@@ -877,6 +897,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 再度更新
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
@@ -935,6 +956,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $newBookMark->id,
@@ -970,6 +992,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($otherUser)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,

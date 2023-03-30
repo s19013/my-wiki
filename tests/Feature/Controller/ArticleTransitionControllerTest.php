@@ -63,6 +63,7 @@ class ArticleTransitionControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->get(route('ViewArticle', ['articleId' => $article->id]));
 
@@ -88,6 +89,7 @@ class ArticleTransitionControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->get(route('ViewArticle', ['articleId' => $article->id]));
 
@@ -124,6 +126,7 @@ class ArticleTransitionControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->get(route('ViewArticle', ['articleId' => $article->id]));
 
@@ -156,6 +159,7 @@ class ArticleTransitionControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->get(route('ViewArticle', ['articleId' => $article->id]));
 
@@ -188,6 +192,7 @@ class ArticleTransitionControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->get(route('EditArticle', ['articleId' => $article->id]));
 
@@ -225,6 +230,7 @@ class ArticleTransitionControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->get(route('EditArticle', ['articleId' => $article->id]));
 
@@ -257,6 +263,7 @@ class ArticleTransitionControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->get(route('EditArticle', ['articleId' => $article->id]));
 
@@ -277,6 +284,7 @@ class ArticleTransitionControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->get(route('ViewArticle', ['articleId' => $article->id]));
 

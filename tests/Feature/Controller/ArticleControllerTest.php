@@ -67,6 +67,7 @@ class ArticleControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->post('/api/article/store/',[
             'articleTitle' => "testTitletest_store_タグあり_タイトルあり",
@@ -120,6 +121,7 @@ class ArticleControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->post('/api/article/store/',[
             'articleTitle' => "",
@@ -167,6 +169,7 @@ class ArticleControllerTest extends TestCase
     {
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->post('/api/article/store/',[
             'articleTitle' => "testTitletest_store_タグなし_タイトルあり",
@@ -213,6 +216,7 @@ class ArticleControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->post('/api/article/store/',[
             'articleTitle' => "",
@@ -254,6 +258,7 @@ class ArticleControllerTest extends TestCase
         $article = Article::factory()->create(['user_id' => $this->user->id]);
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->delete('/api/article/'.$article->id);
 
@@ -277,6 +282,7 @@ class ArticleControllerTest extends TestCase
 
         $response = $this
         ->actingAs($otherUser)
+        ->withHeaders(['UserLang' => 'ja',])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->delete('/api/article/'.$article->id);
 

@@ -74,6 +74,7 @@ class BookMarkTransitionControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja'])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->get(route('EditBookMark', ['bookMarkId' => $bookMark->id]));
 
@@ -101,6 +102,7 @@ class BookMarkTransitionControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja'])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->get(route('EditBookMark', ['bookMarkId' => $bookMark->id]));
 
@@ -136,6 +138,7 @@ class BookMarkTransitionControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja'])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->get(route('EditBookMark', ['bookMarkId' => $bookMark->id]));
 
@@ -168,6 +171,7 @@ class BookMarkTransitionControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja'])
         ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->get(route('EditBookMark', ['bookMarkId' => $bookMark->id]));
 
