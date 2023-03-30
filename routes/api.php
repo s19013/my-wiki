@@ -21,11 +21,12 @@ use App\Http\Controllers\Extended\ExtendedUserController;
 */
 
 // 拡張機能のログイン
+
 Route::post('/extended/login', [ExtendedUserController::class, 'login']);
 Route::get('/extended/logout', [ExtendedUserController::class, 'logout']);
 
 // 認証が必要な部分
-Route::middleware('auth:sanctum', 'throttle:60,1')->group(function () {
+Route::middleware('auth:sanctum', 'throttle:30,1')->group(function () {
     Route::get('/test', function (Request $request) {
         return response()->json([
             "message" => "ok"
