@@ -63,6 +63,8 @@ Route::middleware('auth:sanctum', 'throttle:30,1')->group(function () {
         // カウントアップ用
         Route::get('/countup/{bookMarkId}',[BookMarkController::class,'countup']);
     });
+
+    Route::get('/extended/bookmark/', [BookMarkController::class, 'serveBookMarkToExtended']);
 });
 
 
