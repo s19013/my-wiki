@@ -35,11 +35,13 @@ class ArticleRequest extends FormRequest
 
     public function messages()
     {
-        if ((substr($this->headers->get("UserLang"), 0,2)) == 'ja'){
-            return [
-                "articleTitle.max"    => "126文字以内で入力してください",
-            ];
-        }
+        try {
+            if ((substr($this->headers->get("UserLang"), 0,2)) == 'ja'){
+                return [
+                    "articleTitle.max"    => "126文字以内で入力してください",
+                ];
+            }
+        } catch (\Throwable $th) {}
         return [
             "articleTitle.max"    => "Please enter within 255 characters",
         ];

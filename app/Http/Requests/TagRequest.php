@@ -32,12 +32,14 @@ class TagRequest extends FormRequest
 
     public function messages()
     {
-        if ((substr($this->headers->get("UserLang"), 0,2)) == 'ja'){
-            return [
-                "name.required" => "新しいタグ名を入力してください",
-                "name.max"      => "126文字以内で入力してください"
-            ];
-        }
+        try {
+            if ((substr($this->headers->get("UserLang"), 0,2)) == 'ja'){
+                return [
+                    "name.required" => "新しいタグ名を入力してください",
+                    "name.max"      => "126文字以内で入力してください"
+                ];
+            }
+        } catch (\Throwable $th) {}
         return [
             "name.required" => "Enter new tag name",
             "name.max"      => "Please enter within 255 characters"
