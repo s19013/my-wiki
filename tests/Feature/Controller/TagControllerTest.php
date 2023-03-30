@@ -43,7 +43,7 @@ class TagControllerTest extends TestCase
     {
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->post('/api/tag/store/',[
             'name' => "test_store",
         ]);
@@ -73,7 +73,7 @@ class TagControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->post('/api/tag/store/',[
             'name' => 'test',
         ]);
@@ -96,7 +96,7 @@ class TagControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/tag/update/',[
             'id'   => $tag->id,
             'name' => 'update'
@@ -133,7 +133,7 @@ class TagControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/tag/update/',[
             'id'   => $tag->id,
             'name' => 'allready'
@@ -157,7 +157,7 @@ class TagControllerTest extends TestCase
 
         $response = $this
         ->actingAs($otherUser)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/tag/update/',[
             'id'   => $tag->id,
             'name' => 'allready'
@@ -198,7 +198,7 @@ class TagControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->post('/api/tag/search/',[
             'keyword' => "php",
         ]);
@@ -246,7 +246,7 @@ class TagControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->post('/api/tag/search/',[
             'keyword' => "",
         ]);

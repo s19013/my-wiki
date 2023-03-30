@@ -72,7 +72,7 @@ class BookMarkController_UpdateTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
             'bookMarkTitle'  => "更新titleタグ総入れ替え",
@@ -131,7 +131,7 @@ class BookMarkController_UpdateTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
             'bookMarkTitle'  => "更新title元のタグをそのままに新しく追加",
@@ -192,7 +192,7 @@ class BookMarkController_UpdateTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
             'bookMarkTitle'  => "更新titleタグ総入れ替え",
@@ -257,7 +257,7 @@ class BookMarkController_UpdateTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
             'bookMarkTitle'  => "更新titleタグがついてなかったブックマークにタグを付ける",
@@ -316,7 +316,7 @@ class BookMarkController_UpdateTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'    => $bookMark->id,
             'bookMarkTitle' => "タグがついていたブックマークのタグをすべて消す",
@@ -370,7 +370,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
             'bookMarkTitle'  => "http://hide-no-server.com/更新",
@@ -384,7 +384,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 再度更新
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
             'bookMarkTitle'  => "http://hide-no-server.com/再度更新",
@@ -431,7 +431,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
             'bookMarkTitle'  => "http://hide-no-server.com/更新",
@@ -445,7 +445,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 再度更新
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
             'bookMarkTitle'  => "http://hide-no-server.com/再度更新",
@@ -501,7 +501,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
             'bookMarkTitle'  => "http://hide-no-server.com/更新",
@@ -515,7 +515,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 再度更新
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
             'bookMarkTitle'  => "http://hide-no-server.com/再度更新",
@@ -571,7 +571,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
             'bookMarkTitle'  => "http://hide-no-server.com/更新",
@@ -585,7 +585,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 再度更新
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
             'bookMarkTitle'  => "http://hide-no-server.com/再度更新",
@@ -649,7 +649,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
             'bookMarkTitle'  => "http://hide-no-server.com/更新",
@@ -663,7 +663,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 再度更新
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
             'bookMarkTitle'  => "http://hide-no-server.com/再度更新",
@@ -717,7 +717,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
             'bookMarkTitle'  => "http://hide-no-server.com/更新",
@@ -731,7 +731,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 再度更新
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
             'bookMarkTitle'  => "http://hide-no-server.com/再度更新",
@@ -790,7 +790,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
             'bookMarkTitle'  => "http://hide-no-server.com/更新",
@@ -804,7 +804,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 再度更新
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
             'bookMarkTitle'  => "http://hide-no-server.com/再度更新",
@@ -863,7 +863,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
             'bookMarkTitle'  => "http://hide-no-server.com/更新",
@@ -877,7 +877,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 再度更新
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
             'bookMarkTitle'  => "http://hide-no-server.com/再度更新",
@@ -935,7 +935,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $newBookMark->id,
             'bookMarkTitle'  => "http://hide-no-server.com/更新",
@@ -970,7 +970,7 @@ class BookMarkController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($otherUser)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/bookmark/update/',[
             'bookMarkId'     => $bookMark->id,
             'bookMarkTitle'  => "http://hide-no-server.com/更新",

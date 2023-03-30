@@ -55,7 +55,7 @@ class BookMarkControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->post('/api/bookmark/store/',[
             'bookMarkTitle'=> "testTitletest_bookMarkStore_タグあり_タイトルあり",
             'bookMarkUrl'  => "http://hide-no-server.com/タグあり_タイトルあり" ,
@@ -111,7 +111,7 @@ class BookMarkControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->post('/api/bookmark/store/',[
             'bookMarkTitle' => "",
             'bookMarkUrl'  => "http://hide-no-server.com/タグあり_タイトルなし" ,
@@ -158,7 +158,7 @@ class BookMarkControllerTest extends TestCase
     {
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->post('/api/bookmark/store/',[
             'bookMarkTitle' => "testTitletest_bookMarkStore_タグなし_タイトルあり",
             'bookMarkUrl'   => "http://hide-no-server.com/タグなし_タイトルあり" ,
@@ -206,7 +206,7 @@ class BookMarkControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->post('/api/bookmark/store/',[
             'bookMarkTitle' => "",
             'bookMarkUrl'   => "http://hide-no-server.com/タグなし_タイトルなし" ,
@@ -248,7 +248,7 @@ class BookMarkControllerTest extends TestCase
     {
         $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->post('/api/bookmark/store/',[
             'bookMarkTitle' => "testTitletest_bookMarkStore_タグあり_タイトルあり",
             'bookMarkUrl'   => "http://hide-no-server.com/タグあり_タイトルあり" ,
@@ -257,7 +257,7 @@ class BookMarkControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->post('/api/bookmark/store/',[
             'bookMarkTitle' => "testTitletest_bookMarkStore_タグあり_タイトルあり",
             'bookMarkUrl'   => "http://hide-no-server.com/タグあり_タイトルあり" ,

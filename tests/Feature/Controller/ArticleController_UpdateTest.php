@@ -81,7 +81,7 @@ class ArticleController_UpdateTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
             'articleTitle'  => "更新titleタグ総入れ替え",
@@ -140,7 +140,7 @@ class ArticleController_UpdateTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
             'articleTitle'  => "更新title元のタグをそのままに新しく追加",
@@ -201,7 +201,7 @@ class ArticleController_UpdateTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
             'articleTitle'  => "更新titleタグ総入れ替え",
@@ -266,7 +266,7 @@ class ArticleController_UpdateTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
             'articleTitle'  => "更新titleタグがついてなかった記事にタグを付ける",
@@ -325,7 +325,7 @@ class ArticleController_UpdateTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'    => $article->id,
             'articleTitle' => "タグがついていた記事のタグをすべて消す",
@@ -378,7 +378,7 @@ class ArticleController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
             'articleTitle'  => "更新",
@@ -392,7 +392,7 @@ class ArticleController_UpdateTest extends TestCase
         // 再度更新
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
             'articleTitle'  => "再度更新",
@@ -438,7 +438,7 @@ class ArticleController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
             'articleTitle'  => "更新",
@@ -452,7 +452,7 @@ class ArticleController_UpdateTest extends TestCase
         // 再度更新
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
             'articleTitle'  => "再度更新",
@@ -508,7 +508,7 @@ class ArticleController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
             'articleTitle'  => "更新",
@@ -522,7 +522,7 @@ class ArticleController_UpdateTest extends TestCase
         // 再度更新
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
             'articleTitle'  => "再度更新",
@@ -578,7 +578,7 @@ class ArticleController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
             'articleTitle'  => "更新",
@@ -592,7 +592,7 @@ class ArticleController_UpdateTest extends TestCase
         // 再度更新
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
             'articleTitle'  => "再度更新",
@@ -656,7 +656,7 @@ class ArticleController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
             'articleTitle'  => "更新",
@@ -670,7 +670,7 @@ class ArticleController_UpdateTest extends TestCase
         // 再度更新
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
             'articleTitle'  => "再度更新",
@@ -724,7 +724,7 @@ class ArticleController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
             'articleTitle'  => "更新",
@@ -738,7 +738,7 @@ class ArticleController_UpdateTest extends TestCase
         // 再度更新
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
             'articleTitle'  => "再度更新",
@@ -797,7 +797,7 @@ class ArticleController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
             'articleTitle'  => "更新",
@@ -811,7 +811,7 @@ class ArticleController_UpdateTest extends TestCase
         // 再度更新
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
             'articleTitle'  => "再度更新",
@@ -929,7 +929,7 @@ class ArticleController_UpdateTest extends TestCase
         // 更新
         $response = $this
         ->actingAs($otherUser)
-        ->withSession(['test' => 'test'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/article/update/',[
             'articleId'     => $article->id,
             'articleTitle'  => "更新",
