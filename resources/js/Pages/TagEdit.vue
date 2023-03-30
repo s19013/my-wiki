@@ -282,6 +282,7 @@ export default{
         document.addEventListener('keydown', this.keyEvents)
 
         this.$store.commit('setGlobalLoading',false)
+        this.$store.commit('setSomeDialogOpening',false)
         this.$nextTick(function () {
             if (this.$store.state.lang == "ja"){this.messages = this.japanese}
         })
