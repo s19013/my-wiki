@@ -30,6 +30,10 @@ return [
 
     'max_age' => 0,
 
-    'supports_credentials' => false,
+    // 元
+    // 'supports_credentials' => false,
+
+    // Access-Control-Allow-Credentialsヘッダーを設定する。
+    'supports_credentials' => true,
 
 ];
