@@ -213,9 +213,15 @@ class BookMarkController extends Controller
     public function serveBookMarkToExtended(Request $request)
     {
         $bookMarkId = $this->bookMarkRepository->serveBookMarkId(
-            url   :$request->url,
+            url   :$request->bookMarkUrl,
             userId:Auth::id(),
         );
+
+        if (is_null($bookMarkId)) {
+            return response()->json([
+                "message"       => "bookmark not found",
+            ],555);// ブックマークがなかった時とりあえずエラーを返したい
+        }
 
         $bookMark = $this->bookMarkRepository->serve($bookMarkId);
 
@@ -227,6 +233,18 @@ class BookMarkController extends Controller
         return response()->json([
             "bookmark"       => $bookMark,
             "checkedTagList" => \NullAvoidance::ifnull($bookMarkTagList,[])
+        ]);
+    }
+
+    public function serveBookMarkIdToExtended(Request $request)
+    {
+        $bookMarkId = $this->bookMarkRepository->serveBookMarkId(
+            url   :$request->bookMarkUrl,
+            userId:Auth::id(),
+        );
+
+        return response()->json([
+            "bookMarkId"       => $bookMarkId,
         ]);
     }
 }
