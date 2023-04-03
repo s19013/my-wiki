@@ -17,12 +17,20 @@ class ExtendedUserController extends Controller
 {
     public function login(ExtendedLoginRequest $request)
     {
-        // ユーザーが存在するか確認
-        $isUserExists = User::where('email','=',$request->email)
-        ->where('password','=',Hash::make($request->password))
-        ->exists();
+        // 今は実験のためダミートークンを発行
+        // return response()->json(['token' => 'dammyToken' ], Response::HTTP_OK);
 
-        if (!$isUserExists) {return response()->json('User Not Found.', Response::HTTP_INTERNAL_SERVER_ERROR);}
+        // ユーザーが存在するか確認
+        if (!Auth::attempt(['email' => $request->email, 'password' => $request->password, ])) {
+            // 認証に失敗した
+            return response()->json([
+                'messages' => [
+                    'email' => null,
+                    'password' => null,
+                    'other' => 'パスワードかメールアドレスが間違っています｡もしくは､あなたはまだ登録していないかもしれません'
+                ]
+            ],500);
+        }
 
         $user = User::whereEmail($request->email)->first();
         $user->tokens()->delete();
@@ -33,7 +41,7 @@ class ExtendedUserController extends Controller
     public function logout()
     {
         Auth::guard('sanctum')->user()->tokens()->delete();
-        $res =[message => 'see you'];
-        return response()->json($res, Response::HTTP_OK);
+        $res =['message' => 'see you'];
+        return response()->json($res);
     }
 }
