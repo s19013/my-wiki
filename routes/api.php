@@ -64,7 +64,22 @@ Route::middleware('auth:sanctum', 'throttle:30,1')->group(function () {
         Route::get('/countup/{bookMarkId}',[BookMarkController::class,'countup']);
     });
 
-    Route::get('/extended/bookmark/', [BookMarkController::class, 'serveBookMarkToExtended']);
+    // セッションの関係上､拡張機能で使う動作はまとめる必要がある
+
+    Route::prefix('/extended')->group(function (){
+        Route::prefix('/bookmark')->group(function(){
+            Route::post('/data', [BookMarkController::class, 'serveBookMarkToExtended']);
+            Route::post('/id', [BookMarkController::class, 'serveBookMarkIdToExtended']);
+            Route::post('/store'  , [BookMarkController::class,'store']);
+            Route::put('/update' , [BookMarkController::class,'update']);
+            Route::delete('/{bookMarkId}' , [BookMarkController::class,'delete'])->name('api.bookMark.delete');
+        });
+
+        Route::prefix('/tag')->group(function () {
+            Route::post('/store'  , [TagController::class,'store']);
+            Route::post('/search' , [TagController::class,'search']);
+        });
+    });
 });
 
 
