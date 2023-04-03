@@ -131,6 +131,10 @@ return [
         Str::slug(env('APP_NAME', 'laravel'), '_').'_session'
     ),
 
+
+    // 拡張機能用
+    'cookie_extednded' => Str::slug(env('APP_NAME', 'laravel'), '_').'_session_extednded',
+
     /*
     |--------------------------------------------------------------------------
     | Session Cookie Path
