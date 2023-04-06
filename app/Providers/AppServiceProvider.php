@@ -30,11 +30,11 @@ class AppServiceProvider extends ServiceProvider
         if (config('app.env') === 'production') {URL::forceScheme('https');}
 
         // 利用するクッキーをUrlで分ける
-        $url = explode('/', $request->path() );
-        if ($url[1] == 'extended') {
-            config(['session.cookie' => config('session.cookie_'.'extednded')]);
-        } else {
-            config(['session.cookie' => config('session.cookie')]);
-        }
+        // $url = explode('/', $request->path() );
+        // if ($url[1] == 'extended') {
+        //     config(['session.cookie' => config('session.cookie_'.'extednded')]);
+        // } else {
+        //     config(['session.cookie' => config('session.cookie')]);
+        // }
     }
 }
