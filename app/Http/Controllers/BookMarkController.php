@@ -35,8 +35,9 @@ class BookMarkController extends Controller
     //新規ブックマーク作成
     public function store(BookMarkRequest $request)
     {
-        // CSRFトークンを再生成して、二重送信対策
-        $request->session()->regenerateToken();
+        // webアプリからの場合,CSRFトークンを再生成して、二重送信対策
+        $url = explode('/', $request->path() );
+        if ($url[1] != 'extended') {$request->session()->regenerateToken();}
 
         //urlがすでに登録されているか確かめる
         $isAllreadyExists =$this->bookMarkRepository->isAllreadyExists(Auth::id(),$request->bookMarkUrl);
@@ -86,8 +87,9 @@ class BookMarkController extends Controller
     //ブックマークの更新
     public function update(BookMarkRequest $request)
     {
-        // CSRFトークンを再生成して、二重送信対策
-        $request->session()->regenerateToken();
+        // webアプリからの場合,CSRFトークンを再生成して、二重送信対策
+        $url = explode('/', $request->path() );
+        if ($url[1] != 'extended') {$request->session()->regenerateToken();}
 
         $isSameUser = $this->bookMarkRepository->isSameUser(
             bookMarkId:$request->bookMarkId,
