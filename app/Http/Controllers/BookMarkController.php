@@ -219,8 +219,8 @@ class BookMarkController extends Controller
 
         if (is_null($bookMarkId)) {
             return response()->json([
-                "message"       => "bookmark not found",
-            ],555);// ブックマークがなかった時とりあえずエラーを返したい
+                "result" => "not found"
+            ]);
         }
 
         $bookMark = $this->bookMarkRepository->serve($bookMarkId);
@@ -231,6 +231,7 @@ class BookMarkController extends Controller
         );
 
         return response()->json([
+            "result"         => "found",
             "bookmark"       => $bookMark,
             "checkedTagList" => \NullAvoidance::ifnull($bookMarkTagList,[])
         ]);
