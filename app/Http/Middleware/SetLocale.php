@@ -17,10 +17,10 @@ class SetLocale
      */
     public function handle(Request $request, Closure $next)
     {
-        try {
-            App::setLocale(substr($request->headers->get("UserLang"), 0,2));
-        } catch (\Throwable $th) {
-            App::setLocale("en");
+        try {App::setLocale(substr($request->headers->get("UserLang"), 0,2));}
+        catch (\Throwable $th) {
+            try {App::setLocale(substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0,2));}
+            catch (\Throwable $th) {App::setLocale("en");}
         }
 
         return $next($request);

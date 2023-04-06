@@ -12,11 +12,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
     // ここでもlaravelのために言語切り替えするか｡
-    try {
-        App::setLocale(substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0,2));
-    } catch (\Throwable $th) {
-        App::setLocale("en");
-    }
 
     Route::get('register', [RegisteredUserController::class, 'create'])
                 ->name('register');
