@@ -21,12 +21,29 @@ use App\Http\Controllers\Extended\ExtendedUserController;
 */
 
 // 拡張機能のログイン
+// 認証の関係上,拡張機能で使う動作はまとめる必要がある
+Route::prefix('/extended')->middleware('throttle:30,1')->group(function (){
+    Route::post('/login', [ExtendedUserController::class, 'login']);
+    Route::get('/logout', [ExtendedUserController::class, 'logout']);
 
-Route::post('/extended/login', [ExtendedUserController::class, 'login']);
-Route::get('/extended/logout', [ExtendedUserController::class, 'logout']);
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::prefix('/bookmark')->group(function(){
+            Route::post('/data', [BookMarkController::class, 'serveBookMarkToExtended']);
+            Route::post('/id', [BookMarkController::class, 'serveBookMarkIdToExtended']);
+            Route::post('/store'  , [BookMarkController::class,'store']);
+            Route::put('/update' , [BookMarkController::class,'update']);
+            Route::delete('/{bookMarkId}' , [BookMarkController::class,'delete'])->name('api.bookMark.delete');
+        });
+
+        Route::prefix('/tag')->group(function () {
+            Route::post('/store'  , [TagController::class,'store']);
+            Route::post('/search' , [TagController::class,'search']);
+        });
+    });
+});
 
 // 認証が必要な部分
-Route::middleware('auth:sanctum', 'throttle:30,1')->group(function () {
+Route::middleware(['auth:sanctum', 'throttle:30,1','spa'])->group(function () {
     Route::get('/test', function (Request $request) {
         return response()->json([
             "message" => "ok"
@@ -62,23 +79,6 @@ Route::middleware('auth:sanctum', 'throttle:30,1')->group(function () {
 
         // カウントアップ用
         Route::get('/countup/{bookMarkId}',[BookMarkController::class,'countup']);
-    });
-
-    // セッションの関係上､拡張機能で使う動作はまとめる必要がある
-
-    Route::prefix('/extended')->group(function (){
-        Route::prefix('/bookmark')->group(function(){
-            Route::post('/data', [BookMarkController::class, 'serveBookMarkToExtended']);
-            Route::post('/id', [BookMarkController::class, 'serveBookMarkIdToExtended']);
-            Route::post('/store'  , [BookMarkController::class,'store']);
-            Route::put('/update' , [BookMarkController::class,'update']);
-            Route::delete('/{bookMarkId}' , [BookMarkController::class,'delete'])->name('api.bookMark.delete');
-        });
-
-        Route::prefix('/tag')->group(function () {
-            Route::post('/store'  , [TagController::class,'store']);
-            Route::post('/search' , [TagController::class,'search']);
-        });
     });
 });
 

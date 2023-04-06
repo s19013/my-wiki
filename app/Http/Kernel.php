@@ -45,7 +45,7 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             // \Illuminate\Session\Middleware\StartSession::class
@@ -72,5 +72,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'setMeta'  => \App\Http\Middleware\SetMeta::class,
         'isSameUser_article'  => \App\Http\Middleware\IsSameUser_article::class,
+        'spa' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class
     ];
 }
