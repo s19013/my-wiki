@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('guest')->group(function () {
     // ここでもlaravelのために言語切り替えするか｡
     try {
-        App::setLocale(substr($request->headers->get("UserLang"), 0,2));
+        App::setLocale(substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0,2));
     } catch (\Throwable $th) {
         App::setLocale("en");
     }
