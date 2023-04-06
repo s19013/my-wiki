@@ -43,7 +43,8 @@ class TagControllerTest extends TestCase
     {
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withHeaders(['UserLang' => 'ja'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->post('/api/tag/store/',[
             'name' => "test_store",
         ]);
@@ -73,7 +74,8 @@ class TagControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withHeaders(['UserLang' => 'ja'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->post('/api/tag/store/',[
             'name' => 'test',
         ]);
@@ -96,7 +98,8 @@ class TagControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withHeaders(['UserLang' => 'ja'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/tag/update/',[
             'id'   => $tag->id,
             'name' => 'update'
@@ -133,7 +136,8 @@ class TagControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withHeaders(['UserLang' => 'ja'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/tag/update/',[
             'id'   => $tag->id,
             'name' => 'allready'
@@ -157,7 +161,8 @@ class TagControllerTest extends TestCase
 
         $response = $this
         ->actingAs($otherUser)
-        ->withSession(['test' => 'test'])
+        ->withHeaders(['UserLang' => 'ja'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->put('/api/tag/update/',[
             'id'   => $tag->id,
             'name' => 'allready'
@@ -198,7 +203,8 @@ class TagControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withHeaders(['UserLang' => 'ja'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->post('/api/tag/search/',[
             'keyword' => "php",
         ]);
@@ -246,7 +252,8 @@ class TagControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withHeaders(['UserLang' => 'ja'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->post('/api/tag/search/',[
             'keyword' => "",
         ]);
@@ -282,6 +289,7 @@ class TagControllerTest extends TestCase
         $tag = Tag::factory()->create(['user_id' => $this->user->id]);
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja'])
         ->withSession([
             'my_wiki_session' => 'test',
             'XSRF-TOKEN' => 'test'
@@ -309,6 +317,7 @@ class TagControllerTest extends TestCase
 
         $response = $this
         ->actingAs($otherUser)
+        ->withHeaders(['UserLang' => 'ja'])
         ->withSession([
             'my_wiki_session' => 'test',
             'XSRF-TOKEN' => 'test'

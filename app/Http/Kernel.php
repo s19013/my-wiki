@@ -20,8 +20,9 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
-        // \App\Http\Middleware\SetLocale::class,
+        \App\Http\Middleware\SetLocale::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        \App\Http\Middleware\RequestLogger::class,
 
         // awsなどでhttpsを有効化したらコメントを外す
         //\App\Http\Middleware\RedirectToHttps::class,
@@ -44,9 +45,10 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            // \Illuminate\Session\Middleware\StartSession::class
         ],
     ];
 
@@ -70,5 +72,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'setMeta'  => \App\Http\Middleware\SetMeta::class,
         'isSameUser_article'  => \App\Http\Middleware\IsSameUser_article::class,
+        'spa' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class
     ];
 }

@@ -3,19 +3,20 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+
 use Illuminate\Validation\Rule;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class TagRequest extends FormRequest
+class ExtendedLoginRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize() {return true;}
+    public function authorize(){return true;}
 
     /**
      * Get the validation rules that apply to the request.
@@ -25,8 +26,8 @@ class TagRequest extends FormRequest
     public function rules()
     {
         return [
-            "id"   => 'integer',
-            "name" => "required|max:255",
+            'email' => 'required|email',
+            'password' => 'required'
         ];
     }
 
@@ -35,14 +36,16 @@ class TagRequest extends FormRequest
         try {
             if ((substr($this->headers->get("UserLang"), 0,2)) == 'ja'){
                 return [
-                    "name.required" => "新しいタグ名を入力してください",
-                    "name.max"      => "126文字以内で入力してください"
+                    "email.required"   => "メールアドレスを入力してください",
+                    "email.email"      => "メールアドレスを入力してください",
+                    "password.required"=> "パスワードを入力してください"
                 ];
             }
         } catch (\Throwable $th) {}
         return [
-            "name.required" => "Enter new tag name",
-            "name.max"      => "Please enter within 255 characters"
+            "email.required"   => "Please enter email",
+            "email.email"      => "Please enter email",
+            "password.required"=> "Please enter password",
         ];
     }
 
@@ -55,4 +58,3 @@ class TagRequest extends FormRequest
         throw new HttpResponseException($res);
     }
 }
-

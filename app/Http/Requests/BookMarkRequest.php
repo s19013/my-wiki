@@ -34,13 +34,15 @@ class BookMarkRequest extends FormRequest
 
     public function messages()
     {
-        if ((substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0,2)) == 'ja') {
-            return [
-                "bookMarkTitle.max"    => "126文字以内で入力してください",
-                "bookMarkUrl.required" => "urlを入力してください",
-                "bookMarkUrl.url"      => "url形式で入力してください"
-            ];
-        }
+        try {
+            if ((substr($this->headers->get("UserLang"), 0,2)) == 'ja') {
+                return [
+                    "bookMarkTitle.max"    => "126文字以内で入力してください",
+                    "bookMarkUrl.required" => "urlを入力してください",
+                    "bookMarkUrl.url"      => "url形式で入力してください"
+                ];
+            }
+        } catch (\Throwable $th) {}
         return [
             "bookMarkTitle.max"    => "Please enter within 255 characters",
             "bookMarkUrl.required" => "please enter the url",

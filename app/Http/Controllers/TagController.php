@@ -28,17 +28,20 @@ class TagController extends Controller
     //新規タグ登録
     public function store(TagRequest $request)
     {
-        // CSRFトークンを再生成して、二重送信対策
-        $request->session()->regenerateToken();
+        // webアプリからの場合,CSRFトークンを再生成して、二重送信対策
+        $url = explode('/', $request->path() );
+        if ($url[1] != 'extended') {$request->session()->regenerateToken();}
 
         // すでに登録してあるった場合は弾く
         if ($this->tagRepository->isAllreadyExists(Auth::id(),$request->name)){
-            if ((substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0,2)) == 'ja'){
-                return response()->json([
-                    'messages' => ["name" => ["そのタグは既に保存しています"]],
-                    ],
-                    400);
-            }
+            try {
+                if ((substr($request->headers->get("UserLang"), 0,2)) == 'ja'){
+                    return response()->json([
+                        'messages' => ["name" => ["そのタグは既に保存しています"]],
+                        ],
+                        400);
+                }
+            } catch (\Throwable $th) {}
             return response()->json(
                 ['messages' => ["name" => ["this tag is already saved"]]],
                 400
@@ -55,8 +58,9 @@ class TagController extends Controller
 
     public function update(TagRequest $request)
     {
-        // CSRFトークンを再生成して、二重送信対策
-        $request->session()->regenerateToken();
+        // webアプリからの場合,CSRFトークンを再生成して、二重送信対策
+        $url = explode('/', $request->path() );
+        if ($url[1] != 'extended') {$request->session()->regenerateToken();}
 
         $isSameUser = $this->tagRepository->isSameUser(
             tagId:$request->id,
@@ -72,12 +76,14 @@ class TagController extends Controller
 
         // 帰り値がnullの場合は無視する(urlを完全に別のものに変更したから,まだ更新するurlが登録されてないから)
         if (!is_null($tagId)&&$request->name != $tagId) {
-            if ((substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0,2)) == 'ja'){
-                return response()->json([
-                    'messages' => ["name" => ["そのタグは既に保存しています"]],
-                    ],
-                    400);
-            }
+            try {
+                if ((substr($request->headers->get("UserLang"), 0,2)) == 'ja'){
+                    return response()->json([
+                        'messages' => ["name" => ["そのタグは既に保存しています"]],
+                        ],
+                        400);
+                }
+            } catch (\Throwable $th) {}
             return response()->json(
                 ['messages' => ["name" => ["this tag is already saved"]]],
                 400
@@ -121,7 +127,6 @@ class TagController extends Controller
 
     public function transitionToEdit(Request $request)
     {
-
         $result = $this->tagRepository->searchInEdit(
             userId :Auth::id(),
             keyword:$request->keyword,

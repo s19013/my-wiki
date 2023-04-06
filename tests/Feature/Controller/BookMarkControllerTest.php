@@ -39,7 +39,6 @@ class BookMarkControllerTest extends TestCase
         // ユーザーを用意
         $this->user = User::factory()->create();
 
-        // ここでこの値を設定しておかないとエラーが出てしまう(テスト環境のみ)
         $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'ja';
     }
 
@@ -55,7 +54,8 @@ class BookMarkControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withHeaders(['UserLang' => 'ja'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->post('/api/bookmark/store/',[
             'bookMarkTitle'=> "testTitletest_bookMarkStore_タグあり_タイトルあり",
             'bookMarkUrl'  => "http://hide-no-server.com/タグあり_タイトルあり" ,
@@ -111,7 +111,8 @@ class BookMarkControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withHeaders(['UserLang' => 'ja'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->post('/api/bookmark/store/',[
             'bookMarkTitle' => "",
             'bookMarkUrl'  => "http://hide-no-server.com/タグあり_タイトルなし" ,
@@ -158,7 +159,8 @@ class BookMarkControllerTest extends TestCase
     {
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withHeaders(['UserLang' => 'ja'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->post('/api/bookmark/store/',[
             'bookMarkTitle' => "testTitletest_bookMarkStore_タグなし_タイトルあり",
             'bookMarkUrl'   => "http://hide-no-server.com/タグなし_タイトルあり" ,
@@ -206,7 +208,8 @@ class BookMarkControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withHeaders(['UserLang' => 'ja'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->post('/api/bookmark/store/',[
             'bookMarkTitle' => "",
             'bookMarkUrl'   => "http://hide-no-server.com/タグなし_タイトルなし" ,
@@ -248,7 +251,8 @@ class BookMarkControllerTest extends TestCase
     {
         $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withHeaders(['UserLang' => 'ja'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->post('/api/bookmark/store/',[
             'bookMarkTitle' => "testTitletest_bookMarkStore_タグあり_タイトルあり",
             'bookMarkUrl'   => "http://hide-no-server.com/タグあり_タイトルあり" ,
@@ -257,7 +261,8 @@ class BookMarkControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession(['test' => 'test'])
+        ->withHeaders(['UserLang' => 'ja'])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->post('/api/bookmark/store/',[
             'bookMarkTitle' => "testTitletest_bookMarkStore_タグあり_タイトルあり",
             'bookMarkUrl'   => "http://hide-no-server.com/タグあり_タイトルあり" ,
@@ -280,6 +285,7 @@ class BookMarkControllerTest extends TestCase
         $bookMark = BookMark::factory()->create(['user_id' => $this->user->id]);
         $response = $this
         ->actingAs($this->user)
+        ->withHeaders(['UserLang' => 'ja'])
         ->withSession([
             'my_wiki_session' => 'test',
             'XSRF-TOKEN' => 'test'
@@ -306,6 +312,7 @@ class BookMarkControllerTest extends TestCase
 
         $response = $this
         ->actingAs($otherUser)
+        ->withHeaders(['UserLang' => 'ja'])
         ->withSession([
             'my_wiki_session' => 'test',
             'XSRF-TOKEN' => 'test'
@@ -321,6 +328,7 @@ class BookMarkControllerTest extends TestCase
 
     //     $response = $this
     //     ->actingAs($this->user)
+    //     ->withHeaders(['UserLang' => 'ja'])
     //     ->withSession([
     //         'my_wiki_session' => 'test',
     //         'XSRF-TOKEN' => 'test'
@@ -344,6 +352,7 @@ class BookMarkControllerTest extends TestCase
 
     //     $response = $this
     //     ->actingAs($this->user)
+    //     ->withHeaders(['UserLang' => 'ja'])
     //     ->withSession([
     //         'my_wiki_session' => 'test',
     //         'XSRF-TOKEN' => 'test'
@@ -361,6 +370,7 @@ class BookMarkControllerTest extends TestCase
 
         $response = $this
         ->actingAs($otherUser)
+        ->withHeaders(['UserLang' => 'ja'])
         ->withSession([
             'my_wiki_session' => 'test',
             'XSRF-TOKEN' => 'test'

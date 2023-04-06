@@ -35,18 +35,21 @@ class BookMarkController extends Controller
     //新規ブックマーク作成
     public function store(BookMarkRequest $request)
     {
-        // CSRFトークンを再生成して、二重送信対策
-        $request->session()->regenerateToken();
+        // webアプリからの場合,CSRFトークンを再生成して、二重送信対策
+        $url = explode('/', $request->path() );
+        if ($url[1] != 'extended') {$request->session()->regenerateToken();}
 
         //urlがすでに登録されているか確かめる
         $isAllreadyExists =$this->bookMarkRepository->isAllreadyExists(Auth::id(),$request->bookMarkUrl);
         if ($isAllreadyExists == true) {
-            if ((substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0,2)) == 'ja'){
-                return response()->json([
-                    'messages' => ["bookMarkUrl" => ["そのブックマークは既に保存しています"]],
-                    ],
-                    400);
-            }
+            try {
+                if ((substr($request->headers->get("UserLang"), 0,2)) == 'ja'){
+                    return response()->json([
+                        'messages' => ["bookMarkUrl" => ["そのブックマークは既に保存しています"]],
+                        ],
+                        400);
+                }
+            } catch (\Throwable $th) {}
             return response()->json([
                 'messages' => ["bookMarkUrl" => ["this bookmark is already saved"]],
                 ],
@@ -84,8 +87,9 @@ class BookMarkController extends Controller
     //ブックマークの更新
     public function update(BookMarkRequest $request)
     {
-        // CSRFトークンを再生成して、二重送信対策
-        $request->session()->regenerateToken();
+        // webアプリからの場合,CSRFトークンを再生成して、二重送信対策
+        $url = explode('/', $request->path() );
+        if ($url[1] != 'extended') {$request->session()->regenerateToken();}
 
         $isSameUser = $this->bookMarkRepository->isSameUser(
             bookMarkId:$request->bookMarkId,
@@ -101,12 +105,14 @@ class BookMarkController extends Controller
 
         // 帰り値がnullの場合は無視する(urlを完全に別のものに変更したから,更新するurlがまだ登録されてないから)
         if (!is_null($bookMarkId)&&$request->bookMarkId != $bookMarkId) {
-            if ((substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0,2)) == 'ja'){
-                return response()->json([
-                    'messages' => ["bookMarkUrl" => ["そのブックマークは既に保存しています"]],
-                    ],
-                    400);
-            }
+            try {
+                if ((substr($request->headers->get("UserLang"), 0,2)) == 'ja'){
+                    return response()->json([
+                        'messages' => ["bookMarkUrl" => ["そのブックマークは既に保存しています"]],
+                        ],
+                        400);
+                }
+            } catch (\Throwable $th) {} // 特に何もすることないから書かなくても良いと思う
             return response()->json([
                 'messages' => ["bookMarkUrl" => ["this bookmark is already saved"]],
                 ],
@@ -203,5 +209,45 @@ class BookMarkController extends Controller
 
 
         $this->bookMarkRepository->countUp($bookMarkId);
+    }
+
+    // 拡張機能用
+    public function serveBookMarkToExtended(Request $request)
+    {
+        $bookMarkId = $this->bookMarkRepository->serveBookMarkId(
+            url   :$request->bookMarkUrl,
+            userId:Auth::id(),
+        );
+
+        if (is_null($bookMarkId)) {
+            return response()->json([
+                "result" => "not found"
+            ]);
+        }
+
+        $bookMark = $this->bookMarkRepository->serve($bookMarkId);
+
+        $bookMarkTagList = $this->bookMarkTagRepository->serveTagsRelatedToBookMark(
+            userId:Auth::id(),
+            bookMarkId:$bookMarkId
+        );
+
+        return response()->json([
+            "result"         => "found",
+            "bookmark"       => $bookMark,
+            "checkedTagList" => \NullAvoidance::ifnull($bookMarkTagList,[])
+        ]);
+    }
+
+    public function serveBookMarkIdToExtended(Request $request)
+    {
+        $bookMarkId = $this->bookMarkRepository->serveBookMarkId(
+            url   :$request->bookMarkUrl,
+            userId:Auth::id(),
+        );
+
+        return response()->json([
+            "bookMarkId"       => $bookMarkId,
+        ]);
     }
 }

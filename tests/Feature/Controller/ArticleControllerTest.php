@@ -67,10 +67,8 @@ class ArticleControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession([
-            'my_wiki_session' => 'test',
-            'XSRF-TOKEN' => 'test'
-        ])
+        ->withHeaders(['UserLang' => 'ja',])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->post('/api/article/store/',[
             'articleTitle' => "testTitletest_store_タグあり_タイトルあり",
             'articleBody'  => "testBodytest_store_タグあり_タイトルあり" ,
@@ -123,10 +121,8 @@ class ArticleControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession([
-            'my_wiki_session' => 'test',
-            'XSRF-TOKEN' => 'test'
-        ])
+        ->withHeaders(['UserLang' => 'ja',])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->post('/api/article/store/',[
             'articleTitle' => "",
             'articleBody'  => "testBodytest_store_タグあり_タイトルなし" ,
@@ -173,10 +169,8 @@ class ArticleControllerTest extends TestCase
     {
         $response = $this
         ->actingAs($this->user)
-        ->withSession([
-            'my_wiki_session' => 'test',
-            'XSRF-TOKEN' => 'test'
-        ])
+        ->withHeaders(['UserLang' => 'ja',])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->post('/api/article/store/',[
             'articleTitle' => "testTitletest_store_タグなし_タイトルあり",
             'articleBody'  => "testBodytest_store_タグなし_タイトルあり" ,
@@ -222,10 +216,8 @@ class ArticleControllerTest extends TestCase
 
         $response = $this
         ->actingAs($this->user)
-        ->withSession([
-            'my_wiki_session' => 'test',
-            'XSRF-TOKEN' => 'test'
-        ])
+        ->withHeaders(['UserLang' => 'ja',])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->post('/api/article/store/',[
             'articleTitle' => "",
             'articleBody'  => "testBodytest_store_タグなし_タイトルなし" ,
@@ -266,10 +258,8 @@ class ArticleControllerTest extends TestCase
         $article = Article::factory()->create(['user_id' => $this->user->id]);
         $response = $this
         ->actingAs($this->user)
-        ->withSession([
-            'my_wiki_session' => 'test',
-            'XSRF-TOKEN' => 'test'
-        ])
+        ->withHeaders(['UserLang' => 'ja',])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->delete('/api/article/'.$article->id);
 
         $response->assertStatus(200);
@@ -292,10 +282,8 @@ class ArticleControllerTest extends TestCase
 
         $response = $this
         ->actingAs($otherUser)
-        ->withSession([
-            'my_wiki_session' => 'test',
-            'XSRF-TOKEN' => 'test'
-        ])
+        ->withHeaders(['UserLang' => 'ja',])
+        ->withSession(['XSRF-TOKEN' => 'test','sundlf_session' => 'test'])
         ->delete('/api/article/'.$article->id);
 
         $response->assertStatus(401);
