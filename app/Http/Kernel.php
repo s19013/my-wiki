@@ -22,6 +22,7 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\TrimStrings::class,
         // \App\Http\Middleware\SetLocale::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        \App\Http\Middleware\RequestLogger::class,
 
         // awsなどでhttpsを有効化したらコメントを外す
         //\App\Http\Middleware\RedirectToHttps::class,
@@ -47,7 +48,7 @@ class Kernel extends HttpKernel
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \Illuminate\Session\Middleware\StartSession::class
+            // \Illuminate\Session\Middleware\StartSession::class
         ],
     ];
 
