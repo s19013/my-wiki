@@ -35,5 +35,6 @@ return [
 
     // Access-Control-Allow-Credentialsヘッダーを設定する。
     'supports_credentials' => true,
+    // ↑もうこれfalseに戻してもよいのかな?
 
 ];
