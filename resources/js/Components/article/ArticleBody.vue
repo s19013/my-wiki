@@ -19,6 +19,7 @@
                 rows="20"
                 :label="messages.bodylabel"
                 v-model = "body"
+                @keydown.tab.prevent.exact="addTabSpace()"
             ></v-textarea>
         </div>
 
@@ -60,20 +61,34 @@ export default {
             if (this.activeTab === 1) {this.focusToBody()}
         },
         serveBody(){return this.body},
+        addTabSpace(){
+        	//テキストエリアと挿入する文字列を取得
+            // var area = document.querySelector('textarea');
+        	//カーソルの位置を基準に前後を分割して、その間に文字列を挿入
+            // var forward  = area.value.substr(0, area.selectionStart)
+            // var backward = area.value.substr(area.selectionStart)
+
+        	// area.value = forward + "\t" + backward
+            // area.selectionEnd = forward.length +1;
+
+            // !!execCommandは今後廃止される けど､沢山調べても代替案はなかったからみつかるまでこれで!!
+            document.execCommand('insertText', false, '\t');
+        },
         focusToBody(){ this.$nextTick(() => this.$refs.textarea.focus()) },
+        keyEvents(event){
+            // タブ切り替え(アプリ内)
+            if (event.ctrlKey || event.key === "Meta") {
+                if(event.code === "Space"){this.changeTab()}
+                return
+            }
+        },
     },
     mounted() {
         this.$nextTick(function () {
             if (this.$store.state.lang == "ja"){this.messages = this.japanese}
         })
         //キーボード受付
-        document.addEventListener('keydown', (event)=>{
-            // タブ切り替え(アプリ内)
-            if (event.ctrlKey || event.key === "Meta") {
-                if(event.code === "Space"){this.changeTab()}
-                return
-            }
-        })
+        document.addEventListener('keydown', this.keyEvents)
         // とにかくこれを使って最後に処理することができる?
         this.$nextTick(() => {
             // レンダリング後の処理
@@ -81,6 +96,10 @@ export default {
             this.body = this.originalArticleBody
         });
     },
+    beforeUnmount() {
+        //キーボードによる動作の削除(副作用みたいエラーがでるため)
+        document.removeEventListener("keydown", this.keyEvents);
+    }
 }
 </script>
 
