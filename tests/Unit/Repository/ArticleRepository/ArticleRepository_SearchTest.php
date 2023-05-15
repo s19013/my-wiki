@@ -871,4 +871,43 @@ class ArticleRepository_SearchTest extends TestCase
         $this->assertSame("B",$articleList[1]->title);
         $this->assertSame("A",$articleList[2]->title);
     }
+
+    public function test_search_untagged()
+    {
+        $articleList = Article::factory()->count(5)->create(['user_id' => $this->userId]);
+
+        foreach ($articleList as $article){
+            ArticleTag::create([
+                'article_id' => $article->id,
+                'tag_id'     => null,
+            ]);
+        }
+
+        // ダミー
+        $dammyArticleList = Article::factory()->count(5)->create(['user_id' => $this->userId]);
+        $tag = Tag::factory()->create(['user_id' => $this->userId]);
+
+        foreach ($dammyArticleList as $article){
+            ArticleTag::create([
+                'article_id' => $article->id,
+                'tag_id'     => $tag->id,
+            ]);
+        }
+
+        $response = $this->articleRepository->search(
+            userId:$this->userId,
+            keyword:'',
+            page:1,
+            tagList:null,
+            searchTarget:'title',
+            searchQuantity:10,
+            sortType:"title_desc",
+            isSearchUntagged:true,
+        );
+
+        // 帰ってきたかず
+        $articleList = $response['data'];
+        $this->assertCount(5,$response['data']);
+
+    }
 }

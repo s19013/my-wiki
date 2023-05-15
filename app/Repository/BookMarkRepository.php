@@ -74,7 +74,9 @@ class BookMarkRepository
 
     public  function search(
         $userId,$keyword,$page,$tagList,$searchTarget,
-        $searchQuantity=10,$sortType="updated_at_desc")
+        $searchQuantity=10,$sortType="updated_at_desc",
+        $isSearchUntagged=false
+        )
     {
         // ツールを実体化
         $searchToolKit = new searchToolKit();
@@ -93,6 +95,9 @@ class BookMarkRepository
 
             // 副問合せを使わないver(個人的にわかりにくいと思う)
             // $query = $this->searchByTag($userId,$tagList);
+        } else if ($isSearchUntagged == true) {
+            // タグがついてないのだけ検索
+            $query = $this->searchUntagged($userId);
         } else {
             //タグ検索が不要な場合
             $query = DB::table("book_marks")
@@ -138,7 +143,7 @@ class BookMarkRepository
     //タグを使って検索する時に使う関数
     public  function searchByTag($userId,$tagList)
     {
-        //articleテーブルとarticle_tags,tagsを結合
+        //book_markテーブルとbook_mark_tags,tagsを結合
         $subTable = BookMark::select('book_marks.*')
         ->leftjoin('book_mark_tags','book_marks.id','=','book_mark_tags.book_mark_id')
         ->leftjoin('tags','book_mark_tags.tag_id','=','tags.id')
@@ -160,6 +165,28 @@ class BookMarkRepository
 
         $subTable->groupBy('book_marks.id')
         ->having(DB::raw('count(*)'), '=', count($tagList));
+
+        return $subTable;
+    }
+
+    //タグを使って検索する時に使う関数
+    public function searchUntagged($userId)
+    {
+        //tags.idが
+        //book_markテーブルとbook_mark_tags,tagsを結合->参照元が論理削除されていないか確認するため
+
+        $subTable = DB::table('book_marks')
+        ->select('book_marks.id','book_marks.title','book_marks.user_id','book_marks.count','book_marks.created_at','book_marks.updated_at')
+        ->leftJoin('book_mark_tags','book_marks.id','=','book_mark_tags.book_mark_id')
+        ->leftJoin('tags','book_mark_tags.tag_id','=','tags.id')
+        ->where('book_marks.user_id','=',$userId)
+        // (a or b) and (c or d)みたいなsqlを書くには{}で囲む必要がある
+        ->where(function($subTable) {
+            //削除されてないものたちだけを取り出す
+            $subTable->WhereNull('book_marks.deleted_at')
+                     ->WhereNull('tags.deleted_at');
+        })
+        ->whereNull('book_mark_tags.tag_id');
 
         return $subTable;
     }
