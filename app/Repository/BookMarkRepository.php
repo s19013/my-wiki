@@ -88,11 +88,11 @@ class BookMarkRepository
         if (!empty($tagList)) {
 
             //副問合せのテーブルから選択
-            $subTable = $this->createSubTableForSearch($userId,$tagList);
+            $subTable = $this->searchByTag($userId,$tagList);
             $query = DB::table($subTable,"book_marks");
 
             // 副問合せを使わないver(個人的にわかりにくいと思う)
-            // $query = $this->createSubTableForSearch($userId,$tagList);
+            // $query = $this->searchByTag($userId,$tagList);
         } else {
             //タグ検索が不要な場合
             $query = DB::table("book_marks")
@@ -135,8 +135,8 @@ class BookMarkRepository
         ];
     }
 
-    //検索時のサブテーブル作成
-    public  function createSubTableForSearch($userId,$tagList)
+    //タグを使って検索する時に使う関数
+    public  function searchByTag($userId,$tagList)
     {
         //articleテーブルとarticle_tags,tagsを結合
         $subTable = BookMark::select('book_marks.*')

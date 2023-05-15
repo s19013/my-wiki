@@ -62,7 +62,8 @@ class ArticleRepository
     //検索する数
     public function search(
         $userId,$keyword,$page,$tagList,$searchTarget,
-        $searchQuantity=10,$sortType="updated_at_desc"
+        $searchQuantity=10,$sortType="updated_at_desc",
+        $searchWithoutTags=false
         )
     {
         // ツールを実体化
@@ -75,12 +76,12 @@ class ArticleRepository
         $wordListToSearch = $searchToolKit->preparationToAndSearch($escaped);
 
 
-        // このwhere句をわける部分別の関数にしようかな?
+        # HACK:このwhere句をわける部分別の関数にしようかな?
 
         //タグも検索する場合
         if (!empty($tagList)) {
             //副問合せのテーブルから選択
-            $query = $this->createSubTableForSearch($userId,$tagList);
+            $query = $this->searchByTag($userId,$tagList);
         } else {
             //タグ検索が不要な場合
             $query = DB::table("articles")
@@ -123,8 +124,8 @@ class ArticleRepository
         ];
     }
 
-    //検索時のサブテーブル作成
-    public function createSubTableForSearch($userId,$tagList)
+    //タグを使って検索する時に使う関数
+    public function searchByTag($userId,$tagList)
     {
         //tags.idが
         //articleテーブルとarticle_tags,tagsを結合->参照元が論理削除されていないか確認するため
