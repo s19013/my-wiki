@@ -188,7 +188,7 @@ export default{
             },
             page: this.result.current_page,
             searchTarget:this.old.searchTarget,
-            isSearchUntaggedCheckBox:this.old.isSearchUntagged
+            isSearchUntaggedCheckBox:(this.old.isSearchUntagged == 1) ? true : false
         }
     },
     props:{
@@ -222,7 +222,7 @@ export default{
                 searchTarget:this.searchTarget,
                 searchQuantity:this.$refs.SearchOption.serveSearchQuantity(),
                 sortType:this.$refs.SearchOption.serveSort(),
-                isSearchUntagged:this.isSearchUntaggedCheckBox,
+                isSearchUntagged :(this.isSearchUntaggedCheckBox == true) ? 1 : 0,
                 onError:(errors) => {
                     console.log(errors)
                     this.$store.commit('switchGlobalLoading')
@@ -238,7 +238,7 @@ export default{
                 searchTarget  : this.old.searchTarget,
                 searchQuantity: this.old.searchQuantity,
                 sortType : this.old.sortType,
-                isSearchUntagged : this.isSearchUntaggedCheckBox,
+                isSearchUntagged :(this.old.isSearchUntagged == true) ? 1 : 0,
                 onError:(errors) => {
                     console.log(errors)
                     this.$store.commit('switchGlobalLoading')
