@@ -5,20 +5,13 @@
                 ref = "SearchField"
                 :searchLabel   ="messages.title"
                 :orignalKeyWord="old.keyword"
-                @triggerSearch="search({
-                    page   :1,
-                    keyword:this.$refs.SearchField.serveKeywordToParent(),
-                    tagList:this.$refs.TagDialog.serveCheckedTagList(),
-                    searchTarget  :this.searchTarget,
-                    searchQuantity:this.$refs.SearchOption.serveSearchQuantity(),
-                    sortType:this.$refs.SearchOption.serveSort()
-                })"
+                @triggerSearch="search()"
                 >
             </SearchField>
 
             <div class="untaggedCheckbox">
                 <!-- この部分を既存チェックボックスという -->
-                <input type="checkbox" id="checked" v-model="untagged">
+                <input type="checkbox" id="checked" v-model="isSearchUntaggedCheckBox">
                 <label for="checked">{{ messages.untaggedLabel }}</label>
             </div>
 
@@ -26,7 +19,7 @@
                 ref="TagDialog"
                 :text = "messages.TagDialogLabel"
                 :originalCheckedTagList="old.tagList"
-                :disabled="untagged"
+                :disabled="isSearchUntaggedCheckBox"
                 :searchOnly="true"/>
 
             <div class="searchTarget">
@@ -148,7 +141,7 @@ export default{
             messages:{
                 title:'Search Article',
                 TagDialogLabel:"Search Tag",
-                untaggedLabel:"Find articles without tags",
+                untaggedLabel:"Search articles without tags",
                 searchTarget:{
                     label:"Search Target",
                     title:"title",
@@ -195,7 +188,7 @@ export default{
             },
             page: this.result.current_page,
             searchTarget:this.old.searchTarget,
-            untagged:false
+            isSearchUntaggedCheckBox:this.old.isSearchUntagged
         }
     },
     props:{
@@ -220,15 +213,32 @@ export default{
         // 検索用
         pageIncrease(){if (this.page < this.result.last_page) { this.page += 1 }},
         pageDecrease(){if (this.page > 1) {this.page -= 1}},
-        search({page,keyword,tagList,searchTarget,searchQuantity,sortType}){
+        search(){
+            this.$store.commit('switchGlobalLoading')
+            this.$inertia.get('/Article/Search' ,{
+                page:1,
+                keyword:this.$refs.SearchField.serveKeywordToParent(),
+                tagList:this.$refs.TagDialog.serveCheckedTagList(),
+                searchTarget:this.searchTarget,
+                searchQuantity:this.$refs.SearchOption.serveSearchQuantity(),
+                sortType:this.$refs.SearchOption.serveSort(),
+                isSearchUntagged:this.isSearchUntaggedCheckBox,
+                onError:(errors) => {
+                    console.log(errors)
+                    this.$store.commit('switchGlobalLoading')
+                }
+            })
+        },
+        pagination(page){
             this.$store.commit('switchGlobalLoading')
             this.$inertia.get('/Article/Search' ,{
                 page    : page,
-                keyword : keyword,
-                tagList : tagList,
-                searchTarget:searchTarget,
-                searchQuantity:searchQuantity,
-                sortType:sortType,
+                keyword : this.old.keyword,
+                tagList : makeListTools.tagIdList(this.old.tagList),
+                searchTarget  : this.old.searchTarget,
+                searchQuantity: this.old.searchQuantity,
+                sortType : this.old.sortType,
+                isSearchUntagged : this.isSearchUntaggedCheckBox,
                 onError:(errors) => {
                     console.log(errors)
                     this.$store.commit('switchGlobalLoading')
@@ -241,16 +251,9 @@ export default{
                 this.$store.state.someDialogOpening === false
             ){
                 if (event.ctrlKey || event.key === "Meta") {
-                    // 送信
+                    // 通常検索送信
                     if(event.code === "Enter"){
-                        this.search({
-                            page:1,
-                            keyword:this.$refs.SearchField.serveKeywordToParent(),
-                            tagList:this.$refs.TagDialog.serveCheckedTagList(),
-                            searchTarget:this.searchTarget,
-                            searchQuantity:this.$refs.SearchOption.serveSearchQuantity(),
-                            sortType:this.$refs.SearchOption.serveSort()
-                        })
+                        this.search()
                         return
                     }
 
@@ -279,19 +282,9 @@ export default{
     },
     watch: {
     // @input="pagination"でできるはずなのにできないのでwatchで対応
-    // ページネーションのボタン類を押した場合の処理
     // 厳密にはページネーションのボタン類を押すとpageの値が変化するのでそれをwatchしてページネーションを起動
-        page:function(newValue,oldValue){
-            console.log(newValue);
-            this.search({
-                page    : newValue,
-                keyword : this.old.keyword,
-                tagList : makeListTools.tagIdList(this.old.tagList),
-                searchTarget  : this.old.searchTarget,
-                searchQuantity: this.old.searchQuantity,
-                sortType:this.old.sortType
-            });
-        }
+    // ページネーションのボタン類を押した場合の処理
+        page:function(newValue,oldValue){this.pagination(newValue)}
     },
     mounted() {
         //キーボード受付
