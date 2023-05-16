@@ -16,10 +16,17 @@
                 >
             </SearchField>
 
+            <div class="untaggedCheckbox">
+                <!-- この部分を既存チェックボックスという -->
+                <input type="checkbox" id="checked" v-model="untagged">
+                <label for="checked">{{ messages.untaggedLabel }}</label>
+            </div>
+
             <TagDialog
                 ref="TagDialog"
                 :text = "messages.TagDialogLabel"
                 :originalCheckedTagList="old.tagList"
+                :disabled="untagged"
                 :searchOnly="true"/>
 
             <div class="searchTarget">
@@ -93,6 +100,7 @@ export default{
             japanese:{
                 title:'記事検索',
                 TagDialogLabel:"検索するタグ",
+                untaggedLabel:"タグがない記事を探す",
                 searchTarget:{
                     label:"検索対象",
                     title:"タイトル",
@@ -140,6 +148,7 @@ export default{
             messages:{
                 title:'Search Article',
                 TagDialogLabel:"Search Tag",
+                untaggedLabel:"Find articles without tags",
                 searchTarget:{
                     label:"Search Target",
                     title:"title",
@@ -186,6 +195,7 @@ export default{
             },
             page: this.result.current_page,
             searchTarget:this.old.searchTarget,
+            untagged:false
         }
     },
     props:{
@@ -310,4 +320,12 @@ export default{
     }
     margin-bottom: 1rem;
 }
+.untaggedCheckbox{
+    margin:0.5rem 0;
+    label{
+        margin-left:1rem;
+        width:100%
+    }
+}
+
 </style>

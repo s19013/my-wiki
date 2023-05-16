@@ -5,6 +5,7 @@
             <v-btn color="submit"
                 size="small"
                 class="global_css_haveIconButton_Margin"
+                :disabled="disabled"
                 @click.stop="openTagDialog()">
                 <v-icon>mdi-tag</v-icon>
                 <p>{{ messages.tag }}</p>
@@ -12,6 +13,7 @@
             <TagList
                 :tagList="checkedTagList"
                 :text="text"
+                :disabled="disabled"
                 @popTag="popTag"
             />
         </div>
@@ -203,6 +205,10 @@ export default{
             type:String,
             default:"つけたタグ"
         },
+        disabled:{
+            type:Boolean,
+            default:false,
+        }
     },
     components:{
         loading,

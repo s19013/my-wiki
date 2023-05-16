@@ -18,7 +18,7 @@
 
                 <DateLabel :createdAt="article.created_at" :updatedAt="article.updated_at"/>
                 <!-- タグ -->
-                <TagList :tagList="articleTagList" :text="messages.tagList" :onlyView="true"/>
+                <TagList :tagList="articleTagList" :text="messages.tagList" :cannotDelete="true"/>
 
                 <h1 class="title">{{article.title}}</h1>
 
