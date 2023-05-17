@@ -20,25 +20,10 @@
                 :originalCheckedTagList="old.tagList"
                 :searchOnly="true"/>
 
-            <div class="searchTarget">
-                <p>{{messages.searchTarget.label}}</p>
-                <div class="options">
-                    <div class="option">
-                        <input type="radio" id="searchTargetTitle"
-                        value="title" v-model="searchTarget"/>
-                        <label for="searchTargetTitle">
-                            {{messages.searchTarget.title}}
-                        </label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="url"
-                        value="url" v-model="searchTarget"/>
-                        <label for="url">
-                            Url
-                        </label>
-                    </div>
-                </div>
-            </div>
+            <SearchTarget
+                ref = "SearchTarget"
+                :radioItems="messages.radioItems" :radioDefault="this.old.searchTarget"
+            />
 
             <SortAndQuantityOption
                 ref="SortAndQuantityOption"
@@ -76,6 +61,7 @@ import BaseLayout from '@/Layouts/BaseLayout.vue'
 import { Link } from '@inertiajs/inertia-vue3';
 import TagDialog from '@/Components/dialog/TagDialog.vue';
 import DetailComponent from '@/Components/atomic/DetailComponent.vue';
+import SearchTarget from '@/Components/SearchTarget.vue';
 import SearchField from '@/Components/SearchField.vue';
 import BookMarkContainer from '@/Components/contents/BookMarkContainer.vue';
 import PageController from '@/Components/PageController.vue';
@@ -93,10 +79,16 @@ export default{
                 title:'ブックマーク検索',
                 TagDialogLabel:"検索するタグ",
                 untaggedLabel:"タグがないブックマークを探す",
-                searchTarget:{
-                    label:"検索対象",
-                    title:"タイトル",
-                },
+                radioItems:[
+                    {
+                        value:"title",
+                        label:"タイトル"
+                    },
+                    {
+                        value:"url",
+                        label:"URL"
+                    },
+                ],
                 sort:[
                     {
                         label:"更新日 新 → 古",
@@ -140,11 +132,16 @@ export default{
                 title:'Search Bookmark',
                 TagDialogLabel:"Search Tag",
                 untaggedLabel:"Search bookmarks without tags",
-                searchTarget:{
-                    label:"Search Target",
-                    title:"title",
-                },
-
+                radioItems:[
+                    {
+                        value:"title",
+                        label:"Title"
+                    },
+                    {
+                        value:"url",
+                        label:"URL"
+                    },
+                ],
                 sort:[
                     {
                         label:"Updated Date new → old",
@@ -185,7 +182,6 @@ export default{
                 ]
             },
             page: this.result.current_page,
-            searchTarget:this.old.searchTarget,
             isSearchUntaggedCheckBox:(this.old.isSearchUntagged == 1) ? true : false
         }
     },
@@ -206,7 +202,8 @@ export default{
         BookMarkContainer,
         DetailComponent,
         PageController,
-        SortAndQuantityOption
+        SortAndQuantityOption,
+        SearchTarget
     },
     methods: {
         // 検索用
@@ -216,7 +213,7 @@ export default{
                 page:1,
                 keyword:this.$refs.SearchField.serveKeywordToParent(),
                 tagList:this.$refs.TagDialog.serveCheckedTagList(),
-                searchTarget:this.searchTarget,
+                searchTarget:this.$refs.SearchTarget.serveTarget(),
                 searchQuantity:this.$refs.SortAndQuantityOption.serveSearchQuantity(),
                 sortType:this.$refs.SortAndQuantityOption.serveSort(),
                 isSearchUntagged :(this.isSearchUntaggedCheckBox == true) ? 1 : 0,
@@ -310,14 +307,6 @@ export default{
 .content{margin-bottom: 1.2rem;}
 .TagDialog{margin:1rem 0;}
 .DetailComponent{margin:1rem 0 ;}
-.searchTarget{
-    margin-bottom: 1rem;
-    .options{
-        display: flex;
-        gap:1rem;
-        .option{width:fit-content}
-    }
-}
 .untaggedCheckbox{
     margin:0.5rem 0;
     label{
@@ -325,5 +314,6 @@ export default{
         width:100%
     }
 }
+.SearchTarget{margin-bottom: 1rem;}
 
 </style>
