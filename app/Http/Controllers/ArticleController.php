@@ -134,7 +134,8 @@ class ArticleController extends Controller
             tagList:$request->tagList,
             searchTarget:\NullAvoidance::ifnull($request->searchTarget,"title"),
             searchQuantity:\NullAvoidance::ifnull($request->searchQuantity,10),
-            sortType:\NullAvoidance::ifnull($request->sortType,"updated_at_desc")
+            sortType:\NullAvoidance::ifnull($request->sortType,"updated_at_desc"),
+            isSearchUntagged:\NullAvoidance::ifnull($request->isSearchUntagged,false)
         );
 
         $tagList = [];
@@ -157,6 +158,7 @@ class ArticleController extends Controller
             "searchTarget"   => \NullAvoidance::ifnull($request->searchTarget,"title"),
             "searchQuantity" => \NullAvoidance::ifnull($request->searchQuantity,10),
             "sortType" => \NullAvoidance::ifnull($request->sortType,"updated_at_desc"),
+            "isSearchUntagged" => \NullAvoidance::ifnull($request->isSearchUntagged,false)
         ];
 
         return Inertia::render('Article/SearchArticle',[

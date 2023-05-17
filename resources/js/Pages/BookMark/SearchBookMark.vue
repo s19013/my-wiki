@@ -5,18 +5,17 @@
                 ref        = "SearchField"
                 :searchLabel="messages.title"
                 :orignalKeyWord="old.keyword"
-                @triggerSearch="search({
-                    page:1,
-                    keyword:this.$refs.SearchField.serveKeywordToParent(),
-                    tagList:this.$refs.tagDialog.serveCheckedTagList(),
-                    searchTarget:this.searchTarget,
-                    searchQuantity:this.$refs.SearchOption.serveSearchQuantity(),
-                    sortType:this.$refs.SearchOption.serveSort()
-                })"
+                @triggerSearch="search()"
             />
 
+            <div class="untaggedCheckbox">
+                <!-- この部分を既存チェックボックスという -->
+                <input type="checkbox" id="checked" v-model="isSearchUntaggedCheckBox">
+                <label for="checked">{{ messages.untaggedLabel }}</label>
+            </div>
+
             <TagDialog
-                ref="tagDialog"
+                ref="TagDialog"
                 :text = "messages.TagDialogLabel"
                 :originalCheckedTagList="old.tagList"
                 :searchOnly="true"/>
@@ -92,11 +91,12 @@ export default{
         return {
             japanese:{
                 title:'ブックマーク検索',
+                TagDialogLabel:"検索するタグ",
+                untaggedLabel:"タグがないブックマークを探す",
                 searchTarget:{
                     label:"検索対象",
                     title:"タイトル",
                 },
-                TagDialogLabel:"検索するタグ",
                 sort:[
                     {
                         label:"更新日 新 → 古",
@@ -138,11 +138,13 @@ export default{
             },
             messages:{
                 title:'Search Bookmark',
+                TagDialogLabel:"Search Tag",
+                untaggedLabel:"Search bookmarks without tags",
                 searchTarget:{
                     label:"Search Target",
                     title:"title",
                 },
-                TagDialogLabel:"Search Tag",
+
                 sort:[
                     {
                         label:"Updated Date new → old",
@@ -184,6 +186,7 @@ export default{
             },
             page: this.result.current_page,
             searchTarget:this.old.searchTarget,
+            isSearchUntaggedCheckBox:(this.old.isSearchUntagged == 1) ? true : false
         }
     },
     props:{
@@ -207,15 +210,32 @@ export default{
     },
     methods: {
         // 検索用
-        search({page,keyword,tagList,searchTarget,searchQuantity,sortType}){
+        search(){
+            this.$store.commit('switchGlobalLoading')
+            this.$inertia.get('/BookMark/Search' ,{
+                page:1,
+                keyword:this.$refs.SearchField.serveKeywordToParent(),
+                tagList:this.$refs.TagDialog.serveCheckedTagList(),
+                searchTarget:this.searchTarget,
+                searchQuantity:this.$refs.SearchOption.serveSearchQuantity(),
+                sortType:this.$refs.SearchOption.serveSort(),
+                isSearchUntagged :(this.isSearchUntaggedCheckBox == true) ? 1 : 0,
+                onError:(errors) => {
+                    console.log(errors)
+                    this.$store.commit('switchGlobalLoading')
+                }
+            })
+        },
+        pagination(page){
             this.$store.commit('switchGlobalLoading')
             this.$inertia.get('/BookMark/Search' ,{
                 page    : page,
-                keyword : keyword,
-                tagList : tagList,
-                searchTarget:searchTarget,
-                searchQuantity:searchQuantity,
-                sortType:sortType,
+                keyword : this.old.keyword,
+                tagList : makeListTools.tagIdList(this.old.tagList),
+                searchTarget  : this.old.searchTarget,
+                searchQuantity: this.old.searchQuantity,
+                sortType : this.old.sortType,
+                isSearchUntagged :(this.old.isSearchUntagged == true) ? 1 : 0,
                 onError:(errors) => {
                     console.log(errors)
                     this.$store.commit('switchGlobalLoading')
@@ -231,14 +251,7 @@ export default{
                 if (event.ctrlKey || event.key === "Meta") {
                     // 送信
                     if(event.code === "Enter"){
-                        this.search({
-                            page:1,
-                            keyword:this.$refs.SearchField.serveKeywordToParent(),
-                            tagList:this.$refs.tagDialog.serveCheckedTagList(),
-                            searchTarget:this.searchTarget,
-                            searchQuantity:this.$refs.SearchOption.serveSearchQuantity(),
-                            sortType:this.$refs.SearchOption.serveSort()
-                        })
+                        this.search()
                         return
                     }
 
@@ -246,7 +259,7 @@ export default{
                     if ((event.ctrlKey || event.key === "Meta")
                     && event.altKey && event.code === "KeyT" ) {
                         event.preventDefault();
-                        this.$refs.tagDialog.openTagDialog()
+                        this.$refs.TagDialog.openTagDialog()
                     }
 
                     // ページめくり
@@ -273,19 +286,9 @@ export default{
     },
     watch: {
     // @input="pagination"でできるはずなのにできないのでwatchで対応
-    // ページネーションのボタン類を押した場合の処理
     // 厳密にはページネーションのボタン類を押すとpageの値が変化するのでそれをwatchしてページネーションを起動
-        page:function(newValue,oldValue){
-            console.log(newValue);
-            this.search({
-                page    : newValue,
-                keyword : this.old.keyword,
-                tagList : makeListTools.tagIdList(this.old.tagList),
-                searchTarget : this.old.searchTarget,
-                searchQuantity: this.old.searchQuantity,
-                sortType:this.old.sortType
-            });
-        }
+    // ページネーションのボタン類を押した場合の処理
+        page:function(newValue,oldValue){this.pagination(newValue)}
     },
     mounted() {
         this.$store.commit('setGlobalLoading',false)
@@ -315,4 +318,12 @@ export default{
         .option{width:fit-content}
     }
 }
+.untaggedCheckbox{
+    margin:0.5rem 0;
+    label{
+        margin-left:1rem;
+        width:100%
+    }
+}
+
 </style>

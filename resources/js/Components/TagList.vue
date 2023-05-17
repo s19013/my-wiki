@@ -1,12 +1,12 @@
 <template>
     <div class="tagList">
         <p><v-icon>mdi-tag</v-icon>{{text}}</p>
-        <ul >
+        <ul v-if="!disabled">
             <li v-for="(tag, i) in tagList"
                 :key="tag.name"
             >
                 <v-chip
-                    v-if="!onlyView"
+                    v-if="!cannotDelete"
                     closable
                     @click:close="popTag(i)"
                 >
@@ -37,7 +37,11 @@ export default{
             type:String,
             default:"つけたタグ"
         },
-        onlyView:{
+        cannotDelete:{
+            type:Boolean,
+            default:false
+        },
+        disabled:{
             type:Boolean,
             default:false
         }

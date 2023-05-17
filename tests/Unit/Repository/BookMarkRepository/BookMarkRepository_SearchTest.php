@@ -882,4 +882,43 @@ class BookMarkRepository_SearchTest extends TestCase
         $this->assertSame("B",$bookMarkList[1]->title);
         $this->assertSame("A",$bookMarkList[2]->title);
     }
+
+    public function test_search_untagged()
+    {
+        $bookMarkList = BookMark::factory()->count(5)->create(['user_id' => $this->userId]);
+
+        foreach ($bookMarkList as $bookMark){
+            BookMarkTag::create([
+                'book_mark_id' => $bookMark->id,
+                'tag_id'     => null,
+            ]);
+        }
+
+        // ダミー
+        $dammyBookMarkList = BookMark::factory()->count(5)->create(['user_id' => $this->userId]);
+        $tag = Tag::factory()->create(['user_id' => $this->userId]);
+
+        foreach ($dammyBookMarkList as $bookMark){
+            BookMarkTag::create([
+                'book_mark_id' => $bookMark->id,
+                'tag_id'     => $tag->id,
+            ]);
+        }
+
+        $response = $this->bookMarkRepository->search(
+            userId:$this->userId,
+            keyword:'',
+            page:1,
+            tagList:null,
+            searchTarget:'title',
+            searchQuantity:10,
+            sortType:"title_desc",
+            isSearchUntagged:true,
+        );
+
+        // 帰ってきたかず
+        $bookMarkList = $response['data'];
+        $this->assertCount(5,$response['data']);
+
+    }
 }

@@ -62,7 +62,8 @@ class ArticleRepository
     //検索する数
     public function search(
         $userId,$keyword,$page,$tagList,$searchTarget,
-        $searchQuantity=10,$sortType="updated_at_desc"
+        $searchQuantity=10,$sortType="updated_at_desc",
+        $isSearchUntagged=false
         )
     {
         // ツールを実体化
@@ -75,12 +76,15 @@ class ArticleRepository
         $wordListToSearch = $searchToolKit->preparationToAndSearch($escaped);
 
 
-        // このwhere句をわける部分別の関数にしようかな?
+        # HACK:このwhere句をわける部分別の関数にしようかな?
 
         //タグも検索する場合
         if (!empty($tagList)) {
             //副問合せのテーブルから選択
-            $query = $this->createSubTableForSearch($userId,$tagList);
+            $query = $this->searchByTag($userId,$tagList);
+        } else if ($isSearchUntagged == true) {
+            // タグがついてないのだけ検索
+            $query = $this->searchUntagged($userId);
         } else {
             //タグ検索が不要な場合
             $query = DB::table("articles")
@@ -123,14 +127,12 @@ class ArticleRepository
         ];
     }
 
-    //検索時のサブテーブル作成
-    public function createSubTableForSearch($userId,$tagList)
+    //タグを使って検索する時に使う関数
+    public function searchByTag($userId,$tagList)
     {
         //tags.idが
         //articleテーブルとarticle_tags,tagsを結合->参照元が論理削除されていないか確認するため
 
-        // なぜarticle_tagsをメインにしているのか
-        // -> article_tagsが2つを外部参照しているから
         $subTable = DB::table('articles')
         ->select('articles.id','articles.title','articles.user_id','articles.count','articles.created_at','articles.updated_at')
         ->leftJoin('article_tags','articles.id','=','article_tags.article_id')
@@ -154,6 +156,28 @@ class ArticleRepository
         //ここの説明は別のドキュメントで
         $subTable->groupBy('articles.id')
         ->having(DB::raw('count(*)'), '=', count($tagList));
+
+        return $subTable;
+    }
+
+    //タグを使って検索する時に使う関数
+    public function searchUntagged($userId)
+    {
+        //tags.idが
+        //articleテーブルとarticle_tags,tagsを結合->参照元が論理削除されていないか確認するため
+
+        $subTable = DB::table('articles')
+        ->select('articles.id','articles.title','articles.user_id','articles.count','articles.created_at','articles.updated_at')
+        ->leftJoin('article_tags','articles.id','=','article_tags.article_id')
+        ->leftJoin('tags','article_tags.tag_id','=','tags.id')
+        ->where('articles.user_id','=',$userId)
+        // (a or b) and (c or d)みたいなsqlを書くには{}で囲む必要がある
+        ->where(function($subTable) {
+            //削除されてないものたちだけを取り出す
+            $subTable->WhereNull('articles.deleted_at')
+                     ->WhereNull('tags.deleted_at');
+        })
+        ->whereNull('article_tags.tag_id');
 
         return $subTable;
     }
