@@ -18,19 +18,22 @@
                 ref="TagDialog"
                 :text = "messages.TagDialogLabel"
                 :originalCheckedTagList="old.tagList"
+                :disabled="isSearchUntaggedCheckBox"
                 :searchOnly="true"/>
 
-            <SearchTarget
-                ref = "SearchTarget"
-                :radioItems="messages.radioItems" :radioDefault="this.old.searchTarget"
-            />
+            <div class="searchOption">
+                <SearchTarget
+                    ref = "SearchTarget"
+                    :radioItems="messages.radioItems" :radioDefault="this.old.searchTarget"
+                />
 
-            <SortAndQuantityOption
-                ref="SortAndQuantityOption"
-                :oldSearchQuantity="Number(this.old.searchQuantity)"
-                :oldSortType="this.old.sortType"
-                :sortLabelList="this.messages.sort"
-            />
+                <SortAndQuantityOption
+                    ref="SortAndQuantityOption"
+                    :oldSearchQuantity="Number(this.old.searchQuantity)"
+                    :oldSortType="this.old.sortType"
+                    :sortLabelList="this.messages.sort"
+                />
+            </div>
 
             <template v-for="bookMark of result.data" :key="bookMark.id">
                 <BookMarkContainer
@@ -305,15 +308,14 @@ export default{
 
 <style lang="scss" scoped>
 .content{margin-bottom: 1.2rem;}
-.TagDialog{margin:1rem 0;}
-.DetailComponent{margin:1rem 0 ;}
+.TagDialog{margin:0.5rem 0;}
 .untaggedCheckbox{
-    margin:0.5rem 0;
+    margin-top:0.5rem;
     label{
-        margin-left:1rem;
+        margin-left:0.5rem;
         width:100%
     }
 }
-.SearchTarget{margin-bottom: 1rem;}
-
+.SearchTarget{margin-bottom: 0.8rem;}
+.searchOption{margin-top: 1rem;}
 </style>
