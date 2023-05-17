@@ -42,8 +42,8 @@
                 </div>
             </div>
 
-            <SearchOption
-                ref="SearchOption"
+            <SortAndQuantityOption
+                ref="SortAndQuantityOption"
                 :oldSearchQuantity="Number(this.old.searchQuantity)"
                 :oldSortType="this.old.sortType"
                 :sortLabelList="this.messages.sort"
@@ -81,7 +81,7 @@ import DetailComponent from '@/Components/atomic/DetailComponent.vue';
 import SearchField from '@/Components/SearchField.vue';
 import ArticleContainer from '@/Components/contents/ArticleContainer.vue';
 import PageController from '@/Components/PageController.vue';
-import SearchOption from '@/Components/SearchOption.vue';
+import SortAndQuantityOption from '@/Components/SortAndQuantity.vue';
 
 import MakeListTools from '@/tools/MakeListTools.js';
 
@@ -207,7 +207,7 @@ export default{
         ArticleContainer,
         DetailComponent,
         PageController,
-        SearchOption
+        SortAndQuantityOption
     },
     methods: {
         // 検索用
@@ -220,8 +220,8 @@ export default{
                 keyword:this.$refs.SearchField.serveKeywordToParent(),
                 tagList:this.$refs.TagDialog.serveCheckedTagList(),
                 searchTarget:this.searchTarget,
-                searchQuantity:this.$refs.SearchOption.serveSearchQuantity(),
-                sortType:this.$refs.SearchOption.serveSort(),
+                searchQuantity:this.$refs.SortAndQuantityOption.serveSearchQuantity(),
+                sortType:this.$refs.SortAndQuantityOption.serveSort(),
                 isSearchUntagged :(this.isSearchUntaggedCheckBox == true) ? 1 : 0,
                 onError:(errors) => {
                     console.log(errors)

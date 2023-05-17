@@ -13,14 +13,14 @@
                 @triggerSearch="search({
                     page:1,
                     keyword:this.$refs.SearchField.serveKeywordToParent(),
-                    searchQuantity:this.$refs.SearchOption.serveSearchQuantity(),
-                    sortType:this.$refs.SearchOption.serveSort()
+                    searchQuantity:this.$refs.SortAndQuantityOption.serveSearchQuantity(),
+                    sortType:this.$refs.SortAndQuantityOption.serveSort()
                 })"
                 >
             </SearchField>
 
-            <SearchOption
-                ref="SearchOption"
+            <SortAndQuantityOption
+                ref="SortAndQuantityOption"
                 :oldSearchQuantity="Number(this.old.searchQuantity)"
                 :oldSortType="this.old.sortType"
                 :sortLabelList="this.messages.sort"
@@ -77,7 +77,7 @@ import tagDeleteDialog from '@/Components/useOnlyOnce/tagDeleteDialog.vue'
 import tagFormDialog from '@/Components/useOnlyOnce/tagFormDialog.vue'
 import loadingDialog from '@/Components/dialog/loadingDialog.vue';
 import PageController from '@/Components/PageController.vue';
-import SearchOption from '@/Components/SearchOption.vue';
+import SortAndQuantityOption from '@/Components/SortAndQuantity.vue';
 
 export default{
     data() {
@@ -185,7 +185,7 @@ export default{
         tagFormDialog,
         loadingDialog,
         PageController,
-        SearchOption
+        SortAndQuantityOption
     },
     methods: {
         // 検索用
@@ -228,8 +228,8 @@ export default{
                             page:1,
                             keyword:this.$refs.SearchField.serveKeywordToParent(),
                             searchTarget:this.searchTarget,
-                            searchQuantity:this.$refs.SearchOption.serveSearchQuantity(),
-                            sortType:this.$refs.SearchOption.serveSort()
+                            searchQuantity:this.$refs.SortAndQuantityOption.serveSearchQuantity(),
+                            sortType:this.$refs.SortAndQuantityOption.serveSort()
                         })
                         return
                     }
