@@ -4,7 +4,7 @@
             <SearchField
                 ref        = "SearchField"
                 :searchLabel="messages.title"
-                :orignalKeyWord="old.keyword"
+                :originalKeyWord="old.keyword"
                 @triggerSearch="search()"
             />
 

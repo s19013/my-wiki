@@ -28,11 +28,11 @@ export default{
     data() {
         return {
             // propsのoriginalKeyWordがnullの時は ""
-            keyword:this.orignalKeyWord ? this.orignalKeyWord :""
+            keyword:this.originalKeyWord ? this.originalKeyWord :""
         }
     },
     props:{
-        orignalKeyWord:{
+        originalKeyWord:{
             type:String,
             default:""
         },

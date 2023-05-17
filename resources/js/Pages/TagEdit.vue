@@ -9,7 +9,7 @@
             <SearchField
                 ref = "SearchField"
                 :searchLabel   ="messages.search"
-                :orignalKeyWord="old.keyword"
+                :originalKeyWord="old.keyword"
                 @triggerSearch="search({
                     page:1,
                     keyword:this.$refs.SearchField.serveKeywordToParent(),
