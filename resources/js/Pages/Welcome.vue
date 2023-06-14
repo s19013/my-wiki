@@ -18,8 +18,7 @@ const props = defineProps({
 const japanese = reactive({
     title:"sundlf  -- タグを使ってメモ､ブックマークを整理",
     login:"ログイン",
-    Register:"新規登録",
-    firstHere:"初めての方はこちら",
+    Register:"初めての方はこちら",
     message:"メモ､ブックマークにタグを付けて保存して整理､検索などで探しやすくするツールアプリです",
     article:"メモ",
     articleMessage:"メモをmd形式でかいて保存できます",
@@ -29,6 +28,9 @@ const japanese = reactive({
     tagMessage:"タグをつけて整理したり検索などで探すことができます",
     free:"無料で使える",
     freeMessage:"",
+    addon:"アドオン",
+    addonMessage:"chromeアドオンを使えばブックマーク保存がもっと楽に!",
+    downloadMessage:"ダウンロードはこちらから",
     search:"",
     searchMessage:"",
     returnHome:"ホーム画面に戻る"
@@ -38,16 +40,19 @@ const messages = reactive({
     title:"sundlf  -- Organize article and bookmarks using tags",
     login:"Log in",
     Register:"Register",
-    firstHere:"Click here for the first time",
+    Register:"Click here for the first time",
     message:"this application is makes it easier to find by adding tags to memos and bookmarks, saving them, organizing them, and searching them.",
-    article:"article",
+    article:"Article",
     articleMessage:"You can write and save articles in markdown format",
-    bookmark:"bookmark",
+    bookmark:"Bookmark",
     bookmarkMessage:"You can save bookmarks",
     tag:"Tags",
     tagMessage:"You can add tags to organize and search.",
     free:"Free to use",
     freeMessage:"",
+    addon:"Addon",
+    addonMessage:"use chrome add-on, bookmark saving is easier!",
+    downloadMessage:"Download it here",
     search:"",
     searchMessage:"",
     returnHome:"Return Home"
@@ -100,7 +105,7 @@ onMounted(() => {
             </div>
 
             <div class="mt-8 bg-white overflow-hidden shadow sm:rounded-lg">
-                <p class="p-3">{{ messages.message }}</p>
+                <h3 class="p-3">{{ messages.message }}</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2">
                     <WelcomMessageContainer
                         icon="mdi-note"
@@ -126,17 +131,27 @@ onMounted(() => {
                         :message="messages.freeMessage"
                     />
 
-                    <!-- <WelcomMessageContainer
-                        icon="mdi-currency-usd-off"
-                        :title="messages.free"
-                        :message="messages.freeMessage"
-                    />
+                    <!-- これだけ途中でurlを入れないと行けないのでコンポーネントが使えない -->
+                    <div class="MessageContainer p-6 border-t border-gray-200 md:border-t-0 md:border-l">
+                        <div class="flex items-center">
+                            <v-icon icon="mdi-google-chrome"/>
+                            <div class="ml-4 text-lg leading-7 font-semibold">
+                                <h2>
+                                    {{ messages.addon }}
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="ml-12">
+                            <div class="mt-2 text-gray-600 text-s">
+                                <p>{{ messages.addonMessage }}</p>
+                                <a href="https://chrome.google.com/webstore/detail/sundlf-bookmark-addon/mfcobcdpjbgnpbkhbbfaabkkphpceoka">{{ messages.downloadMessage }}</a>
+                            </div>
+                        </div>
+                    </div>
 
                     <WelcomMessageContainer
-                        icon="mdi-currency-usd-off"
-                        :title="messages.free"
-                        :message="messages.freeMessage"
-                    /> -->
+
+                    />
                 </div>
             </div>
 
@@ -160,12 +175,20 @@ onMounted(() => {
                 </v-btn>
             </Link>
             <template v-else>
-                <Link v-if="canRegister" :href="route('register')" class="flex justify-center">
-                    <v-btn class="fw-bolder" color="#BBDEFB">
-                        <v-icon class="mr-2">mdi-account-plus</v-icon>
-                        {{messages.firstHere}}
-                    </v-btn>
-                </Link>
+                <div class="RegistertAndlogin">
+                    <Link v-if="canRegister" :href="route('register')" class="register">
+                        <v-btn class="fw-bolder" color="#BBDEFB" style="text-transform: none">
+                            <v-icon class="mr-2">mdi-account-plus</v-icon>
+                            {{messages.Register}}
+                        </v-btn>
+                    </Link>
+                    <Link :href="route('login')" class="login">
+                        <v-btn class="fw-bolder" >
+                            <v-icon class="mr-2">mdi-login</v-icon>
+                            {{messages.login}}
+                        </v-btn>
+                    </Link>
+                </div>
             </template>
         </div>
     </v-container>
@@ -173,7 +196,7 @@ onMounted(() => {
     <originalFooter/>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
     #ad{
         margin: 1rem 0;
     }
@@ -187,6 +210,16 @@ onMounted(() => {
         gap:1rem;
     }
     .v-btn{margin: 1rem auto;}
+    .RegistertAndlogin{
+        display: grid;
+        @media (min-width: 700px){
+            grid-template-columns:1fr 1fr;
+            gap:3rem;
+            .register{margin-left:auto}
+            .login   {margin-right:auto}
+        }
+
+    }
     .bg-gray-100 {
         background-color: #f7fafc;
         background-color: rgba(247, 250, 252, var(--tw-bg-opacity));
