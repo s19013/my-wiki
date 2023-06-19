@@ -28,7 +28,7 @@ const props = defineProps({
             </div>
         </div>
         <div class="ml-12">
-            <div class="mt-2 text-gray-600 text-sm">
+            <div class="mt-2 text-gray-600 text-s">
                 <p>{{ message }}</p>
             </div>
         </div>

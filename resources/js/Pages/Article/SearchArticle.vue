@@ -4,7 +4,7 @@
             <SearchField
                 ref = "SearchField"
                 :searchLabel   ="messages.title"
-                :orignalKeyWord="old.keyword"
+                :originalKeyWord="old.keyword"
                 @triggerSearch="search()"
                 >
             </SearchField>
@@ -22,32 +22,19 @@
                 :disabled="isSearchUntaggedCheckBox"
                 :searchOnly="true"/>
 
-            <div class="searchTarget">
-                <p>{{messages.searchTarget.label}}</p>
-                <div class="options">
-                    <div class="option">
-                        <input type="radio" id="searchTargetTitle"
-                        value="title" v-model="searchTarget"/>
-                        <label for="searchTargetTitle">
-                            {{messages.searchTarget.title}}
-                        </label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="searchTargetBody"
-                        value="body" v-model="searchTarget"/>
-                        <label for="searchTargetBody">
-                            {{messages.searchTarget.body}}
-                        </label>
-                    </div>
-                </div>
-            </div>
+            <div class="searchOption">
+                <SearchTarget
+                    ref = "SearchTarget"
+                    :radioItems="messages.radioItems" :radioDefault="this.old.searchTarget"
+                />
 
-            <SearchOption
-                ref="SearchOption"
-                :oldSearchQuantity="Number(this.old.searchQuantity)"
-                :oldSortType="this.old.sortType"
-                :sortLabelList="this.messages.sort"
-            />
+                <SortAndQuantityOption
+                    ref="SortAndQuantityOption"
+                    :oldSearchQuantity="Number(this.old.searchQuantity)"
+                    :oldSortType="this.old.sortType"
+                    :sortLabelList="this.messages.sort"
+                />
+            </div>
 
             <template v-for="article of result.data" :key="article.id">
                 <ArticleContainer
@@ -78,10 +65,11 @@ import BaseLayout from '@/Layouts/BaseLayout.vue'
 import TagDialog from '@/Components/dialog/TagDialog.vue';
 import loadingDialog from '@/Components/dialog/loadingDialog.vue';
 import DetailComponent from '@/Components/atomic/DetailComponent.vue';
+import SearchTarget from '@/Components/SearchTarget.vue';
 import SearchField from '@/Components/SearchField.vue';
 import ArticleContainer from '@/Components/contents/ArticleContainer.vue';
 import PageController from '@/Components/PageController.vue';
-import SearchOption from '@/Components/SearchOption.vue';
+import SortAndQuantityOption from '@/Components/SortAndQuantity.vue';
 
 import MakeListTools from '@/tools/MakeListTools.js';
 
@@ -94,11 +82,16 @@ export default{
                 title:'記事検索',
                 TagDialogLabel:"検索するタグ",
                 untaggedLabel:"タグがない記事を探す",
-                searchTarget:{
-                    label:"検索対象",
-                    title:"タイトル",
-                    body :"本文"
-                },
+                radioItems:[
+                    {
+                        value:"title",
+                        label:"タイトル"
+                    },
+                    {
+                        value:"body",
+                        label:"本文"
+                    },
+                ],
                 sort:[
                     {
                         label:"更新日 新 → 古",
@@ -142,11 +135,16 @@ export default{
                 title:'Search Article',
                 TagDialogLabel:"Search Tag",
                 untaggedLabel:"Search articles without tags",
-                searchTarget:{
-                    label:"Search Target",
-                    title:"title",
-                    body :"body"
-                },
+                radioItems:[
+                    {
+                        value:"title",
+                        label:"Title"
+                    },
+                    {
+                        value:"body",
+                        label:"Body"
+                    },
+                ],
                 sort:[
                     {
                         label:"Updated Date new → old",
@@ -187,7 +185,6 @@ export default{
                 ]
             },
             page: this.result.current_page,
-            searchTarget:this.old.searchTarget,
             isSearchUntaggedCheckBox:(this.old.isSearchUntagged == 1) ? true : false
         }
     },
@@ -207,7 +204,8 @@ export default{
         ArticleContainer,
         DetailComponent,
         PageController,
-        SearchOption
+        SortAndQuantityOption,
+        SearchTarget
     },
     methods: {
         // 検索用
@@ -219,9 +217,9 @@ export default{
                 page:1,
                 keyword:this.$refs.SearchField.serveKeywordToParent(),
                 tagList:this.$refs.TagDialog.serveCheckedTagList(),
-                searchTarget:this.searchTarget,
-                searchQuantity:this.$refs.SearchOption.serveSearchQuantity(),
-                sortType:this.$refs.SearchOption.serveSort(),
+                searchTarget:this.$refs.SearchTarget.serveTarget(),
+                searchQuantity:this.$refs.SortAndQuantityOption.serveSearchQuantity(),
+                sortType:this.$refs.SortAndQuantityOption.serveSort(),
                 isSearchUntagged :(this.isSearchUntaggedCheckBox == true) ? 1 : 0,
                 onError:(errors) => {
                     console.log(errors)
@@ -304,21 +302,14 @@ export default{
 
 <style lang="scss" scoped>
 .content{margin-bottom: 1.2rem;}
-.TagDialog{margin:1rem 0;}
-.searchTarget{
-    .options{
-        display: flex;
-        gap:1rem;
-        .option{width:fit-content}
-    }
-    margin-bottom: 1rem;
-}
+.TagDialog{margin:0.5rem 0;}
 .untaggedCheckbox{
-    margin:0.5rem 0;
+    margin-top:0.5rem;
     label{
-        margin-left:1rem;
+        margin-left:0.5rem;
         width:100%
     }
 }
-
+.SearchTarget{margin-bottom: 0.8rem;}
+.searchOption{margin-top: 1rem;}
 </style>
