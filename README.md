@@ -25,6 +25,7 @@ https://github.com/s19013/my-wiki/tree/main/dev_memo
 * laravel breeze
 * laravel sanctum
 * vue.js
+* vuex
 * vuetify
 * inertia
 * javascript
