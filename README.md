@@ -37,7 +37,7 @@ https://github.com/s19013/my-wiki/tree/main/dev_memo
 * mariaDB
 
 ## この作品をもとに書いた記事
-[エンジニアになれないへっぽこな私が実装したタグをつける機能とタグの検索機能(n番煎じ)](https://qiita.com/hideya670/items/268a9643488e4036706a)
+[エンジニアになれないへっぽこな私が実装したタグをつける機能とタグの検索機能(n番煎じ)](https://qiita.com/hideya670/items/268a9643488e4036706a)  
 [個人開発物のデータベース構造の変化とそうした理由](https://qiita.com/hideya670/items/8a1e3fc31bf4611550a8)
 
 ## 使っていたがやめた技術
