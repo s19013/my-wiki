@@ -11,7 +11,7 @@ readmeの更新日 2023/03/12
 
 # my-wiki
 ## リンク
-https://sundlf.com
+[sundlf.com](https://sundlf.com?utm_source=github)
 
 ## 概要
 ブックマークやメモをタグをつけて保存する｡
