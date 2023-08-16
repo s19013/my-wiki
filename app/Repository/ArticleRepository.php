@@ -16,12 +16,8 @@ class ArticleRepository
         $article = Article::create([
             // タイトルが産められてなかったら日時で埋める
             'user_id'  => $userId,
-            'title'    => \NullAvoidance::ifnull(
-                $title,
-                Carbon::now($timezone).
-                "(".\NullAvoidance::ifnull($timezone,"UTC").")"
-            ),
-            'body'     => \NullAvoidance::ifnull($body,''),
+            'title'    => $title ?? Carbon::now($timezone)."(". ($timezone ?? "UTC").")",
+            'body'     => $body ?? '',
         ]);
 
         //紐付けられたタグをデータベースに登録するのに記事のidが必要なのでidだけを返す
@@ -34,12 +30,8 @@ class ArticleRepository
         Article::where('id','=',$articleId)
             ->update([
                 // タイトルが産められてなかったら日時で埋める
-                'title'    => \NullAvoidance::ifnull(
-                    $title,
-                    Carbon::now($timezone).
-                    "(".\NullAvoidance::ifnull($timezone,"UTC").")"
-                ),
-                'body'     => \NullAvoidance::ifnull($body,''),
+                'title'    => $title ?? Carbon::now($timezone)."(".($timezone ?? "UTC").")",
+                'body'     => $body ?? '',
             ]);
     }
 
