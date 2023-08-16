@@ -67,6 +67,7 @@ class ArticleController extends Controller
         });
 
 
+        // 次から更新するためにidをわたしとく
         return response()->json([
             'articleId' => $id,
         ]);
