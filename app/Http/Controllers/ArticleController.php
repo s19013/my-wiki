@@ -35,7 +35,7 @@ class ArticleController extends Controller
     {
         // webアプリからの場合,CSRFトークンを再生成して、二重送信対策
         $url = explode('/', $request->path() );
-        if ($url[1] != 'extended') {$request->session()->regenerateToken();}
+        // if ($url[1] != 'extended') {$request->session()->regenerateToken();}
 
         $id = DB::transaction(function () use($request){
             // 記事を保存して記事のidを取得
@@ -67,6 +67,7 @@ class ArticleController extends Controller
         });
 
 
+        // 次から更新するためにidをわたしとく
         return response()->json([
             'articleId' => $id,
         ]);
@@ -77,7 +78,7 @@ class ArticleController extends Controller
     {
         // webアプリからの場合,CSRFトークンを再生成して、二重送信対策
         $url = explode('/', $request->path() );
-        if ($url[1] != 'extended') {$request->session()->regenerateToken();}
+        // if ($url[1] != 'extended') {$request->session()->regenerateToken();}
 
         // 同一人物か確認
         $isSameUser = $this->articleRepository->isSameUser(
@@ -130,12 +131,12 @@ class ArticleController extends Controller
         $result = $this->articleRepository->search(
             userId :Auth::id(),
             keyword:$request->keyword,
-            page   :\NullAvoidance::ifnull($request->page,1),
+            page   :$request->page ?? 1,
             tagList:$request->tagList,
-            searchTarget:\NullAvoidance::ifnull($request->searchTarget,"title"),
-            searchQuantity:\NullAvoidance::ifnull($request->searchQuantity,10),
-            sortType:\NullAvoidance::ifnull($request->sortType,"updated_at_desc"),
-            isSearchUntagged:\NullAvoidance::ifnull($request->isSearchUntagged,false)
+            searchTarget:$request->searchTarget ?? "title",
+            searchQuantity:$request->searchQuantity ?? 10,
+            sortType:$request->sortType ?? "updated_at_desc",
+            isSearchUntagged:$request->isSearchUntagged ?? false
         );
 
         $tagList = [];
@@ -153,12 +154,12 @@ class ArticleController extends Controller
         }
 
         $old = [
-            "keyword" => \NullAvoidance::ifnull($request->keyword,""),
+            "keyword" => $request->keyword ?? "",
             "tagList" => $tagList,
-            "searchTarget"   => \NullAvoidance::ifnull($request->searchTarget,"title"),
-            "searchQuantity" => \NullAvoidance::ifnull($request->searchQuantity,10),
-            "sortType" => \NullAvoidance::ifnull($request->sortType,"updated_at_desc"),
-            "isSearchUntagged" => \NullAvoidance::ifnull($request->isSearchUntagged,false)
+            "searchTarget"   => $request->searchTarget ?? "title",
+            "searchQuantity" => $request->searchQuantity ?? 10,
+            "sortType" => $request->sortType ?? "updated_at_desc",
+            "isSearchUntagged" => $request->isSearchUntagged ?? false
         ];
 
         return Inertia::render('Article/SearchArticle',[

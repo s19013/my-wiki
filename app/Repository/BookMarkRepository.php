@@ -16,11 +16,7 @@ class BookMarkRepository
         $bookMark = BookMark::create([
             // タイトルが産められてなかったら日時で埋める
             'user_id'  => $userId,
-            'title'    => \NullAvoidance::ifnull(
-                $title,
-                Carbon::now($timezone).
-                "(".\NullAvoidance::ifnull($timezone,"UTC").")"
-            ),
+            'title'    => $title ?? Carbon::now($timezone)."(".($timezone ?? "UTC").")",
             'url'      => $url,
         ]);
         return $bookMark->id;
@@ -31,11 +27,7 @@ class BookMarkRepository
     {
         BookMark::where('id','=',$bookMarkId)
             ->update([
-                'title'    => \NullAvoidance::ifnull(
-                    $title,
-                    Carbon::now($timezone).
-                    "(".\NullAvoidance::ifnull($timezone,"UTC").")"
-                ),
+                'title'    => $title ?? Carbon::now($timezone)."(".($timezone ?? "UTC").")",
                 'url'   => $url,
             ]);
     }

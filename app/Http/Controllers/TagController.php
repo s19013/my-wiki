@@ -30,7 +30,7 @@ class TagController extends Controller
     {
         // webアプリからの場合,CSRFトークンを再生成して、二重送信対策
         $url = explode('/', $request->path() );
-        if ($url[1] != 'extended') {$request->session()->regenerateToken();}
+        // if ($url[1] != 'extended') {$request->session()->regenerateToken();}
 
         // すでに登録してあるった場合は弾く
         if ($this->tagRepository->isAllreadyExists(Auth::id(),$request->name)){
@@ -60,7 +60,7 @@ class TagController extends Controller
     {
         // webアプリからの場合,CSRFトークンを再生成して、二重送信対策
         $url = explode('/', $request->path() );
-        if ($url[1] != 'extended') {$request->session()->regenerateToken();}
+        // if ($url[1] != 'extended') {$request->session()->regenerateToken();}
 
         $isSameUser = $this->tagRepository->isSameUser(
             tagId:$request->id,
@@ -130,15 +130,15 @@ class TagController extends Controller
         $result = $this->tagRepository->searchInEdit(
             userId :Auth::id(),
             keyword:$request->keyword,
-            page   :\NullAvoidance::ifnull($request->page,1),
-            searchQuantity:\NullAvoidance::ifnull($request->searchQuantity,10),
-            sortType:\NullAvoidance::ifnull($request->sortType,"name_asc")
+            page   :$request->page ?? 1,
+            searchQuantity: $request->searchQuantity ?? 10,
+            sortType:$request->sortType ?? "name_asc"
         );
 
         $old = [
-            "keyword" => \NullAvoidance::ifnull($request->keyword,""),
-            "searchQuantity" => \NullAvoidance::ifnull($request->searchQuantity,10),
-            "sortType" => \NullAvoidance::ifnull($request->sortType,"name_asc"),
+            "keyword" => $request->keyword ?? "",
+            "searchQuantity" => $request->searchQuantity ?? 10,
+            "sortType" => $request->sortType ?? "name_asc",
         ];
 
         return Inertia::render('TagEdit',[

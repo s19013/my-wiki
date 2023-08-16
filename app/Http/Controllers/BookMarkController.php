@@ -37,7 +37,7 @@ class BookMarkController extends Controller
     {
         // webアプリからの場合,CSRFトークンを再生成して、二重送信対策
         $url = explode('/', $request->path() );
-        if ($url[1] != 'extended') {$request->session()->regenerateToken();}
+        // if ($url[1] != 'extended') {$request->session()->regenerateToken();}
 
         //urlがすでに登録されているか確かめる
         $isAllreadyExists =$this->bookMarkRepository->isAllreadyExists(Auth::id(),$request->bookMarkUrl);
@@ -89,7 +89,7 @@ class BookMarkController extends Controller
     {
         // webアプリからの場合,CSRFトークンを再生成して、二重送信対策
         $url = explode('/', $request->path() );
-        if ($url[1] != 'extended') {$request->session()->regenerateToken();}
+        // if ($url[1] != 'extended') {$request->session()->regenerateToken();}
 
         $isSameUser = $this->bookMarkRepository->isSameUser(
             bookMarkId:$request->bookMarkId,
@@ -161,12 +161,12 @@ class BookMarkController extends Controller
         $result = $this->bookMarkRepository->search(
             userId:Auth::id(),
             keyword:$request->keyword,
-            page:\NullAvoidance::ifnull($request->page,1),
+            page:$request->page ?? 1,
             tagList    :$request->tagList,
-            searchTarget:\NullAvoidance::ifnull($request->searchTarget,"title"),
-            searchQuantity:\NullAvoidance::ifnull($request->searchQuantity,10),
-            sortType:\NullAvoidance::ifnull($request->sortType,"updated_at_desc"),
-            isSearchUntagged:\NullAvoidance::ifnull($request->isSearchUntagged,false)
+            searchTarget:$request->searchTarget ?? "title",
+            searchQuantity:$request->searchQuantity ?? 10,
+            sortType:$request->sortType ?? "updated_at_desc",
+            isSearchUntagged:$request->isSearchUntagged ?? false
         );
 
         $tagList = [];
@@ -184,12 +184,12 @@ class BookMarkController extends Controller
         }
 
         $old = [
-            "keyword" => \NullAvoidance::ifnull($request->keyword,""),
+            "keyword" => $request->keyword ?? "",
             "tagList" => $tagList,
-            "searchTarget" => \NullAvoidance::ifnull($request->searchTarget,"title"),
-            "searchQuantity" => \NullAvoidance::ifnull($request->searchQuantity,10),
-            "sortType" => \NullAvoidance::ifnull($request->sortType,"updated_at_desc"),
-            "isSearchUntagged" => \NullAvoidance::ifnull($request->isSearchUntagged,false)
+            "searchTarget" => $request->searchTarget ?? "title",
+            "searchQuantity" => $request->searchQuantity ?? 10,
+            "sortType" => $request->sortType ?? "updated_at_desc",
+            "isSearchUntagged" => $request->isSearchUntagged ?? false
         ];
 
         return Inertia::render('BookMark/SearchBookMark',[
@@ -237,7 +237,7 @@ class BookMarkController extends Controller
         return response()->json([
             "result"         => "found",
             "bookmark"       => $bookMark,
-            "checkedTagList" => \NullAvoidance::ifnull($bookMarkTagList,[])
+            "checkedTagList" => $bookMarkTagList ?? []
         ]);
     }
 
