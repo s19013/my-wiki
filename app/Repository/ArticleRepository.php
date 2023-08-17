@@ -61,11 +61,8 @@ class ArticleRepository
         // ツールを実体化
         $searchToolKit = new searchToolKit();
 
-        // %と_をエスケープ
-        $escaped = $searchToolKit->sqlEscape($keyword);
-
-        //and検索のために空白区切りでつくった配列を用意
-        $wordListToSearch = $searchToolKit->preparationToAndSearch($escaped);
+        // 検索につかうようにエスケープしたり､空白区切りで配列化
+        $wordListToSearch = $searchToolKit->preparationToAndSearch($keyword);
 
 
         # HACK:このwhere句をわける部分別の関数にしようかな?
