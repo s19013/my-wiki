@@ -35,7 +35,7 @@ class ArticleController extends Controller
     {
         // webアプリからの場合,CSRFトークンを再生成して、二重送信対策
         $url = explode('/', $request->path() );
-        // if ($url[1] != 'extended') {$request->session()->regenerateToken();}
+        if ($url[1] != 'extended') {$request->session()->regenerateToken();}
 
         $id = DB::transaction(function () use($request){
             // 記事を保存して記事のidを取得
@@ -78,7 +78,7 @@ class ArticleController extends Controller
     {
         // webアプリからの場合,CSRFトークンを再生成して、二重送信対策
         $url = explode('/', $request->path() );
-        // if ($url[1] != 'extended') {$request->session()->regenerateToken();}
+        if ($url[1] != 'extended') {$request->session()->regenerateToken();}
 
         // 同一人物か確認
         $isSameUser = $this->articleRepository->isSameUser(
