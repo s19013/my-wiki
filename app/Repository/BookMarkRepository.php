@@ -65,7 +65,7 @@ class BookMarkRepository
     }
 
     public  function search(
-        $userId,$keyword,$page,$tagList,$searchTarget,
+        $userId,$title = '',$url = '',$page = 1,$tagList = null,
         $searchQuantity=10,$sortType="updated_at_desc",
         $isSearchUntagged=false
         )
@@ -73,10 +73,9 @@ class BookMarkRepository
         // ツールを実体化
         $searchToolKit = new searchToolKit();
 
-        // %と_をエスケープ
-        $escaped = $searchToolKit->sqlEscape($keyword);
-        //and検索のために空白区切りでつくった配列を用意
-        $wordListToSearch = $searchToolKit->preparationToAndSearch($escaped);
+        // 検索につかうようにエスケープしたり､空白区切りで配列化
+        $wordListOftitle  = $searchToolKit->preparationToAndSearch($title);
+        $wordListOfurl = $searchToolKit->preparationToAndSearch($url);
 
         //タグも検索する場合
         if (!empty($tagList)) {
@@ -98,15 +97,10 @@ class BookMarkRepository
             ->whereNull('deleted_at');
         }
 
-        // title名だけでlike検索する場合
-        if ($searchTarget == "title") {
-            foreach($wordListToSearch as $word){ $query->where('title','like',"%$word%"); }
-        }
-
-        // urlだけでlike検索する場合
-        if ($searchTarget == "url") {
-            foreach($wordListToSearch as $word){ $query->where('url','like',"%$word%"); }
-        }
+        // まずはurlで絞って
+        foreach($wordListOfurl as $word){ $query->where('url','like',"%$word%"); }
+        // そこからさらにtitleで絞る
+        foreach($wordListOftitle as $word){ $query->where('title','like',"%$word%"); }
 
         //ヒット件数取得
         $total = (int)$query->count();
