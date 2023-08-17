@@ -50,6 +50,9 @@ class BookMarkTransitionControllerTest extends TestCase
         $this->bookMarkRepository = new BookMarkTagRepository();
 
         $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'ja';
+
+        // carbonの時間固定
+        Carbon::setTestNow(Carbon::now());
     }
 
     public function test_transitionToEditBookMark_自分の記事_タグ登録済み()
@@ -112,8 +115,6 @@ class BookMarkTransitionControllerTest extends TestCase
 
     public function test_transitionToEditBookMark_自分の削除した記事()
     {
-        // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
 
         //ダミーユーザー追加
         $anotherUsers = User::factory()->count(2)->create();

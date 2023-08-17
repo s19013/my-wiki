@@ -44,6 +44,9 @@ class BookMarkController_UpdateTest extends TestCase
         $this->bookMarkRepository = new BookMarkTagRepository();
 
         $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'ja';
+
+        // carbonの時間固定
+        Carbon::setTestNow(Carbon::now());
     }
 
     // 期待
@@ -55,8 +58,6 @@ class BookMarkController_UpdateTest extends TestCase
     // * ブックマークに別のタグを紐づける
     public function test_bookMarkUpdate_タグ総入れ替え()
     {
-        // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
 
         // ブックマークなどを作成
         $bookMark = BookMark::factory()->create(['user_id' => $this->user->id]);
@@ -179,8 +180,6 @@ class BookMarkController_UpdateTest extends TestCase
     // * つけているタグの一部を消す
     public function test_bookMarkUpdate_タグの一部を消す()
     {
-        // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
 
         // ブックマークなどを作成
         $bookMark = BookMark::factory()->create(['user_id' => $this->user->id]);
@@ -247,8 +246,6 @@ class BookMarkController_UpdateTest extends TestCase
     // * タグがついてなかったブックマークにタグを付ける
     public function test_bookMarkUpdate_タグがついてなかったブックマークにタグを付ける()
     {
-        // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
 
         // ブックマークなどを作成
         $bookMark = BookMark::factory()->create(['user_id' => $this->user->id]);
@@ -305,8 +302,6 @@ class BookMarkController_UpdateTest extends TestCase
     // * タグがついていたブックマークのタグをすべて消す
     public function test_bookMarkUpdate_タグがついていたブックマークのタグをすべて消す()
     {
-        // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
 
         // ブックマークなどを作成
         $bookMark = BookMark::factory()->create(['user_id' => $this->user->id]);

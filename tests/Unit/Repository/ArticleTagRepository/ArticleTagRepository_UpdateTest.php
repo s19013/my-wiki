@@ -52,6 +52,9 @@ class ArticleTagRepository_UpdateTest extends TestCase
         ]);
 
         $this->articleId = $article->id;
+
+        // carbonの時間固定
+        Carbon::setTestNow(Carbon::now());
     }
 
     // 期待
@@ -59,8 +62,6 @@ class ArticleTagRepository_UpdateTest extends TestCase
     // 古いタグは論理削除されている
     public function test_update_記事についていたタグと新規のタグを入れ替える()
     {
-        // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
 
         //更新前
         $tags = Tag::factory()->count(2)->create(['user_id' => $this->userId]);
@@ -98,8 +99,6 @@ class ArticleTagRepository_UpdateTest extends TestCase
     // nullは論理削除されている
     public function test_update_タグがついていなかった記事にタグをつける()
     {
-        // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
 
         $this->articleTagRepository->store(null,$this->articleId);
 
@@ -168,8 +167,6 @@ class ArticleTagRepository_UpdateTest extends TestCase
     // 古いタグは論理削除されている
     public function test_update_記事についていたタグの一部を外す()
     {
-        // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
 
         //更新前
         $tags = Tag::factory()->count(2)->create(['user_id' => $this->userId]);

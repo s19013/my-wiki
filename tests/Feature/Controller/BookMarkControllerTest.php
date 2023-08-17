@@ -40,6 +40,9 @@ class BookMarkControllerTest extends TestCase
         $this->user = User::factory()->create();
 
         $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'ja';
+
+        // carbonの時間固定
+        Carbon::setTestNow(Carbon::now());
     }
 
     // 期待
@@ -104,8 +107,6 @@ class BookMarkControllerTest extends TestCase
     // * タイトルなし
     public function test_bookMarkStore_タグあり_タイトルなし()
     {
-        // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
 
         $tags = Tag::factory()->count(2)->create(['user_id' => $this->user->id]);
 
@@ -203,8 +204,6 @@ class BookMarkControllerTest extends TestCase
     // * タイトルなし
     public function test_bookMarkStore_タグなし_タイトルなし()
     {
-        // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
 
         $response = $this
         ->actingAs($this->user)

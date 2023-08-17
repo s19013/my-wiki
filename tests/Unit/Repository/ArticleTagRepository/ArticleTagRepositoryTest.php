@@ -53,6 +53,9 @@ class ArticleTagRepositoryTest extends TestCase
         ]);
 
         $this->articleId = $article->id;
+
+        // carbonの時間固定
+        Carbon::setTestNow(Carbon::now());
     }
 
     // 期待
@@ -92,7 +95,6 @@ class ArticleTagRepositoryTest extends TestCase
     // 引数2に指定した記事から引数1に指定されたタグを物理削除する
     public function test_delete_紐づけたタグを物理削除する()
     {
-        Carbon::setTestNow(Carbon::now());
 
         $tag = Tag::create([
             'user_id' => $this->userId,

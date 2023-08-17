@@ -1,12 +1,32 @@
 <template>
     <BaseLayout :title="messages.title" :pageTitle="messages.title">
         <v-container>
-            <SearchField
-                ref        = "SearchField"
-                :searchLabel="messages.title"
-                :originalKeyWord="old.keyword"
-                @triggerSearch="search()"
-            />
+            <div class="searchField">
+                <v-form v-on:submit.prevent ="search()">
+                    <v-text-field
+                        v-model="title"
+                        :label ="messages.title"
+                        outlined hide-details="false"
+                        clearable
+                    ></v-text-field>
+
+                    <v-text-field
+                        v-model="url"
+                        :label ="messages.url"
+                        outlined hide-details="false"
+                        clearable
+                    ></v-text-field>
+
+                    <v-btn color="submit"
+                        class="global_css_haveIconButton_Margin"
+                        elevation="2"
+                        @click.stop="search()">
+                        <v-icon>mdi-magnify</v-icon>
+                        <p v-if="$store.state.lang == 'ja'">検索</p>
+                        <p v-else>search</p>
+                    </v-btn>
+                </v-form>
+            </div>
 
             <div class="untaggedCheckbox">
                 <!-- この部分を既存チェックボックスという -->
@@ -22,10 +42,6 @@
                 :searchOnly="true"/>
 
             <div class="searchOption">
-                <SearchTarget
-                    ref = "SearchTarget"
-                    :radioItems="messages.radioItems" :radioDefault="this.old.searchTarget"
-                />
 
                 <SortAndQuantityOption
                     ref="SortAndQuantityOption"
@@ -64,8 +80,6 @@ import BaseLayout from '@/Layouts/BaseLayout.vue'
 import { Link } from '@inertiajs/inertia-vue3';
 import TagDialog from '@/Components/dialog/TagDialog.vue';
 import DetailComponent from '@/Components/atomic/DetailComponent.vue';
-import SearchTarget from '@/Components/SearchTarget.vue';
-import SearchField from '@/Components/SearchField.vue';
 import BookMarkContainer from '@/Components/contents/BookMarkContainer.vue';
 import PageController from '@/Components/PageController.vue';
 import loadingDialog from '@/Components/dialog/loadingDialog.vue';
@@ -79,7 +93,8 @@ export default{
     data() {
         return {
             japanese:{
-                title:'ブックマーク検索',
+                title:'タイトル',
+                url:'url',
                 TagDialogLabel:"検索するタグ",
                 untaggedLabel:"タグがないブックマークを探す",
                 radioItems:[
@@ -132,7 +147,8 @@ export default{
                 ]
             },
             messages:{
-                title:'Search Bookmark',
+                title:'title',
+                url:'url',
                 TagDialogLabel:"Search Tag",
                 untaggedLabel:"Search bookmarks without tags",
                 radioItems:[
@@ -184,6 +200,8 @@ export default{
                     },
                 ]
             },
+            title:this.old.title,
+            url:this.old.url,
             page: this.result.current_page,
             isSearchUntaggedCheckBox:(this.old.isSearchUntagged == 1) ? true : false
         }
@@ -201,22 +219,20 @@ export default{
         Link,
         TagDialog,
         loadingDialog,
-        SearchField,
         BookMarkContainer,
         DetailComponent,
         PageController,
         SortAndQuantityOption,
-        SearchTarget
     },
     methods: {
         // 検索用
-        search(){
+        async search(){
             this.$store.commit('switchGlobalLoading')
-            this.$inertia.get('/BookMark/Search' ,{
+            await this.$inertia.get('/BookMark/Search' ,{
                 page:1,
-                keyword:this.$refs.SearchField.serveKeywordToParent(),
+                title:this.title,
+                url:this.url,
                 tagList:this.$refs.TagDialog.serveCheckedTagList(),
-                searchTarget:this.$refs.SearchTarget.serveTarget(),
                 searchQuantity:this.$refs.SortAndQuantityOption.serveSearchQuantity(),
                 sortType:this.$refs.SortAndQuantityOption.serveSort(),
                 isSearchUntagged :(this.isSearchUntaggedCheckBox == true) ? 1 : 0,
@@ -230,9 +246,9 @@ export default{
             this.$store.commit('switchGlobalLoading')
             this.$inertia.get('/BookMark/Search' ,{
                 page    : page,
-                keyword : this.old.keyword,
+                title:this.title,
+                url:this.url,
                 tagList : makeListTools.tagIdList(this.old.tagList),
-                searchTarget  : this.old.searchTarget,
                 searchQuantity: this.old.searchQuantity,
                 sortType : this.old.sortType,
                 isSearchUntagged :(this.old.isSearchUntagged == true) ? 1 : 0,

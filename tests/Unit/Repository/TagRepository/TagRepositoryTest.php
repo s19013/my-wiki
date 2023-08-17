@@ -306,7 +306,6 @@ class TagRepositoryTest extends TestCase
     // 指定したidのタグが論理削除される
     public function test_delete()
     {
-        Carbon::setTestNow(Carbon::now());
 
         $tag = Tag::factory()->create([
             'user_id' => $this->userId

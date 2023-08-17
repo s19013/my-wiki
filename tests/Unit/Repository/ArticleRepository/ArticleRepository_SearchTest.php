@@ -39,6 +39,9 @@ class ArticleRepository_SearchTest extends TestCase
         ]);
 
         $this->userId = $user->id;
+
+        // carbonの時間固定
+        Carbon::setTestNow(Carbon::now());
     }
 
     // 期待
@@ -48,8 +51,6 @@ class ArticleRepository_SearchTest extends TestCase
     // すべてのデータの合計数が10以上
     public function test_Search_すべてのデータの合計数が10以上()
     {
-        //
-        Carbon::setTestNow(Carbon::now());
 
         //テストユーザーの記事
         Article::factory()->count(25)->create(['user_id' => $this->userId]);
@@ -77,8 +78,6 @@ class ArticleRepository_SearchTest extends TestCase
     // すべてのデータの合計数が10以下
     public function test_Search_すべてのデータの合計数が10以下()
     {
-        //
-        Carbon::setTestNow(Carbon::now());
 
         //テストユーザーの記事
         Article::factory()->count(5)->create(['user_id' => $this->userId]);
@@ -103,8 +102,6 @@ class ArticleRepository_SearchTest extends TestCase
     //
     public function test_Search_11件目から20件目のデータを取得する()
     {
-        //
-        Carbon::setTestNow(Carbon::now());
 
         //ダミーユーザー追加
         $anotherUsers = User::factory()->count(2)->create();
@@ -145,8 +142,6 @@ class ArticleRepository_SearchTest extends TestCase
     // * キーワードなし
     public function test_Search_タグ指定なし_タイトル検索_キーワードなし()
     {
-        //
-        Carbon::setTestNow(Carbon::now());
 
         //ダミーユーザー追加
         $anotherUsers = User::factory()->count(2)->create();
@@ -193,8 +188,6 @@ class ArticleRepository_SearchTest extends TestCase
     // * キーワードあり
     public function test_Search_タグ指定なし_タイトル検索_キーワードあり()
     {
-        //
-        Carbon::setTestNow(Carbon::now());
 
 
         //ダミーユーザー追加
@@ -263,8 +256,6 @@ class ArticleRepository_SearchTest extends TestCase
     // * キーワードなし
     public function test_Search_タグ指定あり_タイトル検索_キーワードなし_()
     {
-        //
-        Carbon::setTestNow(Carbon::now());
 
         // 検索でヒットするはずのタグを作る
         $hitTag = Tag::factory()->create([
@@ -362,8 +353,6 @@ class ArticleRepository_SearchTest extends TestCase
     // * キーワードなし
     public function test_Search_タグ指定あり_タイトル検索_キーワードあり()
     {
-        //
-        Carbon::setTestNow(Carbon::now());
 
 
         //ダミーユーザー追加
@@ -485,8 +474,6 @@ class ArticleRepository_SearchTest extends TestCase
     // * キーワードなし
     public function test_Search_タグ指定なし_本文検索_キーワードなし()
     {
-        //
-        Carbon::setTestNow(Carbon::now());
 
         //ダミーユーザー追加
         $anotherUsers = User::factory()->count(2)->create();
@@ -533,8 +520,6 @@ class ArticleRepository_SearchTest extends TestCase
     // * キーワードあり
     public function test_Search_タグ指定なし_本文検索_キーワードあり()
     {
-        //
-        Carbon::setTestNow(Carbon::now());
 
 
         //ダミーユーザー追加
@@ -603,8 +588,6 @@ class ArticleRepository_SearchTest extends TestCase
     // * キーワードなし
     public function test_Search_タグ指定あり_本文検索_キーワードなし_()
     {
-        //
-        Carbon::setTestNow(Carbon::now());
 
         // 検索でヒットするはずのタグを作る
         $hitTag = Tag::factory()->create([
@@ -702,8 +685,6 @@ class ArticleRepository_SearchTest extends TestCase
     // * キーワードなし
     public function test_Search_タグ指定あり_本文検索_キーワードあり()
     {
-        //
-        Carbon::setTestNow(Carbon::now());
 
 
         //ダミーユーザー追加

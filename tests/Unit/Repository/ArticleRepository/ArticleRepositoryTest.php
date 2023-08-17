@@ -88,8 +88,6 @@ class ArticleRepositoryTest extends TestCase
     // タイトルを入力しなかった
     public function test_store_タイトルも本文を入力しなかった()
     {
-        //これで､Carbon::now()で呼び出される時間を固定化できるらしい
-        Carbon::setTestNow(Carbon::now());
 
         // データを登録
         $this->articleRepository->store(
@@ -114,8 +112,6 @@ class ArticleRepositoryTest extends TestCase
     // タイトルを入力しなかった
     public function test_store_タイトルも本文を入力しなかった_タイムゾーンJSTを指定()
     {
-        //これで､Carbon::now()で呼び出される時間を固定化できるらしい
-        Carbon::setTestNow(Carbon::now());
 
         // データを登録
         $this->articleRepository->store(
@@ -140,8 +136,6 @@ class ArticleRepositoryTest extends TestCase
     // タイトルと本文とタイムゾーンを入力しなかった
     public function test_store_タイトルと本文とタイムゾーンを入力しなかった()
     {
-        //これで､Carbon::now()で呼び出される時間を固定化できるらしい
-        Carbon::setTestNow(Carbon::now());
 
         // データを登録
         $this->articleRepository->store(

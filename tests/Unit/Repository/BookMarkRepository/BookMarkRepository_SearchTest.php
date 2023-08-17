@@ -51,18 +51,11 @@ class BookMarkRepository_SearchTest extends TestCase
     // すべてのデータの合計数が10以上
     public function test_Search_すべてのデータの合計数が10以上()
     {
-        //
-        Carbon::setTestNow(Carbon::now());
-
         //テストユーザーのブックマーク
         BookMark::factory()->count(25)->create(['user_id' => $this->userId]);
 
         $response = $this->bookMarkRepository->search(
             userId:$this->userId,
-            keyword:'',
-            page:1,
-            tagList:null,
-            searchTarget:'title'
         );
 
         //帰ってきたbookMarkListの数を数える(10個以上あっても一度に10個までしか返さない)
@@ -80,18 +73,12 @@ class BookMarkRepository_SearchTest extends TestCase
     // すべてのデータの合計数が10以下
     public function test_Search_すべてのデータの合計数が10以下()
     {
-        //
-        Carbon::setTestNow(Carbon::now());
-
         //テストユーザーのブックマーク
         BookMark::factory()->count(5)->create(['user_id' => $this->userId]);
 
         $response = $this->bookMarkRepository->search(
             userId:$this->userId,
-            keyword:'',
-            page:1,
-            tagList:null,
-            searchTarget:'title'
+            searchQuantity:10
         );
 
         //帰ってきたbookMarkListの数を数える
@@ -106,9 +93,6 @@ class BookMarkRepository_SearchTest extends TestCase
     //
     public function test_Search_11件目から20件目のデータを取得する()
     {
-        //
-        Carbon::setTestNow(Carbon::now());
-
         //ダミーユーザー追加
         $anotherUsers = User::factory()->count(2)->create();
 
@@ -125,10 +109,8 @@ class BookMarkRepository_SearchTest extends TestCase
 
         $response = $this->bookMarkRepository->search(
             userId:$this->userId,
-            keyword:'',
             page:2,
-            tagList:null,
-            searchTarget:'title'
+            searchQuantity:10
         );
 
         $bookMarkList = $response['data'];
@@ -146,11 +128,8 @@ class BookMarkRepository_SearchTest extends TestCase
     // * タグ指定なし
     // * タイトル検索
     // * キーワードなし
-    public function test_Search_タグ指定なし_タイトル検索_キーワードなし()
+    public function test_Search_タグ指定なし_キーワードなし()
     {
-        //
-        Carbon::setTestNow(Carbon::now());
-
         //ダミーユーザー追加
         $anotherUsers = User::factory()->count(2)->create();
 
@@ -169,10 +148,6 @@ class BookMarkRepository_SearchTest extends TestCase
 
         $response = $this->bookMarkRepository->search(
             userId:$this->userId,
-            keyword:'',
-            page:1,
-            tagList:null,
-            searchTarget:'title'
         );
 
         $bookMarkList = $response['data'];
@@ -198,10 +173,6 @@ class BookMarkRepository_SearchTest extends TestCase
     // * キーワードあり
     public function test_Search_タグ指定なし_タイトル検索_キーワードあり()
     {
-        //
-        Carbon::setTestNow(Carbon::now());
-
-
         //ダミーユーザー追加
         $anotherUsers = User::factory()->count(2)->create();
 
@@ -234,10 +205,7 @@ class BookMarkRepository_SearchTest extends TestCase
 
         $response = $this->bookMarkRepository->search(
             userId:$this->userId,
-            keyword:"apple make",
-            page:1,
-            tagList:null,
-            searchTarget:'title'
+            title:"apple make",
         );
 
         $bookMarkList = $response['data'];
@@ -266,11 +234,8 @@ class BookMarkRepository_SearchTest extends TestCase
     // * タグ指定:'recipe'
     // * タイトル検索
     // * キーワードなし
-    public function test_Search_タグ指定あり_タイトル検索_キーワードなし_()
+    public function test_Search_タグ指定あり_キーワードなし()
     {
-        //
-        Carbon::setTestNow(Carbon::now());
-
         // 検索でヒットするはずのタグを作る
         $hitTag = Tag::factory()->create([
             'name'    => 'recipe',
@@ -336,10 +301,7 @@ class BookMarkRepository_SearchTest extends TestCase
 
         $response = $this->bookMarkRepository->search(
             userId:$this->userId,
-            keyword:"",
-            page:1,
             tagList:[$hitTag->id],
-            searchTarget:'title'
         );
 
         $bookMarkList = $response['data'];
@@ -365,12 +327,9 @@ class BookMarkRepository_SearchTest extends TestCase
     // 条件
     // * タグ指定:'recipe'
     // * タイトル検索
-    // * キーワードなし
+    // * キーワードあり
     public function test_Search_タグ指定あり_タイトル検索_キーワードあり()
     {
-        //
-        Carbon::setTestNow(Carbon::now());
-
 
         //ダミーユーザー追加
         $anotherUsers = User::factory()->count(2)->create();
@@ -462,10 +421,8 @@ class BookMarkRepository_SearchTest extends TestCase
 
         $response = $this->bookMarkRepository->search(
             userId:$this->userId,
-            keyword:"make",
-            page:1,
+            title:"make",
             tagList:[$hitTag->id],
-            searchTarget:'title'
         );
 
         $bookMarkList = $response['data'];
@@ -484,66 +441,15 @@ class BookMarkRepository_SearchTest extends TestCase
     }
 
     // 期待
-    // * 指定したユーザーのブックマークだけを取ってくる
-    // * 削除したブックマークは取ってこない
-    // 条件
-    // * タグ指定なし
-    // * 本文検索
-    // * キーワードなし
-    public function test_Search_タグ指定なし_本文検索_キーワードなし()
-    {
-        //
-        Carbon::setTestNow(Carbon::now());
-
-        //ダミーユーザー追加
-        $anotherUsers = User::factory()->count(2)->create();
-
-        //テストユーザーのブックマーク
-        $bookMarks = BookMark::factory()->count(20)->create(['user_id' => $this->userId]);
-
-        //わざとブックマークを消す
-        BookMark::where('id','=',$bookMarks[0]->id)
-        ->update(['deleted_at' => Carbon::now()]);
-        BookMark::where('id','=',$bookMarks[1]->id)
-        ->update(['deleted_at' => Carbon::now()]);
-
-        // ダミーのブックマーク
-        BookMark::factory()->count(5)->create(['user_id' => $anotherUsers[0]->id]);
-        BookMark::factory()->count(5)->create(['user_id' => $anotherUsers[1]->id]);
-
-        $response = $this->bookMarkRepository->search(
-            userId:$this->userId,
-            keyword:'',
-            page:1,
-            tagList:null,
-            searchTarget:'url'
-        );
-
-        $bookMarkList = $response['data'];
-
-        $idList = [];
-        foreach ($bookMarkList as $data){ array_push($idList,$data->id); }
-
-        // 全部指定したユーザーのブックマークか
-        foreach ($bookMarkList as $data){ $this->assertEquals($data->user_id,$this->userId); }
-
-        // 削除したブックマークは含んでないか
-        $this->assertNotContains($bookMarks[0]->id,$idList);
-        $this->assertNotContains($bookMarks[1]->id,$idList);
-    }
-
-    // 期待
     //  * titelカラムに"apple"と"make"の文字列が入っているデータをとってくる
     //  * 指定したユーザーのブックマークだけを取ってくる
     //  * 削除したブックマークは取ってこない
     // 条件
     // * タグ指定なし
-    // * 本文検索
+    // * url検索
     // * キーワードあり
-    public function test_Search_タグ指定なし_本文検索_キーワードあり()
+    public function test_Search_タグ指定なし_url検索_キーワードあり()
     {
-        //
-        Carbon::setTestNow(Carbon::now());
 
 
         //ダミーユーザー追加
@@ -578,10 +484,7 @@ class BookMarkRepository_SearchTest extends TestCase
 
         $response = $this->bookMarkRepository->search(
             userId:$this->userId,
-            keyword:"apple make",
-            page:1,
-            tagList:null,
-            searchTarget:'url'
+            url:"apple make",
         );
 
         $bookMarkList = $response['data'];
@@ -603,119 +506,16 @@ class BookMarkRepository_SearchTest extends TestCase
     }
 
     // 期待
-    //  * 指定したタグがついているブックマークをとってくる
-    //  * 指定したユーザーのブックマークを取ってくる
-    //  * 削除したブックマークは取ってこない
-    // 条件
-    // * タグ指定:'recipe'
-    // * 本文検索
-    // * キーワードなし
-    public function test_Search_タグ指定あり_本文検索_キーワードなし_()
-    {
-        //
-        Carbon::setTestNow(Carbon::now());
-
-        // 検索でヒットするはずのタグを作る
-        $hitTag = Tag::factory()->create([
-            'name'    => 'recipe',
-            'user_id' => $this->userId
-        ]);
-
-        //検索で引っかかるようなブックマーク作成
-        $hitBookMark1 = BookMark::factory()->create([
-            'user_id' => $this->userId,
-            'url' => 'how to make applePie'
-        ]);
-
-        BookMarkTag::create([
-            'book_mark_id' => $hitBookMark1->id,
-            'tag_id'     => $hitTag->id,
-        ]);
-
-        // ダミー
-        $hitBookMark2 = BookMark::factory()->create([
-            'user_id' => $this->userId,
-            'url' => 'how to make berryPie'
-        ]);
-
-        $dammyTag1 = Tag::factory()->create([
-            'name'    => 'berry',
-            'user_id' => $this->userId
-        ]);
-
-        BookMarkTag::create([
-            'book_mark_id' => $hitBookMark2->id,
-            'tag_id'     => $dammyTag1->id,
-        ]);
-
-        BookMarkTag::create([
-            'book_mark_id' => $hitBookMark2->id,
-            'tag_id'     => $hitTag->id,
-        ]);
-
-        // わざと消すブックマーク
-        $deleteBookMark = BookMark::factory()->create([
-            'user_id' => $this->userId,
-            'url'   => 'how to make peachPie'
-        ]);
-
-        $dammyTag2 = Tag::factory()->create([
-            'name'    => 'peach',
-            'user_id' => $this->userId
-        ]);
-
-        BookMarkTag::create([
-            'book_mark_id' => $deleteBookMark->id,
-            'tag_id'     => $dammyTag2->id,
-        ]);
-
-        BookMarkTag::create([
-            'book_mark_id' => $deleteBookMark->id,
-            'tag_id'     => $hitTag->id,
-        ]);
-
-        //わざとブックマークを消す
-        BookMark::where('id','=',$deleteBookMark->id)
-        ->update(['deleted_at' => Carbon::now()]);
-
-        $response = $this->bookMarkRepository->search(
-            userId:$this->userId,
-            keyword:"",
-            page:1,
-            tagList:[$hitTag->id],
-            searchTarget:'url'
-        );
-
-        $bookMarkList = $response['data'];
-
-        $idList = [];
-        foreach ($bookMarkList as $data){ array_push($idList,$data->id); }
-
-        // 全部指定したユーザーのブックマークか
-        foreach ($bookMarkList as $data){ $this->assertEquals($data->user_id,$this->userId); }
-
-        // 削除したブックマークは含んでないか
-        $this->assertNotContains($deleteBookMark->id,$idList);
-
-        // ヒットするはずのブックマークを取ってきているか
-        $this->assertContains($hitBookMark1->id, $idList);
-    }
-
-    // 期待
     //  * titelカラムに"make"の文字列が入っているデータをとってくる
     //  * 指定したタグがついているブックマークをとってくる
     //  * 指定したユーザーのブックマークだけを取ってくる
     //  * 削除したブックマークは取ってこない
     // 条件
     // * タグ指定:'recipe'
-    // * 本文検索
-    // * キーワードなし
-    public function test_Search_タグ指定あり_本文検索_キーワードあり()
+    // * url検索
+    // * キーワードあり
+    public function test_Search_タグ指定あり_url検索_キーワードあり()
     {
-        //
-        Carbon::setTestNow(Carbon::now());
-
-
         //ダミーユーザー追加
         $anotherUsers = User::factory()->count(2)->create();
 
@@ -806,10 +606,203 @@ class BookMarkRepository_SearchTest extends TestCase
 
         $response = $this->bookMarkRepository->search(
             userId:$this->userId,
-            keyword:"make",
-            page:1,
+            url:"make",
             tagList:[$hitTag->id],
-            searchTarget:'url'
+        );
+
+        $bookMarkList = $response['data'];
+
+        $idList = [];
+        foreach ($bookMarkList as $data){ array_push($idList,$data->id); }
+
+        // 全部指定したユーザーのブックマークか
+        foreach ($bookMarkList as $data){ $this->assertEquals($data->user_id,$this->userId); }
+
+        // 削除したブックマークは含んでないか
+        $this->assertNotContains($deleteBookMark->id,$idList);
+
+        // ヒットするはずのブックマークを取ってきているか
+        $this->assertContains($hitBookMark->id , $idList);
+    }
+
+
+    // 期待
+    //  * titelカラムに"apple"と"make"の文字列が入っているデータをとってくる
+    //  * urlカラムに"qiita.com"の文字列が入っているデータをとってくる
+    //  * 指定したユーザーのブックマークだけを取ってくる
+    //  * 削除したブックマークは取ってこない
+    // 条件
+    // * タグ指定なし
+    // * url検索
+    // * キーワードあり
+    public function test_Search_タグ指定なし_title検索_url検索_キーワードあり()
+    {
+
+        //ダミーユーザー追加
+        $anotherUsers = User::factory()->count(2)->create();
+
+        //テストユーザーのブックマーク
+        $bookMarks = BookMark::factory()->count(10)->create(['user_id' => $this->userId]);
+
+        //検索で引っかかるようなブックマーク作成
+        $hitBookMark1 = BookMark::factory()->create([
+            'user_id' => $this->userId,
+            'title' => 'how to make applePie',
+            'url' => 'qiita.com/1'
+        ]);
+
+        $hitBookMark2 = BookMark::factory()->create([
+            'user_id' => $this->userId,
+            'title' => 'how to make appleTea',
+            'url' => 'qiita.com/2'
+        ]);
+
+        // わざと消すブックマーク
+        $deleteBookMark = BookMark::factory()->create([
+            'user_id' => $this->userId,
+            'title' => 'how to make appleJam',
+            'url' => 'qiita.com/3'
+        ]);
+
+        //わざとブックマークを消す
+        BookMark::where('id','=',$deleteBookMark->id)->update(['deleted_at' => Carbon::now()]);
+
+        // ダミーのブックマーク
+        BookMark::factory()->count(5)->create(['user_id' => $anotherUsers[0]->id]);
+        BookMark::factory()->count(5)->create(['user_id' => $anotherUsers[1]->id]);
+
+        $response = $this->bookMarkRepository->search(
+            userId:$this->userId,
+            title:"apple make",
+            url:"qiita.com"
+        );
+
+        $bookMarkList = $response['data'];
+
+        $idList = [];
+        foreach ($bookMarkList as $data){ array_push($idList,$data->id); }
+
+
+        // 全部指定したユーザーのブックマークか
+        foreach ($bookMarkList as $data){ $this->assertEquals($data->user_id,$this->userId); }
+
+        // 削除したブックマークは含んでないか
+        $this->assertNotContains($deleteBookMark->id,$idList);
+
+        // ヒットするはずのブックマークを取ってきているか
+        $this->assertContains($hitBookMark1->id, $idList);
+        $this->assertContains($hitBookMark2->id, $idList);
+
+    }
+
+    // 期待
+    //  * titelカラムに"apple"と"make"の文字列が入っているデータをとってくる
+    //  * urlカラムに"qiita.com"の文字列が入っているデータをとってくる
+    //  * 指定したタグがついているブックマークをとってくる
+    //  * 指定したユーザーのブックマークだけを取ってくる
+    //  * 削除したブックマークは取ってこない
+    // 条件
+    // * タグ指定:'recipe'
+    // * url検索
+    // * キーワードあり
+    public function test_Search_タグ指定あり_title検索_url検索_キーワードあり()
+    {
+        //ダミーユーザー追加
+        $anotherUsers = User::factory()->count(2)->create();
+
+        //テストユーザーのブックマーク
+        $bookMarks = BookMark::factory()->count(10)->create(['user_id' => $this->userId]);
+
+
+        //検索で引っかかるようなブックマーク作成
+        $hitBookMark = BookMark::factory()->create([
+            'user_id' => $this->userId,
+            'title' => 'how to make applePie',
+            'url' => 'qiita.com/1'
+        ]);
+
+        $hitTag = Tag::factory()->create([
+            'name'    => 'recipe',
+            'user_id' => $this->userId
+        ]);
+
+        // 他のダミーにも付けるタグ
+        $tag = Tag::factory()->create([
+            'name'    => 'rest',
+            'user_id' => $this->userId
+        ]);
+
+        BookMarkTag::create([
+            'book_mark_id' => $hitBookMark->id,
+            'tag_id'     => $hitTag->id,
+        ]);
+
+        BookMarkTag::create([
+            'book_mark_id' => $hitBookMark->id,
+            'tag_id'     => $tag->id,
+        ]);
+
+        // ダミー
+        $dammyBookMark = BookMark::factory()->create([
+            'user_id' => $this->userId,
+            'title' => 'how to make berryPie',
+            'url' => 'qiita.com/2'
+        ]);
+
+        $dammyTag1 = Tag::factory()->create([
+            'name'    => 'berry',
+            'user_id' => $this->userId
+        ]);
+
+        BookMarkTag::create([
+            'book_mark_id' => $dammyBookMark->id,
+            'tag_id'     => $dammyTag1->id,
+        ]);
+
+        BookMarkTag::create([
+            'book_mark_id' => $dammyBookMark->id,
+            'tag_id'     => $tag->id,
+        ]);
+
+        // わざと消すブックマーク
+        $deleteBookMark = BookMark::factory()->create([
+            'user_id' => $this->userId,
+            'title' => 'how to make peachPie',
+            'url' => 'qiita.com/3'
+        ]);
+
+        $dammyTag2 = Tag::factory()->create([
+            'name'    => 'berry',
+            'user_id' => $this->userId
+        ]);
+
+        BookMarkTag::create([
+            'book_mark_id' => $deleteBookMark->id,
+            'tag_id'     => $dammyTag2->id,
+        ]);
+
+        BookMarkTag::create([
+            'book_mark_id' => $deleteBookMark->id,
+            'tag_id'     => $tag->id,
+        ]);
+
+        //他のダミーブックマーク
+        BookMark::factory()->count(5)->create(['user_id' => $anotherUsers[0]->id]);
+        BookMark::factory()->count(5)->create(['user_id' => $anotherUsers[1]->id]);
+
+        Tag::factory()->count(2)->create(['user_id' => $anotherUsers[0]->id]);
+        Tag::factory()->count(2)->create(['user_id' => $anotherUsers[0]->id]);
+
+
+        //わざとブックマークを消す
+        BookMark::where('id','=',$deleteBookMark->id)
+        ->update(['deleted_at' => Carbon::now()]);
+
+        $response = $this->bookMarkRepository->search(
+            userId:$this->userId,
+            title:"apple make",
+            url:"qiita.com",
+            tagList:[$hitTag->id],
         );
 
         $bookMarkList = $response['data'];
@@ -837,10 +830,6 @@ class BookMarkRepository_SearchTest extends TestCase
 
         $response = $this->bookMarkRepository->search(
             userId:$this->userId,
-            keyword:'',
-            page:1,
-            tagList:null,
-            searchTarget:'title',
             searchQuantity:20
         );
 
@@ -869,10 +858,6 @@ class BookMarkRepository_SearchTest extends TestCase
 
         $response = $this->bookMarkRepository->search(
             userId:$this->userId,
-            keyword:'',
-            page:1,
-            tagList:null,
-            searchTarget:'title',
             searchQuantity:10,
             sortType:"title_desc"
         );
@@ -883,6 +868,8 @@ class BookMarkRepository_SearchTest extends TestCase
         $this->assertSame("A",$bookMarkList[2]->title);
     }
 
+    // 期待
+    // * タグが1つもついてないデータのみを取ってくる
     public function test_search_untagged()
     {
         $bookMarkList = BookMark::factory()->count(5)->create(['user_id' => $this->userId]);
@@ -907,10 +894,6 @@ class BookMarkRepository_SearchTest extends TestCase
 
         $response = $this->bookMarkRepository->search(
             userId:$this->userId,
-            keyword:'',
-            page:1,
-            tagList:null,
-            searchTarget:'title',
             searchQuantity:10,
             sortType:"title_desc",
             isSearchUntagged:true,

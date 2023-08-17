@@ -158,12 +158,13 @@ class BookMarkController extends Controller
     //ブックマーク検索
     public function search(Request $request)
     {
+
         $result = $this->bookMarkRepository->search(
             userId:Auth::id(),
-            keyword:$request->keyword,
             page:$request->page ?? 1,
             tagList    :$request->tagList,
-            searchTarget:$request->searchTarget ?? "title",
+            title: $request->title,
+            url: $request->url,
             searchQuantity:$request->searchQuantity ?? 10,
             sortType:$request->sortType ?? "updated_at_desc",
             isSearchUntagged:$request->isSearchUntagged ?? false
@@ -184,9 +185,9 @@ class BookMarkController extends Controller
         }
 
         $old = [
-            "keyword" => $request->keyword ?? "",
+            "title" => $request->title ?? '',
+            "url" => $request->url ?? '',
             "tagList" => $tagList,
-            "searchTarget" => $request->searchTarget ?? "title",
             "searchQuantity" => $request->searchQuantity ?? 10,
             "sortType" => $request->sortType ?? "updated_at_desc",
             "isSearchUntagged" => $request->isSearchUntagged ?? false

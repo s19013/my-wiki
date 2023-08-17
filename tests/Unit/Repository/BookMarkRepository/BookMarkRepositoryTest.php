@@ -91,8 +91,6 @@ class BookMarkRepositoryTest extends TestCase
     // タイトルを入力しなかった
     public function test_store_タイトルを入力しなかった()
     {
-        //これで､Carbon::now()で呼び出される時間を固定化できるらしい
-        Carbon::setTestNow(Carbon::now());
 
         // データを登録
         $this->bookMarkRepository->store(
@@ -117,8 +115,6 @@ class BookMarkRepositoryTest extends TestCase
     // タイトルを入力しなかった
     public function test_store_タイトルを入力しなかった_タイムゾーン指定()
     {
-        //これで､Carbon::now()で呼び出される時間を固定化できるらしい
-        Carbon::setTestNow(Carbon::now());
 
         // データを登録
         $this->bookMarkRepository->store(
@@ -142,8 +138,6 @@ class BookMarkRepositoryTest extends TestCase
     // タイトルとタイムゾーンを入力しなかった
     public function test_store_タイトルとタイムゾーンを入力しなかった()
     {
-        //これで､Carbon::now()で呼び出される時間を固定化できるらしい
-        Carbon::setTestNow(Carbon::now());
 
         // データを登録
         $this->bookMarkRepository->store(
@@ -236,7 +230,6 @@ class BookMarkRepositoryTest extends TestCase
     // 指定したブックマークが論理削除されている
     public function test_deleteBookMark_指定したブックマークが論理削除されている()
     {
-        Carbon::setTestNow(Carbon::now());
 
         $bookMark = BookMark::factory()->create(['user_id' => $this->userId]);
 

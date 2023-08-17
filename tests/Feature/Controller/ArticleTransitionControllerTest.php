@@ -38,6 +38,9 @@ class ArticleTransitionControllerTest extends TestCase
         $this->controller = new ArticleTransitionController();
         $this->articleTagRepository = new ArticleTagRepository();
         $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'ja';
+
+        // carbonの時間固定
+        Carbon::setTestNow(Carbon::now());
     }
 
     //自分でもいまいちなテストだと思う(他のテストもだけど)
@@ -100,8 +103,6 @@ class ArticleTransitionControllerTest extends TestCase
 
     public function test_transitionToViewArticle_自分の削除した記事()
     {
-        // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
 
         //ダミーユーザー追加
         $anotherUsers = User::factory()->count(2)->create();
@@ -202,8 +203,6 @@ class ArticleTransitionControllerTest extends TestCase
 
     public function test_transitionToEditArticle_自分の削除した記事()
     {
-        // carbonの時間固定
-        Carbon::setTestNow(Carbon::now());
 
         //ダミーユーザー追加
         $anotherUsers = User::factory()->count(2)->create();
