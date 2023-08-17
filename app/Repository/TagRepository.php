@@ -37,11 +37,8 @@ class TagRepository
         // ツールを実体化
         $searchToolKit = new searchToolKit();
 
-        // %と_をエスケープ
-        $escaped = $searchToolKit->sqlEscape($keyword);
-
-        //and検索のために空白区切りでつくった配列を用意
-        $wordListToSearch = $searchToolKit->preparationToAndSearch($escaped);
+        // 検索につかうようにエスケープしたり､空白区切りで配列化
+        $wordListToSearch = $searchToolKit->preparationToAndSearch($keyword);
 
         //ログインユーザーのタグを探す
         $query = Tag::select('id','name','user_id')
@@ -68,11 +65,8 @@ class TagRepository
         // ツールを実体化
         $searchToolKit = new searchToolKit();
 
-        // %と_をエスケープ
-        $escaped = $searchToolKit->sqlEscape($keyword);
-
-        //and検索のために空白区切りでつくった配列を用意
-        $wordListToSearch = $searchToolKit->preparationToAndSearch($escaped);
+        // 検索につかうようにエスケープしたり､空白区切りで配列化
+        $wordListToSearch = $searchToolKit->preparationToAndSearch($keyword);
 
         //ログインユーザーのタグを探す
         $query = Tag::select('*')
