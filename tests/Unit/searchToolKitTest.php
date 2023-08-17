@@ -21,20 +21,27 @@ class searchToolKitTest extends TestCase
     public function setup():void
     {
         parent::setUp();
-        $this->tookKit = new searchToolKit();
+        $this->toolKit = new searchToolKit();
     }
 
     public function test_sqlEscape()
     {
-        $returnValue = $this->tookKit->sqlEscape("100% りんごジュース_山田林業");
+        $returnValue = $this->toolKit->sqlEscape("100% りんごジュース_山田林業");
         $this->assertEquals($returnValue,"100\% りんごジュース\_山田林業");
+    }
+
+    public function test_separatedByWhiteSpace()
+    {
+        $returnValue = $this->toolKit->separatedByWhiteSpace("林檎 いちご ブルーベリ");
+        $this->assertContains("林檎", $returnValue);
+        $this->assertContains("いちご", $returnValue);
+        $this->assertContains("ブルーベリ", $returnValue);
     }
 
     public function test_preparationToAndSearch()
     {
-        $returnValue = $this->tookKit->preparationToAndSearch("林檎 いちご ブルーベリ");
-        $this->assertContains("林檎", $returnValue);
-        $this->assertContains("いちご", $returnValue);
-        $this->assertContains("ブルーベリ", $returnValue);
+        $returnValue = $this->toolKit->preparationToAndSearch("100% りんごジュース_山田林業");
+        $this->assertContains("100\%", $returnValue);
+        $this->assertContains("りんごジュース\_山田林業", $returnValue);
     }
 }
