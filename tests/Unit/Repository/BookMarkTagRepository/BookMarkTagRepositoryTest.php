@@ -143,7 +143,7 @@ class BookMarkTagRepositoryTest extends TestCase
         $this->assertSame(count($tags),count($IdList));
         $this->assertSame(count($tags),count($nameList));
 
-        // ついてないタグ
+        // ついてるタグ
         foreach ($tags as $tag){
             $this->assertContains($tag->id,$IdList);
             $this->assertContains($tag->name,$nameList);
