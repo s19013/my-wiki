@@ -1,5 +1,5 @@
 <template>
-    <BaseLayout :title="messages.title" :pageTitle="messages.title">
+    <BaseLayout :title="`${title} ${url}   ${messages.title}`" :pageTitle="messages.title">
         <v-container>
             <div class="searchField">
                 <v-form v-on:submit.prevent ="search()">
