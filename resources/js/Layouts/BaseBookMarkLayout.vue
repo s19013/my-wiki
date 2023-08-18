@@ -1,5 +1,5 @@
 <template>
-    <BaseLayout :title="title" :pageTitle="pageTitle">
+    <BaseLayout :title="`${bookMarkTitle}  ${title}`" :pageTitle="pageTitle">
         <div class="articleContainer">
             <div class="head">
                 <DeleteAlertComponent
