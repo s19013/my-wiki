@@ -5,16 +5,18 @@
                 <v-form v-on:submit.prevent ="search()">
                     <v-text-field
                         v-model="title"
-                        :label ="messages.title"
+                        :label ="messages.titleLabel"
                         outlined hide-details="false"
                         clearable
+                        @keypress.enter="search()"
                     ></v-text-field>
 
                     <v-text-field
                         v-model="url"
-                        :label ="messages.url"
+                        :label ="messages.urlLabel"
                         outlined hide-details="false"
                         clearable
+                        @keypress.enter="search()"
                     ></v-text-field>
 
                     <v-btn color="submit"
@@ -93,8 +95,9 @@ export default{
     data() {
         return {
             japanese:{
-                title:'タイトル',
-                url:'url',
+                title:'ブックマーク検索',
+                titleLabel:'タイトル',
+                urlLabel:'url',
                 TagDialogLabel:"検索するタグ",
                 untaggedLabel:"タグがないブックマークを探す",
                 radioItems:[
@@ -147,8 +150,9 @@ export default{
                 ]
             },
             messages:{
-                title:'title',
-                url:'url',
+                title:'Search BookMark',
+                titleLabel:'title',
+                urlLabel:'url',
                 TagDialogLabel:"Search Tag",
                 untaggedLabel:"Search bookmarks without tags",
                 radioItems:[
@@ -330,6 +334,20 @@ export default{
     label{
         margin-left:0.5rem;
         width:100%
+    }
+}
+.searchField {
+    form{
+        display:grid;
+        gap:0.5rem;
+        grid-template-rows: 1fr 1fr;
+        grid-template-columns:5fr 1fr;
+        .v-input{grid-column: 1/2;}
+        .v-btn  {
+            grid-row: 1/2;
+            grid-column: 2/3;
+            width:100%;
+        }
     }
 }
 .SearchTarget{margin-bottom: 0.8rem;}
