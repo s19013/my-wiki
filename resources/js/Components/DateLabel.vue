@@ -55,7 +55,6 @@ export default{
         gap: 0.6rem;
         p{
             font-size: 0.8rem;
-            font-weight: 450;
         }
         span{font-weight: 500;}
     }

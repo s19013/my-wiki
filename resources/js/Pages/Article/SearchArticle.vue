@@ -1,5 +1,5 @@
 <template>
-    <BaseLayout :title="messages.title" :pageTitle="messages.title">
+    <BaseLayout :title="`${old.keyword}  ${messages.title}`" :pageTitle="messages.title">
         <v-container>
             <SearchField
                 ref = "SearchField"

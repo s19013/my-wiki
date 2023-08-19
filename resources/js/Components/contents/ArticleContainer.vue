@@ -48,7 +48,7 @@ export default{
 
 <style scope lang="scss">
 .others{
-    span{font-weight: bold;}
+    span{font-weight: 500;}
     p{
         font-size: 0.8rem;
         text-align:right
@@ -74,8 +74,8 @@ export default{
     border:black solid 1px;
     padding: 5px;
     h3{
-        @media (min-width: 420px){font-size: 1.3rem;}
-        font-size: 1.6rem;
+        // @media (min-width: 420px){font-size: 1.3rem;}
+        font-size: 1.3rem;
         margin: auto 0;
         grid-column: 1/2;
         word-break   :break-word;
