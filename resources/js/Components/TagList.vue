@@ -1,15 +1,9 @@
 <template>
     <div class="tagList">
-        <p><v-icon>mdi-tag</v-icon>{{text}}</p>
+        <p><v-icon>mdi-tag</v-icon>{{ text }}</p>
         <ul v-if="!disabled">
-            <li v-for="(tag, i) in tagList"
-                :key="tag.name"
-            >
-                <v-chip
-                    v-if="!cannotDelete"
-                    closable
-                    @click:close="popTag(i)"
-                >
+            <li v-for="(tag, i) in tagList" :key="tag.name">
+                <v-chip v-if="!cannotDelete" closable @click:close="popTag(i)">
                     {{ tag.name }}
                 </v-chip>
 
@@ -23,47 +17,46 @@
 </template>
 
 <script>
-export default{
+export default {
     data() {
-      return {
-      }
+        return {};
     },
-    props:{
-        tagList:{
-            type:Array,
-            default:[]
+    props: {
+        tagList: {
+            type: Array,
+            default: [],
         },
-        text:{
-            type:String,
-            default:"つけたタグ"
+        text: {
+            type: String,
+            default: "つけたタグ",
         },
-        cannotDelete:{
-            type:Boolean,
-            default:false
+        cannotDelete: {
+            type: Boolean,
+            default: false,
         },
-        disabled:{
-            type:Boolean,
-            default:false
-        }
+        disabled: {
+            type: Boolean,
+            default: false,
+        },
     },
     methods: {
-        popTag(i){
-            this.$emit('popTag',i)
-        }
+        popTag(i) {
+            this.$emit("popTag", i);
+        },
     },
-}
+};
 </script>
 
 <style lang="scss" scoped>
-.tagList{
-    ul{
+.tagList {
+    ul {
         display: flex;
         flex-wrap: wrap;
         min-height: 2rem;
     }
-    li{
-        list-style:none;
-        margin:5px;
+    li {
+        list-style: none;
+        margin: 5px;
     }
 }
 </style>

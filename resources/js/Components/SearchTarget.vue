@@ -4,10 +4,17 @@
         <p v-else>Search Target</p>
         <div class="options">
             <div class="option" v-for="(item, i) in radioItems" :key="i">
-                <input type="radio" :id="'searchTarget_' + item.label"
-                :value="item.value" v-model="target"/>
-                <label :for="'searchTarget_' + item.label" v-bind:class="{selected:target == item.value}">
-                    {{item.label}}
+                <input
+                    type="radio"
+                    :id="'searchTarget_' + item.label"
+                    :value="item.value"
+                    v-model="target"
+                />
+                <label
+                    :for="'searchTarget_' + item.label"
+                    v-bind:class="{ selected: target == item.value }"
+                >
+                    {{ item.label }}
                 </label>
             </div>
         </div>
@@ -15,49 +22,59 @@
 </template>
 
 <script>
-export default{
+export default {
     data() {
-      return {
-        target:this.radioDefault
-      }
+        return {
+            target: this.radioDefault,
+        };
     },
-    props:{
-        radioItems:{
-            type:Object,
-            default:[{
-                value:"value",
-                label:"label"
-            }],
+    props: {
+        radioItems: {
+            type: Object,
+            default: [
+                {
+                    value: "value",
+                    label: "label",
+                },
+            ],
             required: true,
         },
-        radioDefault:{
-            type:String,
-            default:"",
+        radioDefault: {
+            type: String,
+            default: "",
             required: true,
-        }
+        },
     },
     methods: {
         //親にチェックリストを渡す
-        serveTarget(){return this.target},
+        serveTarget() {
+            return this.target;
+        },
     },
     mounted() {
         this.$nextTick(function () {
-            if (this.$store.state.lang == "ja"){this.messages = this.japanese}
-        })
+            if (this.$store.state.lang == "ja") {
+                this.messages = this.japanese;
+            }
+        });
     },
-}
+};
 </script>
 
 <style scoped lang="scss">
-.SearchTarget{
-    .options{
+.SearchTarget {
+    .options {
         display: flex;
-        gap:1rem;
-        .option{
-            width:fit-content;
-            input{margin-right:0.2rem}
+        gap: 1rem;
+        .option {
+            width: fit-content;
+            input {
+                margin-right: 0.2rem;
+            }
         }
     }
 }
-.selected{font-weight:bold;}
+.selected {
+    font-weight: bold;
+}
 </style>
