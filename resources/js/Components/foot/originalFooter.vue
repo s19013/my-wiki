@@ -1,61 +1,81 @@
 <template>
     <footer>
-        <a target="_blank" rel="noopener noreferrer" :href="messages.termsUrl">{{ messages.terms }}</a>
-        <a target="_blank" rel="noopener noreferrer" :href="messages.privacyUrl">{{ messages.privacy }}</a>
-        <a target="_blank" rel="noopener noreferrer" :href="messages.enquiryUrl">{{ messages.enquiry }}</a>
+        <a
+            target="_blank"
+            rel="noopener noreferrer"
+            :href="messages.termsUrl"
+            >{{ messages.terms }}</a
+        >
+        <a
+            target="_blank"
+            rel="noopener noreferrer"
+            :href="messages.privacyUrl"
+            >{{ messages.privacy }}</a
+        >
+        <a
+            target="_blank"
+            rel="noopener noreferrer"
+            :href="messages.enquiryUrl"
+            >{{ messages.enquiry }}</a
+        >
     </footer>
 </template>
 
 <script>
-
-export default{
+export default {
     data() {
         return {
-            japanese:{
-                terms:"利用規約",
-                termsUrl:"https://docs.google.com/document/d/e/2PACX-1vQRfqPmWcI2irs1HpRBOjA9lyo2CiIFWRBpWY2lmHnMM8gWZUEmng57BEs1t-VC5Bd_kSCHhmG9gmAA/pub",
-                privacy:"プライバシーポリシー",
-                privacyUrl:"https://docs.google.com/document/d/e/2PACX-1vQCW5pRoXeXHiZJ-vz8MImLVm-XTViLIdy1TxTBtsbAAzYb4MpPEaEFucHaWnpzDkI905s5AeW6rui3/pub",
-                enquiry:"問い合わせ",
-                enquiryUrl:"https://forms.gle/9tXeZcXmqH2zR6SP9",
+            japanese: {
+                terms: "利用規約",
+                termsUrl:
+                    "https://docs.google.com/document/d/e/2PACX-1vQRfqPmWcI2irs1HpRBOjA9lyo2CiIFWRBpWY2lmHnMM8gWZUEmng57BEs1t-VC5Bd_kSCHhmG9gmAA/pub",
+                privacy: "プライバシーポリシー",
+                privacyUrl:
+                    "https://docs.google.com/document/d/e/2PACX-1vQCW5pRoXeXHiZJ-vz8MImLVm-XTViLIdy1TxTBtsbAAzYb4MpPEaEFucHaWnpzDkI905s5AeW6rui3/pub",
+                enquiry: "問い合わせ",
+                enquiryUrl: "https://forms.gle/9tXeZcXmqH2zR6SP9",
             },
-            messages:{
-                terms:"terms of service",
-                termsUrl:"https://docs.google.com/document/d/e/2PACX-1vSdKoL_dJ3sVwsBBdNh-lVetKD-WupAVq56CYTpTkpkcMHvTNfBruWBnqleHuYDPa7yv1CkdfCL79im/pub",
-                privacy:"privacy policy",
-                privacyUrl:"https://docs.google.com/document/d/e/2PACX-1vQ0WcXsD3kbYli0SqzaQ0yks_r5uuIgIClMLmT_4g6WLbx9zjcXeoAvxHcLmxbQC_OkrFcieFUaghU_/pub",
-                enquiry:"enquiry",
-                enquiryUrl:"https://forms.gle/Y4RPh3k3V9G3wnNp9",
+            messages: {
+                terms: "terms of service",
+                termsUrl:
+                    "https://docs.google.com/document/d/e/2PACX-1vSdKoL_dJ3sVwsBBdNh-lVetKD-WupAVq56CYTpTkpkcMHvTNfBruWBnqleHuYDPa7yv1CkdfCL79im/pub",
+                privacy: "privacy policy",
+                privacyUrl:
+                    "https://docs.google.com/document/d/e/2PACX-1vQ0WcXsD3kbYli0SqzaQ0yks_r5uuIgIClMLmT_4g6WLbx9zjcXeoAvxHcLmxbQC_OkrFcieFUaghU_/pub",
+                enquiry: "enquiry",
+                enquiryUrl: "https://forms.gle/Y4RPh3k3V9G3wnNp9",
             },
-
-        }
+        };
     },
-    components:{},
+    components: {},
     mounted() {
         this.$nextTick(function () {
             // 一番最初の画面で言語が変更されるのにどうしてもほんのすこし時間がかかる
             // ごり押しだが更新が終わるの待つために短時間だけ処理を止める
             setTimeout(() => {
-                if (this.$store.state.lang == "ja"){this.messages = this.japanese}
-            }, "100")
-
-        })
+                if (this.$store.state.lang == "ja") {
+                    this.messages = this.japanese;
+                }
+            }, "100");
+        });
     },
-}
+};
 </script>
 
 <style lang="scss" scoped>
-footer{
+footer {
     width: 100%;
-    padding:1rem 0;
+    padding: 1rem 0;
     background-color: rgb(127, 255, 174);
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 1rem;
-    a {color: black;}
-    @media (max-width: 450px){flex-flow: column;}
+    a {
+        color: black;
+    }
+    @media (max-width: 450px) {
+        flex-flow: column;
+    }
 }
 </style>
-
-

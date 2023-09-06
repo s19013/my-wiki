@@ -1,86 +1,88 @@
 <template>
     <div class="SearchOption">
-
         <SelectComponent
             class="searchQuantity"
             ref="searchQuantity"
             :selected="oldSearchQuantity"
             :label="messages.searchQuantity"
             :list="searchQuantityLabelList"
-         />
+        />
 
-         <SelectComponent
+        <SelectComponent
             class="sort"
             ref="sort"
             :selected="sortSelected"
             :label="messages.sortLabel"
             :list="sortLabelList"
             :object="true"
-
-         />
+        />
     </div>
 </template>
 
 <script>
-import SelectComponent from './SelectComponent.vue'
-export default{
+import SelectComponent from "./SelectComponent.vue";
+export default {
     data() {
         return {
-            japanese:{
-                searchQuantity:"検索数",
-                sortLabel:"並び順",
+            japanese: {
+                searchQuantity: "検索数",
+                sortLabel: "並び順",
             },
-            messages:{
-                searchQuantity:"search quantity",
-                sortLabel:"sort",
+            messages: {
+                searchQuantity: "search quantity",
+                sortLabel: "sort",
             },
-            searchQuantity:this.oldSearchQuantity,
-            searchQuantityLabelList:[
-                {label:"10",value:10},
-                {label:"20",value:20},
-                {label:"30",value:30},
-                {label:"40",value:40},
-                {label:"50",value:50},
+            searchQuantity: this.oldSearchQuantity,
+            searchQuantityLabelList: [
+                { label: "10", value: 10 },
+                { label: "20", value: 20 },
+                { label: "30", value: 30 },
+                { label: "40", value: 40 },
+                { label: "50", value: 50 },
             ],
-            sortSelected:this.oldSortType,
-
-        }
+            sortSelected: this.oldSortType,
+        };
     },
-    components:{SelectComponent},
-    props:{
-        oldSearchQuantity:{
+    components: { SelectComponent },
+    props: {
+        oldSearchQuantity: {
             type: Number,
-            default:10
+            default: 10,
         },
-        oldSortType:{
-            type:String,
-            default:"updated_at_desc"
+        oldSortType: {
+            type: String,
+            default: "updated_at_desc",
         },
-        sortLabelList:{
+        sortLabelList: {
             type: Array,
-            default:[]
-        }
+            default: [],
+        },
     },
     methods: {
-        serveSearchQuantity(){return this.$refs.searchQuantity.serveLocalSelected()},
-        serveSort(){return (this.$refs.sort.serveLocalSelected())},
+        serveSearchQuantity() {
+            return this.$refs.searchQuantity.serveLocalSelected();
+        },
+        serveSort() {
+            return this.$refs.sort.serveLocalSelected();
+        },
     },
     mounted() {
         this.$nextTick(function () {
-            if (this.$store.state.lang == "ja"){Object.assign(this.messages,this.japanese)}
-        })
+            if (this.$store.state.lang == "ja") {
+                Object.assign(this.messages, this.japanese);
+            }
+        });
     },
-}
-
+};
 </script>
 
 <style scoped lang="scss">
-.SelectComponent{
-    margin-bottom:1rem;
+.SelectComponent {
+    margin-bottom: 1rem;
 }
-.SearchOption{
+.SearchOption {
     display: flex;
     flex-wrap: wrap;
-    gap:1rem;
+    gap: 1rem;
 }
 </style>
