@@ -15,3 +15,5 @@ eslint --init
 とりあえず eslint いれて prettier と連携するツール入れて
 eslint --init を実行した
 大丈夫かな｡｡｡
+以下のサイトを参考にすれば--initが何してるかわかる
+https://zenn.dev/ken505/articles/817024d544c5ea
