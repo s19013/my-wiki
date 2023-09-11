@@ -49,13 +49,18 @@
 https://github.com/s19013/my-wiki/tree/main/dev_memo
 
 ## この作品をもとに書いた記事
-<a href="https://qiita.com/hideya670/items/268a9643488e4036706a" target="_blank">
-    エンジニアになれないへっぽこな私が実装したタグをつける機能とタグの検索機能(n番煎じ)  
-</a>  
+<p>
+    <a href="https://qiita.com/hideya670/items/268a9643488e4036706a" target="_blank">
+        エンジニアになれないへっぽこな私が実装したタグをつける機能とタグの検索機能(n番煎じ)  
+    </a>    
+</p>
 
-<a href="https://qiita.com/hideya670/items/8a1e3fc31bf4611550a8" target="_blank">
-    個人開発物のデータベース構造の変化とそうした理由
-</a>
+<p>
+    <a href="https://qiita.com/hideya670/items/8a1e3fc31bf4611550a8" target="_blank">
+        個人開発物のデータベース構造の変化とそうした理由
+    </a>
+</p>
+
 
 ## 使った技術
 * php
@@ -153,7 +158,7 @@ A:※一部機能の一部しか触ってない,どちらも触り始めたば�
 * [サーバーサイドのテストコード](https://github.com/s19013/my-wiki/tree/main/tests)
 * [シェルスクリプトによる定期的なバックアップ](https://github.com/s19013/my-wiki/blob/main/shellScript/scheduledBackup.sh)
 * [シェルスクリプトによる定期的な論理削除されたデータの物理削除](https://github.com/s19013/my-wiki/blob/main/shellScript/periodicDeletion.sh)
-* このアプリを元にqiitaを書いた
+* [このアプリを元にqiitaを書いた](#この作品をもとに書いた記事)
 
 ## 苦労したところ 頑張ったところ
 * とある目的を達成するために自作コンポーネントを作っていたが｡わざわざ自作コンポーネントをつくらなくても達成できるとわかり｡無駄な時間を浪費してしまったこと｡
