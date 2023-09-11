@@ -69,7 +69,7 @@ https://github.com/s19013/my-wiki/tree/main/dev_memo
 * mariaDB
 
 ## 使っていたがやめた技術
-* [gcp](一度gcpを採用した理由は)
+* [gcp](#一度gcpを採用した理由は)
 * computer engine
 
 ## この作品をもとに書いた記事
