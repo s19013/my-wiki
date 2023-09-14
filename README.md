@@ -218,7 +218,7 @@ A:※一部機能の一部しか触ってない,どちらも触り始めたば�
 他多数
 
 ## 今後追加(改善)したい機能
-githubの[issue](https://github.com/s19013/my-wiki/issues)にも書いてあるが
+詳細はissue(https://github.com/s19013/my-wiki/issues)に
 * メモ､ブックマーク登録､編集
     * markedでは機能が不十分に感じるので他のパッケージを探す
         * 引用の書き方が反映されない
