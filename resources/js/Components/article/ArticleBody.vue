@@ -24,7 +24,6 @@
         <div v-show="activeTab === 1">
             <v-textarea
                 ref="textarea"
-                filled
                 no-resize
                 rows="20"
                 :label="messages.bodylabel"
@@ -33,7 +32,7 @@
             ></v-textarea>
         </div>
 
-        <CompiledMarkDown v-show="activeTab === -1" :originalMarkDown="body" />
+        <CompiledMarkDown ref="compiled" v-show="activeTab === -1" />
     </div>
 </template>
 
@@ -71,6 +70,8 @@ export default {
             this.activeTab *= -1;
             if (this.activeTab === 1) {
                 this.focusToBody();
+            } else {
+                this.$refs.compiled.compileMarkDown(this.body);
             }
         },
         serveBody() {
