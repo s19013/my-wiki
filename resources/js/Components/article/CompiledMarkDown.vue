@@ -1,8 +1,5 @@
 <template>
-    <div
-        class="CompiledMarkDown markdown-body"
-        v-html="compileMarkDown()"
-    ></div>
+    <div class="CompiledMarkDown markdown-body" v-html="this.body"></div>
 </template>
 
 <script>
@@ -17,21 +14,21 @@ marked.setOptions({
     gfm: true,
 });
 export default {
-    props: {
-        originalMarkDown: {
-            type: String,
-            default: "",
-        },
+    data() {
+        return {
+            body: null,
+        };
     },
     methods: {
-        compileMarkDown() {
+        compileMarkDown(originalMarkDown = "") {
             // 無毒化
-            const sanitized = sanitizeHtml(this.originalMarkDown, {
+            const sanitized = sanitizeHtml(originalMarkDown, {
                 enforceHtmlBoundary: true,
             });
             const beforeCompiled = this.replaceMarkDownBefore(sanitized);
             const compiled = marked(beforeCompiled);
-            return this.replaceMarkDownAfter(compiled);
+            // return 先が変わってしまったから変数に入れるしかない
+            this.body = this.replaceMarkDownAfter(compiled);
         },
         // 変換前の処理
         replaceMarkDownBefore(arg) {
@@ -50,11 +47,14 @@ export default {
             // codeタグでは上記の<br   />を消す
             arg = arg.replace(/(?<=`[\s|\S]*)<br   \/>(?=[\s|\S]*`)/g, "");
 
+            // スペースを変換
+
+            // タブを変換
+
             return arg;
         },
         // 変換後の処理
         replaceMarkDownAfter(arg) {
-            console.log(arg);
             // <br   />の副作用でテーブルに余計な空白行が追加される
             // ので､それへの対処
             arg = arg.replace(/<tr>\s*<td><br   \/><\/td>[\s|\S]*<\/tr>/g, "");

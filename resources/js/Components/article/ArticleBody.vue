@@ -22,18 +22,18 @@
         </div>
         <!-- md入力欄  -->
         <div v-show="activeTab === 1">
-            <v-textarea
-                ref="textarea"
-                filled
-                no-resize
-                rows="20"
-                :label="messages.bodylabel"
-                v-model="body"
-                @keydown.tab.prevent.exact="addTabSpace()"
-            ></v-textarea>
+            <label for="">
+                {{ messages.bodylabel }}
+                <textarea
+                    ref="textarea"
+                    v-model="body"
+                    rows="20"
+                    @keydown.tab.prevent.exact="addTabSpace()"
+                />
+            </label>
         </div>
 
-        <CompiledMarkDown v-show="activeTab === -1" :originalMarkDown="body" />
+        <CompiledMarkDown ref="compiled" v-show="activeTab === -1" />
     </div>
 </template>
 
@@ -71,6 +71,8 @@ export default {
             this.activeTab *= -1;
             if (this.activeTab === 1) {
                 this.focusToBody();
+            } else {
+                this.$refs.compiled.compileMarkDown(this.body);
             }
         },
         serveBody() {
@@ -128,8 +130,11 @@ export default {
 textarea {
     width: 100%;
     resize: none;
-    // padding: 20px;
-    background-color: #f6f6f6;
+    padding: 10px;
+    background-color: #e9e9e9;
+    font-family: "Roboto", "Noto Sans" !important;
+    // いまいちしっくりこない
+    // できたらvuetifyのフォントをつかいたいので後日探す
 }
 
 .tabLabel {

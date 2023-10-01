@@ -34,7 +34,7 @@
             <h1 class="title">{{ article.title }}</h1>
 
             <!-- md表示 -->
-            <CompiledMarkDown :originalMarkDown="article.body" />
+            <CompiledMarkDown ref="compiled" />
 
             <loadingDialog />
         </div>
@@ -118,6 +118,10 @@ export default {
         document.addEventListener("keydown", this.keyEvents);
 
         this.$store.commit("setGlobalLoading", false);
+
+        // 変換したマークダウンを表示させとく
+        this.$refs.compiled.compileMarkDown(this.article.body);
+
         this.$nextTick(function () {
             if (this.$store.state.lang == "ja") {
                 this.messages = this.japanese;
