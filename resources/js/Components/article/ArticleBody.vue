@@ -133,6 +133,7 @@ textarea {
     padding: 10px;
     background-color: #e9e9e9;
     font-family: "Roboto", "Noto Sans" !important;
+    overflow-anchor: none; // chromeで改行時に上にずれるのを防ぐため
     // いまいちしっくりこない
     // できたらvuetifyのフォントをつかいたいので後日探す
 }
