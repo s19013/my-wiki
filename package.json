@@ -1,38 +1,40 @@
 {
-    "private": true,
-    "scripts": {
-        "dev": "vite",
-        "build": "vite build"
-    },
-    "devDependencies": {
-        "@inertiajs/inertia": "^0.11.0",
-        "@inertiajs/inertia-vue3": "^0.6.0",
-        "@inertiajs/progress": "^0.2.7",
-        "@tailwindcss/forms": "^0.5.2",
-        "@vitejs/plugin-vue": "^2.3.3",
-        "autoprefixer": "^10.4.2",
-        "axios": "^0.25",
-        "eslint": "^8.48.0",
-        "eslint-config-prettier": "^9.0.0",
-        "eslint-plugin-vue": "^9.17.0",
-        "laravel-vite-plugin": "^0.2.1",
-        "lodash": "^4.17.19",
-        "marked": "^4.0.18",
-        "postcss": "^8.4.6",
-        "postscribe": "^2.0.8",
-        "sass": "^1.53.0",
-        "sass-loader": "^13.0.2",
-        "tailwindcss": "^3.1.0",
-        "vite": "^2.9.11",
-        "vue": "^3.2.31",
-        "vuetify": "^3.0.0-beta.5",
-        "vuex": "^4.0.2"
-    },
-    "dependencies": {
-        "@mdi/font": "^7.0.96",
-        "github-markdown-css": "^5.1.0",
-        "sanitize-html": "^2.7.3",
-        "vue-i18n": "^9.2.2",
-        "vue-script-insert": "^0.4.4"
-    }
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "@inertiajs/inertia": "^0.11.0",
+    "@inertiajs/inertia-vue3": "^0.6.0",
+    "@inertiajs/progress": "^0.2.7",
+    "@playwright/test": "^1.39.0",
+    "@tailwindcss/forms": "^0.5.2",
+    "@types/node": "^20.8.10",
+    "@vitejs/plugin-vue": "^2.3.3",
+    "autoprefixer": "^10.4.2",
+    "axios": "^0.25",
+    "eslint": "^8.48.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-vue": "^9.17.0",
+    "laravel-vite-plugin": "^0.2.1",
+    "lodash": "^4.17.19",
+    "marked": "^4.0.18",
+    "postcss": "^8.4.6",
+    "postscribe": "^2.0.8",
+    "sass": "^1.53.0",
+    "sass-loader": "^13.0.2",
+    "tailwindcss": "^3.1.0",
+    "vite": "^2.9.11",
+    "vue": "^3.2.31",
+    "vuetify": "^3.0.0-beta.5",
+    "vuex": "^4.0.2"
+  },
+  "dependencies": {
+    "@mdi/font": "^7.0.96",
+    "github-markdown-css": "^5.1.0",
+    "sanitize-html": "^2.7.3",
+    "vue-i18n": "^9.2.2",
+    "vue-script-insert": "^0.4.4"
+  }
 }
