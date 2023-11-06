@@ -29,6 +29,12 @@ module.exports = defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+
+
+    // ブラウザなしかどうか
+    /* Only on CI systems run the tests headless */
+    // -> 要するにユーザーが実行したらheadedで実行ってこと
+    headless: !!process.env.CI
   },
 
   /* Configure projects for major browsers */
