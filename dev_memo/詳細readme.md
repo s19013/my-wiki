@@ -322,12 +322,14 @@ githubの[issue](https://github.com/s19013/my-wiki/issues)にも書いてある�
 * [【Laravel】 From句にサブクエリを使用する](https://qiita.com/bashi4/items/0da586fde8cfd74667a1)
 * [Laravelでgroup byしたら、"~ isn't in GROUP BY (~)"って怒られました](https://arm4.hatenablog.com/entry/2019/01/11/184734)
 * [Query builder GROUP BY, HAVING, COUNT in Laravel](https://stackoverflow.com/questions/62188895/query-builder-group-by-having-count-in-laravel)
+* [Trick to make laravel Inertia SEO friendly](https://dev.to/hazzazbinfaiz/trick-to-make-laravel-inertia-seo-friendly-3h3j)
 
 
 # html,css
 * [【習得必須】CSSでリストを横並びにする簡単な方法を徹底解説](https://web-camp.io/magazine/archives/100205)
 * [要素をX軸方向へ平行移動するCSSの関数、“translateX()”について](https://web.havincoffee.com/css/value/transform/
 func-translatex.html)
+* [【Chrome】textareaの改行時にカーソル位置がガタっとずれる問題の対処法](https://zenn.dev/catnose99/articles/e0d42812c7588c)
 
 
 # その他
