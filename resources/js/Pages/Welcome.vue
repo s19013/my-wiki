@@ -123,7 +123,7 @@ onMounted(() => {
 
             <div
                 class="mt-8 bg-white overflow-hidden shadow sm:rounded-lg"
-                test-dataid="messages"
+                data-testid="messages"
             >
                 <h3 class="p-3">{{ messages.message }}</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2">
