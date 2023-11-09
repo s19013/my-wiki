@@ -34,7 +34,7 @@ module.exports = defineConfig({
     // ブラウザなしかどうか
     /* Only on CI systems run the tests headless */
     // -> 要するにユーザーが実行したらheadedで実行ってこと
-    headless: !!process.env.CI
+    // headless: !!process.env.CI
   },
 
   /* Configure projects for major browsers */
