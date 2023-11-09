@@ -16,6 +16,6 @@ yarn-error.log
 /.vscode
 /test-results/
 /playwright-report/
-/playwright-screebshot/
+/playwright-screenshot/
 /blob-report/
 /playwright/.cache/
