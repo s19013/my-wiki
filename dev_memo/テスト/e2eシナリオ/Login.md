@@ -35,6 +35,10 @@ url確認(https://sundlf.com/forgot-password)
 ### メアドだけ埋めた
 パスワード欄の近くに｢このフィールドを入力してください｣と表示される
 
+### パスワードが間違ってる
+
+### メアドが間違ってる
+
 ## ログイン成功
 ### ブックマーク検索画面に遷移しているか
 url確認(https://sundlf.com/forgot-password)  

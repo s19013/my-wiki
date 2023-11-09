@@ -31,6 +31,10 @@ url確認(https://sundlf.com/en)
 -> さっと見た目を確認する程度で十分  
 初期状態と似たような感じで良いでしょ｡
 
+### アドオンに飛ぶか
+別タブで開いているか  
+url確認(https://chrome.google.com/webstore/detail/sundlf-bookmark-addon/mfcobcdpjbgnpbkhbbfaabkkphpceoka)
+
 
 ### 利用規約にとぶか
 #### expect
@@ -42,6 +46,14 @@ url確認(https://docs.google.com/document/d/e/2PACX-1vQRfqPmWcI2irs1HpRBOjA9lyo
 別タブで開いているか  
 url確認(https://docs.google.com/document/d/e/2PACX-1vQCW5pRoXeXHiZJ-vz8MImLVm-XTViLIdy1TxTBtsbAAzYb4MpPEaEFucHaWnpzDkI905s5AeW6rui3/pub)
 
-### アドオンに飛ぶか
+### 問い合わせに飛ぶか
+#### expect
 別タブで開いているか  
 url確認(https://docs.google.com/forms/d/e/1FAIpQLSem2D3fV18IWkSeT5BekQOYvW951xetTNRB_mtlPArAn4R1gw/viewform)
+
+### ログインしたらリンクとボタンが変わるか
+ログインした状態ならログインボタンと新規登録ボタンが消える  
+ホームに戻るボタンが表示される
+#### expect
+ログインボタンと新規登録ボタンが消える  
+ホームに戻るボタンが表示される  
