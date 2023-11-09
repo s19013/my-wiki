@@ -14,3 +14,8 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
+/test-results/
+/playwright-report/
+/playwright-screenshot/
+/blob-report/
+/playwright/.cache/

@@ -121,7 +121,10 @@ onMounted(() => {
                 <img :src="'/sundlf_logo.png'" alt="ロゴ" />
             </div>
 
-            <div class="mt-8 bg-white overflow-hidden shadow sm:rounded-lg">
+            <div
+                class="mt-8 bg-white overflow-hidden shadow sm:rounded-lg"
+                data-testid="messages"
+            >
                 <h3 class="p-3">{{ messages.message }}</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2">
                     <WelcomMessageContainer
@@ -164,6 +167,8 @@ onMounted(() => {
                             <div class="mt-2 text-gray-600 text-s">
                                 <p>{{ messages.addonMessage }}</p>
                                 <a
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     href="https://chrome.google.com/webstore/detail/sundlf-bookmark-addon/mfcobcdpjbgnpbkhbbfaabkkphpceoka"
                                     >{{ messages.downloadMessage }}</a
                                 >
