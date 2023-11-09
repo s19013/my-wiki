@@ -167,6 +167,8 @@ onMounted(() => {
                             <div class="mt-2 text-gray-600 text-s">
                                 <p>{{ messages.addonMessage }}</p>
                                 <a
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     href="https://chrome.google.com/webstore/detail/sundlf-bookmark-addon/mfcobcdpjbgnpbkhbbfaabkkphpceoka"
                                     >{{ messages.downloadMessage }}</a
                                 >
