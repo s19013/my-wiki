@@ -30,7 +30,7 @@ const japanese = reactive({
     email: "メールアドレス",
     password: "パスワード",
     confirm: "確認のため パスワードをもう一度入力してください",
-    forgotPassword: "パスワードをわすれた場合",
+    login: "ログインはこちら",
     register: "登録",
     message:
         "ユーザーごとにデータを保存するためにアカウントを作る必要があります",
@@ -41,7 +41,7 @@ const messages = reactive({
     email: "Email",
     password: "Password",
     confirm: "Confirm Password",
-    forgotPassword: "Forgot your password?",
+    login: "Log in is here",
     register: "Register",
     message: "An account must be created for each user to store data",
 });
@@ -156,7 +156,7 @@ onMounted(() => {
                     :href="route('login')"
                     class="underline text-sm text-gray-600 hover:text-gray-900"
                 >
-                    <p>{{ messages.forgotPassword }}</p>
+                    <p>{{ messages.login }}</p>
                 </Link>
 
                 <BreezeButton
