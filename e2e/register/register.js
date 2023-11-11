@@ -17,6 +17,6 @@ test('default', async ({ page }) => {
     await expect(page.getByText('利用規約に同意します')).toBeVisible();
     await expect(page.getByLabel('プライバシーポリシーに同意します')).toBeVisible();
     await expect(page.getByText('プライバシーポリシーに同意します')).toBeVisible();
-    await expect(page.getByRole('link', { name: 'パスワードをわすれた場合' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'ログインはこちら' })).toBeVisible();
     await expect(page.getByRole('button', { name: '登録' })).toBeVisible();
 })
