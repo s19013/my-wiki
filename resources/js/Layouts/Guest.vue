@@ -34,6 +34,9 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
+footer {
+    margin-top: 5rem;
+}
 img {
     width: 30vw;
     @media (max-width: 900px) {
