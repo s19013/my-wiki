@@ -73,6 +73,7 @@ onMounted(() => {
                     required
                     autofocus
                     autocomplete="name"
+                    data-testid="nameInput"
                 />
             </div>
 
@@ -85,7 +86,9 @@ onMounted(() => {
                     v-model="form.email"
                     required
                     autocomplete="username"
+                    data-testid="emailInput"
                 />
+                <!-- autocomplete="username"っておかしくない? -->
             </div>
 
             <div class="mt-4">
@@ -97,6 +100,7 @@ onMounted(() => {
                     v-model="form.password"
                     required
                     autocomplete="new-password"
+                    data-testid="passwordInput"
                 />
             </div>
 
@@ -112,11 +116,17 @@ onMounted(() => {
                     v-model="form.password_confirmation"
                     required
                     autocomplete="new-password"
+                    data-testid="passwordConfirmationInput"
                 />
             </div>
 
             <div class="mt-4">
-                <input type="checkbox" id="terms" required />
+                <input
+                    type="checkbox"
+                    id="terms"
+                    data-testid="termsCheckbox"
+                    required
+                />
                 <label for="terms" v-if="store.state.lang == 'ja'">
                     <a
                         target="_blank"
@@ -134,7 +144,12 @@ onMounted(() => {
                 </label>
             </div>
             <div class="mt-4">
-                <input type="checkbox" id="privacy" required />
+                <input
+                    type="checkbox"
+                    id="privacy"
+                    data-testid="privacyCheckbox"
+                    required
+                />
                 <label for="privacy" v-if="store.state.lang == 'ja'">
                     <a
                         target="_blank"
