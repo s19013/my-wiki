@@ -41,7 +41,7 @@ test("ログイン画面が表示されるか",async({page}) => {
 test.describe("登録失敗",() => {
     // 条件:何も埋めてない
     // 期待:｢このフィールドを入力してください｣と表示される(スクショを目視で確認)
-    test('登録失敗:何も埋めてない',async({page}) => {
+    test('何も埋めてない',async({page}) => {
         await page.goto(baseHome + "register");
         await page.getByRole('button', { name: '登録' }).click();
         await page.screenshot({ path: 'playwright-screenshot/register/登録失敗-何も埋めてない-jp.jpg', fullPage: false });
@@ -49,7 +49,7 @@ test.describe("登録失敗",() => {
 
     // 条件:メアドの欄に適当な文字列を入れる
     // 期待:｢[@]を挿入してください｣と表示される(スクショを目視で確認)
-    test('登録失敗:メアド欄にメアド以外の文字列を入力',async({page}) => {
+    test('メアド欄にメアド以外の文字列を入力',async({page}) => {
         await page.goto(baseHome + "register");
         await page.getByLabel('メールアドレス').fill('aaa');
         await page.getByRole('button', { name: '登録' }).click();
