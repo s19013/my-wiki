@@ -1,5 +1,5 @@
 <template>
-    <div class="deleteAlertDialog">
+    <div class="deleteAlertDialog" data-testid="deleteAlertDialog">
         <!-- ダイアログを呼び出すためのボタン -->
 
         <v-btn

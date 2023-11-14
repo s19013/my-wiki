@@ -1,12 +1,18 @@
 <template>
-    <div class ="content">
+    <div class="content" data-testid="articleContainer">
         <div class="others">
-            <p><span>{{ messages.count }}</span>:{{ article.count }}</p>
-            <DateLabel :createdAt="article.created_at" :updatedAt="article.updated_at"/>
+            <p>
+                <span>{{ messages.count }}</span
+                >:{{ article.count }}
+            </p>
+            <DateLabel
+                :createdAt="article.created_at"
+                :updatedAt="article.updated_at"
+            />
         </div>
         <div class="elements">
             <Link :href="'/Article/View/' + article.id">
-                <h3>{{article.title}}</h3>
+                <h3>{{ article.title }}</h3>
             </Link>
             <Link :href="'/Article/Edit/' + article.id">
                 <v-btn color="submit" elevation="2" size="small">
@@ -18,77 +24,82 @@
 </template>
 
 <script>
-import { Link } from '@inertiajs/inertia-vue3';
-import DateLabel from '@/Components/DateLabel.vue';
-export default{
+import { Link } from "@inertiajs/inertia-vue3";
+import DateLabel from "@/Components/DateLabel.vue";
+export default {
     data() {
         return {
-            japanese:{
-                button:"編集",
-                count:"閲覧数"
+            japanese: {
+                button: "編集",
+                count: "閲覧数",
             },
-            messages:{
-                button:"Edit",
-                count:"count"
-            }
-        }
+            messages: {
+                button: "Edit",
+                count: "count",
+            },
+        };
     },
-    components:{
+    components: {
         Link,
-        DateLabel
+        DateLabel,
     },
-    props:{article:{type:Object}},
-    mounted(){
+    props: { article: { type: Object } },
+    mounted() {
         this.$nextTick(function () {
-            if (this.$store.state.lang == "ja"){this.messages = this.japanese}
-        })
+            if (this.$store.state.lang == "ja") {
+                this.messages = this.japanese;
+            }
+        });
     },
-}
+};
 </script>
 
 <style scope lang="scss">
-.others{
-    span{font-weight: 500;}
-    p{
-        font-size: 0.8rem;
-        text-align:right
+.others {
+    span {
+        font-weight: 500;
     }
-    .DateLabel{justify-content: flex-end;}
+    p {
+        font-size: 0.8rem;
+        text-align: right;
+    }
+    .DateLabel {
+        justify-content: flex-end;
+    }
 }
 
-@media (min-width: 440px){
-    .others{
+@media (min-width: 440px) {
+    .others {
         display: flex;
         justify-content: flex-end;
-        word-break   :break-word;
-        overflow-wrap:normal;
+        word-break: break-word;
+        overflow-wrap: normal;
         gap: 0.6rem;
     }
 }
 
-.elements{
+.elements {
     display: grid;
-    grid-template-columns:10fr 1fr;
-    gap:0.5rem;
+    grid-template-columns: 10fr 1fr;
+    gap: 0.5rem;
     background-color: #e1e1e1;
-    border:black solid 1px;
+    border: black solid 1px;
     padding: 5px;
-    h3{
+    h3 {
         // @media (min-width: 420px){font-size: 1.3rem;}
         font-size: 1.3rem;
         margin: auto 0;
         grid-column: 1/2;
-        word-break   :break-word;
-        overflow-wrap:normal;
+        word-break: break-word;
+        overflow-wrap: normal;
     }
-    button{
+    button {
         width: 100%;
         grid-column: 2/3;
     }
-    a{
+    a {
         text-decoration: none;
         color: black;
     }
 }
-
 </style>

@@ -1,9 +1,9 @@
 <template>
-    <div class="deleteAlertDialog">
+    <div class="confirmationDialog" data-testid="confirmationDialog">
         <v-dialog v-model="dialogFlag" persistent>
             <section class="global_css_Dialog">
                 <h2>{{ messages.message }}</h2>
-                <div class="control">
+                <div class="controll">
                     <v-btn class="cancel" @click.stop="dialogFlagSwitch()">
                         <p>{{ messages.cancel }}</p>
                     </v-btn>
@@ -92,7 +92,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.control {
+.controll {
     p {
         text-align: center;
         margin: auto;

@@ -1,5 +1,5 @@
 <template>
-    <div class="tagList">
+    <div class="tagList" data-testid="tagList">
         <p><v-icon>mdi-tag</v-icon>{{ text }}</p>
         <ul v-if="!disabled">
             <li v-for="(tag, i) in tagList" :key="tag.name">

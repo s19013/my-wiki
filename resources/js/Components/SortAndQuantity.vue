@@ -1,7 +1,8 @@
 <template>
-    <div class="SearchOption">
+    <div class="SearchOption" data-testid="SelectComponent">
         <SelectComponent
             class="searchQuantity"
+            data-testid="searchQuantity"
             ref="searchQuantity"
             :selected="oldSearchQuantity"
             :label="messages.searchQuantity"
@@ -10,6 +11,7 @@
 
         <SelectComponent
             class="sort"
+            data-testid="sort"
             ref="sort"
             :selected="sortSelected"
             :label="messages.sortLabel"

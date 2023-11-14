@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="originalHead">
+        <div class="originalHead" data-testid="originalHead">
             <h2>{{ pageTitle }}</h2>
             <v-btn
                 @click.stop="$refs.NavMenu.show = true"

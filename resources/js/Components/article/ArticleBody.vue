@@ -1,5 +1,5 @@
 <template>
-    <div class="articleBody">
+    <div class="articleBody" data-testid="articleBody">
         <!-- タブ -->
         <p>{{ messages.shotcutMessage }}</p>
         <div class="tabLabel">

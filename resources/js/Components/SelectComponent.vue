@@ -1,5 +1,5 @@
 <template>
-    <div class="SelectComponent">
+    <div class="SelectComponent" data-testid="selectComponent">
         <p>{{ label }}:</p>
         <!-- ただの配列 -->
         <div class="selecter">
