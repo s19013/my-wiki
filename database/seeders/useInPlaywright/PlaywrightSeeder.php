@@ -24,5 +24,8 @@ class PlaywrightSeeder extends Seeder
         (new ArticleSeeder())->run();
     }
 }
+
+// artisanコマンド作るんじゃなくてbashで良いかも?2つ連続で実行するだけだし
+// -> でもディレクトリ実行する必要があるな｡｡｡
 // php artisan migrate:fresh
 // php artisan db:seed --class=Database\\Seeders\\useInPlaywright\\PlaywrightSeeder
