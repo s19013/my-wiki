@@ -13,7 +13,7 @@ use App\Models\BookMarkTag;
 use App\Models\Tag;
 
 
-class SampleDataForNewRegistrantsJp extends Seeder
+class SampleDataForNewRegistrantsEn extends Seeder
 {
     /**
      * Seed the application's database.
@@ -24,18 +24,18 @@ class SampleDataForNewRegistrantsJp extends Seeder
     {
         $tag = Tag::create([
             'user_id' => $userId,
-            'name'    => "サンプルタグ"
+            'name'    => "sampleTag"
         ]);
 
         $article = Article::create([
             'user_id'  => $userId,
-            'title'    => "サンプルデータ",
-            'body'     => "登録していただきありがとうございます｡タグはいくつでもつけることができます",
+            'title'    => "sample",
+            'body'     => "Thank you for registering. You can add as many tags as you like.",
         ]);
 
         ArticleTag::factory()->create([
             "article_id" => $article->id,
-            "tag_id"     => (Tag::where('name', "サンプルタグ")->first())->id
+            "tag_id"     => (Tag::where('name', "sampleTag")->first())->id
         ]);
 
         // 本来ならqaへのリンクとか入れときたい
