@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders\useInPlaywight;
+namespace Database\Seeders\useInPlaywright;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
