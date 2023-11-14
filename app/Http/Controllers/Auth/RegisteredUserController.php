@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 
+use Database\Seeders\SampleDataForNewRegistrantsJp;
+use Database\Seeders\SampleDataForNewRegistrantsEn;
+
 class RegisteredUserController extends Controller
 {
     /**
@@ -49,6 +52,14 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
 
         Auth::login($user);
+
+        // サンプルデータを作る
+        if ((substr($request->headers->get("UserLang"), 0,2)) == 'ja'){
+            (new SampleDataForNewRegistrantsJp)->run($user->id);
+        } else {
+            (new SampleDataForNewRegistrantsEn)->run($user->id);
+        }
+
 
         return redirect(RouteServiceProvider::HOME);
     }
