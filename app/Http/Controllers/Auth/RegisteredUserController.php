@@ -54,7 +54,8 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         // サンプルデータを作る
-        if ((substr($request->headers->get("UserLang"), 0,2)) == 'ja'){
+
+        if ((substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0,2)) == 'ja'){
             (new SampleDataForNewRegistrantsJp)->run($user->id);
         } else {
             (new SampleDataForNewRegistrantsEn)->run($user->id);
