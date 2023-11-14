@@ -9,7 +9,7 @@ use App\Models\User;
 use App\Models\Tag;
 
 
-class ArticleSeeder extends Seeder
+class TagSeeder extends Seeder
 {
     /**
      * Seed the application's database.

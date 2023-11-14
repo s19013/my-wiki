@@ -10,7 +10,7 @@ use Database\Seeders\useInPlaywright\ArticleSeeder;
 use Database\Seeders\useInPlaywright\TagSeeder;
 
 
-class DatabaseSeeder extends Seeder
+class PlaywrightSeeder extends Seeder
 {
     /**
      * Seed the application's database.
