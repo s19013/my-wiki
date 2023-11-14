@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
 const baseHome = 'http://127.0.0.1:8000/'
-const testuser = "testuser"
-const testmail = 'testuser@abc.com'
-const testpass = 'testuser'
+const testuser = "testuser2"
+const testmail = 'testuser2@abc.com'
+const testpass = 'testuser2'
 
 test.use({locale: 'ja-JP',})
 // 期待:表示されるべきものが全部表示されているか

@@ -22,14 +22,11 @@ class ManyMakeSeeder extends Seeder
      */
     public function run()
     {
-        $mainUser  = User::factory()->create([
-            'email'    => 'hideya670@gmail.com',
-            'password' => Hash::make("gemini0522"),
-        ]);
+        $mainUserId  = 1;
         $otherUser = User::factory()->create();
         // $mainTags      = Tag::factory()->create();
 
-        $mainArticles = Article::factory()->count(10)->create(['user_id' => $mainUser->id]);
+        $mainArticles = Article::factory()->count(10)->create(['user_id' => $mainUserId]);
         $otherArticles = Article::factory()->count(10)->create(['user_id' => $otherUser->id]);
 
         foreach ($mainArticles as $article){
@@ -46,7 +43,7 @@ class ManyMakeSeeder extends Seeder
             ]);
         }
 
-        $mainBookMarks = BookMark::factory()->count(10)->create(['user_id' => $mainUser->id]);
+        $mainBookMarks = BookMark::factory()->count(10)->create(['user_id' => $mainUserId]);
         $otherBookMarks = BookMark::factory()->count(10)->create(['user_id' => $otherUser->id]);
 
         foreach ($mainBookMarks as $bookMark){
