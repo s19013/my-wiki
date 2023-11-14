@@ -24,5 +24,5 @@ class PlaywrightSeeder extends Seeder
         (new ArticleSeeder())->run();
     }
 }
-
+// php artisan migrate:fresh
 // php artisan db:seed --class=Database\\Seeders\\useInPlaywright\\PlaywrightSeeder
