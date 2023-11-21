@@ -68,7 +68,7 @@ test('default', async ({page}) => {
     await expect(page.getByTestId('nextButton')).toBeVisible();
     await expect(page.getByTestId('nextButton')).toBeEnabled();
 
-    await page.screenshot({ path: 'playwright-screenshot/searchArticke/default-jp.jpg', fullPage: false });
+    await page.screenshot({ path: 'playwright-screenshot/searchArtice/default-jp.jpg', fullPage: false });
 })
 
 test('検索結果が10件以下(初期の値)の場合一部ボタンが押せない', async({page}) => {
@@ -152,6 +152,25 @@ test('検索結果が10件以下(初期の値)の場合一部ボタンが押せ�
 
     await expect(page.getByTestId('searchQuantity').getByRole('combobox')).toHaveValue('20');
     await expect(page.getByTestId('sort').getByRole('combobox')).toHaveValue('updated_at_asc');
+ })
+
+ test('検索した後設定がそのままになっているかどうか.タグなし', async({page}) => {
+    await page.getByLabel('タグがない記事を探す').check();
+
+    await page.getByRole('button', { name: '検索' }).click()
+    await page.waitForURL('**/Search?**')
+
+    await expect(page.getByTestId('tagDialogOpenButton')).toBeDisabled();
+ })
+
+
+
+test('プルダウン確認', async({page}) => {
+    await page.getByTestId('searchQuantity').getByRole('combobox').click()
+    await page.screenshot({ path: 'playwright-screenshot/searchArtice/pulldown-quantity-jp.jpg', fullPage: false });
+
+    await page.getByTestId('sort').getByRole('combobox').click()
+    await page.screenshot({ path: 'playwright-screenshot/searchArtice/pulldown-sort-jp.jpg', fullPage: false });
  })
 
 //  test('', async({page}) => {
