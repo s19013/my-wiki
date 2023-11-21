@@ -6,7 +6,7 @@ test.beforeEach('Setup', async ({page}) => {
     await page.goto('http://127.0.0.1:8000/Article/Search');
   });
 
-// 期待:表示されるべきものが全部表示されているか
+// 期待:表示されるべきものが全部表示されているか(すでに10件以上のデータを登録している前提)
 test('default', async ({page}) => {
 
     await expect(page.getByRole('heading', { name: '記事検索' })).toBeVisible();
@@ -14,6 +14,7 @@ test('default', async ({page}) => {
     await expect(page.getByRole('textbox').first()).toBeVisible();
     await expect(page.getByLabel('記事検索')).toHaveValue('')
     await expect(page.getByRole('button', { name: '検索' })).toBeVisible();
+
 
     await expect(page.getByText('タグがない記事を探す')).toBeVisible();
     await expect(page.getByLabel('タグがない記事を探す')).toBeVisible();
@@ -40,11 +41,9 @@ test('default', async ({page}) => {
     await expect(page.getByTestId('sort').getByRole('combobox')).toHaveValue('updated_at_desc');
 
 
+    // for inとかで回したら謎の数字が吐き出されるのでこれで
     const containers = await page.locator('.others').all();
     const containersCount = containers.length;
-
-
-    // for inとかで回したら謎の数字が吐き出されるのでこれで
     for (var index = 0; index < containersCount; index++){
         //今回はタグに関しては調べない､中の文字列だけ知りたいのでinnerHTMLじゃなくて良い
         const innerText = await containers[index].innerText();
@@ -53,7 +52,30 @@ test('default', async ({page}) => {
         await expect(innerText).toContain('編集日');
     }
 
+    await expect(page.getByLabel('Previous page')).toBeDisabled();
+    await expect(page.getByLabel('Next page')).toBeEnabled();
+
+    const pagination =await (page.getByTestId('v-pagination').getByRole('list')).innerText()
+    expect(pagination.length).not.toBe(0)
+
+    await expect(page.getByTestId('preButton')).toBeVisible();
+    await expect(page.getByTestId('preButton')).toBeDisabled();
+    await expect(page.getByTestId('nextButton')).toBeVisible();
+    await expect(page.getByTestId('nextButton')).toBeEnabled();
+
     await page.screenshot({ path: 'playwright-screenshot/searchArticke/default-jp.jpg', fullPage: false });
 })
 
+test('検索結果が10件以下(初期の値)の場合一部ボタンが押せない', async({page}) => {
 
+    // 適当な値を入れて何もデータが表示されない状態にする
+    await page.getByLabel('記事検索').fill('aaa');
+    await page.getByRole('button', { name: '検索' }).click();
+    await page.waitForURL('**/Search?**')
+    await expect(page.getByTestId('preButton')).toBeDisabled();
+    await expect(page.getByTestId('nextButton')).toBeDisabled();
+    await expect(page.getByLabel('Previous page')).toBeDisabled();
+    await expect(page.getByLabel('Next page')).toBeDisabled();
+    const pagination = await (page.getByTestId('v-pagination').getByRole('list')).innerText()
+    expect(pagination.length).toBe(0)
+ })
