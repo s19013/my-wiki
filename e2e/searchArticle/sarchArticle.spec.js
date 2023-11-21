@@ -22,6 +22,12 @@ test('default', async ({page}) => {
 
     await expect(page.getByText('検索するタグ')).toBeVisible();
     await expect(page.getByTestId('tagList').getByRole('list')).toBeVisible();
+
+    // ついてるタグの数(1つもついてない)
+    const tags = await (page.getByTestId('tagList').getByRole('list')).innerText()
+    expect(tags.length).toBe(0)
+
+
     await expect(page.getByText('検索対象')).toBeVisible();
     await expect(page.getByTestId('SearchTarget').getByText('タイトル')).toBeVisible();
     await expect(page.getByLabel('タイトル')).toBeVisible();
@@ -39,7 +45,6 @@ test('default', async ({page}) => {
 
     await expect(page.getByTestId('sort').getByRole('combobox')).toBeVisible();
     await expect(page.getByTestId('sort').getByRole('combobox')).toHaveValue('updated_at_desc');
-
 
     // for inとかで回したら謎の数字が吐き出されるのでこれで
     const containers = await page.locator('.others').all();
@@ -79,3 +84,76 @@ test('検索結果が10件以下(初期の値)の場合一部ボタンが押せ�
     const pagination = await (page.getByTestId('v-pagination').getByRole('list')).innerText()
     expect(pagination.length).toBe(0)
  })
+
+ test('[タグが無い記事を探す]にチェックを入れるとタグダイアログボタンが非活性になる', async({page}) => {
+    await page.getByLabel('タグがない記事を探す').check();
+    await expect(page.getByTestId('tagDialogOpenButton')).toBeDisabled();
+ })
+
+ test('ユーザーの変更がバックに送信されているか', async({page}) => {
+    await page.getByLabel('記事検索').fill('apple');
+    await page.getByTestId('tagDialogOpenButton').click();
+    await page.getByLabel('recipe').check();
+    await page.getByLabel('sweets').check();
+    await page.getByRole('button', { name: '閉じる' }).click();
+    await page.getByLabel('本文').check();
+    await page.getByTestId('searchQuantity').getByRole('combobox').selectOption('20');
+    await page.getByTestId('sort').getByRole('combobox').selectOption('updated_at_asc');
+
+    // リクエストとレスポンスどっちも撮らないとエラーになるっぽい
+    const [request, response] = await Promise.all([
+        page.waitForRequest(request => request.url().includes('Search?')),
+        page.waitForResponse(response => response.url().includes('Search?')),
+        // 検索を実行
+        page.getByRole('button', { name: '検索' }).click()
+    ])
+
+    expect(request.url()).toContain('keyword=apple');
+    expect(request.url()).toContain('searchTarget=body');
+    expect(request.url()).toContain('searchQuantity=20');
+    expect(request.url()).toContain('sortType=updated_at_asc');
+    expect(request.url()).toContain('isSearchUntagged=0');
+    expect(request.url()).toContain('tagList[]=1');
+    expect(request.url()).toContain('tagList[]=5');
+ })
+
+ test('検索した後設定がそのままになっているかどうか.タグあり(他のもまとめて)', async({page}) => {
+    await page.getByLabel('記事検索').fill('apple');
+
+    await page.getByTestId('tagDialogOpenButton').click();
+    await page.getByLabel('recipe').check();
+    await page.getByLabel('sweets').check();
+    await page.getByRole('button', { name: '閉じる' }).click();
+
+    await page.getByLabel('本文').check();
+
+    await page.getByTestId('searchQuantity').getByRole('combobox').selectOption('20');
+    await page.getByTestId('sort').getByRole('combobox').selectOption('updated_at_asc');
+
+    await page.getByRole('button', { name: '検索' }).click()
+    await page.waitForURL('**/Search?**')
+
+    // 検索後の状態
+
+    await expect(page.getByLabel('記事検索')).toHaveValue('apple');
+
+    await page.getByTestId('tagDialogOpenButton').click();
+    await expect(page.getByLabel('recipe')).toBeChecked()
+    await expect(page.getByLabel('sweets')).toBeChecked()
+    await page.getByRole('button', { name: '閉じる' }).click();
+
+    const tags = await (page.getByTestId('tagList').getByRole('list')).innerText()
+    expect(tags).toContain('recipe')
+    expect(tags).toContain('sweets')
+
+
+    await expect(page.getByLabel('本文')).toBeChecked()
+    await expect(page.getByLabel('タイトル')).toBeChecked({checked:false})
+
+    await expect(page.getByTestId('searchQuantity').getByRole('combobox')).toHaveValue('20');
+    await expect(page.getByTestId('sort').getByRole('combobox')).toHaveValue('updated_at_asc');
+ })
+
+//  test('', async({page}) => {
+
+//  })
