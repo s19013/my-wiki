@@ -273,16 +273,6 @@ export default {
                         return;
                     }
 
-                    // タグダイアログを開く
-                    if (
-                        (event.ctrlKey || event.key === "Meta") &&
-                        event.altKey &&
-                        event.code === "KeyT"
-                    ) {
-                        event.preventDefault();
-                        this.$refs.TagDialog.openTagDialog();
-                    }
-
                     // ページめくり
                     if (event.key === "ArrowRight") {
                         this.pageIncrease();

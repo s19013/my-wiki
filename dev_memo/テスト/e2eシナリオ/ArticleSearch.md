@@ -85,9 +85,6 @@ urlに"/Article/View/"を含む
 ### "ctrl + enter"
 送信
 
-### "ctrl + T"
-タグダイアログを開く
-
 ### "ctrl + ←" "ctrl + →"
 "ctrl + →"でページめくり
 "ctrl + ←"でページ戻り
