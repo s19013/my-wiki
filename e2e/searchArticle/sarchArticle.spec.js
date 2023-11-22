@@ -173,6 +173,35 @@ test('プルダウン確認', async({page}) => {
     await page.screenshot({ path: 'playwright-screenshot/searchArtice/pulldown-sort-jp.jpg', fullPage: false });
  })
 
+
+test.describe("画面遷移",() => {
+    test('編集画面', async({page}) => {
+        await page.locator('div').filter({ hasText: /^how to make applePie編集$/ }).getByRole('button').click();
+        await expect(page).toHaveURL(/Article\/Edit\/\d+/);
+    })
+
+    test('閲覧画面', async({page}) => {
+        await page.getByRole('link', { name: 'how to make applePie' }).click();
+        await expect(page).toHaveURL(/Article\/View\/\d+/);
+    })
+})
+
+test.describe("ショートカットキー",() => {
+    test('Ctrl + -> , Ctrl + <-', async({page}) => {
+        await page.keyboard.press('Control+ArrowRight');
+        await expect(page).toHaveURL(/\?page=2/);
+
+        await page.keyboard.press('Control+ArrowLeft');
+        await expect(page).toHaveURL(/\?page=1/);
+    })
+
+     test('Ctrl + enter', async({page}) => {
+        await page.keyboard.press('Control+Enter');
+        await expect(page).toHaveURL(/\?page=1/);
+    })
+
+})
+
 //  test('', async({page}) => {
 
 //  })
