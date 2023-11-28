@@ -1,11 +1,12 @@
 <template>
-    <div class="TagDialog">
+    <div class="TagDialog" data-testid="tagDialog">
         <!-- ダイアログを呼び出すためのボタン -->
         <div class="buttonAndList">
             <v-btn
                 color="submit"
                 size="small"
                 class="global_css_haveIconButton_Margin"
+                data-testid="tagDialogOpenButton"
                 :disabled="disabled"
                 @click.stop="openTagDialog()"
             >
@@ -23,7 +24,7 @@
         <!-- v-modelがv-ifとかの代わりになっている -->
         <v-dialog v-model="tagDialogFlag" scrollable persistent>
             <section class="global_css_Dialog tagDialog">
-                <div class="clooseButton">
+                <div class="clooseButton" data-testid="tagDialogCloseButton">
                     <v-btn
                         color="#E57373"
                         size="small"
@@ -48,7 +49,7 @@
 
                 <!-- 操作ボタン -->
                 <div class="control">
-                    <div class="existCheckbox">
+                    <div class="existCheckbox" data-testid="existCheckbox">
                         <!-- この部分を既存チェックボックスという -->
                         <input
                             type="checkbox"
@@ -58,6 +59,7 @@
                         <label for="checked">{{ messages.checked }}</label>
                     </div>
                     <v-btn
+                        data-testid="clearAllCheck"
                         variant="outlined"
                         color="primary"
                         size="small"
@@ -75,6 +77,7 @@
 
                 <!-- タグ一覧 -->
                 <v-list
+                    data-testid="tagDialogSearchResult"
                     class="overflow-y-auto mx-auto"
                     width="100%"
                     v-show="!disableFlag"
@@ -95,7 +98,7 @@
                 </v-list>
 
                 <!--  -->
-                <div v-if="!searchOnly">
+                <div v-if="!searchOnly" data-testid="createNewTag">
                     <v-btn
                         class="global_css_haveIconButton_Margin my-4 global_css_longButton"
                         color="submit"
@@ -123,6 +126,7 @@
 
                         <v-form v-on:submit.prevent="createNewTag">
                             <v-text-field
+                                data-testid="createNewTagInput"
                                 v-model="newTag"
                                 :label="messages.tagName"
                                 outlined

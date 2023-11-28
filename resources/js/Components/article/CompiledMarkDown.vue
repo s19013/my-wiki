@@ -1,5 +1,9 @@
 <template>
-    <div class="CompiledMarkDown markdown-body" v-html="this.body"></div>
+    <div
+        class="CompiledMarkDown markdown-body"
+        data-testid="compiledMarkDown"
+        v-html="this.body"
+    ></div>
 </template>
 
 <script>

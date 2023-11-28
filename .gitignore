@@ -15,6 +15,7 @@ yarn-error.log
 /.idea
 /.vscode
 /test-results/
+/playwright/
 /playwright-report/
 /playwright-screenshot/
 /blob-report/

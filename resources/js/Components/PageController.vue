@@ -5,6 +5,7 @@
             @click="clickPre()"
             :disabled="page <= 1"
             class="pre"
+            data-testid="preButton"
         >
             <v-icon>mdi-arrow-left-bold</v-icon>
             {{ messages.pre }}
@@ -14,6 +15,7 @@
             @click="clickNext()"
             :disabled="page >= length"
             class="next"
+            data-testid="nextButton"
         >
             {{ messages.next }}
             <v-icon>mdi-arrow-right-bold</v-icon>

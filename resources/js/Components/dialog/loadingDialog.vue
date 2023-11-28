@@ -1,5 +1,5 @@
 <template>
-    <div v-show="$store.state.globalLoading">
+    <div v-show="$store.state.globalLoading" data-testid="loadingDialog">
         <v-progress-circular
             :size="100"
             color="primary"

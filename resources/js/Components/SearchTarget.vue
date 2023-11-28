@@ -1,5 +1,5 @@
 <template>
-    <div class="SearchTarget">
+    <div class="SearchTarget" data-testid="SearchTarget">
         <p v-if="this.$store.state.lang == 'ja'">検索対象</p>
         <p v-else>Search Target</p>
         <div class="options">

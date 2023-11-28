@@ -1,7 +1,8 @@
 <template>
-    <div class="searchField">
+    <div class="searchField" data-testid="searchField">
         <v-form v-on:submit.prevent="triggerSearch()">
             <v-text-field
+                data-testid="searchFieldInput"
                 v-model="keyword"
                 :label="searchLabel"
                 outlined

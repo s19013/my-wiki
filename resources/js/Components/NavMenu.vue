@@ -1,5 +1,5 @@
 <template>
-    <div class="navMenu">
+    <div class="navMenu" data-testid="naveMenu">
         <transition name="slide">
             <nav v-show="show">
                 <ol>
