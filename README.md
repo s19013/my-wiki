@@ -67,6 +67,7 @@
 <video height="300" src="https://github.com/s19013/my-wiki/assets/50346558/c262bade-746a-42c4-bd76-6179532a1218" ></video>
 
 #### アドオンを使ったブックマークの保存
+むしろこのやり方を推奨している
 <video height="300" src="https://github.com/s19013/my-wiki/assets/50346558/960a7448-e8aa-42c3-86e0-580d1367faa1" ></video>
 
 ## 制作背景 なぜ作ったのか 
