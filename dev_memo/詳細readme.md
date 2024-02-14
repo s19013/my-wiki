@@ -12,6 +12,7 @@
 ## 目次
 * [概要](#概要)
 * [何ができるか](#何ができるか)
+* [デモ](#デモ)
 * [制作背景 なぜ作ったのか](#制作背景-なぜ作ったのか)
 * [開発メモ](#開発メモ)
 * [この作品をもとに書いた記事](#この作品をもとに書いた記事)
@@ -37,6 +38,37 @@
 * chromeの拡張機能を使ってアプリを開かずともブックマークを保存できる
 	* <a href="https://chrome.google.com/webstore/detail/sundlf-bookmark-addon/mfcobcdpjbgnpbkhbbfaabkkphpceoka" target="_blank">拡張機能</a>
 	* <a href="https://github.com/s19013/sundlf-addon" target="_blank">拡張機能のリポジトリ</a>
+
+### デモ
+#### メモ新規作成
+<video height="300" src="https://github.com/s19013/my-wiki/assets/50346558/f69075b6-602c-4b46-ba36-669920f93880" ></video>
+
+#### タグのつけ外し
+<video height="300" src="https://github.com/s19013/my-wiki/assets/50346558/cfe0bf67-04ab-4e58-97cf-63a0de6b9568" ></video>
+
+#### メモ編集
+<video height="300" src="https://github.com/s19013/my-wiki/assets/50346558/98a8ac34-4e63-44d0-aaf1-49341f5c57a3" ></video>
+
+#### メモ閲覧
+<video height="300" src="https://github.com/s19013/my-wiki/assets/50346558/c384700a-799e-4f31-b2d8-a7239e846a7d" ></video>
+
+#### メモ削除
+<video height="300" src="https://github.com/s19013/my-wiki/assets/50346558/716f74f4-1d93-4e4a-8a0a-4d996a0a1bf4" ></video>
+
+#### 検索
+<video height="300" src="https://github.com/s19013/my-wiki/assets/50346558/a7a857fb-f6b4-495a-b2df-647c314b9428" ></video>
+
+#### 並べ替え
+<video height="300" src="https://github.com/s19013/my-wiki/assets/50346558/29b7cfba-cd3f-4f43-a7f7-aaa54e1ef2d3" ></video>
+
+#### ブックマークの保存､新規タグの作成
+アドオンを使ったやり方が圧倒的に便利なのでこの方法で保存する人は少ないと思う
+
+<video height="300" src="https://github.com/s19013/my-wiki/assets/50346558/c262bade-746a-42c4-bd76-6179532a1218" ></video>
+
+#### アドオンを使ったブックマークの保存
+むしろこのやり方を推奨している
+<video height="300" src="https://github.com/s19013/my-wiki/assets/50346558/960a7448-e8aa-42c3-86e0-580d1367faa1" ></video>
 
 ## 開発メモ(すごく雑)
 https://github.com/s19013/my-wiki/tree/main/dev_memo
