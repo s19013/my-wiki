@@ -33,8 +33,9 @@ return [
     // 元
     // 'supports_credentials' => false,
 
-    // Access-Control-Allow-Credentialsヘッダーを設定する。
     'supports_credentials' => true,
-    // ↑もうこれfalseに戻してもよいのかな?
+
+    // allowed_originsで許可するホストを設定するのが望ましいらしいが
+    // sanctumで認証を済まさないと通信できないように設定してあるから､大丈夫ではあるらしい｡
 
 ];
