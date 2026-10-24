@@ -20,3 +20,4 @@ yarn-error.log
 /playwright-screenshot/
 /blob-report/
 /playwright/.cache/
+*.pem
