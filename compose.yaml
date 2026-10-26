@@ -41,6 +41,9 @@ services:
   db:
     image: mariadb:11.4
     env_file: .env.production
+    # DBeaver などから SSH トンネル経由で使うため。127.0.0.1 限定なので外からは見えない
+    ports:
+      - "127.0.0.1:3306:3306"
     volumes:
       - db-data:/var/lib/mysql
     healthcheck:
