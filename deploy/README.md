@@ -77,6 +77,16 @@ docker compose restart app                     # 再起動
 grep my-wiki /var/log/syslog                   # cron（バックアップと掃除）の結果
 ```
 
+## DBeaver などから DB を見る
+
+DB はサーバーの 127.0.0.1:3306 にだけ公開しているので、SSH トンネル経由で繋ぐ。
+
+| 項目 | 値 |
+|---|---|
+| SSH | `ubuntu@52.193.96.129`、鍵は `LightsailDefaultKey-ap-northeast-1.pem` |
+| DB | `localhost:3306`、データベース `my-wiki`、ユーザー `my-wiki` |
+| パスワード | サーバーで `grep ^DB_PASSWORD= /srv/my-wiki/.env.production` |
+
 ## バックアップと復元
 
 バックアップは毎日自動で取られる。手動で取るときは `deploy/backup.sh` を実行する。
