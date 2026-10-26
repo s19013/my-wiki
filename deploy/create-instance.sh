@@ -16,8 +16,14 @@ BLUEPRINT=ubuntu_24_04
 # 1GB / 40GB / 月 $7。足りなければ small_3_0（2GB / 月 $12）
 BUNDLE=micro_3_0
 
-# user-data の先頭でブランチを渡してから setup-server.sh を実行する
-user_data=$(printf '#!/bin/bash\nexport MY_WIKI_BRANCH=%q\n' "$BRANCH"; sed 1d setup-server.sh)
+# Lightsail は user-data を自前の起動スクリプト (#!/bin/sh) の末尾に貼り付けて sh で実行する。
+# setup-server.sh は bash 用なので、ファイルに書き出してから bash で実行させる
+user_data=$(
+    echo "cat > /root/setup-server.sh <<'MY_WIKI_SETUP_EOF'"
+    cat setup-server.sh
+    echo "MY_WIKI_SETUP_EOF"
+    printf 'MY_WIKI_BRANCH=%q bash /root/setup-server.sh\n' "$BRANCH"
+)
 
 aws lightsail create-instances --region "$REGION" \
     --instance-names "$NAME" \
