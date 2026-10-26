@@ -1,0 +1,19 @@
+# 値は .env.production から渡す
+#   SITE_ADDRESS: 本番は sundlf.com、ローカルは localhost
+#   TLS_MODE:     acme（Let's Encrypt）か internal（自己署名。切り替え前の確認用）
+{
+	email {$ACME_EMAIL}
+}
+
+(tls-acme) {
+}
+
+(tls-internal) {
+	tls internal
+}
+
+{$SITE_ADDRESS} {
+	import tls-{$TLS_MODE:acme}
+	encode gzip
+	reverse_proxy app:80
+}

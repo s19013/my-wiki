@@ -1,0 +1,59 @@
+# 本番用の構成（サーバーの作り方は deploy/README.md）
+# 設定と秘密情報はすべて .env.production に書く（git には入れない）
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "5"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile
+    image: my-wiki-app
+    env_file: .env.production
+    volumes:
+      - storage:/var/www/html/storage
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    logging: *logging
+
+  caddy:
+    image: caddy:2
+    env_file: .env.production
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - app
+    restart: unless-stopped
+    logging: *logging
+
+  db:
+    image: mariadb:11.4
+    env_file: .env.production
+    volumes:
+      - db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped
+    logging: *logging
+
+volumes:
+  storage:
+  caddy-data:
+  caddy-config:
+  db-data:

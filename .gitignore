@@ -21,3 +21,4 @@ yarn-error.log
 /blob-report/
 /playwright/.cache/
 *.pem
+.env.production
